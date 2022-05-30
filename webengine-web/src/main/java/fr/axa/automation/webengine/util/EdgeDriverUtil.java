@@ -6,14 +6,20 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 
 import java.io.File;
+import java.util.Optional;
 
 public class EdgeDriverUtil {
 
-    public static final String EDGE_DIRECTORY = "/Edge/";
-    public static final String HKEY_LOCAL_MACHINE_SOFTWARE_PATHS_EDGE_EXE_POWERSHELL = "(Get-AppxPackage -Name 'Microsoft.MicrosoftEdge.Stable').Version";
-    public static final String URL_EDGE_DRIVER_REMOTE = "https://msedgedriver.azureedge.net/";
-    public static final String NAME_EDGE_DRIVER_ZIP = "edgedriver_win64.zip";
-    public static final String NAME_EDGE_DRIVER_EXECUTABLE = "msedgedriver.exe";
+    public static Optional<WebDriver> getEdgeDriver() throws WebEngineException {
+        WebDriverManager.edgedriver().setup();
+        return Optional.of(new EdgeDriver());
+    }
+
+//    public static final String EDGE_DIRECTORY = "/Edge/";
+//    public static final String HKEY_LOCAL_MACHINE_SOFTWARE_PATHS_EDGE_EXE_POWERSHELL = "(Get-AppxPackage -Name 'Microsoft.MicrosoftEdge.Stable').Version";
+//    public static final String URL_EDGE_DRIVER_REMOTE = "https://msedgedriver.azureedge.net/";
+//    public static final String NAME_EDGE_DRIVER_ZIP = "edgedriver_win64.zip";
+//    public static final String NAME_EDGE_DRIVER_EXECUTABLE = "msedgedriver.exe";
 
 //    public static WebDriver getEdgeDriver() throws WebEngineException {
 //        List<String> edgeInformationList = Command.runPowershellCommand(HKEY_LOCAL_MACHINE_SOFTWARE_PATHS_EDGE_EXE_POWERSHELL);
@@ -27,13 +33,9 @@ public class EdgeDriverUtil {
 //        return driver;
 //    }
 
-    public static WebDriver getEdgeDriver() throws WebEngineException {
-        WebDriverManager.edgedriver().setup();
-        return new EdgeDriver();
-    }
+//    private static File createTempDirectory(String version){
+//        String installationDirectory = EDGE_DIRECTORY + version;
+//        return FileUtil.createDirectoryInUserDir(installationDirectory);
+//    }
 
-    private static File createTempDirectory(String version){
-        String installationDirectory = EDGE_DIRECTORY + version;
-        return FileUtil.createDirectoryInUserDir(installationDirectory);
-    }
 }

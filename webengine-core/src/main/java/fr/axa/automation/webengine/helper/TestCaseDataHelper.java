@@ -10,7 +10,7 @@ import java.util.Optional;
 public class TestCaseDataHelper {
 
     public static Optional<Variable> getValue(String name, List<Variable> dataList){
-        Optional<Variable> variable = null;
+        Optional<Variable> variable = Optional.empty();;
         if(StringUtils.isNotEmpty(name) && CollectionUtils.isNotEmpty(dataList)){
             variable = dataList.stream().filter(x->name.equalsIgnoreCase(x.getName())).findFirst();
         }

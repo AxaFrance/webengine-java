@@ -58,7 +58,6 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         }finally {
             actionReport.setEndTime(Calendar.getInstance());
             actionReport.getScreenshots().getScreenshotReport().addAll(screenShotList);
-//            actionReport.setContextValues(actionDetailContext.getTestCaseData().getData());
         }
 
         return actionReport;
@@ -71,7 +70,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     }
 
     protected Optional<String> getEnvironnementValue(String name){
-        Optional<String> value = null;
+        Optional<String> value = Optional.empty();
         Optional<Variable> variable = EnvironmentVariablesHelper.getEnvironnementValue(name, getActionDetailContext().getEnvironmentVariables().getVariable());
         if(variable.isPresent()){
             value = Optional.ofNullable(variable.get().getValue());
@@ -84,7 +83,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     }
 
     protected Optional<String> getParameter(String name){
-        Optional<String> value = null;
+        Optional<String> value = Optional.empty();
         Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
         if(variable.isPresent()){
             value = Optional.ofNullable(variable.get().getValue());

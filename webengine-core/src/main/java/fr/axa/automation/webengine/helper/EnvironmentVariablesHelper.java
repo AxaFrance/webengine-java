@@ -13,46 +13,16 @@ import java.util.Optional;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Slf4j
 public class EnvironmentVariablesHelper {
-    List<Variable> variableList;
-
-    public String getValue(String name) throws WebEngineException {
-        String value = null;
-        if(StringUtils.isEmpty(name)){
-            throw new WebEngineException("Parameter name is null");
-        }
-        if(CollectionUtils.isEmpty(variableList)){
-            throw new WebEngineException("Environnement variables not initialized");
-        }
-
-        if(variableList.stream().noneMatch(elt -> name.equals(elt.getName()))){
-            StringBuilder stringBuffer = new StringBuilder("Environnement variable").append(name).append("not found");
-            log.debug(stringBuffer.toString());
-        }else{
-            value = getConcreteValue(name).getValue();
-            while (value != null && value.startsWith("$")){
-                value = getConcreteValue(value).getValue();
-            }
-        }
-        return value;
-    }
-
-    private Variable getConcreteValue(String name) {
-        return variableList
-                .stream()
-                .filter(elt -> name.equals(elt.getName()))
-                .findFirst()
-                .orElse(null);
-    }
 
     public static Optional<Variable> getEnvironnementValue(String name, List<Variable> environnementVariableList){
-        Optional<Variable> variable = null;
+        Optional<Variable> variable = Optional.empty();
         if(StringUtils.isNotEmpty(name) && CollectionUtils.isNotEmpty(environnementVariableList)){
             variable = environnementVariableList.stream().filter(x->name.equalsIgnoreCase(x.getName())).findFirst();
+            if(variable.isPresent() && variable.get().getValue().startsWith("$")){
+                variable = getEnvironnementValue(variable.get().getValue().substring(1),environnementVariableList);
+            }
         }
         return variable;
     }

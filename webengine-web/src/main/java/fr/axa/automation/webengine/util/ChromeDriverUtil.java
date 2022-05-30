@@ -12,15 +12,21 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ChromeDriverUtil {
 
-    public static final String CHROME_DIRECTORY = "/Chrome/";
-    public static final String HKEY_LOCAL_MACHINE_SOFTWARE_PATHS_CHROME_EXE_POWERSHELL = "(Get-Item (Get-ItemProperty 'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe').'(Default)').VersionInfo";
-    public static final String URL_CHROME_DRIVER_REMOTE = "https://chromedriver.storage.googleapis.com/";
-    public static final String URL_CHROME_DRIVER_REMOTE_VERSION = URL_CHROME_DRIVER_REMOTE+"LATEST_RELEASE_";
-    public static final String NAME_CHROME_DRIVER_ZIP = "chromedriver_win32.zip";
-    public static final String NAME_CHROME_DRIVER_EXECUTABLE = "chromedriver.exe";
+    public static Optional<WebDriver> getChromeDriver() throws WebEngineException {
+        WebDriverManager.chromedriver().setup();
+        return Optional.of(new ChromeDriver());
+    }
+
+//    public static final String CHROME_DIRECTORY = "/Chrome/";
+//    public static final String HKEY_LOCAL_MACHINE_SOFTWARE_PATHS_CHROME_EXE_POWERSHELL = "(Get-Item (Get-ItemProperty 'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe').'(Default)').VersionInfo";
+//    public static final String URL_CHROME_DRIVER_REMOTE = "https://chromedriver.storage.googleapis.com/";
+//    public static final String URL_CHROME_DRIVER_REMOTE_VERSION = URL_CHROME_DRIVER_REMOTE+"LATEST_RELEASE_";
+//    public static final String NAME_CHROME_DRIVER_ZIP = "chromedriver_win32.zip";
+//    public static final String NAME_CHROME_DRIVER_EXECUTABLE = "chromedriver.exe";
 
 //    public static WebDriver getChromeDriver() throws WebEngineException {
 //        List<String> chromeInformationList = Command.runPowershellCommand(HKEY_LOCAL_MACHINE_SOFTWARE_PATHS_CHROME_EXE_POWERSHELL);
@@ -34,44 +40,43 @@ public class ChromeDriverUtil {
 //        return new ChromeDriver();
 //    }
 
-    public static WebDriver getChromeDriver() throws WebEngineException {
-        WebDriverManager.chromedriver().setup();
-        return new ChromeDriver();
-    }
+//    private static String getFirstPartOfChromeVersion(List<String> chromeInformationList) {
+//        String infoFullVersion = getFullChromeVersion(chromeInformationList);
+//        String fisrtPartVersion = infoFullVersion.split("\\s+")[0];
+//        return fisrtPartVersion.substring(0, fisrtPartVersion.lastIndexOf("."));
+//    }
+//
+//    private static String getFullChromeVersion(List<String> chromeInformationList) {
+//        String chromeVersion="";
+//        for (String chromeInformation: chromeInformationList) {
+//            if(chromeInformation.contains(".exe")){
+//                List<String> versionList = Collections.singletonList(chromeInformation);
+//                chromeVersion = versionList.get(0);
+//            }
+//        }
+//        return chromeVersion;
+//    }
+//
+//    private static String getChromeVersionInRemote(String urlVersionInRemote) throws WebEngineException{
+//        //Example of version https://chromedriver.storage.googleapis.com/LATEST_RELEASE_101.0.4951
+//        String chromeVersionInRemote = null;
+//        try {
+//            URL url = new URL(urlVersionInRemote);
+//            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+//            chromeVersionInRemote = in.readLine();
+//        } catch (IOException e) {
+//            throw new WebEngineException("Error during get chrome version in remote with url : "+urlVersionInRemote,e);
+//        }
+//
+//        return chromeVersionInRemote; //you get the IP as a String
+//    }
+//
+//    private static File createTempDirectory(String version){
+//        String installationDirectory = CHROME_DIRECTORY + version;
+//        return FileUtil.createDirectoryInUserDir(installationDirectory);
+//    }
 
-    private static String getFirstPartOfChromeVersion(List<String> chromeInformationList) {
-        String infoFullVersion = getFullChromeVersion(chromeInformationList);
-        String fisrtPartVersion = infoFullVersion.split("\\s+")[0];
-        return fisrtPartVersion.substring(0, fisrtPartVersion.lastIndexOf("."));
-    }
 
-    private static String getFullChromeVersion(List<String> chromeInformationList) {
-        String chromeVersion="";
-        for (String chromeInformation: chromeInformationList) {
-            if(chromeInformation.contains(".exe")){
-                List<String> versionList = Collections.singletonList(chromeInformation);
-                chromeVersion = versionList.get(0);
-            }
-        }
-        return chromeVersion;
-    }
 
-    private static String getChromeVersionInRemote(String urlVersionInRemote) throws WebEngineException{
-        //Example of version https://chromedriver.storage.googleapis.com/LATEST_RELEASE_101.0.4951
-        String chromeVersionInRemote = null;
-        try {
-            URL url = new URL(urlVersionInRemote);
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            chromeVersionInRemote = in.readLine();
-        } catch (IOException e) {
-            throw new WebEngineException("Error during get chrome version in remote with url : "+urlVersionInRemote,e);
-        }
 
-        return chromeVersionInRemote; //you get the IP as a String
-    }
-
-    private static File createTempDirectory(String version){
-        String installationDirectory = CHROME_DIRECTORY + version;
-        return FileUtil.createDirectoryInUserDir(installationDirectory);
-    }
 }

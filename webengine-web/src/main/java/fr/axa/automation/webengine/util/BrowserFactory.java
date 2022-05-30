@@ -6,10 +6,13 @@ import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.general.Settings;
 import org.openqa.selenium.WebDriver;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 public class BrowserFactory {
 
-    public static WebDriver getDriver(Settings settings) throws WebEngineException {
-        WebDriver webDriver = null;
+    public static Optional<WebDriver> getDriver(Settings settings) throws WebEngineException {
+        Optional<WebDriver> webDriver = Optional.empty();
         if(settings.getPlatform()== Platform.WINDOWS){
             if(settings.getBrowserType()== BrowserType.CHROME){
                 webDriver = ChromeDriverUtil.getChromeDriver();
@@ -18,7 +21,7 @@ public class BrowserFactory {
             }else if(settings.getBrowserType()== BrowserType.FIREFOX){
                 webDriver = FirefoxDriverUtil.getFirefoxDriver();
             }
-            webDriver.manage().deleteAllCookies();
+            webDriver.get().manage().deleteAllCookies();
         }
         return webDriver;
     }

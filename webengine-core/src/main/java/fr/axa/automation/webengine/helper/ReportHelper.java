@@ -113,7 +113,7 @@ public class ReportHelper {
         testsuite.setSystemOut(testSuiteReport.getSystemOut());
         testsuite.setSystemErr(testSuiteReport.getSystemError());
         testsuite.setErrors(Long.valueOf(testSuiteReport.getTestResult().stream().filter(elt->elt.getResult()== Result.FAILED).count()).intValue());
-        testsuite.setTests(Long.valueOf(testSuiteReport.getTestResult().size()).intValue());
+        testsuite.setTests(testSuiteReport.getTestResult().size());
         return testsuite;
     }
 }

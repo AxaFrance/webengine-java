@@ -5,11 +5,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 
+import java.util.Optional;
+
 public class FirefoxDriverUtil {
 
-    public static WebDriver getFirefoxDriver() throws WebEngineException {
+    public static Optional<WebDriver> getFirefoxDriver() throws WebEngineException {
         WebDriverManager.firefoxdriver().setup();
-        return new EdgeDriver();
+        return Optional.of(new EdgeDriver());
     }
 
 }

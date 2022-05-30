@@ -47,7 +47,7 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
         String errorMessage = "";
         String actionName = action.getClass().getSimpleName();
         LocalDateTime startTime = LocalDateTime.now();
-        ActionReportDetail actionReportDetail = null;
+        ActionReportDetail actionReportDetail = ActionReportDetail.builder().build();
 
         loggerService.info("The action " + actionName + " is started at " + startTime);
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -74,11 +74,13 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
             actionReportDetail.getActionReport().setLog(errorMessage);
             loggerService.error(errorMessage, ierr);
+            throw new WebEngineException(errorMessage,ierr);
         } catch (ExecutionException err) {
             errorMessage = "Execution Exception for action :" + actionName;
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
             actionReportDetail.getActionReport().setLog(errorMessage);
             loggerService.error(errorMessage, err);
+            throw new WebEngineException(errorMessage,err);
         }
         executorService.shutdown();
         return actionReportDetail;

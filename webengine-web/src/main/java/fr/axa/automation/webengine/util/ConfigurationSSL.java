@@ -12,8 +12,9 @@ public class ConfigurationSSL {
     public static void configureSSL()throws WebEngineException {
         TrustManager[] trustAllCerts = getTrustManagers();
         try {
-            // Activate the new trust managertry
-            SSLContext sc = SSLContext.getInstance("SSL");
+//            Activate the new trust managertry
+//            SSLContext sc = SSLContext.getInstance("SSL");
+            SSLContext sc = SSLContext.getInstance("TLSv1.2");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
