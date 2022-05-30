@@ -154,11 +154,6 @@
     </dependencyManagement>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${project.build.directory}/generated-resources</directory>
-            </resource>
-        </resources>
         <plugins></plugins>
 		
         <pluginManagement>
