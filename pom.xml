@@ -19,9 +19,8 @@
     <properties>
         <java-source.version>1.8</java-source.version>
         <java-target.version>1.8</java-target.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>   
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-        <build-helper-maven-plugin.version>1.10</build-helper-maven-plugin.version>
         <lombok.version>1.18.22</lombok.version>
         <logback-core.version>1.2.11</logback-core.version>
         <logback-classic.version>1.2.11</logback-classic.version>
@@ -41,12 +40,14 @@
         <maven-jaxb2-plugin.version>0.7.1</maven-jaxb2-plugin.version>
         <webdrivermanager.version>5.0.3</webdrivermanager.version>
         <selenium-java.version>3.141.59</selenium-java.version>
+        <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
     </properties>
 
     <modules>
         <module>webengine-core</module>
         <module>webengine-web</module>
-		 <module>webengine-boot</module>
+        <module>webengine-boot</module>
         <module>webengine-runner</module>
     </modules>
 
@@ -150,12 +151,19 @@
                 <artifactId>jna-platform</artifactId>
                 <version>${jna-platform.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb-api.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <build>
         <plugins></plugins>
-		
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -190,6 +198,13 @@
                     <artifactId>maven-jaxb2-plugin</artifactId>
                     <version>${maven-jaxb2-plugin.version}</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-maven-plugin.version}</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
