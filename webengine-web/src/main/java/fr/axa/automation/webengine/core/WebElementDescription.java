@@ -1,5 +1,7 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.general.Settings;
+import fr.axa.automation.webengine.general.SettingsWeb;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +16,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.*;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -46,6 +49,8 @@ public class WebElementDescription extends AbstractElementDescription {
         super(webDriver);
     }
 
+
+
     public String getInnerHtml() throws Exception {
         return findElement().getAttribute(INNER_HTML);
     }
@@ -74,7 +79,6 @@ public class WebElementDescription extends AbstractElementDescription {
         return sb.toString();
     }
 
-
     @Override
     public WebElement internalFindElement() throws Exception {
         Collection<WebElement> elements = internalFindElements();
@@ -102,7 +106,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public Collection<WebElement> internalFindElements() throws Exception {
         Collection<WebElement> webElementList = null;
         if (StringUtils.isNotEmpty(this.id)) {
-            webElementList = getInternalFindElementsById();
+            webElementList = getInternalFindElementsById(this.id);
         }
         if (StringUtils.isNotEmpty(this.name)) {
             Collection<WebElement> webElementByNameList = getInternalFindElementsByName(this.name);
@@ -181,7 +185,7 @@ public class WebElementDescription extends AbstractElementDescription {
         return webDriver.findElements(By.name(name));
     }
 
-    private Collection<WebElement> getInternalFindElementsById() {
+    private Collection<WebElement> getInternalFindElementsById(String id) {
         return webDriver.findElements(By.id(this.id));
     }
 
@@ -240,84 +244,54 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     public void selectByText(String text) throws Exception {
-        perform(getFunctionInternalSelectByText(), text);
+        WebElement element = this.findElement();
+        element.click();
+        Select se = new Select(element);
+        se.selectByVisibleText(text);
     }
 
-    private Function<String, Void> getFunctionInternalSelectByText() {
-        Function<String, Void> fun = (x) -> {
-            try {
-                WebElement element = this.internalFindElement();
-                element.click();
-                Select se = new Select(element);
-                se.selectByVisibleText(x);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        };
-        return fun;
+    public void selectByText(String text,Long...millisecondes) throws Exception {
+        selectByText(text);
+        wait(millisecondes[0]);
     }
 
     public void selectByIndex(Integer index) throws Exception {
-        perform(getFunctionInternalSelectByIndex(), index);
-    }
-
-    private Function<Integer, Void> getFunctionInternalSelectByIndex() {
-        Function<Integer, Void> fun = (x) -> {
-            try {
-                WebElement element = this.internalFindElement();
-                element.click();
-                Select se = new Select(element);
-                se.selectByIndex(x);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        };
-        return fun;
+        WebElement element = this.findElement();
+        element.click();
+        Select se = new Select(element);
+        se.selectByIndex(index);
     }
 
     public void selectByValue(String value) throws Exception {
-        perform(getFunctionInternalSelectByValue(), value);
-    }
-
-    private Function<String, Void> getFunctionInternalSelectByValue() {
-        Function<String, Void> fun = (x) -> {
-            try {
-                WebElement element = this.internalFindElement();
-                element.click();
-                Select se = new Select(element);
-                se.selectByValue(x);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        };
-        return fun;
+        WebElement element = this.findElement();
+        element.click();
+        Select se = new Select(element);
+        se.selectByValue(value);
     }
 
     public void checkByValue(String value) throws Exception {
         perform(getFunctionInternalCheckByValue(), value);
     }
 
-    private Function<String, Void> getFunctionInternalCheckByValue() {
-        Function<String, Void> fun = (x) -> {
+    private Function<String, String> getFunctionInternalCheckByValue() {
+        Function<String, String> fun = (value) -> {
             try {
                 Collection<WebElement> elementCollection = this.internalFindElements();
                 if (CollectionUtils.isNotEmpty(elementCollection)) {
-                    for (WebElement webElt : elementCollection) {
-                        if (webElt.getAttribute("value").equalsIgnoreCase(x)) {
-                            webElt.click();
-                        }
-                    }
+                    WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(value)).findFirst().orElse(null);
+                    webElementFilter.click();
+//                    for (WebElement webElt : elementCollection) {
+//                        if (webElt.getAttribute("value").equalsIgnoreCase(value)) {
+//                            webElt.click();
+//                            break;
+//                        }
+//                    }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                return null;
             }
-            return null;
+            return "OK";
         };
         return fun;
     }
-
-
 }
