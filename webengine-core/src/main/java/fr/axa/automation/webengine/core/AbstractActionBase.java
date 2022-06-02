@@ -53,8 +53,14 @@ public abstract class AbstractActionBase implements IAction {
 
     @Override
     public boolean runCheckpoint() throws Exception{
-        boolean checkpoint = doCheckpoint();
-        if(!checkpoint){
+        boolean checkpoint = true ;
+        try {
+            checkpoint = doCheckpoint();
+            if(!checkpoint){
+                screenShot("Error in this action +"+getClass().getSimpleName()+", phase doCheckpoint");
+            }
+        }catch (Exception exception){
+            checkpoint = false;
             screenShot("Error in this action +"+getClass().getSimpleName()+", phase doCheckpoint");
         }
         return checkpoint;

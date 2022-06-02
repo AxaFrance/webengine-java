@@ -30,6 +30,7 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public static final String INNER_HTML = "innerHTML";
     public static final String OUTER_HTML = "outerHTML";
+    public static final String OK = "OK";
 
     String id;
     String name;
@@ -190,19 +191,18 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     @Override
-    protected Function<Void, Byte[]> internalGetScreenshot() throws Exception {
-        Function<Void, Byte[]> fun = (x) -> {
+    protected Function<Void, String> internalGetScreenshot() throws Exception {
+        Function<Void, String> fun = (x) -> {
             try {
                 WebElement element = findElement();
                 if (element instanceof WebElement) {
-                    return (Byte[]) ArrayUtils.toPrimitive(element.getScreenshotAs(OutputType.BASE64).getBytes());
+                    return element.getScreenshotAs(OutputType.BASE64).getBytes().toString();
                 } else {
                     throw new Exception("Don't find a instanceof a WebElement");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                return null;
             }
-            return null;
         };
         return fun;
     }
@@ -280,17 +280,11 @@ public class WebElementDescription extends AbstractElementDescription {
                 if (CollectionUtils.isNotEmpty(elementCollection)) {
                     WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(value)).findFirst().orElse(null);
                     webElementFilter.click();
-//                    for (WebElement webElt : elementCollection) {
-//                        if (webElt.getAttribute("value").equalsIgnoreCase(value)) {
-//                            webElt.click();
-//                            break;
-//                        }
-//                    }
                 }
             } catch (Exception e) {
                 return null;
             }
-            return "OK";
+            return OK;
         };
         return fun;
     }
