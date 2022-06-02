@@ -9,8 +9,8 @@ import java.util.List;
 public interface IAction {
     ActionReport runAction() throws Exception;
     void doAction() throws Exception;
-    boolean runCheckpoint() throws WebEngineException;
-    boolean doCheckpoint() throws WebEngineException;
+    boolean runCheckpoint() throws Exception;
+    boolean doCheckpoint() throws Exception;
     void screenShot(String name) throws WebEngineException;
     default List<Variable> getRequiredParameters(){
         return null;

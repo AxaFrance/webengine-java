@@ -17,4 +17,5 @@ public class ActionContext {
     EnvironmentVariables environmentVariables;
     TestData testCaseData;
     TestCaseAdditionalInformation testCaseAdditionalInformation;
+    Settings settings;
 }

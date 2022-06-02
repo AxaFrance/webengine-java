@@ -12,10 +12,10 @@ import fr.axa.automation.webengine.helper.TestCaseDataHelper;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Calendar;
 import java.util.Optional;
@@ -38,24 +38,24 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         ActionReport actionReport = getActionReport();
         try {
             doAction();
-            if(getResult()!=null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)) {
+            if (getResult() != null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)) {
                 actionReport.setResult(getResult());
-                screenShot("Error in this action "+getClass().getSimpleName());
+                screenShot("Error in this action " + getClass().getSimpleName());
             }
             actionReport.setResult(Result.PASSED);
-        }catch (NoSuchElementException e){
-            erroMessage = "Web element not present in this action : "+getClass().getSimpleName();
+        } catch (NoSuchElementException e) {
+            erroMessage = "Web element not present in this action : " + getClass().getSimpleName();
             screenShot(erroMessage);
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(erroMessage);
-            loggerService.error(erroMessage,e);
-        }catch (Exception e){
-            erroMessage = "Error during exection of act : "+getClass().getSimpleName();
+            loggerService.error(erroMessage, e);
+        } catch (Exception e) {
+            erroMessage = "Error during exection of act : " + getClass().getSimpleName();
             screenShot(erroMessage);
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(erroMessage);
-            loggerService.error(erroMessage,e);
-        }finally {
+            loggerService.error(erroMessage, e);
+        } finally {
             actionReport.setEndTime(Calendar.getInstance());
             actionReport.getScreenshots().getScreenshotReport().addAll(screenShotList);
         }
@@ -63,32 +63,70 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         return actionReport;
     }
 
-    public void screenShot(String name) throws WebEngineException{
-        String screenshot = ((TakesScreenshot)actionDetailContext.getContext()).getScreenshotAs(OutputType.BASE64);
-        ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(getClass().getSimpleName(),screenshot);
+    public void screenShot(String name) throws WebEngineException {
+        String screenshot = ((TakesScreenshot) actionDetailContext.getContext()).getScreenshotAs(OutputType.BASE64);
+        ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
         screenShotList.add(screenshotReport);
     }
 
-    protected Optional<String> getEnvironnementValue(String name){
+    public void screenShot(AbstractElementDescription elementDescription) throws WebEngineException {
+        try {
+            String screenshot = elementDescription.getScreenshot().toString();
+            ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport("Error message", screenshot);
+            screenShotList.add(screenshotReport);
+        } catch (Exception e) {
+           throw new WebEngineException("Erreur lors du screenshot",e);
+        }
+    }
+
+
+    public void screenShot() throws WebEngineException {
+        screenShot("");
+    }
+
+    protected Optional<String> getEnvironnementValue(String name) {
         Optional<String> value = Optional.empty();
         Optional<Variable> variable = EnvironmentVariablesHelper.getEnvironnementValue(name, getActionDetailContext().getEnvironmentVariables().getVariable());
-        if(variable.isPresent()){
+        if (variable.isPresent()) {
             value = Optional.ofNullable(variable.get().getValue());
         }
         return value;
     }
 
-    protected WebDriver getWebDriver(){
-        return ((WebDriver)getActionDetailContext().getContext());
+    protected String getParameterWithException(String name) throws WebEngineException {
+        Optional<String> environnement = getParameter(name);
+        if (environnement.isPresent()) {
+            return environnement.get();
+        } else {
+            throw new WebEngineException("La variable " + name + " n'est pas présente");
+        }
     }
 
-    protected Optional<String> getParameter(String name){
+    protected String getEnvironnementValueWithException(String name) throws WebEngineException {
+        Optional<String> url = getEnvironnementValue(name);
+        if (url.isPresent()) {
+            return url.get();
+        } else {
+            throw new WebEngineException("La variable d'environnement " + name + " n'est pas présente");
+        }
+    }
+
+
+    protected WebDriver getWebDriver() {
+        return ((WebDriver) getActionDetailContext().getContext());
+    }
+
+    protected Optional<String> getParameter(String name) {
         Optional<String> value = Optional.empty();
         Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
-        if(variable.isPresent()){
+        if (variable.isPresent()) {
             value = Optional.ofNullable(variable.get().getValue());
         }
         return value;
     }
 
+    protected void sync(WebDriver webDriver) throws InterruptedException {
+        Wait wait = new WebDriverWait(webDriver, getActionDetailContext().getSettings().getSynchronzationTimeout());
+        wait.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+    }
 }

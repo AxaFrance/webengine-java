@@ -52,7 +52,7 @@ public abstract class AbstractActionBase implements IAction {
     public abstract void doAction() throws Exception;
 
     @Override
-    public boolean runCheckpoint() throws WebEngineException{
+    public boolean runCheckpoint() throws Exception{
         boolean checkpoint = doCheckpoint();
         if(!checkpoint){
             screenShot("Error in this action +"+getClass().getSimpleName()+", phase doCheckpoint");
@@ -60,7 +60,7 @@ public abstract class AbstractActionBase implements IAction {
         return checkpoint;
     }
 
-    public abstract boolean doCheckpoint() throws WebEngineException;
+    public abstract boolean doCheckpoint() throws Exception;
 
     @Override
     public abstract void screenShot(String name) throws WebEngineException;

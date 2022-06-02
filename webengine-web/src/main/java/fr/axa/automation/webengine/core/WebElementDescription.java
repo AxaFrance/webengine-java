@@ -1,24 +1,28 @@
 package fr.axa.automation.webengine.core;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.ui.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
+@Builder
+@AllArgsConstructor
 public class WebElementDescription extends AbstractElementDescription {
 
     public static final String INNER_HTML = "innerHTML";
@@ -88,7 +92,7 @@ public class WebElementDescription extends AbstractElementDescription {
         } else if (CollectionUtils.isEmpty(webElementList)) {
             newWebElementList = webElementListToJoin;
         } else {
-            newWebElementList = webElementList.stream().filter(x -> webElementListToJoin.contains(x)).collect(Collectors.toList());
+            newWebElementList = webElementList.stream().filter(one -> webElementListToJoin.stream().anyMatch(two -> ((RemoteWebElement) two).getId().equals(((RemoteWebElement) one).getId()))).collect(Collectors.toList());
         }
         return newWebElementList;
     }
@@ -156,6 +160,7 @@ public class WebElementDescription extends AbstractElementDescription {
 
     private List<WebElement> getInternalindElementByTagName(String tagName) {
         return webDriver.findElements(By.tagName(tagName.toUpperCase()));
+
     }
 
     private List<WebElement> getInternalindElementByLinkText(String linkText) {
@@ -229,7 +234,7 @@ public class WebElementDescription extends AbstractElementDescription {
         act.dragAndDrop(e1, e2).build().perform();
     }
 
-    public Select AsSelect() throws Exception {
+    public Select asSelect() throws Exception {
         WebElement element = findElement();
         return new Select(element);
     }
@@ -272,7 +277,7 @@ public class WebElementDescription extends AbstractElementDescription {
         return fun;
     }
 
-    public void SelectByValue(String value) throws Exception {
+    public void selectByValue(String value) throws Exception {
         perform(getFunctionInternalSelectByValue(), value);
     }
 
@@ -291,7 +296,7 @@ public class WebElementDescription extends AbstractElementDescription {
         return fun;
     }
 
-    public void CheckByValue(String value) throws Exception {
+    public void checkByValue(String value) throws Exception {
         perform(getFunctionInternalCheckByValue(), value);
     }
 

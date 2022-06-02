@@ -19,8 +19,6 @@ import java.util.function.Function;
 public abstract class AbstractElementDescription {
     protected WebDriver webDriver;
 
-    abstract WebElement internalFindElement() throws Exception;
-
     public AbstractElementDescription() {
     }
 
@@ -28,38 +26,11 @@ public abstract class AbstractElementDescription {
         this.webDriver = webDriver;
     }
 
+    abstract WebElement internalFindElement() throws Exception;
+
     public AbstractElementDescription useDriver(WebDriver webDriver) {
         this.webDriver = webDriver;
         return this;
-    }
-
-    public WebElement findElement() throws Exception {
-        return findElement(SettingsWeb.SYNCHRONZATION_TIMEOUT);
-    }
-
-    public WebElement findElement(int timeoutSecond) throws Exception {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeoutSecond);
-        WebElement webElement = null;
-
-        while (now.isBefore(timeOut) && webElement==null) {
-            try {
-                webElement = internalFindElement();
-            } catch (Exception e) {
-                throw e;
-            }
-        }
-        return webElement;
-    }
-
-    public WebElement findElement(By by) throws Exception {
-        WebElement e = findElement();
-        return e.findElement(by);
-    }
-
-    public WebElement findElement(By by, int timeoutSecond) throws Exception {
-        WebElement e = findElement(timeoutSecond);
-        return e.findElement(by);
     }
 
     public boolean exists() {
@@ -91,25 +62,11 @@ public abstract class AbstractElementDescription {
         return fun;
     }
 
-    protected <T, R> R perform(Function<T, R> function) throws Exception {
-        R r = perform(function, null);
-        return r;
+    private void internalClick() throws Exception {
+        WebElement e = findElement();
+        e.click();
     }
 
-    protected <T, R> R perform(Function<T, R> function, T param) throws Exception {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.SYNCHRONZATION_TIMEOUT);
-        R returnValue = null;
-
-//        while (now.isBefore(timeOut) && returnValue==null) {
-            try {
-                returnValue = function.apply(param);
-            } catch (Exception e) {
-                throw e;
-            }
-//        }
-        return returnValue;
-    }
 
     public Byte[] getScreenshot() throws Exception {
         return perform(internalGetScreenshot());
@@ -117,10 +74,7 @@ public abstract class AbstractElementDescription {
 
     protected abstract Function<Void, Byte[]> internalGetScreenshot() throws Exception;
 
-    private void internalClick() throws Exception {
-        WebElement e = findElement();
-        e.click();
-    }
+
 
     public void sendKeys(String text) throws Exception {
         perform(getFunctionInternalSendKeys(), text);
@@ -302,6 +256,55 @@ public abstract class AbstractElementDescription {
         return fun;
     }
 
+    protected <T, R> R perform(Function<T, R> function) throws Exception {
+        R r = perform(function, null);
+        return r;
+    }
+
+    protected <T, R> R perform(Function<T, R> function, T param) throws Exception {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.SYNCHRONZATION_TIMEOUT);
+        R returnValue = null;
+
+//        while (now.isBefore(timeOut) && returnValue==null) {
+        try {
+            returnValue = function.apply(param);
+        } catch (Exception e) {
+            throw e;
+        }
+//        }
+        return returnValue;
+    }
+
+    public WebElement findElement() throws Exception {
+        return findElement(SettingsWeb.SYNCHRONZATION_TIMEOUT);
+    }
+
+    public WebElement findElement(int timeoutSecond) throws Exception {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeoutSecond);
+        WebElement webElement = null;
+
+        while (now.isBefore(timeOut) && webElement==null) {
+            try {
+                webElement = internalFindElement();
+            } catch (Exception e) {
+                throw e;
+            }
+        }
+        return webElement;
+    }
+
+    public WebElement findElement(By by) throws Exception {
+        WebElement e = findElement();
+        return e.findElement(by);
+    }
+
+    public WebElement findElement(By by, int timeoutSecond) throws Exception {
+        WebElement e = findElement(timeoutSecond);
+        return e.findElement(by);
+    }
+
     private String internalGetAttribute(String attributeName) throws Exception {
         WebElement e = findElement();
         return e.getAttribute(attributeName);
@@ -319,7 +322,6 @@ public abstract class AbstractElementDescription {
     public abstract Collection<WebElement> internalFindElements() throws Exception;
 
     public Collection<WebElement> FindElements(int timeoutSecond) throws Exception {
-
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.SYNCHRONZATION_TIMEOUT);
         WebElement webElement = null;

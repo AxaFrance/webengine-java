@@ -11,20 +11,22 @@ import java.util.List;
 
 public abstract class AbstractPageModel {
 
-    public AbstractPageModel(WebDriver webDriver) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, NoSuchFieldException, InstantiationException {
+    public AbstractPageModel() {
+    }
+
+    protected void populateDriver(WebDriver webDriver) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class currentClazz = this.getClass();
         List<Field> fieldList = Arrays.asList(currentClazz.getDeclaredFields());
         Type type = null;
         for(Field  field : fieldList) {
             type = field.getType();
             if(type.getTypeName().equalsIgnoreCase("fr.axa.automation.webengine.core.WebElementDescription")){
-
-                WebElementDescription webElementDescription = (WebElementDescription)ClassUtil.create(WebElementDescription.class);
-                webElementDescription.useDriver(webDriver);
+                Object value = field.get(this);
                 field.setAccessible(true);
-                field.set(this, webElementDescription);
+                ((WebElementDescription)value).useDriver(webDriver);
 
             }
         }
     }
+
 }

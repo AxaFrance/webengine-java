@@ -30,5 +30,11 @@ public class VariableHelper {
         return variableOptional.orElse(null);
     }
 
+    public static Variable getVariable(String name, String value){
+        Variable variable = new Variable();
+        variable.setName(name);
+        variable.setValue(value);
+        return variable;
+    }
 
 }

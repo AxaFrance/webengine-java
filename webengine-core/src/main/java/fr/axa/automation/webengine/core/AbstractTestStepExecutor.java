@@ -59,6 +59,7 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
                 .context(context)
                 .environmentVariables(globalApplicationContext.getEnvironmentVariables())
                 .testCaseData(testDataByTestCase.orElse(null))
+                .settings(globalApplicationContext.getSettings())
                 .testCaseAdditionalInformation(testCaseAdditionalInformation).build();
     }
 }
