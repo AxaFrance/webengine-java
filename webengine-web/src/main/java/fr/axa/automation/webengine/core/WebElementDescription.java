@@ -191,12 +191,12 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     @Override
-    protected Function<Void, String> internalGetScreenshot() throws Exception {
-        Function<Void, String> fun = (x) -> {
+    protected Function<Void, byte[]> internalGetScreenshot() throws Exception {
+        Function<Void, byte[]> fun = (x) -> {
             try {
                 WebElement element = findElement();
                 if (element instanceof WebElement) {
-                    return element.getScreenshotAs(OutputType.BASE64).getBytes().toString();
+                    return element.getScreenshotAs(OutputType.BYTES);
                 } else {
                     throw new Exception("Don't find a instanceof a WebElement");
                 }

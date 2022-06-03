@@ -79,11 +79,11 @@ public abstract class AbstractElementDescription {
         wait(millisecondes[0]);
     }
 
-    public String getScreenshot() throws Exception {
+    public byte[] getScreenshot() throws Exception {
         return perform(internalGetScreenshot());
     }
 
-    protected abstract Function<Void, String> internalGetScreenshot() throws Exception;
+    protected abstract Function<Void, byte[]> internalGetScreenshot() throws Exception;
 
     public void sendKeys(String text) throws Exception {
         WebElement e = findElement();
