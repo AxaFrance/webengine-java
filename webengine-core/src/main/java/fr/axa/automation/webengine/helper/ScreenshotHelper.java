@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ScreenshotHelper {
 
-    public static ArrayOfScreenshotReport getArrayOfScreenshotReport(String name, String dataInbase64){
+    public static ArrayOfScreenshotReport getArrayOfScreenshotReport(String name, byte[] dataInbase64){
         ArrayOfScreenshotReport arrayOfScreenshotReport = new ArrayOfScreenshotReport();
         List<ScreenshotReport> screenshotReportList = new ArrayList<>();
         ScreenshotReport screenshotReport = getScreenshotReport(name, dataInbase64);
@@ -17,10 +17,10 @@ public class ScreenshotHelper {
         return arrayOfScreenshotReport;
     }
 
-    public static ScreenshotReport getScreenshotReport(String name, String dataInbase64) {
+    public static ScreenshotReport getScreenshotReport(String name, byte[] dataInbase64) {
         ScreenshotReport screenshotReport = new ScreenshotReport();
         screenshotReport.setName(name);
-        screenshotReport.setData(dataInbase64.getBytes());
+        screenshotReport.setData(dataInbase64);
         return screenshotReport;
     }
 

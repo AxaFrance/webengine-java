@@ -64,14 +64,14 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     }
 
     public void screenShot(String name) throws WebEngineException {
-        String screenshot = ((TakesScreenshot) actionDetailContext.getContext()).getScreenshotAs(OutputType.BASE64);
+        byte[] screenshot = ((TakesScreenshot) actionDetailContext.getContext()).getScreenshotAs(OutputType.BYTES);
         ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
         screenShotList.add(screenshotReport);
     }
 
     public void screenShot(AbstractElementDescription elementDescription) throws WebEngineException {
         try {
-            String screenshot = elementDescription.getScreenshot().toString();
+            byte[] screenshot = elementDescription.getScreenshot();
             ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport("Error message", screenshot);
             screenShotList.add(screenshotReport);
         } catch (Exception e) {
