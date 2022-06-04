@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.MultipleElementException;
-import fr.axa.automation.webengine.general.Settings;
 import fr.axa.automation.webengine.general.SettingsWeb;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,10 +15,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -266,7 +262,7 @@ public class WebElementDescription extends AbstractElementDescription {
                 throw e;
             }catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -293,7 +289,7 @@ public class WebElementDescription extends AbstractElementDescription {
                 throw e;
             }catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -321,7 +317,7 @@ public class WebElementDescription extends AbstractElementDescription {
                 throw e;
             }catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -363,10 +359,17 @@ public class WebElementDescription extends AbstractElementDescription {
                 throw e;
             }catch (NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
+    }
+
+    public boolean waitUntilXpath(Long timeOutInSeconds) throws InterruptedException {
+        By byXpath = By.xpath("//*[contains(text(),"+this.getXPath()+")]");
+        WebElement webElement = (new WebDriverWait(getWebDriver(), timeOutInSeconds))
+                .until(ExpectedConditions.presenceOfElementLocated(byXpath));
+        return webElement!=null;
     }
 
 }

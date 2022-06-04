@@ -84,4 +84,7 @@ public abstract class AbstractActionBase implements IAction {
         return null;
     }
 
+    public void waitInMillisecondes(Long milliseconds) throws InterruptedException {
+        Thread.sleep(milliseconds);
+    }
 }

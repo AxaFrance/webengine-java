@@ -7,10 +7,11 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
@@ -32,7 +33,7 @@ public abstract class AbstractElementDescription {
         return this;
     }
 
-    public void waitFor(Long milliseconds) throws InterruptedException {
+    public void waitInMillisecondes(Long milliseconds) throws InterruptedException {
         Thread.sleep(milliseconds);
     }
 
@@ -72,7 +73,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -134,7 +135,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -153,7 +154,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -179,7 +180,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -196,7 +197,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -213,7 +214,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -231,7 +232,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -248,7 +249,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -266,7 +267,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
@@ -284,7 +285,7 @@ public abstract class AbstractElementDescription {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
                 exception = e;
-                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
         throw exception;
