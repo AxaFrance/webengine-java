@@ -12,6 +12,7 @@ import fr.axa.automation.webengine.helper.TestCaseDataHelper;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
@@ -87,8 +88,30 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     protected Optional<String> getEnvironnementValue(String name) {
         Optional<String> value = Optional.empty();
         Optional<Variable> variable = EnvironmentVariablesHelper.getEnvironnementValue(name, getActionDetailContext().getEnvironmentVariables().getVariable());
-        if (variable.isPresent()) {
-            value = Optional.ofNullable(variable.get().getValue());
+        if ((variable.isPresent() && StringUtils.isEmpty(variable.get().getValue().trim())) || !variable.isPresent()) {
+            value = Optional.empty();
+        }else{
+            value = Optional.of(variable.get().getValue());
+        }
+        return value;
+    }
+
+    protected String getEnvironnementValueWithException(String name) throws WebEngineException {
+        Optional<String> environnementValue = getEnvironnementValue(name);
+        if (environnementValue.isPresent()) {
+            return environnementValue.get();
+        } else {
+            throw new WebEngineException("La variable d'environnement " + name + " n'est pas présente");
+        }
+    }
+
+    protected Optional<String> getParameter(String name) {
+        Optional<String> value = Optional.empty();
+        Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
+        if ((variable.isPresent() && StringUtils.isEmpty(variable.get().getValue().trim())) || !variable.isPresent()) {
+            value = Optional.empty();
+        }else{
+            value = Optional.of(variable.get().getValue());
         }
         return value;
     }
@@ -102,27 +125,8 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         }
     }
 
-    protected String getEnvironnementValueWithException(String name) throws WebEngineException {
-        Optional<String> url = getEnvironnementValue(name);
-        if (url.isPresent()) {
-            return url.get();
-        } else {
-            throw new WebEngineException("La variable d'environnement " + name + " n'est pas présente");
-        }
-    }
-
-
     protected WebDriver getWebDriver() {
         return ((WebDriver) getActionDetailContext().getContext());
-    }
-
-    protected Optional<String> getParameter(String name) {
-        Optional<String> value = Optional.empty();
-        Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
-        if (variable.isPresent()) {
-            value = Optional.ofNullable(variable.get().getValue());
-        }
-        return value;
     }
 
     protected void sync(WebDriver webDriver) throws InterruptedException {

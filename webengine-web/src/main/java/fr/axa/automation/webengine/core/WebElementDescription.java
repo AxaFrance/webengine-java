@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.general.Settings;
 import fr.axa.automation.webengine.general.SettingsWeb;
 import lombok.AccessLevel;
@@ -17,6 +18,7 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -81,10 +83,10 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     @Override
-    public WebElement internalFindElement() throws Exception {
+    public WebElement internalFindElement() {
         Collection<WebElement> elements = internalFindElements();
         if (CollectionUtils.isNotEmpty(elements) && elements.size() > 1) {
-            throw new Exception("Multiple element has found with the given selection criteria");
+            throw new MultipleElementException("Multiple element has found with the given selection criteria");
         } else {
             return elements.iterator().next();
         }
@@ -104,7 +106,7 @@ public class WebElementDescription extends AbstractElementDescription {
 
 
     @Override
-    public Collection<WebElement> internalFindElements() throws Exception {
+    public Collection<WebElement> internalFindElements() {
         Collection<WebElement> webElementList = null;
         if (StringUtils.isNotEmpty(this.id)) {
             webElementList = getInternalFindElementsById(this.id);
@@ -153,7 +155,7 @@ public class WebElementDescription extends AbstractElementDescription {
             webElementList = calculWebElementByCriteria(webElementList, webElementByAttributeList);
         }
         if (CollectionUtils.isEmpty(webElementList)) {
-            throw new Exception("No such WebElement");
+            throw new NoSuchElementException("No such WebElement if found in the page");
         }
 
         return webElementList;
@@ -243,49 +245,128 @@ public class WebElementDescription extends AbstractElementDescription {
         return new Select(element);
     }
 
+//    public void selectByText(String text) throws Exception {
+//        WebElement element = this.findElement();
+//        element.click();
+//        Select se = new Select(element);
+//        se.selectByVisibleText(text);
+//    }
+
     public void selectByText(String text) throws Exception {
-        WebElement element = this.findElement();
-        element.click();
-        Select se = new Select(element);
-        se.selectByVisibleText(text);
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
+        Exception exception = new Exception();
+        while (LocalDateTime.now().isBefore(timeOut)) {
+            try {
+                WebElement webElement = this.findElement();
+                webElement.click();
+                Select se = new Select(webElement);
+                se.selectByVisibleText(text);
+                return;
+            }catch (InvalidSelectorException e){
+                throw e;
+            }catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
+                exception = e;
+                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+            }
+        }
+        throw exception;
     }
 
-    public void selectByText(String text,Long...millisecondes) throws Exception {
-        selectByText(text);
-        wait(millisecondes[0]);
-    }
+//    public void selectByIndex(Integer index) throws Exception {
+//        WebElement element = this.findElement();
+//        element.click();
+//        Select se = new Select(element);
+//        se.selectByIndex(index);
+//    }
 
     public void selectByIndex(Integer index) throws Exception {
-        WebElement element = this.findElement();
-        element.click();
-        Select se = new Select(element);
-        se.selectByIndex(index);
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
+        Exception exception = new Exception();
+        while (LocalDateTime.now().isBefore(timeOut)) {
+            try {
+                WebElement element = this.findElement();
+                element.click();
+                Select se = new Select(element);
+                se.selectByIndex(index);
+                return;
+            }catch (InvalidSelectorException e){
+                throw e;
+            }catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
+                exception = e;
+                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+            }
+        }
+        throw exception;
     }
+
+//    public void selectByValue(String value) throws Exception {
+//        WebElement element = this.findElement();
+//        element.click();
+//        Select se = new Select(element);
+//        se.selectByValue(value);
+//    }
+
 
     public void selectByValue(String value) throws Exception {
-        WebElement element = this.findElement();
-        element.click();
-        Select se = new Select(element);
-        se.selectByValue(value);
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
+        Exception exception = new Exception();
+        while (LocalDateTime.now().isBefore(timeOut)) {
+            try {
+                WebElement element = this.findElement();
+                element.click();
+                Select se = new Select(element);
+                se.selectByValue(value);
+                return;
+            }catch (InvalidSelectorException e){
+                throw e;
+            }catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
+                exception = e;
+                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
+            }
+        }
+        throw exception;
     }
+
+
+//    public void checkByValue(String value) throws Exception {
+//        perform(getFunctionInternalCheckByValue(), value);
+//    }
+//
+//    private Function<String, String> getFunctionInternalCheckByValue() {
+//        Function<String, String> fun = (value) -> {
+//            try {
+//                Collection<WebElement> elementCollection = this.internalFindElements();
+//                if (CollectionUtils.isNotEmpty(elementCollection)) {
+//                    WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(value)).findFirst().orElse(null);
+//                    webElementFilter.click();
+//                }
+//            } catch (Exception e) {
+//                return null;
+//            }
+//            return OK;
+//        };
+//        return fun;
+//    }
 
     public void checkByValue(String value) throws Exception {
-        perform(getFunctionInternalCheckByValue(), value);
-    }
-
-    private Function<String, String> getFunctionInternalCheckByValue() {
-        Function<String, String> fun = (value) -> {
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
+        Exception exception = new Exception();
+        while (LocalDateTime.now().isBefore(timeOut)) {
             try {
                 Collection<WebElement> elementCollection = this.internalFindElements();
                 if (CollectionUtils.isNotEmpty(elementCollection)) {
                     WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(value)).findFirst().orElse(null);
                     webElementFilter.click();
                 }
-            } catch (Exception e) {
-                return null;
+                return;
+            }catch (InvalidSelectorException e){
+                throw e;
+            }catch (NoSuchElementException | StaleElementReferenceException e) {
+                exception = e;
+                waitFor(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
-            return OK;
-        };
-        return fun;
+        }
+        throw exception;
     }
+
 }
