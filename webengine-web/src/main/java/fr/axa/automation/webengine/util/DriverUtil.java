@@ -2,8 +2,6 @@ package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;

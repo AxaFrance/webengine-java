@@ -6,7 +6,6 @@ import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.general.Settings;
 import org.openqa.selenium.WebDriver;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class BrowserFactory {

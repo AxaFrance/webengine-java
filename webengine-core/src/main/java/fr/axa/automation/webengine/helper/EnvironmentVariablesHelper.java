@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.Variable;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

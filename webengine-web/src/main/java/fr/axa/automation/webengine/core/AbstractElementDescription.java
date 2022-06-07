@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -56,6 +54,24 @@ public abstract class AbstractElementDescription {
         return returnValue;
     }
 
+    protected <T, R> R perform2(IFunction<T, R> function, T param) throws Exception {
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
+        Exception exception = new Exception();
+
+        while (LocalDateTime.now().isBefore(timeOut)) {
+            try {
+                R r = function.call(param);
+                return r;
+            } catch (InvalidSelectorException e) {
+                throw e;
+            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
+                exception = e;
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
+            }
+        }
+        throw exception;
+    }
+
     protected abstract WebElement internalFindElement() ;
 
     public WebElement findElement() throws Exception {
@@ -78,7 +94,6 @@ public abstract class AbstractElementDescription {
         }
         throw exception;
     }
-
 
     public Collection<WebElement> findElements(By by) throws Exception {
         WebElement e = findElement();
@@ -110,8 +125,11 @@ public abstract class AbstractElementDescription {
         return webElementCollection;
     }
 
-    public boolean exists() {
-        return exists(SettingsWeb.TIMEOUT_SECONDES);
+    public Boolean exists() throws Exception {
+        IFunction<Void, Boolean> fun = (x) -> {
+            return Boolean.valueOf(exists(SettingsWeb.TIMEOUT_SECONDES));
+        };
+        return perform2(fun,null);
     }
 
     public boolean exists(int timeoutSecond) {
@@ -124,42 +142,23 @@ public abstract class AbstractElementDescription {
     }
 
     public void click() throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
+        IFunction<Void, Void> fun = (x) -> {
                 WebElement webElement = findElement();
                 webElement.click();
-                return;
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+                return null;
+        };
+        perform2(fun,null);
     }
 
     public void sendKeys(String text) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement webElement = findElement();
-                webElement.clear();
-                webElement.sendKeys(text);
-                return;
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<String, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            webElement.clear();
+            webElement.sendKeys(x);
+            return null;
+        };
+        perform2(fun,text);
     }
-
 
     public byte[] getScreenshot() throws Exception {
         return perform(internalGetScreenshot());
@@ -168,128 +167,61 @@ public abstract class AbstractElementDescription {
     protected abstract Function<Void, byte[]> internalGetScreenshot() throws Exception;
 
     public void setValue(String text) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement element = findElement();
-                element.clear();
-                element.sendKeys(text);
-                return;
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<String, Void> fun = (x) -> {
+            WebElement element = findElement();
+            element.clear();
+            element.sendKeys(x);
+            return null;
+        };
+        perform2(fun,text);
     }
 
     public String getText() throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement element = findElement();
-                return element.getText();
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<Void, String> fun = (x) -> {
+            WebElement element = findElement();
+            return element.getText();
+        };
+        return perform2(fun,null);
     }
 
     public Boolean isSelected() throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement e = findElement();
-                return e.isSelected();
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement e = findElement();
+            return Boolean.valueOf(e.isSelected());
+        };
+        return perform2(fun,null);
     }
 
-
     public Boolean isEnabled() throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement e = findElement();
-                return e.isEnabled();
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement e = findElement();
+            return Boolean.valueOf(e.isEnabled());
+        };
+        return perform2(fun,null);
     }
 
     public Boolean isDisplayed() throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement e = findElement();
-                return e.isDisplayed();
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement e = findElement();
+            return Boolean.valueOf(e.isDisplayed());
+        };
+        return perform2(fun,null);
     }
 
     public void clear() throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement e = findElement();
-                e.clear();
-                return;
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement e = findElement();
+            e.clear();
+            return null;
+        };
+        perform2(fun,null);
     }
-
 
     public String getAttribute(String attributeName) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        Exception exception = new Exception();
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                WebElement e = findElement();
-                return e.getAttribute(attributeName);
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
-            }
-        }
-        throw exception;
+        IFunction<String, String> fun = (x) -> {
+            WebElement e = findElement();
+            return e.getAttribute(x);
+        };
+        return perform2(fun,attributeName);
     }
-
-
 }

@@ -1,10 +1,8 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.util.ClassUtil;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +25,10 @@ public abstract class AbstractPageModel {
 
             }
         }
+    }
+
+    public void waitInMillisecondes(Long milliseconds) throws InterruptedException {
+        Thread.sleep(milliseconds);
     }
 
 }
