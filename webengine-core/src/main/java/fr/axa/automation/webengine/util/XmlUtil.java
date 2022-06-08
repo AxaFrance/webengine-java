@@ -32,6 +32,7 @@ public class XmlUtil {
             Source source = new StreamSource(file);
             jaxbContext = JAXBContext.newInstance(object.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             JAXBElement jaxbElement = new JAXBElement( new QName("", object.getClass().getSimpleName()), object.getClass(), object );
             jaxbMarshaller.marshal(jaxbElement, file);
         } catch (JAXBException e) {
