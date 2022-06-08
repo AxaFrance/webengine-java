@@ -45,7 +45,7 @@ public class ReportHelper {
                         .append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat()))
                         .append(".xml").toString();
         loggerService.info("Create report : "+path.toString()+"\\"+fileName);
-        FileUtil.saveAsXML(path.toString(),fileName,testSuiteReport);
+        FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport,"http://www.axa.fr/WebEngine/2022","ns");
     }
 
 

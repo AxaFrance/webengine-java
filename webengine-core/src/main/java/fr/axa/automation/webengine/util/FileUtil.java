@@ -25,7 +25,13 @@ public class FileUtil {
 
     public static String saveAsXML(String path, String fileName, Object object) throws IOException, WebEngineException {
         Path filePath = Paths.get(path,fileName);
-        XmlUtil.marshall(filePath.toString(),object);
+        XmlUtil.marshallWithoutNamespace(filePath.toString(),object);
+        return filePath.toString();
+    }
+
+    public static String saveAsXml(String path, String fileName, Object object,String namespace, String prefixe) throws IOException, WebEngineException {
+        Path filePath = Paths.get(path,fileName);
+        XmlUtil.marshallWithNamespace(filePath.toString(),object,namespace,prefixe);
         return filePath.toString();
     }
 
