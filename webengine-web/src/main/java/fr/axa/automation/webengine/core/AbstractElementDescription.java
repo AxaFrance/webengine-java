@@ -153,7 +153,6 @@ public abstract class AbstractElementDescription {
     public void sendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            webElement.clear();
             webElement.sendKeys(x);
             return null;
         };

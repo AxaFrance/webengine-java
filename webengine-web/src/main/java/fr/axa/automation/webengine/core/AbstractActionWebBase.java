@@ -58,6 +58,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
             loggerService.error(erroMessage, e);
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
+            actionReport.getContextValues().getVariable().addAll(contextValueList);
             actionReport.getScreenshots().getScreenshotReport().addAll(screenShotList);
         }
 

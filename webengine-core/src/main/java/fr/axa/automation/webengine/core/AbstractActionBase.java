@@ -20,6 +20,7 @@ public abstract class AbstractActionBase implements IAction {
     ActionContext actionDetailContext;
     List<ScreenshotReport> screenShotList = new ArrayList<>();
     Result result;
+    List<Variable> contextValueList = new ArrayList<>();
 
     public AbstractActionBase() {
     }
@@ -43,6 +44,8 @@ public abstract class AbstractActionBase implements IAction {
         ActionReport actionReport = new ActionReport();
         actionReport.setName(getClass().getSimpleName());
         actionReport.setStartTime(Calendar.getInstance());
+        ArrayOfVariable arrayOfVariable = new ArrayOfVariable();
+        actionReport.setContextValues(arrayOfVariable);
         actionReport.setScreenshots(new ArrayOfScreenshotReport());
         actionReport.setResult(Result.NONE);
         return actionReport;
@@ -72,12 +75,12 @@ public abstract class AbstractActionBase implements IAction {
     public abstract void screenShot(String name) throws WebEngineException;
 
     protected void setContextValue(Variable contextValue){
-        SharedContext.CONTEXT_VALUE_LIST.add(contextValue);
+        contextValueList.add(contextValue);
     }
 
     protected String getContexteValue(String contextName){
-        for (Variable variable: SharedContext.CONTEXT_VALUE_LIST) {
-            if(variable.getName().equalsIgnoreCase("contextName")){
+        for (Variable variable: contextValueList) {
+            if(variable.getName().equalsIgnoreCase(contextName)){
                 return variable.getValue();
             }
         }
