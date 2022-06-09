@@ -3,9 +3,9 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 public class WebElementDescription extends AbstractElementDescription {
 
@@ -158,34 +158,34 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private List<WebElement> getInternalindElementByCssSelector(String cssSelector) {
-        return webDriver.findElements(By.cssSelector(cssSelector));
+        return useDriver.findElements(By.cssSelector(cssSelector));
     }
 
     private List<WebElement> getInternalindElementByTagName(String tagName) {
-        return webDriver.findElements(By.tagName(tagName.toUpperCase()));
+        return useDriver.findElements(By.tagName(tagName.toUpperCase()));
 
     }
 
     private List<WebElement> getInternalindElementByLinkText(String linkText) {
-        return webDriver.findElements(By.linkText(linkText));
+        return useDriver.findElements(By.linkText(linkText));
     }
 
     private Collection<WebElement> getInternalFindElementByClassName(String className) {
         String xPath = "//*[@class='{" + className + "}']";
-        return webDriver.findElements(By.xpath(xPath));
+        return useDriver.findElements(By.xpath(xPath));
     }
 
     private Collection<WebElement> getInternalFindElementByXpath(String xPath) {
-        return webDriver.findElements(By.xpath(xPath));
+        return useDriver.findElements(By.xpath(xPath));
     }
 
 
     private Collection<WebElement> getInternalFindElementsByName(String name) {
-        return webDriver.findElements(By.name(name));
+        return useDriver.findElements(By.name(name));
     }
 
     private Collection<WebElement> getInternalFindElementsById(String id) {
-        return webDriver.findElements(By.id(this.id));
+        return useDriver.findElements(By.id(this.id));
     }
 
     @Override
@@ -207,32 +207,32 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public void mouseHover() throws Exception {
         WebElement webElement = findElement();
-        Actions actions = new Actions(webDriver);
+        Actions actions = new Actions(useDriver);
         actions.moveToElement(webElement).build().perform();
     }
 
     public void rightClick() throws Exception {
         WebElement webElement = findElement();
-        Actions actions = new Actions(webDriver);
+        Actions actions = new Actions(useDriver);
         actions.moveToElement(webElement).contextClick().build().perform();
     }
 
     public void dragAndDropTo(WebElement element) throws Exception {
         WebElement findWebElement = findElement();
-        Actions actions = new Actions(webDriver);
+        Actions actions = new Actions(useDriver);
         actions.dragAndDrop(findWebElement, element).build().perform();
     }
 
     public void scrollIntoView() throws Exception {
         WebElement findWebElement = findElement();
-        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        JavascriptExecutor js = (JavascriptExecutor) useDriver;
         js.executeScript("arguments[0].scrollIntoView(true);", findWebElement);
     }
 
     public void dragAndDropTo(AbstractElementDescription element) throws Exception {
         WebElement e1 = findElement();
         WebElement e2 = element.findElement();
-        Actions act = new Actions(webDriver);
+        Actions act = new Actions(useDriver);
         act.dragAndDrop(e1, e2).build().perform();
     }
 
@@ -249,7 +249,7 @@ public class WebElementDescription extends AbstractElementDescription {
             se.selectByVisibleText(x);
             return null;
         };
-        perform2(fun,text);
+        retry(fun,text);
     }
 
     public void selectByIndex(Integer index) throws Exception {
@@ -260,7 +260,7 @@ public class WebElementDescription extends AbstractElementDescription {
             se.selectByIndex(x);
             return null;
         };
-        perform2(fun,index);
+        retry(fun,index);
     }
 
     public void selectByValue(String value) throws Exception {
@@ -271,7 +271,7 @@ public class WebElementDescription extends AbstractElementDescription {
             se.selectByValue(x);
             return null;
         };
-        perform2(fun,value);
+        retry(fun,value);
     }
 
     public void checkByValue(String value) throws Exception {
@@ -283,12 +283,12 @@ public class WebElementDescription extends AbstractElementDescription {
             }
             return null;
         };
-        perform2(fun,value);
+        retry(fun,value);
     }
 
     public boolean waitUntilXpath(Long timeOutInSeconds) throws InterruptedException {
         By byXpath = By.xpath("//*[contains(text(),'"+this.innerText+"')]");
-        WebElement webElement = (new WebDriverWait(getWebDriver(), timeOutInSeconds)
+        WebElement webElement = (new WebDriverWait(getUseDriver(), timeOutInSeconds)
                 .ignoring(StaleElementReferenceException.class).ignoring(NoSuchElementException.class))
                 .until(ExpectedConditions.presenceOfElementLocated(byXpath));
         return webElement!=null;
@@ -298,10 +298,10 @@ public class WebElementDescription extends AbstractElementDescription {
     public void focus() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement element = this.findElement();
-            new Actions(getWebDriver()).moveToElement(element).perform();
+            new Actions(getUseDriver()).moveToElement(element).perform();
             return null;
         };
-        perform2(fun,null);
+        retry(fun,null);
     }
 
 

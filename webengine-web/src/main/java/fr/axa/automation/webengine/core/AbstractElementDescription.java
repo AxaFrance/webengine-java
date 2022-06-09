@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.general.SettingsWeb;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 
@@ -15,19 +16,19 @@ import java.util.function.Function;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
 @Slf4j
+@SuperBuilder
 public abstract class AbstractElementDescription {
-    protected WebDriver webDriver;
+    protected WebDriver useDriver;
 
     public AbstractElementDescription() {
     }
 
     public AbstractElementDescription(WebDriver webDriver) {
-        this.webDriver = webDriver;
+        this.useDriver = webDriver;
     }
 
-
-    public AbstractElementDescription useDriver(WebDriver webDriver) {
-        this.webDriver = webDriver;
+    public AbstractElementDescription populateDriver(WebDriver webDriver) {
+        this.useDriver = webDriver;
         return this;
     }
 
@@ -36,8 +37,7 @@ public abstract class AbstractElementDescription {
     }
 
     protected <T, R> R perform(Function<T, R> function) throws Exception {
-        R r = perform(function, null);
-        return r;
+        return perform(function, null);
     }
 
     protected <T, R> R perform(Function<T, R> function, T param) throws Exception {
@@ -54,14 +54,13 @@ public abstract class AbstractElementDescription {
         return returnValue;
     }
 
-    protected <T, R> R perform2(IFunction<T, R> function, T param) throws Exception {
+    protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
         LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
         Exception exception = new Exception();
 
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
-                R r = function.call(param);
-                return r;
+                return function.call(param);
             } catch (InvalidSelectorException e) {
                 throw e;
             } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
@@ -127,9 +126,9 @@ public abstract class AbstractElementDescription {
 
     public Boolean exists() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
-            return Boolean.valueOf(exists(SettingsWeb.TIMEOUT_SECONDES));
+            return exists(SettingsWeb.TIMEOUT_SECONDES);
         };
-        return perform2(fun,null);
+        return retry(fun,null);
     }
 
     public boolean exists(int timeoutSecond) {
@@ -147,7 +146,7 @@ public abstract class AbstractElementDescription {
                 webElement.click();
                 return null;
         };
-        perform2(fun,null);
+        retry(fun,null);
     }
 
     public void sendKeys(String text) throws Exception {
@@ -156,7 +155,7 @@ public abstract class AbstractElementDescription {
             webElement.sendKeys(x);
             return null;
         };
-        perform2(fun,text);
+        retry(fun,text);
     }
 
     public byte[] getScreenshot() throws Exception {
@@ -172,7 +171,7 @@ public abstract class AbstractElementDescription {
             element.sendKeys(x);
             return null;
         };
-        perform2(fun,text);
+        retry(fun,text);
     }
 
     public String getText() throws Exception {
@@ -180,47 +179,47 @@ public abstract class AbstractElementDescription {
             WebElement element = findElement();
             return element.getText();
         };
-        return perform2(fun,null);
+        return retry(fun,null);
     }
 
     public Boolean isSelected() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
-            WebElement e = findElement();
-            return Boolean.valueOf(e.isSelected());
+            WebElement webElement = findElement();
+            return webElement.isSelected();
         };
-        return perform2(fun,null);
+        return retry(fun,null);
     }
 
     public Boolean isEnabled() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
-            WebElement e = findElement();
-            return Boolean.valueOf(e.isEnabled());
+            WebElement webElement = findElement();
+            return webElement.isEnabled();
         };
-        return perform2(fun,null);
+        return retry(fun,null);
     }
 
     public Boolean isDisplayed() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
-            WebElement e = findElement();
-            return Boolean.valueOf(e.isDisplayed());
+            WebElement webElement = findElement();
+            return webElement.isDisplayed();
         };
-        return perform2(fun,null);
+        return retry(fun,null);
     }
 
     public void clear() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement e = findElement();
-            e.clear();
+            WebElement webElement = findElement();
+            webElement.clear();
             return null;
         };
-        perform2(fun,null);
+        retry(fun,null);
     }
 
     public String getAttribute(String attributeName) throws Exception {
         IFunction<String, String> fun = (x) -> {
-            WebElement e = findElement();
-            return e.getAttribute(x);
+            WebElement webElement = findElement();
+            return webElement.getAttribute(x);
         };
-        return perform2(fun,attributeName);
+        return retry(fun,attributeName);
     }
 }
