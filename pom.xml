@@ -20,7 +20,7 @@
         <java-source.version>1.8</java-source.version>
         <java-target.version>1.8</java-target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <lombok.version>1.18.22</lombok.version>
         <logback-core.version>1.2.11</logback-core.version>
         <logback-classic.version>1.2.11</logback-classic.version>

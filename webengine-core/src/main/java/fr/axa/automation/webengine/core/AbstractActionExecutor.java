@@ -28,13 +28,16 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
     public AbstractActionExecutor() {
     }
 
-    public ActionReportDetail run(GlobalApplicationContext globalApplicationContext, IAction action) throws WebEngineException {
+    public ActionReportDetail run(GlobalApplicationContext globalApplicationContext, IAction action) {
+        String errorMessage = "";
         String actionName = action.getClass().getSimpleName();
-        ActionReportDetail actionReportDetail;
+        ActionReportDetail actionReportDetail = ActionReportDetail.builder().build();
         try {
             actionReportDetail = execute(globalApplicationContext, action);
-        } catch (WebEngineException e) {
-            throw new WebEngineException("Exception occurs when running the Action : " + actionName, e);
+        } catch (Exception e) {
+            errorMessage = "Exception for action :" + actionName;
+            actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
+            actionReportDetail.getActionReport().setLog(errorMessage);
         }
         return actionReportDetail;
     }
@@ -43,7 +46,7 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
         return (actionReport != null && actionReport.getResult() != Result.IGNORED);
     }
 
-    private ActionReportDetail execute(GlobalApplicationContext globalApplicationContext, IAction action) throws WebEngineException {
+    private ActionReportDetail execute(GlobalApplicationContext globalApplicationContext, IAction action)  {
         String errorMessage = "";
         String actionName = action.getClass().getSimpleName();
         LocalDateTime startTime = LocalDateTime.now();
@@ -74,15 +77,16 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
             actionReportDetail.getActionReport().setLog(errorMessage);
             loggerService.error(errorMessage, ierr);
-            throw new WebEngineException(errorMessage,ierr);
+            future.cancel(true);
         } catch (ExecutionException err) {
             errorMessage = "Execution Exception for action :" + actionName;
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
             actionReportDetail.getActionReport().setLog(errorMessage);
             loggerService.error(errorMessage, err);
-            throw new WebEngineException(errorMessage,err);
+        }finally {
+            executorService.shutdown();
         }
-        executorService.shutdown();
+
         return actionReportDetail;
     }
 }

@@ -20,7 +20,9 @@ public class BrowserFactory {
             }else if(settings.getBrowserType()== BrowserType.FIREFOX){
                 webDriver = FirefoxDriverUtil.getFirefoxDriver();
             }
-            webDriver.get().manage().deleteAllCookies();
+            if(webDriver.isPresent()){
+                webDriver.get().manage().deleteAllCookies();
+            }
         }
         return webDriver;
     }

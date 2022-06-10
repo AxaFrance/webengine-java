@@ -129,9 +129,4 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     protected WebDriver getWebDriver() {
         return ((WebDriver) getActionDetailContext().getContext());
     }
-
-    protected void sync(WebDriver webDriver) throws InterruptedException {
-        Wait wait = new WebDriverWait(webDriver, getActionDetailContext().getSettings().getSynchronzationTimeout());
-        wait.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-    }
 }
