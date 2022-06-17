@@ -35,14 +35,18 @@ public class BootProject {
     private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT,ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM);
     private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM);
 
-    @Autowired
     LoggerService loggerService;
 
-    @Autowired
     ITestSuiteExecutor testSuiteExecutor;
 
-    @Autowired
     ReportHelper reportHelper;
+
+    @Autowired
+    public BootProject(LoggerService loggerService, ITestSuiteExecutor testSuiteExecutor, ReportHelper reportHelper) {
+        this.loggerService = loggerService;
+        this.testSuiteExecutor = testSuiteExecutor;
+        this.reportHelper = reportHelper;
+    }
 
     public void runFromFramework(String... args) throws Exception {
         CommandLine commandLine = ArgumentParser.getOption(args, ArgumentParser.getOptionList(ARGUMENT_OPTION_FRAMEWORK));
@@ -131,7 +135,6 @@ public class BootProject {
         loggerService.info("Find Test Suite Class is running ");
         return JarUtil.findAllClass(ITestSuite.class);
     }
-
 
     private EnvironmentVariables getEnvironmentVariables(CommandLine cmd,String... args) throws WebEngineException {
         String environnementVariablesFilePath = cmd.getOptionValue(ArgumentOption.ENVIRONNEMENT_VARIABLE.getOption());

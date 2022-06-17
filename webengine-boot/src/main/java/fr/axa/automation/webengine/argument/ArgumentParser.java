@@ -2,6 +2,8 @@ package fr.axa.automation.webengine.argument;
 
 import org.apache.commons.cli.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ArgumentParser {
@@ -29,8 +31,23 @@ public class ArgumentParser {
     }
 
     public static Option getOption(ArgumentOption argumentOption) {
-        Option option = new Option(argumentOption.getOption(), argumentOption.getHasArg(), argumentOption.getDescription());
-        option.setRequired(argumentOption.getRequired());
+        Option option = Option.builder()
+                        .option(argumentOption.getOption())
+                        .hasArg(argumentOption.getHasArg())
+                        .valueSeparator(argumentOption.getSeparator())
+                        .required(argumentOption.getRequired())
+                        .desc(argumentOption.getDescription()).build();
+
         return option;
+    }
+
+    public static String[] splitArguments(String[] args,String regex,int limit) {
+        List<String> newArgsList = new ArrayList<>();
+        List<String> argsList = Arrays.asList(args);
+        for (String argument:argsList){
+            newArgsList.addAll(Arrays.asList(argument.split(regex, limit)));
+        }
+        String[] array = new String[newArgsList.size()];
+        return newArgsList.toArray(array);
     }
 }
