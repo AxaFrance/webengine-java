@@ -74,10 +74,21 @@ public class BootProject {
                 .testCaseAdditionnalInformationList(testCaseAdditionalInformationMap)
                 .build();
 
+        loggerService.info("Start Phase initialize ");
         testSuiteExecutor.initialize(globalApplicationContext);
+        loggerService.info("End Phase initialize ");
+
+        loggerService.info("Start run test ");
         TestSuiteReport testSuiteReport = testSuiteExecutor.run(globalApplicationContext);
+        loggerService.info("End run test ");
+
+        loggerService.info("Start clean ");
         testSuiteExecutor.cleanUp(globalApplicationContext);
+        loggerService.info("End clean ");
+
+        loggerService.info("Start report ");
         reportHelper.generateAllReport(testSuiteReport,testSuite.getClass().getSimpleName(),settings.getLogDir());
+        loggerService.info("End report ");
     }
 
     private Map<String,TestCaseAdditionalInformation> getTestCaseAdditionalInformation(ITestSuite testSuite, TestSuiteData testSuiteData ) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
@@ -128,12 +139,20 @@ public class BootProject {
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             throw new WebEngineException("No TestSuite class found :",e);
         }
+
+        if(testSuite==null){
+            throw new WebEngineException("Test Suite is null :");
+        }
+
         return testSuite;
     }
 
     private Set<Class<? extends ITestSuite>> getTestSuiteList(String... args) {
         loggerService.info("Find Test Suite Class is running ");
-        return JarUtil.findAllClass(ITestSuite.class);
+        Set<Class<? extends ITestSuite>> testSuite = JarUtil.findAllClass(ITestSuite.class);
+        loggerService.info("Test Suite class founded is : "+testSuite.toString());
+        loggerService.info("Find Test Suite Class is succeed ");
+        return testSuite;
     }
 
     private EnvironmentVariables getEnvironmentVariables(CommandLine cmd,String... args) throws WebEngineException {

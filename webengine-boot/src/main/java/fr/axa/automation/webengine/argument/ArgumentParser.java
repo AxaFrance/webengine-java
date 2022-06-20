@@ -34,7 +34,6 @@ public class ArgumentParser {
         Option option = Option.builder()
                         .option(argumentOption.getOption())
                         .hasArg(argumentOption.getHasArg())
-                        .valueSeparator(argumentOption.getSeparator())
                         .required(argumentOption.getRequired())
                         .desc(argumentOption.getDescription()).build();
 
