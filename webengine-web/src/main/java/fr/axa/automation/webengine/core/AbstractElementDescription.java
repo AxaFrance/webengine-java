@@ -63,7 +63,7 @@ public abstract class AbstractElementDescription {
                 return function.call(param);
             } catch (InvalidSelectorException e) {
                 throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
+            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException | ElementClickInterceptedException e ) {
                 exception = e;
                 waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }

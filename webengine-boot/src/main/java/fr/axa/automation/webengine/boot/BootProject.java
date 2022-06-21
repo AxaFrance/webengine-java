@@ -160,9 +160,9 @@ public class BootProject {
 
     private EnvironmentVariables getEnvironmentVariables(CommandLine cmd) throws WebEngineException {
         String environnementVariablesFilePath = cmd.getOptionValue(ArgumentOption.ENVIRONNEMENT_VARIABLE.getOption());
-        loggerService.info("Loading test data running: " + environnementVariablesFilePath);
+        loggerService.info("Loading environment data running: " + environnementVariablesFilePath);
         EnvironmentVariables environmentVariables = XmlUtil.unmarshall(environnementVariablesFilePath,EnvironmentVariables.class);
-        loggerService.info("Loading test data succeed: " + environnementVariablesFilePath);
+        loggerService.info("Loading environment data succeed: " + environnementVariablesFilePath);
         return environmentVariables;
     }
 
