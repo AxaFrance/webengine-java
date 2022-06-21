@@ -3,8 +3,10 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class JarUtil {
@@ -12,7 +14,10 @@ public class JarUtil {
     public static void loadLibrary(java.io.File jar) throws WebEngineException{
         try {
             /*We are using reflection here to circumvent encapsulation; addURL is not public*/
-            java.net.URLClassLoader loader = (java.net.URLClassLoader)ClassLoader.getSystemClassLoader();
+
+            //java.net.URLClassLoader loader = (java.net.URLClassLoader)ClassLoader.getSystemClassLoader(); //Doesn't work with spring boot
+            java.net.URLClassLoader loader = (java.net.URLClassLoader)Thread.currentThread().getContextClassLoader();
+
             java.net.URL url = jar.toURI().toURL();
             /*Disallow if already loaded*/
             for (java.net.URL it : java.util.Arrays.asList(loader.getURLs())){
@@ -32,6 +37,9 @@ public class JarUtil {
     }
 
     public static <T> Set<Class<? extends T>> findAllClass(Class<T> clazz) {
+//        Don't Delete this two lines, need to debug all class from external class loaded
+//        Reflections reflections = new Reflections("fr.axa", new SubTypesScanner(false));
+//        Set<Class> classes = reflections.getSubTypesOf(Object.class).stream().collect(Collectors.toSet());
         Reflections reflections = new Reflections();
         return reflections.getSubTypesOf(clazz);
     }

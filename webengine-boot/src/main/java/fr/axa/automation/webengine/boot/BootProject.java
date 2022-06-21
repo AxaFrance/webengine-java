@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -50,7 +52,7 @@ public class BootProject {
 
     public void runFromFramework(String... args) throws Exception {
         CommandLine commandLine = ArgumentParser.getOption(args, ArgumentParser.getOptionList(ARGUMENT_OPTION_FRAMEWORK));
-        loadProject(commandLine, args);
+        loadProject(commandLine);
         runTestSuite(commandLine,args);
     }
 
@@ -60,9 +62,9 @@ public class BootProject {
     }
 
     private void runTestSuite(CommandLine commandLine,String[] args) throws WebEngineException, IllegalAccessException, InstantiationException, ClassNotFoundException, IOException {
-        TestSuiteData testSuiteData = getTestSuiteData(commandLine,args);
-        Settings settings = getSettings(commandLine, args);
-        EnvironmentVariables environmentVariables = getEnvironmentVariables(commandLine,args);
+        TestSuiteData testSuiteData = getTestSuiteData(commandLine);
+        Settings settings = getSettings(commandLine);
+        EnvironmentVariables environmentVariables = getEnvironmentVariables(commandLine);
         ITestSuite testSuite = getTestSuiteExecutor(args);
         Map<String, TestCaseAdditionalInformation> testCaseAdditionalInformationMap = getTestCaseAdditionalInformation(testSuite,testSuiteData);
 
@@ -124,7 +126,7 @@ public class BootProject {
         return TestCaseAdditionalInformation.builder().additionalDataList(additionalDataList).missingDataList(missingDataList).canRun(CollectionUtils.isEmpty(missingDataList)).build();
     }
 
-    private void loadProject(CommandLine cmd, String... args) throws WebEngineException {
+    private void loadProject(CommandLine cmd) throws WebEngineException {
         String projectPath = cmd.getOptionValue(ArgumentOption.PROJECT.getOption());
         loggerService.info("Loading project : " + projectPath +" is running");
         JarUtil.loadLibrary(new File(projectPath));
@@ -132,7 +134,7 @@ public class BootProject {
     }
 
     private ITestSuite getTestSuiteExecutor(String... args) throws  WebEngineException{
-        Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList(args);
+        Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList();
         ITestSuite testSuite = null;
         try {
             testSuite = TestSuiteHelper.getTestSuite(testSuiteList);
@@ -147,7 +149,9 @@ public class BootProject {
         return testSuite;
     }
 
-    private Set<Class<? extends ITestSuite>> getTestSuiteList(String... args) {
+
+
+    private Set<Class<? extends ITestSuite>> getTestSuiteList() {
         loggerService.info("Find Test Suite Class is running ");
         Set<Class<? extends ITestSuite>> testSuite = JarUtil.findAllClass(ITestSuite.class);
         loggerService.info("Test Suite class founded is : "+testSuite.toString());
@@ -155,7 +159,7 @@ public class BootProject {
         return testSuite;
     }
 
-    private EnvironmentVariables getEnvironmentVariables(CommandLine cmd,String... args) throws WebEngineException {
+    private EnvironmentVariables getEnvironmentVariables(CommandLine cmd) throws WebEngineException {
         String environnementVariablesFilePath = cmd.getOptionValue(ArgumentOption.ENVIRONNEMENT_VARIABLE.getOption());
         loggerService.info("Loading test data running: " + environnementVariablesFilePath);
         EnvironmentVariables environmentVariables = XmlUtil.unmarshall(environnementVariablesFilePath,EnvironmentVariables.class);
@@ -163,7 +167,7 @@ public class BootProject {
         return environmentVariables;
     }
 
-    private TestSuiteData getTestSuiteData(CommandLine cmd ,String... args) throws WebEngineException {
+    private TestSuiteData getTestSuiteData(CommandLine cmd) throws WebEngineException {
         String testData = cmd.getOptionValue(ArgumentOption.TEST_DATA.getOption());
         loggerService.info("Loading test data running: " + testData);
         TestSuiteData testSuiteData = XmlUtil.unmarshall(testData, TestSuiteData.class);
@@ -171,7 +175,7 @@ public class BootProject {
         return testSuiteData;
     }
 
-    private Settings getSettings(CommandLine cmd, String... args) throws WebEngineException {
+    private Settings getSettings(CommandLine cmd) throws WebEngineException {
         loggerService.info("Loading settings running ");
         String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
