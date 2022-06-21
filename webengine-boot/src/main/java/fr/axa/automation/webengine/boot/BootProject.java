@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.general.Settings;
 import fr.axa.automation.webengine.generated.*;
+import fr.axa.automation.webengine.helper.BrowserTypeHelper;
 import fr.axa.automation.webengine.helper.ReportHelper;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
@@ -34,8 +35,8 @@ import java.util.*;
 @Slf4j
 public class BootProject {
 
-    private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT,ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM);
-    private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM);
+    private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT,ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+    private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM,ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
     LoggerService loggerService;
 
@@ -149,8 +150,6 @@ public class BootProject {
         return testSuite;
     }
 
-
-
     private Set<Class<? extends ITestSuite>> getTestSuiteList() {
         loggerService.info("Find Test Suite Class is running ");
         Set<Class<? extends ITestSuite>> testSuite = JarUtil.findAllClass(ITestSuite.class);
@@ -184,7 +183,7 @@ public class BootProject {
             platform = Platform.WINDOWS.name();
         }
 
-        Settings settings = Settings.builder().platform(Platform.valueOf(platform)).browserType(BrowserType.valueOf(browser)).logDir(outputDir!=null?outputDir:System.getProperty("java.io.tmpdir")).build();
+        Settings settings = Settings.builder().platform(Platform.valueOf(platform)).browserType(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir!=null?outputDir:System.getProperty("java.io.tmpdir")).build();
         loggerService.info("Loading settings running is succeed : "+settings.toString());
         return settings;
     }
