@@ -4,7 +4,6 @@ import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.argument.ArgumentParser;
 import fr.axa.automation.webengine.core.*;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.BrowserType;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.general.Settings;
@@ -22,15 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 
-@Service
+@Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProject {
@@ -72,7 +69,6 @@ public class BootProject {
         GlobalApplicationContext globalApplicationContext = GlobalApplicationContext.builder()
                 .settings(settings)
                 .environmentVariables(environmentVariables)
-                .testSuite(testSuite)
                 .testSuiteData(testSuiteData)
                 .testCaseAdditionnalInformationList(testCaseAdditionalInformationMap)
                 .build();
@@ -82,7 +78,10 @@ public class BootProject {
         loggerService.info("End Phase initialize ");
 
         loggerService.info("Start run test ");
-        TestSuiteReport testSuiteReport = testSuiteExecutor.run(globalApplicationContext);
+        if(testSuite instanceof AbstractTestSuite){
+            ((AbstractTestSuite) testSuite).setGlobalApplicationContext(globalApplicationContext);
+        }
+        TestSuiteReport testSuiteReport = testSuiteExecutor.run(globalApplicationContext,testSuite);
         loggerService.info("End run test ");
 
         loggerService.info("Start clean ");

@@ -34,14 +34,13 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
     public void cleanUp(Object object) {
     }
 
-    public TestSuiteReport run(GlobalApplicationContext globalApplicationContext) throws WebEngineException, UnknownHostException {
+    public TestSuiteReport run(GlobalApplicationContext globalApplicationContext, ITestSuite testSuite) throws WebEngineException, UnknownHostException {
         Calendar startTime = Calendar.getInstance();
         TestSuiteReport testSuiteReport = new TestSuiteReport();
         List<AbstractMap.SimpleEntry<String,? extends ITestCase>> testCaseList;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
 
         try {
-            ITestSuite testSuite = globalApplicationContext.getTestSuite();
             if (testSuite != null) {
                 testCaseList = testSuite.getTestCaseList();
                 testCaseReportList.addAll(runTestCase(globalApplicationContext, testCaseList));

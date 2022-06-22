@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.core;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class ActionExecutorWeb extends AbstractActionExecutor {
 }

@@ -4,7 +4,6 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

@@ -1,12 +1,8 @@
 package fr.axa.automation.webengine.core;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class TestSuiteExecutorWeb extends AbstractTestSuiteExecutor {
-
-//    protected AbstractTestCaseExecutor getTestCaseExecutor() {
-//        return new TestCaseExecutorWeb();
-//    }
 
 }

@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.argument;
 
-import fr.axa.automation.webengine.constante.IConstant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

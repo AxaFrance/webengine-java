@@ -3,10 +3,8 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class JarUtil {

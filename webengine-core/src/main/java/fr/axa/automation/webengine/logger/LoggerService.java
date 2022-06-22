@@ -1,11 +1,11 @@
 package fr.axa.automation.webengine.logger;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.StringJoiner;
 
-@Service
+@Component
 @Slf4j
 public class LoggerService {
     private static final String PREFIX = "";
@@ -21,6 +21,12 @@ public class LoggerService {
         StringJoiner joiner = new StringJoiner("", PREFIX, SUFFIX);
         joiner.add(message);
         log.error(joiner.toString(),e);
+    }
+
+    public void warn(String message,Exception e) {
+        StringJoiner joiner = new StringJoiner("", PREFIX, SUFFIX);
+        joiner.add(message);
+        log.warn(joiner.toString(),e);
     }
 
 }

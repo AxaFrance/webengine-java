@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.general;
 
-import fr.axa.automation.webengine.core.ITestSuite;
 import fr.axa.automation.webengine.core.TestCaseAdditionalInformation;
 import fr.axa.automation.webengine.generated.EnvironmentVariables;
 import fr.axa.automation.webengine.generated.TestData;
@@ -20,12 +19,9 @@ public class GlobalApplicationContext {
     Settings settings;
     EnvironmentVariables environmentVariables;
     TestSuiteData testSuiteData;
-    ITestSuite testSuite;
     Map<String, TestCaseAdditionalInformation> testCaseAdditionnalInformationList;
-
 
     public List<TestData> getTestDataList(){
         return getTestSuiteData().getTestData();
     }
-
 }

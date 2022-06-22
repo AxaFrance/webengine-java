@@ -2,8 +2,6 @@ package fr.axa.automation.webengine.util;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.generated.ObjectFactory;
-import fr.axa.automation.webengine.generated.TestSuiteReport;
 
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;

@@ -3,12 +3,13 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.util.BrowserFactory;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Service
+@Component
 public class TestCaseExecutorWeb extends AbstractTestCaseExecutor {
     @Override
     public Object initialize(GlobalApplicationContext globalApplicationContext) throws WebEngineException {
@@ -25,7 +26,11 @@ public class TestCaseExecutorWeb extends AbstractTestCaseExecutor {
 
     @Override
     public void cleanUp(Object object) {
-        ((WebDriver)object).close();
-        ((WebDriver)object).quit();
+//        ((WebDriver)object).close();
+        try {
+            ((WebDriver)object).quit();
+        }catch (NoSuchSessionException e){
+            loggerService.warn("Warning during quit browser",e);
+        }
     }
 }
