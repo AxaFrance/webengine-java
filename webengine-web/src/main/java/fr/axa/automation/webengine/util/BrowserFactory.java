@@ -11,13 +11,17 @@ import java.util.Optional;
 public class BrowserFactory {
 
     public static Optional<WebDriver> getDriver(Settings settings) throws WebEngineException {
+        return getDriver(settings.getPlatform(),settings.getBrowserType());
+    }
+
+    public static Optional<WebDriver> getDriver(Platform platform, BrowserType browserType) throws WebEngineException {
         Optional<WebDriver> webDriver = Optional.empty();
-        if(settings.getPlatform()== Platform.WINDOWS){
-            if(settings.getBrowserType()== BrowserType.CHROME){
+        if(platform== Platform.WINDOWS){
+            if(browserType== BrowserType.CHROME){
                 webDriver = ChromeDriverUtil.getChromeDriver();
-            }else if(settings.getBrowserType()== BrowserType.CHROMIUM_EDGE){
+            }else if(browserType== BrowserType.CHROMIUM_EDGE){
                 webDriver = EdgeDriverUtil.getEdgeDriver();
-            }else if(settings.getBrowserType()== BrowserType.FIREFOX){
+            }else if(browserType== BrowserType.FIREFOX){
                 webDriver = FirefoxDriverUtil.getFirefoxDriver();
             }
             if(webDriver.isPresent()){
@@ -26,4 +30,5 @@ public class BrowserFactory {
         }
         return webDriver;
     }
+
 }

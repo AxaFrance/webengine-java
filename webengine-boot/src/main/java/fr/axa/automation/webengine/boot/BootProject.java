@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.boot;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.argument.ArgumentParser;
+import fr.axa.automation.webengine.constante.IConstant;
 import fr.axa.automation.webengine.core.*;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
@@ -49,14 +50,16 @@ public class BootProject {
     }
 
     public void runFromFramework(String... args) throws Exception {
-        CommandLine commandLine = ArgumentParser.getOption(args, ArgumentParser.getOptionList(ARGUMENT_OPTION_FRAMEWORK));
+        String[] newArgs = ArgumentParser.splitArguments(args, IConstant.SEPARATOR_ARG,2);
+        CommandLine commandLine = ArgumentParser.getOption(newArgs, ArgumentParser.getOptionList(ARGUMENT_OPTION_FRAMEWORK));
         loadProject(commandLine);
-        runTestSuite(commandLine,args);
+        runTestSuite(commandLine,newArgs);
     }
 
     public void runFromProject(String... args) throws Exception {
-        CommandLine commandLine = ArgumentParser.getOption(args, ArgumentParser.getOptionList(ARGUMENT_OPTION_PROJECT));
-        runTestSuite(commandLine,args);
+        String[] newArgs = ArgumentParser.splitArguments(args, IConstant.SEPARATOR_ARG,2);
+        CommandLine commandLine = ArgumentParser.getOption(newArgs, ArgumentParser.getOptionList(ARGUMENT_OPTION_PROJECT));
+        runTestSuite(commandLine,newArgs);
     }
 
     private void runTestSuite(CommandLine commandLine,String[] args) throws WebEngineException, IllegalAccessException, InstantiationException, ClassNotFoundException, IOException {

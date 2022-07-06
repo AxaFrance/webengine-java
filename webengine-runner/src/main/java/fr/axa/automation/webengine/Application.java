@@ -26,7 +26,6 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         loggerService.info("Temporary directory : "+System.getProperty("java.io.tmpdir"));
-        String[] newArgs = ArgumentParser.splitArguments(args, IConstant.SEPARATOR_ARG,2);
-        bootProject.runFromFramework(newArgs);
+        bootProject.runFromFramework(args);
     }
 }

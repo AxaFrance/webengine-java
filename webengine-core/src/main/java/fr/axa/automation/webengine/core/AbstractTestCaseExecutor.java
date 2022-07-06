@@ -8,6 +8,7 @@ import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.report.ActionReportDetail;
 import fr.axa.automation.webengine.util.DateUtil;
+import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -86,6 +87,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
           }
 
           try {
+               SharedContext.CONTEXT_VALUE_LIST.clear();
                for (ITestStep testStep :testStepList){
                     testStepName = testStep.getClass().getSimpleName();
                     actionReport = new ActionReport();

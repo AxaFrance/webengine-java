@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +20,8 @@ public abstract class AbstractActionBase implements IAction {
     ActionContext actionDetailContext;
     List<ScreenshotReport> screenShotList = new ArrayList<>();
     Result result;
-    List<Variable> contextValueList = new ArrayList<>();
+    StringBuffer information = new StringBuffer();
+
 
     public AbstractActionBase() {
     }
@@ -74,11 +76,11 @@ public abstract class AbstractActionBase implements IAction {
     public abstract void screenShot(String name) throws WebEngineException;
 
     protected void setContextValue(Variable contextValue){
-        contextValueList.add(contextValue);
+        SharedContext.CONTEXT_VALUE_LIST.add(contextValue);
     }
 
     protected String getContexteValue(String contextName){
-        for (Variable variable: contextValueList) {
+        for (Variable variable: SharedContext.CONTEXT_VALUE_LIST) {
             if(variable.getName().equalsIgnoreCase(contextName)){
                 return variable.getValue();
             }

@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.helper.EnvironmentVariablesHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.helper.TestCaseDataHelper;
+import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -58,7 +59,8 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
             loggerService.error(erroMessage, e);
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
-            actionReport.getContextValues().getVariable().addAll(contextValueList);
+            actionReport.getContextValues().getVariable().addAll(SharedContext.CONTEXT_VALUE_LIST);
+            actionReport.setLog(information.toString());
             actionReport.getScreenshots().getScreenshotReport().addAll(screenShotList);
         }
 
@@ -128,5 +130,9 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
 
     protected WebDriver getWebDriver() {
         return ((WebDriver) getActionDetailContext().getContext());
+    }
+
+    protected void addInformation(String information){
+        this.information.append(information);
     }
 }
