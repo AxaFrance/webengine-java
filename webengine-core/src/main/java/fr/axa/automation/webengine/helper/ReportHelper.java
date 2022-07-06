@@ -29,8 +29,12 @@ import java.util.List;
 @Slf4j
 public class ReportHelper {
 
-    @Autowired
     LoggerService loggerService;
+
+    @Autowired
+    public ReportHelper(LoggerService loggerService) {
+        this.loggerService = loggerService;
+    }
 
     public void generateAllReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
         generateReport(testSuiteReport,testName,outputPath);
@@ -99,7 +103,9 @@ public class ReportHelper {
     private Testsuite.Testcase createJunitTestCase(TestSuiteReport testSuiteReport, TestCaseReport testCaseReport) {
         Testsuite.Testcase testcase = new Testsuite.Testcase();
         testcase.setName(testCaseReport.getTestName());
-        testcase.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getStartTime(),testSuiteReport.getStartTime())));
+        if(testSuiteReport.getEndTime()!=null && testSuiteReport.getStartTime()!=null) {
+            testcase.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getEndTime(), testSuiteReport.getStartTime())));
+        }
         testcase.setClassname(testCaseReport.getTestName());
         return testcase;
     }
@@ -108,7 +114,9 @@ public class ReportHelper {
         Testsuite testsuite = new ObjectFactory().createTestsuite();
         testsuite.setName(StringUtils.isEmpty(testName) ? testName : "WebEngine Test Suite");
         testsuite.setTimestamp(Calendar.getInstance());
-        testsuite.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getStartTime(),testSuiteReport.getStartTime())));
+        if(testSuiteReport.getEndTime()!=null && testSuiteReport.getStartTime()!=null){
+            testsuite.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getEndTime(),testSuiteReport.getStartTime())));
+        }
         testsuite.setHostname(testSuiteReport.getHostName());
         testsuite.setSystemOut(testSuiteReport.getSystemOut());
         testsuite.setSystemErr(testSuiteReport.getSystemError());
