@@ -2,15 +2,23 @@ package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
+import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.util.BrowserFactory;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
 public class TestCaseExecutorWeb extends AbstractTestCaseExecutor {
+
+    @Autowired
+    public TestCaseExecutorWeb(LoggerService loggerService, ITestStepExecutor testStepExecutor) {
+        super(loggerService, testStepExecutor);
+    }
+
     @Override
     public Object initialize(GlobalApplicationContext globalApplicationContext) throws WebEngineException {
         try {

@@ -21,8 +21,11 @@ import java.util.Optional;
 @Slf4j
 public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
 
-    @Autowired
     IActionExecutor actionExecutor;
+
+    public AbstractTestStepExecutor(IActionExecutor actionExecutor) {
+        this.actionExecutor = actionExecutor;
+    }
 
     public Object initialize(GlobalApplicationContext globalApplicationContext){
         return null;

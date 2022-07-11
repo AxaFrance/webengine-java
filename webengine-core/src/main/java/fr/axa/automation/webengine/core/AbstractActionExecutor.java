@@ -17,14 +17,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
 public abstract class AbstractActionExecutor implements IActionExecutor {
 
-    @Autowired
     LoggerService loggerService;
 
-    public AbstractActionExecutor() {
+    public AbstractActionExecutor(LoggerService loggerService) {
+        this.loggerService = loggerService;
     }
 
     public ActionReportDetail run(GlobalApplicationContext globalApplicationContext, IAction action) {

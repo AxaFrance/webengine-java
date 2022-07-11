@@ -24,11 +24,13 @@ import java.util.Optional;
 @Data
 public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
-     @Autowired
      LoggerService loggerService;
-
-     @Autowired
      ITestStepExecutor testStepExecutor;
+
+     public AbstractTestCaseExecutor(LoggerService loggerService, ITestStepExecutor testStepExecutor) {
+          this.loggerService = loggerService;
+          this.testStepExecutor = testStepExecutor;
+     }
 
      @Override
      public abstract Object initialize(GlobalApplicationContext globalApplicationContext) throws WebEngineException;

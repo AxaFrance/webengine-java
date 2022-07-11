@@ -21,11 +21,13 @@ import java.util.*;
 @Data
 public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
 
-    @Autowired
     LoggerService loggerService;
-
-    @Autowired
     ITestCaseExecutor testCaseExecutor;
+
+    public AbstractTestSuiteExecutor(LoggerService loggerService, ITestCaseExecutor testCaseExecutor) {
+        this.loggerService = loggerService;
+        this.testCaseExecutor = testCaseExecutor;
+    }
 
     public Object initialize(GlobalApplicationContext globalApplicationContext){
         return null;
