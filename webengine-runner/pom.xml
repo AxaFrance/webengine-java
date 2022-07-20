@@ -14,6 +14,9 @@
     <packaging>jar</packaging>
     <name>webengine-runner</name>
 
+    <properties>
+        <start-class>fr.axa.automation.webengine.Application</start-class>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -46,7 +49,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>fr.axa.automation.webengine.Application</mainClass>
+                    <mainClass>${start-class}</mainClass>
+                    <classifier>exec</classifier>
+                    <excludeDevtools>true</excludeDevtools>
                 </configuration>
                 <executions>
                     <execution>

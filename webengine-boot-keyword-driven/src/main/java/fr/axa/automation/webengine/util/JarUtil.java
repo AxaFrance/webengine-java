@@ -12,10 +12,8 @@ public class JarUtil {
     public static void loadLibrary(java.io.File jar) throws WebEngineException{
         try {
             /*We are using reflection here to circumvent encapsulation; addURL is not public*/
-
             //java.net.URLClassLoader loader = (java.net.URLClassLoader)ClassLoader.getSystemClassLoader(); //Doesn't work with spring boot
             java.net.URLClassLoader loader = (java.net.URLClassLoader)Thread.currentThread().getContextClassLoader();
-
             java.net.URL url = jar.toURI().toURL();
             /*Disallow if already loaded*/
             for (java.net.URL it : java.util.Arrays.asList(loader.getURLs())){

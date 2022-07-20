@@ -34,7 +34,6 @@
         <guava.version>31.1-jre</guava.version>
         <jna-platform.version>4.2.2</jna-platform.version>
         <commons-io.version>2.6</commons-io.version>
-        <start-class>fr.axa.automation.webengine.Application</start-class>
         <spring-boot-maven-plugin.version>2.5.4</spring-boot-maven-plugin.version>
         <maven-jaxb2-plugin.version>0.7.1</maven-jaxb2-plugin.version>
         <webdrivermanager.version>5.0.3</webdrivermanager.version>
@@ -48,8 +47,9 @@
     <modules>
         <module>webengine-core</module>
         <module>webengine-web</module>
-        <module>webengine-boot</module>
+        <module>webengine-boot-keyword-driven</module>
         <module>webengine-runner</module>
+        <module>webengine-report</module>
     </modules>
 
     <dependencies>
@@ -198,11 +198,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-maven-plugin.version}</version>
-                    <configuration>
-                        <mainClass>${start-class}</mainClass>
-                        <classifier>exec</classifier>
-                        <excludeDevtools>true</excludeDevtools>
-                    </configuration>
                 </plugin>
 
                 <plugin>
