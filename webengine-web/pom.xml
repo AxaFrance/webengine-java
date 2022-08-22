@@ -15,27 +15,33 @@
     <name>webengine-web</name>
 
     <dependencies>
+
         <dependency>
             <groupId>fr.axa.automation.webengine</groupId>
             <artifactId>webengine-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna-platform</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -43,10 +49,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java-source.version}</source>
-                    <target>${java-target.version}</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>

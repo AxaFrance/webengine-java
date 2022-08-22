@@ -9,7 +9,6 @@ import fr.axa.automation.webengine.report.ActionReportDetail;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;

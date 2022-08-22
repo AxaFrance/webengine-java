@@ -50,6 +50,7 @@
         <module>webengine-boot-keyword-driven</module>
         <module>webengine-runner</module>
         <module>webengine-report</module>
+        <module>webengine-util</module>
     </modules>
 
     <dependencies>
@@ -106,6 +107,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
                 <version>${spring-boot-starter.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -185,6 +192,14 @@
                     <configuration>
                         <source>${java-source.version}</source>
                         <target>${java-target.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>1.18.22</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
 
@@ -211,7 +226,6 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>${build-helper-maven-plugin.version}</version>
                 </plugin>
-
             </plugins>
         </pluginManagement>
     </build>
