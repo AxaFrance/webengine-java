@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.helper;
+package fr.axa.automation.webengine.report.helper;
 
 import fr.axa.automation.junit.generated.ObjectFactory;
 import fr.axa.automation.junit.generated.Testsuite;
@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.report.constante.ReportPath;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.FormatDate;
@@ -20,9 +21,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -36,20 +35,26 @@ public class ReportHelper {
         this.loggerService = loggerService;
     }
 
-    public void generateAllReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
-        generateReport(testSuiteReport,testName,outputPath);
-        generateJUnitReport(testSuiteReport,testName,outputPath);
+    public Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
+        Map<ReportPath,String> path = new HashMap<>();
+        String webEngineReport = generateWebengineReport(testSuiteReport,testName,outputPath);
+        String JunitReport = generateJUnitReport(testSuiteReport,testName,outputPath);
+        path.put(ReportPath.WEBENGINE_REPORT,webEngineReport);
+        path.put(ReportPath.JUNITREPORT,JunitReport);
+        return path;
     }
 
-    public void generateReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
+    public String generateWebengineReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
         Path path = FileUtil.createDirectories(outputPath + testName );
 
         StringBuilder composeFilePath = new StringBuilder("DataDrivenTestSuite-"+testName);
         String fileName = composeFilePath.append("_")
                         .append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat()))
                         .append(".xml").toString();
-        loggerService.info("Create report : "+path.toString()+"\\"+fileName);
+        String completePath = path.toString()+"\\"+fileName;
+        loggerService.info("Create report : "+completePath);
         FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport,"http://www.axa.fr/WebEngine/2022","ns");
+        return completePath;
     }
 
 
@@ -74,10 +79,10 @@ public class ReportHelper {
         String fileName = composeFilePath.append("_")
                 .append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat()))
                 .append(".xml").toString();
+        String completePath = path.toString()+"\\"+fileName;
         loggerService.info("Create Junit report : "+path.toString()+"\\"+fileName);
         FileUtil.saveAsXML(path.toString(),fileName,testsuite);
-
-        return path.toString();
+        return completePath;
     }
 
     private Testsuite.Testcase.Failure createTestCaseFailure(TestCaseReport testCaseReport) {

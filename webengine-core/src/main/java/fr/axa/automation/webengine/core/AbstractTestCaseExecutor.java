@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.general.IVariableConstante;
 import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.report.ActionReportDetail;
+import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;

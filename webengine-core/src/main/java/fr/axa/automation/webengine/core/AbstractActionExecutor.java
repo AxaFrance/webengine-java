@@ -5,7 +5,7 @@ import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.report.ActionReportDetail;
+import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

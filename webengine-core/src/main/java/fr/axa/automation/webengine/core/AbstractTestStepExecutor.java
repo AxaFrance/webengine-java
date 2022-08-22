@@ -4,7 +4,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.generated.TestData;
-import fr.axa.automation.webengine.report.ActionReportDetail;
+import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.ClassUtil;
 import lombok.AccessLevel;
 import lombok.Data;

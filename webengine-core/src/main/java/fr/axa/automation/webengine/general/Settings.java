@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.general;
 
 
-import fr.axa.automation.webengine.report.ReportSettings;
+import fr.axa.automation.webengine.report.object.ReportSettings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

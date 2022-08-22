@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.generated.ActionReport;
-import fr.axa.automation.webengine.report.ActionReportDetail;
+import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
