@@ -180,7 +180,7 @@ public class BootProject {
         loggerService.info("Loading settings running ");
         String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
-        String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
+        String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption()) + File.separator;
         if(platform==null){
             platform = Platform.WINDOWS.name();
         }
