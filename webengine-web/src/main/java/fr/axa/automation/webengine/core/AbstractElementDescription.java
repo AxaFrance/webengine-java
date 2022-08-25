@@ -149,6 +149,16 @@ public abstract class AbstractElementDescription {
         retry(fun,null);
     }
 
+    public void autocompletion(String text) throws Exception {
+        setValue(text);
+        pressEnterKey();
+    }
+
+    public void pressEnterKey() throws Exception {
+        String s = Keys.chord(Keys.RETURN);
+        sendKeys(s);
+    }
+
     public void sendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
