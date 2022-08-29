@@ -57,4 +57,8 @@ public abstract class AbstractPageModel {
         Wait wait = new WebDriverWait(this.useDriver, timeout);
         wait.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
     }
+
+    public void maximize() throws InterruptedException {
+        this.getUseDriver().manage().window().maximize();
+    }
 }

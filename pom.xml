@@ -41,7 +41,6 @@
         <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
         <jaxb-api.version>2.2.7</jaxb-api.version>
         <istack-commons-runtime.version>2.16</istack-commons-runtime.version>
-        <cucumber-java.version>4.8.0</cucumber-java.version>
         <cucumber.version>7.0.0</cucumber.version>
         <hamcrest-library.version>1.3</hamcrest-library.version>
     </properties>
@@ -185,6 +184,7 @@
 
     <build>
         <plugins>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -204,8 +204,8 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
         </plugins>
-
         <pluginManagement>
             <plugins>
                 <plugin>

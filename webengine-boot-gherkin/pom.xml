@@ -68,7 +68,7 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <version>${hamcrest-library.version}</version>
-        </dependency>        
+        </dependency>
 
     </dependencies>
 

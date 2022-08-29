@@ -229,6 +229,12 @@ public class WebElementDescription extends AbstractElementDescription {
         js.executeScript("arguments[0].scrollIntoView(true);", findWebElement);
     }
 
+    public void scrollIntoCenterView() throws Exception {
+        WebElement findWebElement = findElement();
+        JavascriptExecutor js = (JavascriptExecutor) useDriver;
+        js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", findWebElement);
+    }
+
     public void dragAndDropTo(AbstractElementDescription element) throws Exception {
         WebElement e1 = findElement();
         WebElement e2 = element.findElement();
