@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.generated.*;
+import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;
@@ -32,23 +33,12 @@ public abstract class AbstractActionBase implements IAction {
 
     @Override
     public ActionReport runAction() throws Exception {
-        ActionReport actionReport = getActionReport();
+        ActionReport actionReport = ActionReportHelper.getActionReport(getClass().getSimpleName());
         doAction();
         if(getResult()!=null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)){
             screenShot("Error in this step "+getClass().getSimpleName());
         }
         actionReport.setEndTime(Calendar.getInstance());
-        return actionReport;
-    }
-
-    protected ActionReport getActionReport() {
-        ActionReport actionReport = new ActionReport();
-        actionReport.setName(getClass().getSimpleName());
-        actionReport.setStartTime(Calendar.getInstance());
-        ArrayOfVariable arrayOfVariable = new ArrayOfVariable();
-        actionReport.setContextValues(arrayOfVariable);
-        actionReport.setScreenshots(new ArrayOfScreenshotReport());
-        actionReport.setResult(Result.NONE);
         return actionReport;
     }
 

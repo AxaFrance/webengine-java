@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.report;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.*;
+import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.report.helper.ReportHelper;
@@ -89,21 +90,23 @@ public class ReportHelperGherkin {
         testCaseReportMap.put(normalizeName.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE),testCaseReport);
     }
 
-    public void updateTestCaseReport(String testCaseName){
+    public void updateTestCaseReport(String testCaseName,Result result){
         Map<NameNormalizeKey,String> normalizeName = getNormalizeTestCaseName(testCaseName);
         TestCaseReport testCaseReport = testCaseReportMap.get(normalizeName.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE));
         testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
+        testCaseReport.setResult(result);
     }
 
     public void addTestStepReport(String testCaseName, String testStepName){
         Map<NameNormalizeKey,String> normalizeNameMap = getNormalizeName(testCaseName,testStepName);
-        ActionReport actionReport = createActionReport(testStepName);
+        ActionReport actionReport = ActionReportHelper.getActionReport(testStepName);
         actionReportMap.put(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE),actionReport);
     }
 
     public void updateTestStepReport(String testCaseName, String testStepName, Result result){
-        TestCaseReport testCaseReport = testCaseReportMap.get(StringUtil.removeSpecialCharacters(testCaseName));
-        ActionReport actionReport = actionReportMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE);
+        Map<NameNormalizeKey,String> normalizeNameMap = getNormalizeName(testCaseName,testStepName);
+        TestCaseReport testCaseReport = testCaseReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE));
+        ActionReport actionReport = actionReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE));
         actionReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
         actionReport.setResult(result);
         if(Result.PASSED != result){
@@ -111,13 +114,6 @@ public class ReportHelperGherkin {
             actionReport.getScreenshots().getScreenshotReport().add(ScreenshotHelper.getScreenshotReport(testStepName,screenshot));
         }
         testCaseReport.getActionReports().getActionReport().add(actionReport);
-    }
-
-    public ActionReport createActionReport(String name) {
-        ActionReport actionReport = new ActionReport();
-        actionReport.setName(name);
-        actionReport.setStartTime(Calendar.getInstance());
-        return actionReport;
     }
 
     public void closeReport() throws IOException, WebEngineException {

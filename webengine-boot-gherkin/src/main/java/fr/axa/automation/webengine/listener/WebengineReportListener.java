@@ -70,7 +70,7 @@ public class WebengineReportListener implements EventListener {
 
     private void scenarioFinished(TestCaseFinished testCaseFinished) {
         System.out.println("scenario finished");
-        reportHelperGherkin.updateTestCaseReport(testCaseFinished.getTestCase().getName());
+        reportHelperGherkin.updateTestCaseReport(testCaseFinished.getTestCase().getName(),StatusMapping.MAPPING.get(testCaseFinished.getResult().getStatus()));
     }
 
     private String getTestStepName(TestStep testStep) {

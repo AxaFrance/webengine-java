@@ -6,6 +6,7 @@ import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.generated.Variable;
+import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.EnvironmentVariablesHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.helper.TestCaseDataHelper;
@@ -37,7 +38,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     @Override
     public ActionReport runAction() throws Exception {
         String erroMessage = "";
-        ActionReport actionReport = getActionReport();
+        ActionReport actionReport = ActionReportHelper.getActionReport(getClass().getSimpleName());
         try {
             doAction();
             if (getResult() != null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)) {
