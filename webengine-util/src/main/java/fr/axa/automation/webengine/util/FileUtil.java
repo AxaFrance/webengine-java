@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.StringJoiner;
 
 public class FileUtil {
 
@@ -42,6 +43,12 @@ public class FileUtil {
             directory.mkdirs();
         }
         return directory;
+    }
+
+    public static String getDefaultRunResultDirectory(){
+        StringJoiner stringJoiner = new StringJoiner(File.separator);
+        stringJoiner.add(".").add("target").add("run-result");
+        return stringJoiner.toString();
     }
 }
 

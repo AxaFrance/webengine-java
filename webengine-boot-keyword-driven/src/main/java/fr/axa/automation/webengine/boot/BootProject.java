@@ -14,6 +14,7 @@ import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.report.helper.ReportHelper;
 import fr.axa.automation.webengine.util.ClassUtil;
+import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.JarUtil;
 import fr.axa.automation.webengine.util.XmlUtil;
 import lombok.AccessLevel;
@@ -96,7 +97,7 @@ public class BootProject {
         loggerService.info("End report ");
     }
 
-    private Map<String,TestCaseAdditionalInformation> getTestCaseAdditionalInformation(ITestSuite testSuite, TestSuiteData testSuiteData ) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    private Map<String,TestCaseAdditionalInformation> getTestCaseAdditionalInformation(ITestSuite testSuite, TestSuiteData testSuiteData ) throws WebEngineException {
         Map<String,TestCaseAdditionalInformation> map = new HashMap<>();
         if(testSuite!=null){
             List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList = testSuite.getTestCaseList();
@@ -110,7 +111,7 @@ public class BootProject {
         return map;
     }
 
-    private TestCaseAdditionalInformation getTestCaseAdditionalInformation(List<TestData> testDataList, String testCaseName, ITestStep testStep) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    private TestCaseAdditionalInformation getTestCaseAdditionalInformation(List<TestData> testDataList, String testCaseName, ITestStep testStep) throws WebEngineException {
         IAction action = ClassUtil.create(testStep.getAction());
         List<Variable> requiredParametersList = action.getRequiredParameters();
         List<Variable> additionalDataList = new ArrayList<>();
@@ -138,17 +139,10 @@ public class BootProject {
 
     private ITestSuite getTestSuiteExecutor(String... args) throws  WebEngineException{
         Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList();
-        ITestSuite testSuite = null;
-        try {
-            testSuite = TestSuiteHelper.getTestSuite(testSuiteList);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            throw new WebEngineException("No TestSuite class found :",e);
-        }
-
+        ITestSuite testSuite = testSuite = TestSuiteHelper.getTestSuite(testSuiteList);
         if(testSuite==null){
-            throw new WebEngineException("Test Suite is null :");
+            throw new WebEngineException("TestSuite class is null. No TestSuite class found in the project");
         }
-
         return testSuite;
     }
 
@@ -180,12 +174,17 @@ public class BootProject {
         loggerService.info("Loading settings running ");
         String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
-        String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption()) + File.separator;
+        String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
         if(platform==null){
             platform = Platform.WINDOWS.name();
         }
+        if(outputDir!=null){
+            outputDir += File.separator;
+        }else{
+            outputDir = FileUtil.getDefaultRunResultDirectory();
+        }
 
-        Settings settings = Settings.builder().platform(Platform.valueOf(platform)).browserType(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir!=null?outputDir:System.getProperty("java.io.tmpdir")).build();
+        Settings settings = Settings.builder().platform(Platform.valueOf(platform)).browserType(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir).build();
         loggerService.info("Loading settings running is succeed : "+settings.toString());
         return settings;
     }

@@ -58,31 +58,26 @@ public class WebElementDescription extends AbstractElementDescription {
         return findElement().getAttribute(OUTER_HTML);
     }
 
+    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        if (!StringUtils.isNotEmpty(id)) {
-            sb.append("id = ").append(id);
-        }
-        if (!StringUtils.isNotEmpty(name)) {
-            sb.append("name = ").append(name);
-        }
-        if (!StringUtils.isNotEmpty(innerText)) {
-            sb.append("innerText = ").append(innerText);
-        }
-        if (!StringUtils.isNotEmpty(xPath)) {
-            sb.append("xPath = ").append(xPath);
-        }
-        if (!StringUtils.isNotEmpty(tagName)) {
-            sb.append("xPath = ").append(xPath);
-        }
-        return sb.toString();
+        return "WebElementDescription{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", innerText='" + innerText + '\'' +
+                ", attributeList=" + attributeList +
+                ", xPath='" + xPath + '\'' +
+                ", cssSelector='" + cssSelector + '\'' +
+                ", className='" + className + '\'' +
+                ", tagName='" + tagName + '\'' +
+                ", linkText='" + linkText + '\'' +
+                '}';
     }
 
     @Override
     public WebElement internalFindElement() {
         Collection<WebElement> elements = internalFindElements();
         if (CollectionUtils.isNotEmpty(elements) && elements.size() > 1) {
-            throw new MultipleElementException("Multiple element has found with the given selection criteria");
+            throw new MultipleElementException("Multiple element has found with the given selection criteria for this web element : "+toString());
         } else {
             return elements.iterator().next();
         }

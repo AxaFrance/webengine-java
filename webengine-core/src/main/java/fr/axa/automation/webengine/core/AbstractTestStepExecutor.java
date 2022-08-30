@@ -40,15 +40,9 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
 
     protected IAction getAction(GlobalApplicationContext globalApplicationContext, Object context, String testCaseName, ITestStep testStep) throws WebEngineException {
         IAction action;
-        Class<? extends IAction> clazz ;
-        try {
-            clazz = testStep.getAction();
-            ActionContext actionContext = getActionContext(globalApplicationContext, context, testCaseName);
-            action = ClassUtil.createAndPopulateAction(clazz, "setActionDetailContext",actionContext);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            throw new WebEngineException("Error during instantiation of Action : " + testStep.getAction() +" for this this test case :"+ testCaseName,e);
-        }
-        return action;
+        Class<? extends IAction> clazz = testStep.getAction();
+        ActionContext actionContext = getActionContext(globalApplicationContext, context, testCaseName);
+        return ClassUtil.createAndPopulateAction(clazz, "setActionDetailContext", actionContext);
     }
 
     protected ActionContext getActionContext(GlobalApplicationContext globalApplicationContext, Object context, String testCaseName){

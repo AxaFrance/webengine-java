@@ -125,6 +125,6 @@ public class ReportHelperGherkin {
         testSuiteReport.setEndTime(Calendar.getInstance());
         testSuiteReport.getTestResult().addAll(testCaseReportMap.values());
         ReportHelper reportHelper =  new ReportHelper(new LoggerService());
-        reportHelper.generateAllReport(testSuiteReport,applicationName,"./target/run-result/");
+        reportHelper.generateAllReport(testSuiteReport,applicationName,FileUtil.getDefaultRunResultDirectory());
     }
 }
