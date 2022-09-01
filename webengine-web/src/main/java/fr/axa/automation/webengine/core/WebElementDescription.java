@@ -185,7 +185,7 @@ public class WebElementDescription extends AbstractElementDescription {
 
     @Override
     protected Function<Void, byte[]> internalGetScreenshot() throws Exception {
-        Function<Void, byte[]> fun = (x) -> {
+        return (x) -> {
             try {
                 WebElement element = findElement();
                 if (element instanceof WebElement) {
@@ -197,7 +197,6 @@ public class WebElementDescription extends AbstractElementDescription {
                 return null;
             }
         };
-        return fun;
     }
 
     public void mouseHover() throws Exception {

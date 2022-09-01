@@ -5,6 +5,6 @@ import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ReportPath {
-    WEBENGINE_REPORT, JUNITREPORT;
+    WEBENGINE_REPORT, JUNITREPORT
 
 }

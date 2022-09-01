@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.listener;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.report.ReportHelperGherkin;
 import fr.axa.automation.webengine.status.StatusMapping;
 import io.cucumber.plugin.EventListener;

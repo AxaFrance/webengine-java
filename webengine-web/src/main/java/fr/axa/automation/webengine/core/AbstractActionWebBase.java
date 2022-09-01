@@ -53,7 +53,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
             actionReport.setLog(erroMessage);
             loggerService.error(erroMessage, e);
         } catch (Exception e) {
-            erroMessage = "Error during exection of act : " + getClass().getSimpleName();
+            erroMessage = "Error during execution of act : " + getClass().getSimpleName();
             screenShot(erroMessage);
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(erroMessage);
@@ -92,7 +92,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     protected Optional<String> getEnvironnementValue(String name) {
         Optional<String> value = Optional.empty();
         Optional<Variable> variable = EnvironmentVariablesHelper.getEnvironnementValue(name, getActionDetailContext().getEnvironmentVariables().getVariable());
-        if ((variable.isPresent() && StringUtils.isEmpty(variable.get().getValue().trim())) || !variable.isPresent()) {
+        if (!variable.isPresent() || StringUtils.isEmpty(variable.get().getValue().trim())) {
             value = Optional.empty();
         }else{
             value = Optional.of(variable.get().getValue());
@@ -112,7 +112,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     protected Optional<String> getParameter(String name) {
         Optional<String> value = Optional.empty();
         Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
-        if ((variable.isPresent() && StringUtils.isEmpty(variable.get().getValue().trim())) || !variable.isPresent()) {
+        if (!variable.isPresent() || StringUtils.isEmpty(variable.get().getValue().trim())) {
             value = Optional.empty();
         }else{
             value = Optional.of(variable.get().getValue());

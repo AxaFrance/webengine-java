@@ -28,7 +28,7 @@ import java.util.*;
 @Slf4j
 public class ReportHelper {
 
-    LoggerService loggerService;
+    final LoggerService loggerService;
 
     @Autowired
     public ReportHelper(LoggerService loggerService) {

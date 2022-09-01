@@ -21,8 +21,7 @@ public class ActiveWindowScreenShot {
         Robot robot = null;
         try {
             robot = new Robot();
-            BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-            return screenShot;
+            return robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
         } catch (AWTException e) {
             e.printStackTrace();
         }

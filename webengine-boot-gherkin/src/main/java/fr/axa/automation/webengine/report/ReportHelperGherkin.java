@@ -13,9 +13,6 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.RenderedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -31,8 +28,8 @@ public class ReportHelperGherkin {
     Map<String,TestCaseReport> testCaseReportMap;
     Map<String,ActionReport> actionReportMap;
 
-    private static enum NameNormalizeKey{
-        TEST_CASE_NAME_NORMALIZE,TEST_STEP_NAME_NORMALIZE,TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE;
+    private enum NameNormalizeKey{
+        TEST_CASE_NAME_NORMALIZE,TEST_STEP_NAME_NORMALIZE,TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE
     }
 
     private ReportHelperGherkin() {

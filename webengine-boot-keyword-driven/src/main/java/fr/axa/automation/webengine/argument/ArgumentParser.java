@@ -31,13 +31,12 @@ public class ArgumentParser {
     }
 
     public static Option getOption(ArgumentOption argumentOption) {
-        Option option = Option.builder()
+
+        return Option.builder()
                         .option(argumentOption.getOption())
                         .hasArg(argumentOption.getHasArg())
                         .required(argumentOption.getRequired())
                         .desc(argumentOption.getDescription()).build();
-
-        return option;
     }
 
     public static String[] splitArguments(String[] args,String regex,int limit) {

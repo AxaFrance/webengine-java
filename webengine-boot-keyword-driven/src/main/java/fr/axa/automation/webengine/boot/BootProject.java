@@ -37,11 +37,11 @@ public class BootProject {
     private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT,ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
     private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM,ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
-    LoggerService loggerService;
+    final LoggerService loggerService;
 
-    ITestSuiteExecutor testSuiteExecutor;
+    final ITestSuiteExecutor testSuiteExecutor;
 
-    ReportHelper reportHelper;
+    final ReportHelper reportHelper;
 
     @Autowired
     public BootProject(LoggerService loggerService, ITestSuiteExecutor testSuiteExecutor, ReportHelper reportHelper) {
@@ -139,7 +139,7 @@ public class BootProject {
 
     private ITestSuite getTestSuiteExecutor(String... args) throws  WebEngineException{
         Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList();
-        ITestSuite testSuite = testSuite = TestSuiteHelper.getTestSuite(testSuiteList);
+        ITestSuite testSuite = TestSuiteHelper.getTestSuite(testSuiteList);
         if(testSuite==null){
             throw new WebEngineException("TestSuite class is null. No TestSuite class found in the project");
         }
