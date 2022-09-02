@@ -52,7 +52,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(erroMessage);
             loggerService.error(erroMessage, e);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             erroMessage = "Error during execution of act : " + getClass().getSimpleName();
             screenShot(erroMessage);
             actionReport.setResult(Result.CRITICAL_ERROR);
