@@ -106,10 +106,8 @@ public class ReportHelperGherkin {
         ActionReport actionReport = actionReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE));
         actionReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
         actionReport.setResult(result);
-        if(Result.PASSED != result){
-            byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShot.getGeneratedCurrentDesktopImage());
-            actionReport.getScreenshots().getScreenshotReport().add(ScreenshotHelper.getScreenshotReport(testStepName,screenshot));
-        }
+        byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShot.getGeneratedCurrentDesktopImage());
+        actionReport.getScreenshots().getScreenshotReport().add(ScreenshotHelper.getScreenshotReport(testStepName,screenshot));
         testCaseReport.getActionReports().getActionReport().add(actionReport);
     }
 
