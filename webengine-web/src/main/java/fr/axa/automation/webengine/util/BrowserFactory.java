@@ -24,9 +24,7 @@ public class BrowserFactory {
             }else if(browserType== BrowserType.FIREFOX){
                 webDriver = FirefoxDriverUtil.getFirefoxDriver();
             }
-            if(webDriver.isPresent()){
-                webDriver.get().manage().deleteAllCookies();
-            }
+            webDriver.ifPresent(driver -> driver.manage().deleteAllCookies());
         }
         return webDriver;
     }

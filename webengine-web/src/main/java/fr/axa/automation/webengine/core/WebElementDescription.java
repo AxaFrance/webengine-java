@@ -188,7 +188,7 @@ public class WebElementDescription extends AbstractElementDescription {
         return (x) -> {
             try {
                 WebElement element = findElement();
-                if (element instanceof WebElement) {
+                if (element != null) {
                     return element.getScreenshotAs(OutputType.BYTES);
                 } else {
                     throw new Exception("Don't find a instanceof a WebElement");

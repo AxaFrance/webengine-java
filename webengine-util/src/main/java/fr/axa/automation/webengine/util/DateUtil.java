@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class DateUtil {
@@ -12,6 +13,11 @@ public class DateUtil {
 
     public static String getDateTime(String format){
         DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern(format);
+        return FOMATTER.format(LocalDateTime.now());
+    }
+
+    public static String getDateTime(String format, Locale locale){
+        DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern(format).withLocale(locale);
         return FOMATTER.format(LocalDateTime.now());
     }
 
@@ -34,4 +40,16 @@ public class DateUtil {
         LocalDateTime localDateTime2 = getLocalDateTime(calendar2);
         return Duration.between(localDateTime1,localDateTime2).toMillis();
     }
+
+    public static void main(String[] args){
+        String date = getDateTime("dd/MM/yyyy");
+        String date2 = getDateTime("d MMM yyyy",Locale.FRENCH);
+        String heure = getDateTime("HH",Locale.FRENCH);
+        String minute = getDateTime("mm",Locale.FRENCH);
+        System.out.println(date);
+        System.out.println(date2);
+        System.out.println(heure);
+        System.out.println(minute);
+    }
+
 }
