@@ -10,15 +10,14 @@ import java.util.TimeZone;
 
 public class DateUtil {
 
-
     public static String getDateTime(String format){
-        DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern(format);
-        return FOMATTER.format(LocalDateTime.now());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
+        return dateTimeFormatter.format(LocalDateTime.now());
     }
 
     public static String getDateTime(String format, Locale locale){
-        DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern(format).withLocale(locale);
-        return FOMATTER.format(LocalDateTime.now());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format).withLocale(locale);
+        return dateTimeFormatter.format(LocalDateTime.now());
     }
 
     public static Calendar localDateTimeToCalendar(LocalDateTime localDateTime) {
