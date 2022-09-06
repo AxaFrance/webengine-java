@@ -120,8 +120,8 @@ public class ReportHelperGherkin {
     }
 
     public void closeReport() throws  WebEngineException {
-        Optional<String> optionalApplicationName = PropertiesUtil.getInstance().getValue("application.properties","application.name");
         String applicationName = "application";
+        Optional<String> optionalApplicationName = PropertiesUtil.getInstance().getValue("application.properties","application.name");
         if(optionalApplicationName.isPresent()){
             applicationName = optionalApplicationName.get();
         }

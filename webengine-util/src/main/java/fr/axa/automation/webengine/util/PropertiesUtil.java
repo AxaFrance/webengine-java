@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.logger.LoggerService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,9 +19,11 @@ import java.util.Properties;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PropertiesUtil {
     Map<String,Properties> propertyFileMap;
+    LoggerService loggerService;
 
     private PropertiesUtil() {
         propertyFileMap = new HashMap<>();
+        loggerService = new LoggerService();
     }
 
     private static class PropertiesUtilHolder{
@@ -47,7 +50,14 @@ public class PropertiesUtil {
     }
 
     public Optional<String> getValue(String resourceName,String property) throws WebEngineException{
-        loadPropertiesFile(resourceName);
-        return Optional.of(propertyFileMap.get(resourceName).getProperty(property));
+        Optional optional;
+        try {
+            loadPropertiesFile(resourceName);
+            optional = Optional.ofNullable(propertyFileMap.get(resourceName).getProperty(property));
+        }catch (WebEngineException e){
+            loggerService.info("WARNING : The file :"+resourceName+" or the property :"+property+" not found");
+            optional = Optional.empty();
+        }
+        return optional;
     }
 }
