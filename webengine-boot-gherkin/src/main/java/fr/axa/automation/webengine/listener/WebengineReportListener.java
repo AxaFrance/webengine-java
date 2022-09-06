@@ -1,6 +1,8 @@
 package fr.axa.automation.webengine.listener;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.logger.LoggerServiceDecorator;
 import fr.axa.automation.webengine.report.ReportHelperGherkin;
 import fr.axa.automation.webengine.status.StatusMapping;
 import io.cucumber.plugin.EventListener;
@@ -18,6 +20,7 @@ import java.net.UnknownHostException;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebengineReportListener implements EventListener {
 
+    LoggerService loggerService;
     ReportHelperGherkin reportHelperGherkin;
 
     public void setEventPublisher(EventPublisher eventPublisher) {
@@ -33,38 +36,34 @@ public class WebengineReportListener implements EventListener {
     private void runStarted(TestRunStarted event) {
         System.out.println("Run started");
         reportHelperGherkin = ReportHelperGherkin.getInstance();
+        loggerService = LoggerServiceDecorator.getInstance();
         try {
             reportHelperGherkin.createReport();
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            loggerService.error("Erreur lors de la création du rapport : ", e);
         }
     }
 
-    /**
-     * This event is triggered when feature file is read
-     */
     private void runFinished(TestRunFinished event) {
         System.out.println("Run finished");
         try {
             reportHelperGherkin.closeReport();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (WebEngineException e) {
-            e.printStackTrace();
+            loggerService.error("Erreur lors de la fermeture du rapport : ", e);
         }
     }
 
-    /**
-     * TestRunFinished event is triggered when all feature file executions are completed
-     */
     private void featureRead(TestSourceRead testSourceRead) {
-        System.out.println("feature read");
+        String currentfeatureName = testSourceRead.getSource();
+        reportHelperGherkin.setCurrentfeatureName(currentfeatureName);
+        System.out.println("feature : "+currentfeatureName+" read");
     }
-
 
     private void scenarioStarted(TestCaseStarted testCaseStarted) {
         System.out.println("scenario read");
-        reportHelperGherkin.addTestCaseReport(testCaseStarted.getTestCase().getName());
+        String currentScenarioName = testCaseStarted.getTestCase().getName();
+        reportHelperGherkin.setCurrentScenarioName(currentScenarioName);
+        reportHelperGherkin.addTestCaseReport(currentScenarioName);
     }
 
     private void scenarioFinished(TestCaseFinished testCaseFinished) {
@@ -88,8 +87,10 @@ public class WebengineReportListener implements EventListener {
      */
     private void stepStarted(TestStepStarted testStepStarted) {
         System.out.println("step read");
-        String stepName = getTestStepName(testStepStarted.getTestStep());
-        reportHelperGherkin.addTestStepReport(testStepStarted.getTestCase().getName(), stepName);
+        String currentStepName = getTestStepName(testStepStarted.getTestStep());
+        reportHelperGherkin.setCurrentStepName(currentStepName);
+        reportHelperGherkin.getInformation().setLength(0);
+        reportHelperGherkin.addTestStepReport(testStepStarted.getTestCase().getName(), currentStepName);
     }
 
     /**

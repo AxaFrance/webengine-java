@@ -20,17 +20,21 @@ public class FileUtil {
         }
     }
 
-    public static Path createDirectories(String path) throws IOException {
-        return Files.createDirectories(Paths.get(path));
+    public static Path createDirectories(String path) throws WebEngineException {
+        try {
+            return Files.createDirectories(Paths.get(path));
+        } catch (IOException e) {
+            throw new WebEngineException("Erreur lors de la création du répertoire : " + path.toString(),e);
+        }
     }
 
-    public static String saveAsXML(String path, String fileName, Object object) throws IOException, WebEngineException {
+    public static String saveAsXML(String path, String fileName, Object object) throws WebEngineException {
         Path filePath = Paths.get(path,fileName);
         XmlUtil.marshallWithoutNamespace(filePath.toString(),object);
         return filePath.toString();
     }
 
-    public static String saveAsXml(String path, String fileName, Object object,String namespace, String prefixe) throws IOException, WebEngineException {
+    public static String saveAsXml(String path, String fileName, Object object,String namespace, String prefixe) throws WebEngineException {
         Path filePath = Paths.get(path,fileName);
         XmlUtil.marshallWithNamespace(filePath.toString(),object,namespace,prefixe);
         return filePath.toString();
@@ -47,7 +51,7 @@ public class FileUtil {
 
     public static String getDefaultRunResultDirectory(){
         StringJoiner stringJoiner = new StringJoiner(File.separator);
-        stringJoiner.add(".").add("target").add("run-result");
+        stringJoiner.add(".").add("target").add("run-result-");
         return stringJoiner.toString();
     }
 }

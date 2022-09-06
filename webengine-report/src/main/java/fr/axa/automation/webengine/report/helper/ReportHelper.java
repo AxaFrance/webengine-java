@@ -35,7 +35,7 @@ public class ReportHelper {
         this.loggerService = loggerService;
     }
 
-    public Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
+    public Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws  WebEngineException {
         Map<ReportPath,String> path = new HashMap<>();
         String webEngineReport = generateWebengineReport(testSuiteReport,testName,outputPath);
         String JunitReport = generateJUnitReport(testSuiteReport,testName,outputPath);
@@ -44,7 +44,7 @@ public class ReportHelper {
         return path;
     }
 
-    public String generateWebengineReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
+    public String generateWebengineReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws WebEngineException {
         Path path = FileUtil.createDirectories(outputPath + testName );
 
         StringBuilder composeFilePath = new StringBuilder("DataDrivenTestSuite-"+testName);
@@ -58,7 +58,7 @@ public class ReportHelper {
     }
 
 
-    public String generateJUnitReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws IOException, WebEngineException {
+    public String generateJUnitReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws  WebEngineException {
         Testsuite testsuite = createJUnitTestSuite(testSuiteReport, testName);
         List<Testsuite.Testcase> testcaseList = new ArrayList<>();
         for (TestCaseReport testCaseReport : testSuiteReport.getTestResult()) {

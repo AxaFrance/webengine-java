@@ -28,6 +28,12 @@ public class ReportHelperGherkin {
     Map<String,TestCaseReport> testCaseReportMap;
     Map<String,ActionReport> actionReportMap;
 
+    String currentfeatureName;
+    String currentScenarioName;
+    String currentStepName;
+    StringBuilder information;
+
+
     private enum NameNormalizeKey{
         TEST_CASE_NAME_NORMALIZE,TEST_STEP_NAME_NORMALIZE,TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE
     }
@@ -47,6 +53,7 @@ public class ReportHelperGherkin {
         initTestSuiteReport();
         testCaseReportMap = new HashMap<>();
         actionReportMap = new HashMap<>();
+        information = new StringBuilder();
     }
 
     private void initTestSuiteReport() throws UnknownHostException {
@@ -104,6 +111,7 @@ public class ReportHelperGherkin {
         Map<NameNormalizeKey,String> normalizeNameMap = getNormalizeName(testCaseName,testStepName);
         TestCaseReport testCaseReport = testCaseReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE));
         ActionReport actionReport = actionReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE));
+        actionReport.setLog(information.toString());
         actionReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
         actionReport.setResult(result);
         byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShot.getGeneratedCurrentDesktopImage());
@@ -111,7 +119,7 @@ public class ReportHelperGherkin {
         testCaseReport.getActionReports().getActionReport().add(actionReport);
     }
 
-    public void closeReport() throws IOException, WebEngineException {
+    public void closeReport() throws  WebEngineException {
         Optional<String> optionalApplicationName = PropertiesUtil.getInstance().getValue("application.properties","application.name");
         String applicationName = "application";
         if(optionalApplicationName.isPresent()){

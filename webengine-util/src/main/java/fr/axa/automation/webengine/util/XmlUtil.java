@@ -21,7 +21,7 @@ public class XmlUtil {
             JAXBElement jaxbElement = jaxbUnmarshaller.unmarshal(source, returnType);
             return (T) jaxbElement.getValue();
         } catch (JAXBException e) {
-            throw new WebEngineException("Error during parsing XML data for file :"+filePath, e);
+            throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
         }
     }
 
@@ -35,7 +35,7 @@ public class XmlUtil {
             JAXBElement jaxbElement = new JAXBElement( new QName("", object.getClass().getSimpleName(),""), object.getClass(), object );
             jaxbMarshaller.marshal(jaxbElement, file);
         } catch (JAXBException e) {
-            throw new WebEngineException("Error during parsing XML data for file :"+filePath, e);
+            throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
         }
     }
 
@@ -55,7 +55,7 @@ public class XmlUtil {
             JAXBElement jaxbElement = new JAXBElement( new QName(namespace, object.getClass().getSimpleName(),prefixe), object.getClass(), object );
             jaxbMarshaller.marshal(jaxbElement, file);
         } catch (JAXBException e) {
-            throw new WebEngineException("Error during parsing XML data for file :"+filePath, e);
+            throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
         }
     }
 
