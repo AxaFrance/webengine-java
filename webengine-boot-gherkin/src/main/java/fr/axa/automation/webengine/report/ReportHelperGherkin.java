@@ -31,7 +31,7 @@ public class ReportHelperGherkin {
     String currentfeatureName;
     String currentScenarioName;
     String currentStepName;
-    StringBuilder information;
+    StringJoiner information;
 
 
     private enum NameNormalizeKey{
@@ -53,7 +53,7 @@ public class ReportHelperGherkin {
         initTestSuiteReport();
         testCaseReportMap = new HashMap<>();
         actionReportMap = new HashMap<>();
-        information = new StringBuilder();
+        information = new StringJoiner("\n");
     }
 
     private void initTestSuiteReport() throws UnknownHostException {
