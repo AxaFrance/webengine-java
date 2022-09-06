@@ -6,6 +6,6 @@ public abstract class AbstractStep {
 
     protected void addInformation(String information){
         ReportHelperGherkin reportHelperGherkin = ReportHelperGherkin.getInstance();
-        reportHelperGherkin.getInformation().append(information);
+        reportHelperGherkin.getInformation().add(information);
     }
 }

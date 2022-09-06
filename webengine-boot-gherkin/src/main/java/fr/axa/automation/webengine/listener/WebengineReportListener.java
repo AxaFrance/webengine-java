@@ -12,8 +12,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.StringJoiner;
 
 @Getter
 @Setter
@@ -89,7 +89,7 @@ public class WebengineReportListener implements EventListener {
         System.out.println("step read");
         String currentStepName = getTestStepName(testStepStarted.getTestStep());
         reportHelperGherkin.setCurrentStepName(currentStepName);
-        reportHelperGherkin.getInformation().setLength(0);
+        reportHelperGherkin.setInformation(new StringJoiner("\n"));
         reportHelperGherkin.addTestStepReport(testStepStarted.getTestCase().getName(), currentStepName);
     }
 
