@@ -58,16 +58,27 @@ public abstract class AbstractElementDescription {
         LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
         Exception exception = new Exception();
 
+//        while (LocalDateTime.now().isBefore(timeOut)) {
+//            try {
+//                return function.call(param);
+//            } catch (InvalidSelectorException e) {
+//                throw e;
+//            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException | ElementClickInterceptedException e ) {
+//                exception = e;
+//                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
+//            }
+//        }
+
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
                 return function.call(param);
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException | ElementClickInterceptedException e ) {
+            } catch (Exception e ) {
                 exception = e;
                 waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
+
+
         throw exception;
     }
 
@@ -81,16 +92,26 @@ public abstract class AbstractElementDescription {
         LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeoutSecond);
         Exception exception = new Exception();
 
+//        while (LocalDateTime.now().isBefore(timeOut)) {
+//            try {
+//                return internalFindElement();
+//            } catch (InvalidSelectorException e) {
+//                throw e;
+//            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
+//                exception = e;
+//                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
+//            }
+//        }
+
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
                 return internalFindElement();
-            } catch (InvalidSelectorException e) {
-                throw e;
-            } catch (MultipleElementException | NoSuchElementException | StaleElementReferenceException e) {
+            } catch (Exception e) {
                 exception = e;
                 waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
             }
         }
+
         throw exception;
     }
 
