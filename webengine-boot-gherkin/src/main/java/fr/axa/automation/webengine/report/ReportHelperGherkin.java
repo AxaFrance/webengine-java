@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -107,16 +108,27 @@ public class ReportHelperGherkin {
         actionReportMap.put(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE),actionReport);
     }
 
-    public void updateTestStepReport(String testCaseName, String testStepName, Result result){
-        Map<NameNormalizeKey,String> normalizeNameMap = getNormalizeName(testCaseName,testStepName);
+    public void updateTestStepReport(ReportDetail reportDetail){
+        Map<NameNormalizeKey,String> normalizeNameMap = getNormalizeName(reportDetail.getTestCaseName(),reportDetail.getStepName());
         TestCaseReport testCaseReport = testCaseReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE));
-        ActionReport actionReport = actionReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE));
-        actionReport.setLog(information.toString());
-        actionReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
-        actionReport.setResult(result);
+        ActionReport actionReport = getActionReport(reportDetail);
         byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShot.getGeneratedCurrentDesktopImage());
-        actionReport.getScreenshots().getScreenshotReport().add(ScreenshotHelper.getScreenshotReport(testStepName,screenshot));
+        actionReport.getScreenshots().getScreenshotReport().add(ScreenshotHelper.getScreenshotReport(reportDetail.getStepName(),screenshot));
         testCaseReport.getActionReports().getActionReport().add(actionReport);
+    }
+
+
+    private ActionReport getActionReport(ReportDetail reportDetail) {
+        Map<NameNormalizeKey,String> normalizeNameMap = getNormalizeName(reportDetail.getTestCaseName(),reportDetail.getStepName());
+        ActionReport actionReport = actionReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE));
+        StringJoiner stringJoiner = new StringJoiner("\n").add(information.toString());
+        if(reportDetail.getThrowable()!=null){
+            stringJoiner.add(ExceptionUtils.getStackTrace(reportDetail.getThrowable()));
+        }
+        actionReport.setLog(stringJoiner.toString());
+        actionReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
+        actionReport.setResult(reportDetail.getResult());
+        return actionReport;
     }
 
     public void closeReport() throws  WebEngineException {

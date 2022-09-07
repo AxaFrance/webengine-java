@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
@@ -35,7 +36,7 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
         } catch (Exception e) {
             errorMessage = "Exception for action :" + actionName;
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
-            actionReportDetail.getActionReport().setLog(errorMessage);
+            actionReportDetail.getActionReport().setLog(ExceptionUtils.getStackTrace(e));
         }
         return actionReportDetail;
     }
@@ -73,13 +74,13 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
         } catch (InterruptedException ierr) {
             errorMessage = "Interrupted Exception for action :" + actionName;
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
-            actionReportDetail.getActionReport().setLog(errorMessage);
+            actionReportDetail.getActionReport().setLog(ExceptionUtils.getStackTrace(ierr));
             loggerService.error(errorMessage, ierr);
             future.cancel(true);
         } catch (ExecutionException err) {
             errorMessage = "Execution Exception for action :" + actionName;
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
-            actionReportDetail.getActionReport().setLog(errorMessage);
+            actionReportDetail.getActionReport().setLog(ExceptionUtils.getStackTrace(err));
             loggerService.error(errorMessage, err);
         }finally {
             executorService.shutdown();

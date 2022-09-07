@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.listener;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceDecorator;
+import fr.axa.automation.webengine.report.ReportDetail;
 import fr.axa.automation.webengine.report.ReportHelperGherkin;
 import fr.axa.automation.webengine.status.StatusMapping;
 import io.cucumber.plugin.EventListener;
@@ -99,6 +100,10 @@ public class WebengineReportListener implements EventListener {
      */
     private void stepFinished(TestStepFinished testStepFinished) {
         String stepName = getTestStepName(testStepFinished.getTestStep());
-        reportHelperGherkin.updateTestStepReport(testStepFinished.getTestCase().getName(), stepName, StatusMapping.MAPPING.get(testStepFinished.getResult().getStatus()));
+        ReportDetail reportDetail = ReportDetail.builder().testCaseName(testStepFinished.getTestCase().getName())
+                                                          .stepName(stepName)
+                                                          .result(StatusMapping.MAPPING.get(testStepFinished.getResult().getStatus()))
+                                                          .throwable(testStepFinished.getResult().getError()).build();
+        reportHelperGherkin.updateTestStepReport(reportDetail);
     }
 }

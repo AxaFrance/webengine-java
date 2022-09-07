@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -47,7 +48,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
                 testCaseReportList.addAll(runTestCase(globalApplicationContext, testCaseList));
             }
         }catch (WebEngineException e){
-            testSuiteReport.setSystemError(e.getMessage());
+            testSuiteReport.setSystemError(ExceptionUtils.getStackTrace(e));
         }finally {
             testSuiteReport.setHostName(InetAddress.getLocalHost().getHostName());
             testSuiteReport.setStartTime(startTime);

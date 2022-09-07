@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
           }catch (WebEngineException e){
                loggerService.info("Fatal exception during step : " + testStepName+" and test case name is : "+testCaseName+". All test step are cancelled.");
                actionReport.setResult(Result.CRITICAL_ERROR);
-               actionReport.setLog(e.getMessage());
+               actionReport.setLog(ExceptionUtils.getStackTrace(e));
                actionReportDetailList.add(ActionReportDetail.builder().actionReport(actionReport).resultCheckPoint(true).build());
           }
 
