@@ -223,6 +223,18 @@ public class WebElementDescription extends AbstractElementDescription {
         js.executeScript("arguments[0].scrollIntoView(true);", findWebElement);
     }
 
+    public void scrollIntoViewAndclick() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            JavascriptExecutor js = (JavascriptExecutor) useDriver;
+            js.executeScript("arguments[0].scrollIntoView(true);", webElement);
+            webElement.click();
+            return null;
+        };
+        retry(fun,null);
+    }
+
+
     public void scrollIntoCenterView() throws Exception {
         WebElement findWebElement = findElement();
         JavascriptExecutor js = (JavascriptExecutor) useDriver;
