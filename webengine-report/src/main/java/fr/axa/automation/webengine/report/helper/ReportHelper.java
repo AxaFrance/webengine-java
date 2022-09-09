@@ -60,6 +60,20 @@ public class ReportHelper {
 
     public String generateJUnitReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws  WebEngineException {
         Testsuite testsuite = createJUnitTestSuite(testSuiteReport, testName);
+        testsuite.getTestcase().addAll(getTestcases(testSuiteReport));
+
+        Path path = FileUtil.createDirectories(outputPath + testName );
+        StringBuilder composeFilePath = new StringBuilder("Junit-"+testName);
+        String fileName = composeFilePath.append("_")
+                .append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat()))
+                .append(".xml").toString();
+        String completePath = path.toString()+"\\"+fileName;
+        loggerService.info("Create Junit report : "+path.toString()+"\\"+fileName);
+        FileUtil.saveAsXML(path.toString(),fileName,testsuite);
+        return completePath;
+    }
+
+    private List<Testsuite.Testcase> getTestcases(TestSuiteReport testSuiteReport) {
         List<Testsuite.Testcase> testcaseList = new ArrayList<>();
         for (TestCaseReport testCaseReport : testSuiteReport.getTestResult()) {
             Testsuite.Testcase testcase = createJunitTestCase(testSuiteReport, testCaseReport);
@@ -72,17 +86,7 @@ public class ReportHelper {
             }
             testcaseList.add(testcase);
         }
-        testsuite.getTestcase().addAll(testcaseList);
-
-        Path path = FileUtil.createDirectories(outputPath + testName );
-        StringBuilder composeFilePath = new StringBuilder("Junit-"+testName);
-        String fileName = composeFilePath.append("_")
-                .append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat()))
-                .append(".xml").toString();
-        String completePath = path.toString()+"\\"+fileName;
-        loggerService.info("Create Junit report : "+path.toString()+"\\"+fileName);
-        FileUtil.saveAsXML(path.toString(),fileName,testsuite);
-        return completePath;
+        return testcaseList;
     }
 
     private Testsuite.Testcase.Failure createTestCaseFailure(TestCaseReport testCaseReport) {
