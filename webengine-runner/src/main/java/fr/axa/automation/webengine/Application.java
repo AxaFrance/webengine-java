@@ -11,11 +11,15 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-    @Autowired
-    LoggerService loggerService;
+    final LoggerService loggerService;
+
+    final BootProject bootProject;
 
     @Autowired
-    BootProject bootProject;
+    public Application(LoggerService loggerService,BootProject bootProject) {
+        this.loggerService = loggerService;
+        this.bootProject = bootProject;
+    }
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(Application.class).web(WebApplicationType.NONE).run(args);

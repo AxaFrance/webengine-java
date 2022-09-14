@@ -5,16 +5,15 @@ import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.ReportHelper;
 import fr.axa.automation.webengine.util.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -133,9 +132,9 @@ public class ReportHelperGherkin {
 
     public void closeReport() throws  WebEngineException {
         String applicationName = "application";
-        Optional<String> optionalApplicationName = PropertiesUtil.getInstance().getValue("application.properties","application.name");
-        if(optionalApplicationName.isPresent()){
-            applicationName = optionalApplicationName.get();
+        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfiguration();
+        if(globalConfigProperties.isPresent()){
+            applicationName = globalConfigProperties.get().getApplication().getName();
         }
         testSuiteReport.setEndTime(Calendar.getInstance());
         testSuiteReport.getTestResult().addAll(testCaseReportMap.values());

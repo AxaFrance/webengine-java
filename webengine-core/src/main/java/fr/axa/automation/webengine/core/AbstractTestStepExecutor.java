@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
+import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.ClassUtil;
@@ -37,9 +38,16 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
         return actionExecutor.run(globalApplicationContext, action);
     }
 
-    protected IAction getAction(GlobalApplicationContext globalApplicationContext, Object context, String testCaseName, ITestStep testStep) throws WebEngineException {
-        IAction action;
+    protected Class<? extends IAction> getActionClass(GlobalApplicationContext globalApplicationContext, ITestStep testStep) throws WebEngineException {
         Class<? extends IAction> clazz = testStep.getAction();
+        if(globalApplicationContext.getSettings().getPlatform()!= Platform.WINDOWS && testStep.getMobileAction()!=null){
+            clazz = testStep.getMobileAction();
+        }
+        return clazz;
+    }
+
+    protected IAction getAction(GlobalApplicationContext globalApplicationContext, Object context, String testCaseName, ITestStep testStep) throws WebEngineException {
+        Class<? extends IAction> clazz = getActionClass(globalApplicationContext,testStep);
         ActionContext actionContext = getActionContext(globalApplicationContext, context, testCaseName);
         return ClassUtil.createAndPopulateAction(clazz, "setActionDetailContext", actionContext);
     }

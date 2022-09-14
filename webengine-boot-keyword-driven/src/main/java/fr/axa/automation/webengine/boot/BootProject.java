@@ -10,6 +10,7 @@ import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.general.Settings;
 import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.helper.BrowserTypeHelper;
+import fr.axa.automation.webengine.helper.PlatformTypeHelper;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.report.helper.ReportHelper;
@@ -176,7 +177,7 @@ public class BootProject {
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
         String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
         if(platform==null){
-            platform = Platform.WINDOWS.name();
+            platform = Platform.WINDOWS.getValue();
         }
         if(outputDir!=null){
             outputDir += File.separator;
@@ -184,7 +185,7 @@ public class BootProject {
             outputDir = FileUtil.getDefaultRunResultDirectory();
         }
 
-        Settings settings = Settings.builder().platform(Platform.valueOf(platform)).browserType(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir).build();
+        Settings settings = Settings.builder().platform(PlatformTypeHelper.getPlatform(platform)).browser(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir).build();
         loggerService.info("Loading settings running is succeed : "+settings.toString());
         return settings;
     }

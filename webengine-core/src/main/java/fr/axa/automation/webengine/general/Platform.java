@@ -1,5 +1,14 @@
 package fr.axa.automation.webengine.general;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@AllArgsConstructor
 public enum Platform {
-    WINDOWS, ANDROID, IOS
+    WINDOWS("Windows"), ANDROID("Android"), IOS("iOS");
+    final String value;
 }

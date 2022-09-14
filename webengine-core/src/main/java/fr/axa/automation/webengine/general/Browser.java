@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor
-public enum BrowserType {
+public enum Browser {
     INTERNET_EXPLORER("InternetExplorer"), FIREFOX("Firefox"), CHROME("Chrome"), CHROMIUM_EDGE("ChromiumEdge"), IOS_NATIVE("IOSNative"), ANDROID_NATIVE("AndroidNative"),  SAFARI("Safari");
     final String value;
 }

@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 public class Settings {
-    BrowserType browserType;
+    Browser browser;
     @Builder.Default Integer synchronzationTimeout = 20;
     String logDir;
     String logFileName;
