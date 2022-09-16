@@ -35,8 +35,9 @@
         <commons-io.version>2.6</commons-io.version>
         <spring-boot-maven-plugin.version>2.5.4</spring-boot-maven-plugin.version>
         <maven-jaxb2-plugin.version>0.7.1</maven-jaxb2-plugin.version>
-        <webdrivermanager.version>5.0.3</webdrivermanager.version>
-        <selenium-java.version>3.141.59</selenium-java.version>
+        <webdrivermanager.version>5.2.3</webdrivermanager.version>
+        <selenium-java.version>4.4.0</selenium-java.version>
+        <selenium-remote-driver.version>4.4.0</selenium-remote-driver.version>
         <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
         <jaxb-api.version>2.2.7</jaxb-api.version>
         <istack-commons-runtime.version>2.16</istack-commons-runtime.version>
@@ -45,6 +46,7 @@
         <java-client.version>8.1.0</java-client.version>
         <jackson-dataformat-yaml.version>2.13.2</jackson-dataformat-yaml.version>
         <appium-java-client-.version>8.1.1</appium-java-client-.version>
+
     </properties>
 
     <modules>
@@ -156,6 +158,15 @@
                 <artifactId>selenium-api</artifactId>
                 <version>${selenium-java.version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-remote-driver -->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-remote-driver</artifactId>
+                <version>${selenium-remote-driver.version}</version>
+            </dependency>
+
+
 
             <dependency>
                 <groupId>net.java.dev.jna</groupId>
