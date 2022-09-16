@@ -60,7 +60,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
                Object object = initialize(globalApplicationContext);
                actionReportDetailList.addAll(runAllTestStep(globalApplicationContext, object, testCaseName, testCase));
                cleanUp(object);
-          }catch (WebEngineException e){
+          }catch (Throwable e){
                testCaseReport.setResult(Result.FAILED);
                loggerService.error("Error during execution of test case : "+testCaseName,e);
           }finally {
@@ -104,7 +104,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
                          actionReportDetailList.add(actionReportDetail);
                     }
                }
-          }catch (WebEngineException e){
+          }catch (Throwable e){
                loggerService.info("Fatal exception during step : " + testStepName+" and test case name is : "+testCaseName+". All test step are cancelled.");
                actionReport.setResult(Result.CRITICAL_ERROR);
                actionReport.setLog(ExceptionUtils.getStackTrace(e));
