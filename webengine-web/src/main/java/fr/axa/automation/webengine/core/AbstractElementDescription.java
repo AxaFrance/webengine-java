@@ -1,13 +1,15 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.general.SettingsWeb;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -41,17 +43,7 @@ public abstract class AbstractElementDescription {
     }
 
     protected <T, R> R perform(Function<T, R> function, T param) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
-        R returnValue = null;
-
-        while (LocalDateTime.now().isBefore(timeOut) && returnValue == null) {
-            try {
-                returnValue = function.apply(param);
-            } catch (Exception e) {
-                throw e;
-            }
-        }
-        return returnValue;
+        return function.apply(param);
     }
 
     protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
@@ -123,9 +115,7 @@ public abstract class AbstractElementDescription {
     }
 
     public Boolean exists() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
-            return exists(SettingsWeb.TIMEOUT_SECONDES);
-        };
+        IFunction<Void, Boolean> fun = (x) -> exists(SettingsWeb.TIMEOUT_SECONDES);
         return retry(fun,null);
     }
 

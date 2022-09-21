@@ -28,13 +28,14 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
     }
 
     public ActionReportDetail run(GlobalApplicationContext globalApplicationContext, IAction action) {
-        String errorMessage = "";
+        String errorMessage ;
         String actionName = action.getClass().getSimpleName();
         ActionReportDetail actionReportDetail = ActionReportDetail.builder().build();
         try {
             actionReportDetail = execute(globalApplicationContext, action);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             errorMessage = "Exception for action :" + actionName;
+            loggerService.error(errorMessage, e);
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
             actionReportDetail.getActionReport().setLog(ExceptionUtils.getStackTrace(e));
         }
@@ -46,7 +47,7 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
     }
 
     private ActionReportDetail execute(GlobalApplicationContext globalApplicationContext, IAction action)  {
-        String errorMessage = "";
+        String errorMessage;
         String actionName = action.getClass().getSimpleName();
         LocalDateTime startTime = LocalDateTime.now();
         ActionReportDetail actionReportDetail = ActionReportDetail.builder().build();
@@ -61,7 +62,7 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
                 if (isRunCheckpoint(actionReport)) {
                     resultCheckPoint = action.runCheckpoint();
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 loggerService.error("The action " + actionName + " is failed ",e);
                 throw e;
             }
@@ -71,18 +72,13 @@ public abstract class AbstractActionExecutor implements IActionExecutor {
         try {
             actionReportDetail = future.get();
             loggerService.info("The action " + actionName + " is finished at "+ LocalDateTime.now());
-        } catch (InterruptedException ierr) {
-            errorMessage = "Interrupted Exception for action :" + actionName;
+        } catch (Throwable e) {
+            errorMessage = "Exception for action :" + actionName;
             actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
-            actionReportDetail.getActionReport().setLog(ExceptionUtils.getStackTrace(ierr));
-            loggerService.error(errorMessage, ierr);
+            actionReportDetail.getActionReport().setLog(ExceptionUtils.getStackTrace(e));
+            loggerService.error(errorMessage, e);
             future.cancel(true);
-        } catch (ExecutionException err) {
-            errorMessage = "Execution Exception for action :" + actionName;
-            actionReportDetail.getActionReport().setResult(Result.CRITICAL_ERROR);
-            actionReportDetail.getActionReport().setLog(ExceptionUtils.getStackTrace(err));
-            loggerService.error(errorMessage, err);
-        }finally {
+        } finally {
             executorService.shutdown();
         }
 

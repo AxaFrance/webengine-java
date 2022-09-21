@@ -107,7 +107,7 @@ public class BrowserFactory {
         if(appiumSettings!=null){
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
             if(MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())){
-                capabilitiesProperties.getDesiredCapabilitiesMap().entrySet().forEach(cap -> desiredCapabilities.setCapability(cap.getKey(),cap.getValue()));
+                capabilitiesProperties.getDesiredCapabilitiesMap().forEach((key, value) -> desiredCapabilities.setCapability(key, value));
                 if(appiumSettings.getGridConnection().contains("browserstack.com")){
                     desiredCapabilities.setCapability("bstack:options", getBrowserStackOptions(appiumSettings,capabilitiesProperties));
                 }
