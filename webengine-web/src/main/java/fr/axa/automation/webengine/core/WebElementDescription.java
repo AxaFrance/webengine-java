@@ -234,12 +234,22 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-
     public void scrollIntoCenterView() throws Exception {
         WebElement findWebElement = findElement();
         JavascriptExecutor js = (JavascriptExecutor) useDriver;
         js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", findWebElement);
     }
+
+    public void highLight() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement findWebElement = findElement();
+            JavascriptExecutor js = (JavascriptExecutor) useDriver;
+            js.executeScript("arguments[0].style.border='3px solid red'", findWebElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
 
     public void dragAndDropTo(AbstractElementDescription element) throws Exception {
         WebElement e1 = findElement();
