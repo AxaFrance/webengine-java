@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
@@ -9,9 +8,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
 
@@ -35,26 +37,42 @@ public class PropertiesUtilV2 {
         return PropertiesUtilV2.PropertiesUtilHolder.INSTANCE;
     }
 
-    protected File loadFile() throws WebEngineException {
-        File file = null;
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(APPLICATION_FILE_NAME);
-        if(url!=null){
-            file = new File(url.getFile());
-        }
-        return file;
-    }
+//    protected File loadFile() throws WebEngineException {
+//        File file = null;
+//        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//        URL url = classLoader.getResource(APPLICATION_FILE_NAME);
+//        if(url!=null){
+//            file = new File(url.getFile());
+//        }
+//        return file;
+//    }
+
+//    protected void loadPropertiesFile() throws WebEngineException {
+//        if (globalConfigProperties == null) {
+//            File file = loadFile();
+//            if (file != null) {
+//                ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+//                try {
+//                    globalConfigProperties = objectMapper.readValue(file, GlobalConfigProperties.class);
+//                } catch (IOException e) {
+//                    throw new WebEngineException("Error during reading application-properties.yaml file", e);
+//                }
+//            }
+//        }
+//    }
 
     protected void loadPropertiesFile() throws WebEngineException {
         if (globalConfigProperties == null) {
-            File file = loadFile();
-            if (file != null) {
-                ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-                try {
-                    globalConfigProperties = objectMapper.readValue(file, GlobalConfigProperties.class);
-                } catch (IOException e) {
-                    throw new WebEngineException("Error during reading application-properties.yaml file", e);
+            try {
+                Yaml yaml = new Yaml(new Constructor(GlobalConfigProperties.class));
+                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(APPLICATION_FILE_NAME);
+                if(inputStream!=null){
+                    globalConfigProperties = yaml.load(inputStream);
+                }else{
+                    loggerService.info("No application-properties.yml file found.");
                 }
+            } catch (Exception e) {
+                throw new WebEngineException("Error during reading application-properties.yaml file", e);
             }
         }
     }

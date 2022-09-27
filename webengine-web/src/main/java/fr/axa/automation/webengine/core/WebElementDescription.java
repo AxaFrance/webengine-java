@@ -218,9 +218,13 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     public void scrollIntoView() throws Exception {
-        WebElement findWebElement = findElement();
-        JavascriptExecutor js = (JavascriptExecutor) useDriver;
-        js.executeScript("arguments[0].scrollIntoView(true);", findWebElement);
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement findWebElement = findElement();
+            JavascriptExecutor js = (JavascriptExecutor) useDriver;
+            js.executeScript("arguments[0].scrollIntoView(true);", findWebElement);
+            return null;
+        };
+        retry(fun,null);
     }
 
     public void scrollIntoViewAndclick() throws Exception {
@@ -235,9 +239,13 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     public void scrollIntoCenterView() throws Exception {
-        WebElement findWebElement = findElement();
-        JavascriptExecutor js = (JavascriptExecutor) useDriver;
-        js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", findWebElement);
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement findWebElement = findElement();
+            JavascriptExecutor js = (JavascriptExecutor) useDriver;
+            js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", findWebElement);
+            return null;
+        };
+        retry(fun,null);
     }
 
     public void highLight() throws Exception {
