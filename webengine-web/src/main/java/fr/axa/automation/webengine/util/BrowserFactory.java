@@ -99,14 +99,14 @@ public class BrowserFactory {
 //        String automationName = platform == Platform.ANDROID ? "UiAutomator2" : "Safari";
 
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME,browser.getValue());
+
 //        desiredCapabilities.setCapability("appium:platformName",platform.getValue());
 //        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,automationName);
-        desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME,browser.getValue());
 //        desiredCapabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,90);
 //        desiredCapabilities.setCapability("nativeWebScreenshot","true");
+
         Map<String, Object> browserStackOptions = new HashMap<>();
-
-
         AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
         if(appiumSettings!=null){
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
@@ -114,7 +114,7 @@ public class BrowserFactory {
                 capabilitiesProperties.getDesiredCapabilitiesMap().forEach((key, value) -> browserStackOptions.put(key, value));
             }
         }
-        desiredCapabilities.setCapability("bstack:options",browserStackOptions);
+        desiredCapabilities.setCapability("bstack:options", browserStackOptions);
         return desiredCapabilities;
     }
 

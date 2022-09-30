@@ -11,6 +11,5 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CapabilitiesProperties {
-  String deviceName;
   Map<String,String> desiredCapabilitiesMap;
 }
