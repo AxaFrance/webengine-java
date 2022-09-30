@@ -102,15 +102,19 @@ public class BrowserFactory {
 //        desiredCapabilities.setCapability("appium:platformName",platform.getValue());
 //        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,automationName);
         desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME,browser.getValue());
-        desiredCapabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,90);
-        desiredCapabilities.setCapability("nativeWebScreenshot","true");
+//        desiredCapabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,90);
+//        desiredCapabilities.setCapability("nativeWebScreenshot","true");
+        Map<String, Object> browserStackOptions = new HashMap<>();
+
+
         AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
         if(appiumSettings!=null){
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
             if(MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())){
-                capabilitiesProperties.getDesiredCapabilitiesMap().forEach((key, value) -> desiredCapabilities.setCapability(key, value));
+                capabilitiesProperties.getDesiredCapabilitiesMap().forEach((key, value) -> browserStackOptions.put(key, value));
             }
         }
+        desiredCapabilities.setCapability("bstack:options",browserStackOptions);
         return desiredCapabilities;
     }
 
