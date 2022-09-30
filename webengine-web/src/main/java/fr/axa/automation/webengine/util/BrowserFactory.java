@@ -79,9 +79,9 @@ public class BrowserFactory {
             AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
             if(appiumSettings!=null){
                 if(platform == Platform.ANDROID) {
-                    return (Optional<T>) Optional.of(new AndroidDriver(new URL(appiumSettings.getGridConnection()), getAppiumOption(globalConfigProperties)));
+                    return (Optional<T>) Optional.of(new AndroidDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfigProperties)));
                 }else if(platform == Platform.IOS){
-                    return (Optional<T>) Optional.of(new IOSDriver(new URL(appiumSettings.getGridConnection()), getAppiumOption(globalConfigProperties)));
+                    return (Optional<T>) Optional.of(new IOSDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfigProperties)));
                 } else {
                     throw new WebEngineException("Platform not recognized for getting Appium driver");
                 }
@@ -94,33 +94,34 @@ public class BrowserFactory {
     }
 
     private static DesiredCapabilities getAppiumOption(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
         Browser browser = Browser.valueOf(globalConfigProperties.getApplication().getBrowserName());
-        String automationName = platform == Platform.ANDROID ? "UiAutomator2" : "Safari";
+//        Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
+//        String automationName = platform == Platform.ANDROID ? "UiAutomator2" : "Safari";
+
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 //        desiredCapabilities.setCapability("appium:platformName",platform.getValue());
 //        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,automationName);
         desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME,browser.getValue());
         desiredCapabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,90);
-//        desiredCapabilities.setCapability("nativeWebScreenshot","true");
+        desiredCapabilities.setCapability("nativeWebScreenshot","true");
         AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
         if(appiumSettings!=null){
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
             if(MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())){
                 capabilitiesProperties.getDesiredCapabilitiesMap().forEach((key, value) -> desiredCapabilities.setCapability(key, value));
-                if(appiumSettings.getGridConnection().contains("browserstack.com")){
-                    desiredCapabilities.setCapability("bstack:options", getBrowserStackOptions(appiumSettings,capabilitiesProperties));
-                }
             }
         }
-
         return desiredCapabilities;
     }
 
-    private static Map<String, String> getBrowserStackOptions(AppiumSettingsProperties appiumSettings,CapabilitiesProperties capabilitiesProperties) throws WebEngineException {
-        Map<String, String> browserstackOptions = new HashMap();
-        browserstackOptions.put("userName", appiumSettings.getUserName());
-        browserstackOptions.put("accessKey", appiumSettings.getPassword());
-        return browserstackOptions;
+    private static String getURLBrowserStack(AppiumSettingsProperties appiumSettings) throws WebEngineException{
+        if(appiumSettings!=null){
+            if(appiumSettings.getGridConnection().contains("browserstack.com")){
+                return "https://"+appiumSettings.getUserName()+":"+appiumSettings.getPassword()+"@hub-cloud.browserstack.com/wd/hub";
+            }else {
+                return appiumSettings.getGridConnection();
+            }
+        }
+        throw  new WebEngineException("Appium Settings are null. Check your application-properties.yml or your custom config ");
     }
 }
