@@ -61,11 +61,11 @@ public class PropertiesUtilV2 {
 //        }
 //    }
 
-    protected void loadPropertiesFile() throws WebEngineException {
+    protected void loadPropertiesFile(String name) throws WebEngineException {
         if (globalConfigProperties == null) {
             try {
                 Yaml yaml = new Yaml(new Constructor(GlobalConfigProperties.class));
-                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(APPLICATION_FILE_NAME);
+                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(name);
                 if(inputStream!=null){
                     globalConfigProperties = yaml.load(inputStream);
                 }else{
@@ -78,7 +78,12 @@ public class PropertiesUtilV2 {
     }
 
     public Optional<GlobalConfigProperties> getGlobalConfiguration() throws WebEngineException{
-        loadPropertiesFile();
+        return getGlobalConfigPropertiesByName(APPLICATION_FILE_NAME);
+    }
+
+
+    public Optional<GlobalConfigProperties> getGlobalConfigPropertiesByName(String name) throws WebEngineException {
+        loadPropertiesFile(name);
         Optional<GlobalConfigProperties> optionalGlobalConfigProperties = Optional.empty();
         if(globalConfigProperties!=null){
             optionalGlobalConfigProperties = Optional.of(globalConfigProperties);
