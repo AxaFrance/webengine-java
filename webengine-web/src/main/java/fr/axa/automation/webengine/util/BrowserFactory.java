@@ -98,11 +98,11 @@ public class BrowserFactory {
         Browser browser = Browser.valueOf(globalConfigProperties.getApplication().getBrowserName());
         String automationName = platform == Platform.ANDROID ? "UiAutomator2" : "Safari";
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setCapability("appium:platformName",platform.getValue());
-        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,automationName);
+//        desiredCapabilities.setCapability("appium:platformName",platform.getValue());
+//        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,automationName);
         desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME,browser.getValue());
         desiredCapabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,90);
-        desiredCapabilities.setCapability("nativeWebScreenshot","true");
+//        desiredCapabilities.setCapability("nativeWebScreenshot","true");
         AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
         if(appiumSettings!=null){
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
@@ -121,10 +121,6 @@ public class BrowserFactory {
         Map<String, String> browserstackOptions = new HashMap();
         browserstackOptions.put("userName", appiumSettings.getUserName());
         browserstackOptions.put("accessKey", appiumSettings.getPassword());
-//        browserstackOptions.put("appiumVersion", "1.22.0");
-//        browserstackOptions.put("projectName", "Java Project");
-//        browserstackOptions.put("buildName", "browserstack-build-1");
-//        browserstackOptions.put("sessionName", "first_test");
         return browserstackOptions;
     }
 }
