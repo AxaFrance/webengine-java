@@ -166,7 +166,7 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private Collection<WebElement> getInternalFindElementByClassName(String className) {
-        String xPath = "//*[@class='{" + className + "}']";
+        String xPath = "//*[contains(@class, '{" + className + "}')]";
         return useDriver.findElements(By.xpath(xPath));
     }
 
