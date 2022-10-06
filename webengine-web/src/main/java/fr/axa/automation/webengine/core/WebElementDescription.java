@@ -130,7 +130,7 @@ public class WebElementDescription extends AbstractElementDescription {
             if (CollectionUtils.isNotEmpty(webElementList)) {
                 webElementList = webElementList.stream().filter(x -> this.innerText.equalsIgnoreCase(x.getText())).collect(Collectors.toList());
             } else {
-                webElementList = getInternalFindElementByXpath("//*[text()='{" + this.innerText + "}']");
+                webElementList = getInternalFindElementByXpath("//*[text()='" + this.innerText + "']");
             }
         }
         if (CollectionUtils.isNotEmpty(this.attributeList)) {
@@ -333,6 +333,4 @@ public class WebElementDescription extends AbstractElementDescription {
         };
         retry(fun,null);
     }
-
-
 }
