@@ -95,7 +95,6 @@ public class WebElementDescription extends AbstractElementDescription {
         return newWebElementList;
     }
 
-
     @Override
     public Collection<WebElement> internalFindElements() {
         Collection<WebElement> webElementList = null;
@@ -173,7 +172,6 @@ public class WebElementDescription extends AbstractElementDescription {
     private Collection<WebElement> getInternalFindElementByXpath(String xPath) {
         return useDriver.findElements(By.xpath(xPath));
     }
-
 
     private Collection<WebElement> getInternalFindElementsByName(String name) {
         return useDriver.findElements(By.name(name));

@@ -37,30 +37,6 @@ public class PropertiesUtilV2 {
         return PropertiesUtilV2.PropertiesUtilHolder.INSTANCE;
     }
 
-//    protected File loadFile() throws WebEngineException {
-//        File file = null;
-//        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-//        URL url = classLoader.getResource(APPLICATION_FILE_NAME);
-//        if(url!=null){
-//            file = new File(url.getFile());
-//        }
-//        return file;
-//    }
-
-//    protected void loadPropertiesFile() throws WebEngineException {
-//        if (globalConfigProperties == null) {
-//            File file = loadFile();
-//            if (file != null) {
-//                ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-//                try {
-//                    globalConfigProperties = objectMapper.readValue(file, GlobalConfigProperties.class);
-//                } catch (IOException e) {
-//                    throw new WebEngineException("Error during reading application-properties.yaml file", e);
-//                }
-//            }
-//        }
-//    }
-
     protected void loadPropertiesFile(String name) throws WebEngineException {
         if (globalConfigProperties == null) {
             try {

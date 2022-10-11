@@ -35,7 +35,7 @@ public class WebengineReportListener implements EventListener {
     }
 
     private void runStarted(TestRunStarted event) {
-        System.out.println("Run started");
+        loggerService.info("Run started");
         reportHelperGherkin = ReportHelperGherkin.getInstance();
         loggerService = LoggerServiceDecorator.getInstance();
         try {
@@ -46,7 +46,7 @@ public class WebengineReportListener implements EventListener {
     }
 
     private void runFinished(TestRunFinished event) {
-        System.out.println("Run finished");
+        loggerService.info("Run finished");
         try {
             reportHelperGherkin.closeReport();
         } catch (WebEngineException e) {
@@ -82,10 +82,6 @@ public class WebengineReportListener implements EventListener {
         return stepName;
     }
 
-    /**
-     * Step started event
-     * @param testStepStarted
-     */
     private void stepStarted(TestStepStarted testStepStarted) {
         System.out.println("step read");
         String currentStepName = getTestStepName(testStepStarted.getTestStep());
@@ -94,10 +90,6 @@ public class WebengineReportListener implements EventListener {
         reportHelperGherkin.addTestStepReport(testStepStarted.getTestCase().getName(), currentStepName);
     }
 
-    /**
-     *
-     * @param testStepFinished
-     */
     private void stepFinished(TestStepFinished testStepFinished) {
         String stepName = getTestStepName(testStepFinished.getTestStep());
         ReportDetail reportDetail = ReportDetail.builder().testCaseName(testStepFinished.getTestCase().getName())

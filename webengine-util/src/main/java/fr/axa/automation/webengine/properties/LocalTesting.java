@@ -3,15 +3,14 @@ package fr.axa.automation.webengine.properties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Map;
+
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppiumSettingsProperties {
-    String gridConnection;
-    String userName;
-    String password;
-    LocalTesting localTesting;
-    CapabilitiesProperties capabilities;
+public class LocalTesting {
+    boolean activate;
+    Map<String,String> arguments;
 }

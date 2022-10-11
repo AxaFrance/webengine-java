@@ -18,11 +18,21 @@ You need to have the "application-properties.yml" in the resource directory
 Exemple of this file :
 
 application:
-  name: E-decla
+  name: axa-fr-automation
+  platformName: IOS
+  browserName: SAFARI
 appiumSettings:
-  gridConnection: http://localhost:4723/wd/hub
-  userName:
-  password:
+  gridConnection: https://hub-cloud.browserstack.com/wd/hub
+  userName: XXXXXX
+  password: XXXXXX
+  localtesting:
+    activate: 
+    arguments:        
   capabilities:
-    deviceName:
     desiredCapabilitiesMap:
+      deviceName: iPad Pro 12.9 2021
+      osVersion: 14.5
+      projectName: axa-fr-automation
+      buildName: axa-fr-automation-mobile
+      sessionName: iPad
+      local: true
