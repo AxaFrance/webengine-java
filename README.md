@@ -25,7 +25,7 @@ appiumSettings:
   gridConnection: https://hub-cloud.browserstack.com/wd/hub
   userName: XXXXXX
   password: XXXXXX
-  localtesting:
+  localTesting:
     activate: 
     arguments:        
   capabilities:

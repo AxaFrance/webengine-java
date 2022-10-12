@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.listener;
 
 import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.logger.LoggerServiceDecorator;
 import fr.axa.automation.webengine.util.LocalTestingUtil;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.EventPublisher;
@@ -25,8 +26,9 @@ public class WebengineLocalTestingListener implements EventListener {
     }
 
     private void runStarted(TestRunStarted event) {
-        loggerService.info("Run started");
+        loggerService = LoggerServiceDecorator.getInstance();
         localTestingUtil = LocalTestingUtil.getInstance();
+        loggerService.info("Run started");
         try {
             localTestingUtil.startLocalTesting(getApplicationFileName());
         } catch (Exception e) {

@@ -35,9 +35,9 @@ public class WebengineReportListener implements EventListener {
     }
 
     private void runStarted(TestRunStarted event) {
-        loggerService.info("Run started");
         reportHelperGherkin = ReportHelperGherkin.getInstance();
         loggerService = LoggerServiceDecorator.getInstance();
+        loggerService.info("Run started");
         try {
             reportHelperGherkin.createReport();
         } catch (UnknownHostException e) {
