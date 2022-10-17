@@ -37,25 +37,37 @@ public class LocalTestingUtil {
 
     public void startLocalTesting(String propertyFileName) throws Exception {
         Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfigPropertiesByName(propertyFileName);
-        if(isLocalTestingPresent(globalConfigProperties)){
-            LocalTesting localTesting = globalConfigProperties.get().getAppiumSettings().getLocalTesting();
-            if(localTesting.isActivate()){
-                local = new Local();
-                local.start(createLocalTestingArguments(globalConfigProperties.get()));
-                loggerService.info("Check if local testing is running : "+local.isRunning());
-            }else{
-                loggerService.info("Local testing is not activate if you run your testing app in mobile");
-            }
-        }else{
-            loggerService.info("Local testing isn't configured if you run your testing app in mobile");
+        if(isLocalTestingActivate(propertyFileName)){
+            local = new Local();
+            local.start(createLocalTestingArguments(globalConfigProperties.get()));
+            loggerService.info("Check if local testing is running : "+local.isRunning());
         }
     }
 
     public void stopLocalTesting() throws Exception {
-        local.stop();
+        if(local!=null) {
+            local.stop();
+        }
     }
 
-    private boolean isLocalTestingPresent(Optional<GlobalConfigProperties> globalConfigProperties) {
+    private boolean isLocalTestingActivate(String propertyFileName) throws Exception {
+        boolean activate = false;
+        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfigPropertiesByName(propertyFileName);
+        if(isLocalTestingConfExist(globalConfigProperties)) {
+            LocalTesting localTesting = globalConfigProperties.get().getAppiumSettings().getLocalTesting();
+            if (localTesting.isActivate()) {
+                activate = true;
+            }else{
+                loggerService.info("Local testing flag is not activate if you run your testing app in mobile");
+            }
+        }else{
+            loggerService.info("Local testing isn't configured if you run your testing app in mobile");
+        }
+        return activate;
+    }
+
+
+    private boolean isLocalTestingConfExist(Optional<GlobalConfigProperties> globalConfigProperties) {
         if (globalConfigProperties.isPresent() &&
                 globalConfigProperties.get().getAppiumSettings()!=null &&
                 globalConfigProperties.get().getAppiumSettings().getLocalTesting()!=null){
