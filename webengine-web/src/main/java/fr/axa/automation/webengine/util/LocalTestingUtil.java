@@ -40,13 +40,14 @@ public class LocalTestingUtil {
         if(isLocalTestingActivate(propertyFileName)){
             local = new Local();
             local.start(createLocalTestingArguments(globalConfigProperties.get()));
-            loggerService.info("Check if local testing is running : "+local.isRunning());
+            loggerService.info("Start action - Check if local testing is running : "+local.isRunning());
         }
     }
 
     public void stopLocalTesting() throws Exception {
         if(local!=null) {
             local.stop();
+            loggerService.info("Stop action - Check if local testing is running : "+local.isRunning());
         }
     }
 
