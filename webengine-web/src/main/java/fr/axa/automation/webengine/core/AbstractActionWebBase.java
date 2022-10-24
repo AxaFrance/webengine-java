@@ -41,11 +41,11 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         ActionReport actionReport = ActionReportHelper.getActionReport(getClass().getSimpleName());
         try {
             doAction();
+            actionReport.setResult(Result.PASSED);
             if (getResult() != null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)) {
                 actionReport.setResult(getResult());
                 screenShot("Error in this action " + getClass().getSimpleName());
             }
-            actionReport.setResult(Result.PASSED);
         } catch (NoSuchElementException e) {
             erroMessage = "Web element not present in this action : " + getClass().getSimpleName();
             screenShot(erroMessage);
