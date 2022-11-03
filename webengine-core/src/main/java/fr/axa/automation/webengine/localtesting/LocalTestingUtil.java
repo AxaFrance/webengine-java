@@ -1,9 +1,10 @@
-package fr.axa.automation.webengine.util;
+package fr.axa.automation.webengine.localtesting;
 
 import com.browserstack.local.Local;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.properties.LocalTesting;
+import fr.axa.automation.webengine.util.PropertiesUtilV2;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -66,7 +67,6 @@ public class LocalTestingUtil {
         }
         return activate;
     }
-
 
     private boolean isLocalTestingConfExist(Optional<GlobalConfigProperties> globalConfigProperties) {
         if (globalConfigProperties.isPresent() &&

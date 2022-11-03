@@ -6,6 +6,7 @@ import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.localtesting.LocalListenerRunner;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +24,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
 
     LoggerService loggerService;
     ITestCaseExecutor testCaseExecutor;
+    LocalListenerRunner localListenerRunner = LocalListenerRunner.getInstance();
 
     public AbstractTestSuiteExecutor(LoggerService loggerService, ITestCaseExecutor testCaseExecutor) {
         this.loggerService = loggerService;
@@ -30,10 +32,12 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
     }
 
     public Object initialize(GlobalApplicationContext globalApplicationContext){
+        localListenerRunner.started();
         return null;
     }
 
     public void cleanUp(Object object) {
+        localListenerRunner.finished();
     }
 
     public TestSuiteReport run(GlobalApplicationContext globalApplicationContext, ITestSuite testSuite) throws WebEngineException, UnknownHostException {

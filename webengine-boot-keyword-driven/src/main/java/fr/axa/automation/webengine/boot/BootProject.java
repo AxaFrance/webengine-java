@@ -164,10 +164,10 @@ public class BootProject {
     }
 
     private TestSuiteData getTestSuiteData(CommandLine cmd) throws WebEngineException {
-        String testData = cmd.getOptionValue(ArgumentOption.TEST_DATA.getOption());
-        loggerService.info("Loading test data running: " + testData);
-        TestSuiteData testSuiteData = XmlUtil.unmarshall(testData, TestSuiteData.class);
-        loggerService.info("Loading test data is succeed " + testData);
+        String testDataFile = cmd.getOptionValue(ArgumentOption.TEST_DATA.getOption());
+        loggerService.info("Loading test data running: " + testDataFile);
+        TestSuiteData testSuiteData = XmlUtil.unmarshall(testDataFile, TestSuiteData.class);
+        loggerService.info("Loading test data is succeed " + testDataFile);
         return testSuiteData;
     }
 

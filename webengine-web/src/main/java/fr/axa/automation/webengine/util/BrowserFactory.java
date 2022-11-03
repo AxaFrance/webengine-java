@@ -59,13 +59,17 @@ public class BrowserFactory {
     public static Optional<WebDriver> getDesktopDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
         Browser browser = Browser.valueOf(globalConfigProperties.getApplication().getBrowserName());
+        return getWebDriver(platform, browser);
+    }
+
+    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser) throws WebEngineException {
         Optional<WebDriver> webDriver = Optional.empty();
         if(platform == Platform.WINDOWS){
-            if(browser== Browser.CHROME){
+            if(browser == Browser.CHROME){
                 webDriver = ChromeDriverUtil.getChromeDriver();
-            }else if(browser== Browser.CHROMIUM_EDGE){
+            }else if(browser == Browser.CHROMIUM_EDGE){
                 webDriver = EdgeDriverUtil.getEdgeDriver();
-            }else if(browser== Browser.FIREFOX){
+            }else if(browser == Browser.FIREFOX){
                 webDriver = FirefoxDriverUtil.getFirefoxDriver();
             }
             webDriver.ifPresent(driver -> driver.manage().deleteAllCookies());

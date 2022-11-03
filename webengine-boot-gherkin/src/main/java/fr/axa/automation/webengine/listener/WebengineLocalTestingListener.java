@@ -1,8 +1,7 @@
 package fr.axa.automation.webengine.listener;
 
-import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.logger.LoggerServiceDecorator;
-import fr.axa.automation.webengine.util.LocalTestingUtil;
+import fr.axa.automation.webengine.localtesting.LocalListenerRunner;
+import fr.axa.automation.webengine.localtesting.LocalTestingUtil;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.EventPublisher;
 import io.cucumber.plugin.event.TestRunFinished;
@@ -17,8 +16,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebengineLocalTestingListener implements EventListener {
 
-    LoggerService loggerService;
-    LocalTestingUtil localTestingUtil;
+    LocalListenerRunner localListenerRunner = LocalListenerRunner.getInstance();
 
     public void setEventPublisher(EventPublisher eventPublisher) {
         eventPublisher.registerHandlerFor(TestRunStarted.class, this::runStarted);
@@ -26,14 +24,7 @@ public class WebengineLocalTestingListener implements EventListener {
     }
 
     private void runStarted(TestRunStarted event) {
-        loggerService = LoggerServiceDecorator.getInstance();
-        localTestingUtil = LocalTestingUtil.getInstance();
-        loggerService.info("Run started");
-        try {
-            localTestingUtil.startLocalTesting(getApplicationFileName());
-        } catch (Exception e) {
-            loggerService.error("Error when start local testing",e);
-        }
+        localListenerRunner.started();
     }
 
     protected String getApplicationFileName() {
@@ -41,10 +32,6 @@ public class WebengineLocalTestingListener implements EventListener {
     }
 
     private void runFinished(TestRunFinished event) {
-        try {
-            localTestingUtil.stopLocalTesting();
-        } catch (Exception e) {
-            loggerService.error("Error when stop local testing",e);
-        }
+        localListenerRunner.finished();
     }
 }

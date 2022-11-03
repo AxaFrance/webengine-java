@@ -46,11 +46,6 @@
             <artifactId>java-client</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.browserstack</groupId>
-            <artifactId>browserstack-local-java</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
