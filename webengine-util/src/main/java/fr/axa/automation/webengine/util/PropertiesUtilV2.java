@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
@@ -11,10 +10,9 @@ import lombok.experimental.FieldDefaults;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Getter
@@ -23,10 +21,12 @@ import java.util.Optional;
 public class PropertiesUtilV2 {
     LoggerService loggerService;
     GlobalConfigProperties globalConfigProperties;
+    Map<String, Object> propertyFileMap;
     static final String APPLICATION_FILE_NAME = "application-properties.yml";
 
     public PropertiesUtilV2() {
         this.loggerService = new LoggerService();
+        propertyFileMap = new HashMap<>();
     }
 
     private static class PropertiesUtilHolder{
@@ -37,11 +37,11 @@ public class PropertiesUtilV2 {
         return PropertiesUtilV2.PropertiesUtilHolder.INSTANCE;
     }
 
-    protected void loadPropertiesFile(String name) throws WebEngineException {
+    protected void loadPropertiesFile(String resourceName) throws WebEngineException {
         if (globalConfigProperties == null) {
             try {
                 Yaml yaml = new Yaml(new Constructor(GlobalConfigProperties.class));
-                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(name);
+                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(resourceName);
                 if(inputStream!=null){
                     globalConfigProperties = yaml.load(inputStream);
                 }else{
@@ -53,10 +53,26 @@ public class PropertiesUtilV2 {
         }
     }
 
+    public <T>T loadPropertiesFile(String resourceName, Class<T> clazz) throws WebEngineException {
+        if(propertyFileMap.get(resourceName) == null){
+            try {
+                Yaml yaml = new Yaml(new Constructor(clazz));
+                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(resourceName);
+                if(inputStream!=null){
+                    propertyFileMap.put(resourceName,yaml.load(inputStream));
+                }else{
+                    loggerService.info("No "+resourceName+" file found.");
+                }
+            } catch (Exception e) {
+                throw new WebEngineException("Error during reading "+resourceName+" file", e);
+            }
+        }
+        return (T) propertyFileMap.get(resourceName);
+    }
+
     public Optional<GlobalConfigProperties> getGlobalConfiguration() throws WebEngineException{
         return getGlobalConfigPropertiesByName(APPLICATION_FILE_NAME);
     }
-
 
     public Optional<GlobalConfigProperties> getGlobalConfigPropertiesByName(String name) throws WebEngineException {
         loadPropertiesFile(name);

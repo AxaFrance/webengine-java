@@ -19,20 +19,24 @@ Exemple of this file :
 
 application:
   name: axa-fr-automation
-  platformName: IOS
-  browserName: SAFARI
+  platformName: ANDROID
+  browserName: CHROME  
 appiumSettings:
   gridConnection: https://hub-cloud.browserstack.com/wd/hub
-  userName: XXXXXX
-  password: XXXXXX
+  userName: XXXXXXX
+  password: XXXXXXX
   localTesting:
-    activate: 
-    arguments:        
+    activate: true
+    arguments:
+      force: true
+      forcelocal: true
+      binarypath: C:\\BrowserStack\\BrowserStackLocal.exe
   capabilities:
     desiredCapabilitiesMap:
-      deviceName: iPad Pro 12.9 2021
-      osVersion: 14.5
-      projectName: axa-fr-automation
-      buildName: axa-fr-automation-mobile
-      sessionName: iPad
+      geoLocation: FR
+      deviceName: Samsung Galaxy S20 Ultra
+      osVersion: 10.0
+      projectName: e-decla-automation
+      buildName: e-decla-automation-mobile
+      sessionName: Samsung
       local: true
