@@ -9,9 +9,11 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,7 +24,7 @@ public class PropertiesUtilV2 {
     LoggerService loggerService;
     GlobalConfigProperties globalConfigProperties;
     Map<String, Object> propertyFileMap;
-    static final String APPLICATION_FILE_NAME = "application-properties.yml";
+    public static final String APPLICATION_FILE_NAME = "application-properties.yml";
 
     public PropertiesUtilV2() {
         this.loggerService = new LoggerService();
@@ -37,37 +39,77 @@ public class PropertiesUtilV2 {
         return PropertiesUtilV2.PropertiesUtilHolder.INSTANCE;
     }
 
+//    protected void loadPropertiesFile(String resourceName) throws WebEngineException {
+//        if (globalConfigProperties == null) {
+//            try {
+//                Yaml yaml = new Yaml(new Constructor(GlobalConfigProperties.class));
+//                InputStream inputStream = getPropertiesFile(resourceName);
+//                if(inputStream!=null){
+//                    globalConfigProperties = yaml.load(inputStream);
+//                }else{
+//                    loggerService.info("No application-properties.yml file found.");
+//                }
+//            } catch (Exception e) {
+//                throw new WebEngineException("Error during reading application-properties.yaml file", e);
+//            }
+//        }
+//    }
+
     protected void loadPropertiesFile(String resourceName) throws WebEngineException {
         if (globalConfigProperties == null) {
-            try {
-                Yaml yaml = new Yaml(new Constructor(GlobalConfigProperties.class));
-                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(resourceName);
-                if(inputStream!=null){
-                    globalConfigProperties = yaml.load(inputStream);
-                }else{
-                    loggerService.info("No application-properties.yml file found.");
-                }
-            } catch (Exception e) {
-                throw new WebEngineException("Error during reading application-properties.yaml file", e);
-            }
+            globalConfigProperties = loadPropertiesFile(resourceName,GlobalConfigProperties.class);
         }
     }
 
-    public <T>T loadPropertiesFile(String resourceName, Class<T> clazz) throws WebEngineException {
-        if(propertyFileMap.get(resourceName) == null){
-            try {
-                Yaml yaml = new Yaml(new Constructor(clazz));
-                InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(resourceName);
+//    public <T>T loadPropertiesFile(String fileOrResource, Class<T> clazz) throws WebEngineException {
+//        if(propertyFileMap.get(fileOrResource) == null){
+//            try {
+//                Yaml yaml = getYaml(clazz);
+//                InputStream inputStream = getPropertiesFileByPathOrResource(fileOrResource);
+//                if(inputStream!=null){
+//                    propertyFileMap.put(fileOrResource,yaml.load(inputStream));
+//                }else{
+//                    loggerService.info("No "+fileOrResource+" file found.");
+//                }
+//            } catch (Exception e) {
+//                throw new WebEngineException("Error during reading "+fileOrResource+" file", e);
+//            }
+//        }
+//        return (T) propertyFileMap.get(fileOrResource);
+//    }
+
+    public <T>T loadPropertiesFile(String fileOrResource, Class<T> clazz) throws WebEngineException {
+        if(propertyFileMap.get(fileOrResource) == null){
+            Yaml yaml = getYaml(clazz);
+            try (InputStream inputStream = getPropertiesFileByPathOrResource(fileOrResource)){
                 if(inputStream!=null){
-                    propertyFileMap.put(resourceName,yaml.load(inputStream));
+                    propertyFileMap.put(fileOrResource,yaml.load(inputStream));
                 }else{
-                    loggerService.info("No "+resourceName+" file found.");
+                    loggerService.info("No "+fileOrResource+" file found.");
                 }
             } catch (Exception e) {
-                throw new WebEngineException("Error during reading "+resourceName+" file", e);
+                throw new WebEngineException("Error during reading "+fileOrResource+" file", e);
             }
         }
-        return (T) propertyFileMap.get(resourceName);
+        return (T) propertyFileMap.get(fileOrResource);
+    }
+
+    private <T> Yaml getYaml(Class<T> clazz) {
+        Representer representer = new Representer();
+        representer.getPropertyUtils().setSkipMissingProperties(true);
+        return new Yaml(new Constructor(clazz),representer);
+    }
+
+    private InputStream getPropertiesFileByPathOrResource(String fileOrResource) throws IOException {
+        try {
+            return new FileInputStream(fileOrResource);
+        } catch (FileNotFoundException fileNotFoundException) {
+            return getPropertiesFileInResource(fileOrResource);
+        }
+    }
+
+    private InputStream getPropertiesFileInResource(String resourceName) {
+        return this.getClass().getClassLoader().getResourceAsStream(resourceName);
     }
 
     public Optional<GlobalConfigProperties> getGlobalConfiguration() throws WebEngineException{
@@ -81,5 +123,13 @@ public class PropertiesUtilV2 {
             optionalGlobalConfigProperties = Optional.of(globalConfigProperties);
         }
         return optionalGlobalConfigProperties;
+    }
+
+    public Optional<GlobalConfigProperties> getGlobalConfigProperties(List<String> propertiesFileList, String fileName) throws WebEngineException {
+        Optional<String> applicationPropertiesFile = propertiesFileList.stream().filter(s->s.contains(fileName)).findFirst();
+        if(applicationPropertiesFile.isPresent()){
+            return Optional.of(loadPropertiesFile(applicationPropertiesFile.get(),GlobalConfigProperties.class));
+        }
+        return Optional.empty();
     }
 }

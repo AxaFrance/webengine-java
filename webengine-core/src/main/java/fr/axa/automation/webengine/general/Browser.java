@@ -11,4 +11,7 @@ import lombok.experimental.FieldDefaults;
 public enum Browser {
     INTERNET_EXPLORER("InternetExplorer"), FIREFOX("Firefox"), CHROME("Chrome"), CHROMIUM_EDGE("ChromiumEdge"), IOS_NATIVE("IOSNative"), ANDROID_NATIVE("AndroidNative"),  SAFARI("Safari");
     final String value;
+    public static Browser getDefaultBrowser(){
+        return CHROMIUM_EDGE;
+    }
 }

@@ -11,4 +11,8 @@ import lombok.experimental.FieldDefaults;
 public enum Platform {
     WINDOWS("Windows"), ANDROID("Android"), IOS("iOS");
     final String value;
+
+    public static Platform getDefaultPlatform(){
+        return WINDOWS;
+    }
 }

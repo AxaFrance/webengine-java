@@ -12,4 +12,5 @@ public class ApplicationProperties {
     String name;
     String platformName;
     String browserName;
+    String outputDir;
 }

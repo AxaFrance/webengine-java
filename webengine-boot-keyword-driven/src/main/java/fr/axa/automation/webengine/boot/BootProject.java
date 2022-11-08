@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.argument.ArgumentParser;
 import fr.axa.automation.webengine.constante.IConstant;
 import fr.axa.automation.webengine.core.*;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.general.Browser;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.general.Settings;
@@ -13,16 +14,15 @@ import fr.axa.automation.webengine.helper.BrowserTypeHelper;
 import fr.axa.automation.webengine.helper.PlatformTypeHelper;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.ReportHelper;
-import fr.axa.automation.webengine.util.ClassUtil;
-import fr.axa.automation.webengine.util.FileUtil;
-import fr.axa.automation.webengine.util.JarUtil;
-import fr.axa.automation.webengine.util.XmlUtil;
+import fr.axa.automation.webengine.util.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,13 +35,11 @@ import java.util.*;
 @Slf4j
 public class BootProject {
 
-    private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT,ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
-    private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE,ArgumentOption.BROWSER, ArgumentOption.PLATFORM,ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+    private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT,ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+    private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM,ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
     final LoggerService loggerService;
-
     final ITestSuiteExecutor testSuiteExecutor;
-
     final ReportHelper reportHelper;
 
     @Autowired
@@ -52,19 +50,23 @@ public class BootProject {
     }
 
     public void runFromFramework(String... args) throws Exception {
-        String[] newArgs = ArgumentParser.splitArguments(args, IConstant.SEPARATOR_ARG,2);
-        CommandLine commandLine = ArgumentParser.getOption(newArgs, ArgumentParser.getOptionList(ARGUMENT_OPTION_FRAMEWORK));
-        loadProject(commandLine);
-        runTestSuite(commandLine,newArgs);
+        run(ARGUMENT_OPTION_FRAMEWORK,true,args);
     }
 
     public void runFromProject(String... args) throws Exception {
+        run(ARGUMENT_OPTION_PROJECT,false,args);
+    }
+
+    public void run(List<ArgumentOption> argumentOptionList, boolean loadProject,String... args) throws Exception {
         String[] newArgs = ArgumentParser.splitArguments(args, IConstant.SEPARATOR_ARG,2);
-        CommandLine commandLine = ArgumentParser.getOption(newArgs, ArgumentParser.getOptionList(ARGUMENT_OPTION_PROJECT));
+        CommandLine commandLine = ArgumentParser.getOption(newArgs, ArgumentParser.getOptionList(argumentOptionList));
+        if(loadProject){
+            loadProject(commandLine);
+        }
         runTestSuite(commandLine,newArgs);
     }
 
-    private void runTestSuite(CommandLine commandLine,String[] args) throws WebEngineException, IllegalAccessException, InstantiationException, ClassNotFoundException, IOException {
+    private void runTestSuite(CommandLine commandLine,String[] args) throws WebEngineException, IOException {
         TestSuiteData testSuiteData = getTestSuiteData(commandLine);
         Settings settings = getSettings(commandLine);
         EnvironmentVariables environmentVariables = getEnvironmentVariables(commandLine);
@@ -173,20 +175,72 @@ public class BootProject {
 
     private Settings getSettings(CommandLine cmd) throws WebEngineException {
         loggerService.info("Loading settings running ");
+
+        List<String> propertiesFileList = getPropertiesFiles(cmd);
+        String platform = getPlatform(cmd);
+        String browser = getBrowser(cmd);
+        String outputDir = getOutputDir(cmd);
+
+        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(PlatformTypeHelper.getPlatform(platform)).browser(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir).build();
+        loggerService.info("Loading settings running is succeed : "+settings.toString());
+        return settings;
+    }
+
+    private String getBrowser(CommandLine cmd) throws WebEngineException{
         String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
-        String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
-        String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
-        if(platform==null){
-            platform = Platform.WINDOWS.getValue();
+        if(browser==null){
+            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
+            if(globalConfigProperties.isPresent()){
+                browser = globalConfigProperties.get().getApplication().getBrowserName();
+            }
+            if(StringUtils.isEmpty(browser)){
+                browser = Browser.getDefaultBrowser().getValue();
+            }
         }
+        return browser;
+    }
+
+    private String getPlatform(CommandLine cmd) throws WebEngineException {
+        String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
+        if(platform==null){
+            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
+            if(globalConfigProperties.isPresent()){
+                platform = globalConfigProperties.get().getApplication().getPlatformName();
+            }
+            if(StringUtils.isEmpty(platform)){
+                platform = Platform.getDefaultPlatform().getValue();
+            }
+        }
+        return platform;
+    }
+
+    private String getOutputDir(CommandLine cmd) throws WebEngineException {
+        String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
         if(outputDir!=null){
             outputDir += File.separator;
         }else{
-            outputDir = FileUtil.getDefaultRunResultDirectory();
+            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
+            if(globalConfigProperties.isPresent()) {
+                outputDir = globalConfigProperties.get().getApplication().getOutputDir();
+            }
+            if (StringUtils.isEmpty(outputDir)) {
+                outputDir = FileUtil.getDefaultRunResultDirectory();
+            }
         }
+        return outputDir;
+    }
 
-        Settings settings = Settings.builder().platform(PlatformTypeHelper.getPlatform(platform)).browser(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir).build();
-        loggerService.info("Loading settings running is succeed : "+settings.toString());
-        return settings;
+    private Optional<GlobalConfigProperties> getGlobalConfigProperties(CommandLine cmd) throws WebEngineException {
+        List<String> propertiesFileList = getPropertiesFiles(cmd);
+        return PropertiesUtilV2.getInstance().getGlobalConfigProperties(propertiesFileList,PropertiesUtilV2.APPLICATION_FILE_NAME);
+    }
+
+    private List<String> getPropertiesFiles(CommandLine cmd) {
+        List<String> propertiesFileList =  Collections.<String>emptyList();
+        String propertiesFiles = cmd.getOptionValue(ArgumentOption.PROPERTIES_FILE_LIST.getOption());
+        if(propertiesFiles!=null){
+            propertiesFileList = Arrays.asList(propertiesFiles.split(";"));
+        }
+        return propertiesFileList;
     }
 }
