@@ -39,44 +39,11 @@ public class PropertiesUtilV2 {
         return PropertiesUtilV2.PropertiesUtilHolder.INSTANCE;
     }
 
-//    protected void loadPropertiesFile(String resourceName) throws WebEngineException {
-//        if (globalConfigProperties == null) {
-//            try {
-//                Yaml yaml = new Yaml(new Constructor(GlobalConfigProperties.class));
-//                InputStream inputStream = getPropertiesFile(resourceName);
-//                if(inputStream!=null){
-//                    globalConfigProperties = yaml.load(inputStream);
-//                }else{
-//                    loggerService.info("No application-properties.yml file found.");
-//                }
-//            } catch (Exception e) {
-//                throw new WebEngineException("Error during reading application-properties.yaml file", e);
-//            }
-//        }
-//    }
-
     protected void loadPropertiesFile(String resourceName) throws WebEngineException {
         if (globalConfigProperties == null) {
             globalConfigProperties = loadPropertiesFile(resourceName,GlobalConfigProperties.class);
         }
     }
-
-//    public <T>T loadPropertiesFile(String fileOrResource, Class<T> clazz) throws WebEngineException {
-//        if(propertyFileMap.get(fileOrResource) == null){
-//            try {
-//                Yaml yaml = getYaml(clazz);
-//                InputStream inputStream = getPropertiesFileByPathOrResource(fileOrResource);
-//                if(inputStream!=null){
-//                    propertyFileMap.put(fileOrResource,yaml.load(inputStream));
-//                }else{
-//                    loggerService.info("No "+fileOrResource+" file found.");
-//                }
-//            } catch (Exception e) {
-//                throw new WebEngineException("Error during reading "+fileOrResource+" file", e);
-//            }
-//        }
-//        return (T) propertyFileMap.get(fileOrResource);
-//    }
 
     public <T>T loadPropertiesFile(String fileOrResource, Class<T> clazz) throws WebEngineException {
         if(propertyFileMap.get(fileOrResource) == null){
@@ -126,9 +93,13 @@ public class PropertiesUtilV2 {
     }
 
     public Optional<GlobalConfigProperties> getGlobalConfigProperties(List<String> propertiesFileList, String fileName) throws WebEngineException {
+        return getPropertiesByClass(propertiesFileList,fileName,GlobalConfigProperties.class);
+    }
+
+    public <T> Optional<T> getPropertiesByClass(List<String> propertiesFileList, String fileName, Class<T> clazz) throws WebEngineException {
         Optional<String> applicationPropertiesFile = propertiesFileList.stream().filter(s->s.contains(fileName)).findFirst();
         if(applicationPropertiesFile.isPresent()){
-            return Optional.of(loadPropertiesFile(applicationPropertiesFile.get(),GlobalConfigProperties.class));
+            return Optional.of(loadPropertiesFile(applicationPropertiesFile.get(),clazz));
         }
         return Optional.empty();
     }
