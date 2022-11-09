@@ -232,7 +232,7 @@ public class BootProject {
 
     private Optional<GlobalConfigProperties> getGlobalConfigProperties(CommandLine cmd) throws WebEngineException {
         List<String> propertiesFileList = getPropertiesFiles(cmd);
-        return PropertiesUtilV2.getInstance().getGlobalConfigProperties(propertiesFileList,PropertiesUtilV2.APPLICATION_FILE_NAME);
+        return PropertiesUtilV2.getInstance().getGlobalConfiguration(propertiesFileList,PropertiesUtilV2.APPLICATION_FILE_NAME_WITHOUT_POSTFIX);
     }
 
     private List<String> getPropertiesFiles(CommandLine cmd) {

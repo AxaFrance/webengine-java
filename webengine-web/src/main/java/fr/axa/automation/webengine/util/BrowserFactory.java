@@ -24,7 +24,7 @@ import java.util.Optional;
 public class BrowserFactory {
 
     private static GlobalConfigProperties getGlobalConfig(Settings settings) throws WebEngineException {
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfiguration();
+        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfiguration(settings.getPropertiesFileList(),PropertiesUtilV2.APPLICATION_FILE_NAME_WITHOUT_POSTFIX);
         if(!globalConfigProperties.isPresent()){
             globalConfigProperties = Optional.of(GlobalConfigProperties.builder().build());
         }

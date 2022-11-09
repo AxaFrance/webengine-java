@@ -25,6 +25,7 @@ public class PropertiesUtilV2 {
     GlobalConfigProperties globalConfigProperties;
     Map<String, Object> propertyFileMap;
     public static final String APPLICATION_FILE_NAME = "application-properties.yml";
+    public static final String APPLICATION_FILE_NAME_WITHOUT_POSTFIX = "application-properties";
 
     public PropertiesUtilV2() {
         this.loggerService = new LoggerService();
@@ -39,26 +40,20 @@ public class PropertiesUtilV2 {
         return PropertiesUtilV2.PropertiesUtilHolder.INSTANCE;
     }
 
-    protected void loadPropertiesFile(String resourceName) throws WebEngineException {
-        if (globalConfigProperties == null) {
-            globalConfigProperties = loadPropertiesFile(resourceName,GlobalConfigProperties.class);
-        }
-    }
-
-    public <T>T loadPropertiesFile(String fileOrResource, Class<T> clazz) throws WebEngineException {
-        if(propertyFileMap.get(fileOrResource) == null){
+    public <T>T loadPropertiesFile(String resourceOrPathAndFileName, Class<T> clazz) throws WebEngineException {
+        if(propertyFileMap.get(resourceOrPathAndFileName) == null){
             Yaml yaml = getYaml(clazz);
-            try (InputStream inputStream = getPropertiesFileByPathOrResource(fileOrResource)){
+            try (InputStream inputStream = getPropertiesFileByPathOrResource(resourceOrPathAndFileName)){
                 if(inputStream!=null){
-                    propertyFileMap.put(fileOrResource,yaml.load(inputStream));
+                    propertyFileMap.put(resourceOrPathAndFileName,yaml.load(inputStream));
                 }else{
-                    loggerService.info("No "+fileOrResource+" file found.");
+                    loggerService.info("No "+resourceOrPathAndFileName+" file found.");
                 }
             } catch (Exception e) {
-                throw new WebEngineException("Error during reading "+fileOrResource+" file", e);
+                throw new WebEngineException("Error during reading "+resourceOrPathAndFileName+" file", e);
             }
         }
-        return (T) propertyFileMap.get(fileOrResource);
+        return (T) propertyFileMap.get(resourceOrPathAndFileName);
     }
 
     private <T> Yaml getYaml(Class<T> clazz) {
@@ -79,12 +74,10 @@ public class PropertiesUtilV2 {
         return this.getClass().getClassLoader().getResourceAsStream(resourceName);
     }
 
-    public Optional<GlobalConfigProperties> getGlobalConfiguration() throws WebEngineException{
-        return getGlobalConfigPropertiesByName(APPLICATION_FILE_NAME);
-    }
+    //    ----------------------------------------------------------------------------------------------
 
-    public Optional<GlobalConfigProperties> getGlobalConfigPropertiesByName(String name) throws WebEngineException {
-        loadPropertiesFile(name);
+    public Optional<GlobalConfigProperties> getGlobalConfigPropertiesByName(String resourceNameOrPathAndFileName) throws WebEngineException {
+        GlobalConfigProperties globalConfigProperties = loadPropertiesFile(resourceNameOrPathAndFileName,GlobalConfigProperties.class);
         Optional<GlobalConfigProperties> optionalGlobalConfigProperties = Optional.empty();
         if(globalConfigProperties!=null){
             optionalGlobalConfigProperties = Optional.of(globalConfigProperties);
@@ -92,12 +85,21 @@ public class PropertiesUtilV2 {
         return optionalGlobalConfigProperties;
     }
 
-    public Optional<GlobalConfigProperties> getGlobalConfigProperties(List<String> propertiesFileList, String fileName) throws WebEngineException {
-        return getPropertiesByClass(propertiesFileList,fileName,GlobalConfigProperties.class);
+    public Optional<GlobalConfigProperties> getDefaultGlobalConfiguration() throws WebEngineException{
+        return getGlobalConfigPropertiesByName(APPLICATION_FILE_NAME);
     }
 
+    public Optional<GlobalConfigProperties> getGlobalConfiguration(List<String> propertiesFileList, String resourceNameOrPathAndFileName) throws WebEngineException{
+        Optional<String> applicationPropertiesFile = ListUtil.findFirst(propertiesFileList,resourceNameOrPathAndFileName);
+        if(applicationPropertiesFile.isPresent()){
+            return getGlobalConfigPropertiesByName(applicationPropertiesFile.get());
+        }
+        return Optional.empty();
+    }
+
+    //--Use by project, be careful
     public <T> Optional<T> getPropertiesByClass(List<String> propertiesFileList, String fileName, Class<T> clazz) throws WebEngineException {
-        Optional<String> applicationPropertiesFile = propertiesFileList.stream().filter(s->s.contains(fileName)).findFirst();
+        Optional<String> applicationPropertiesFile = ListUtil.findFirst(propertiesFileList,fileName);
         if(applicationPropertiesFile.isPresent()){
             return Optional.of(loadPropertiesFile(applicationPropertiesFile.get(),clazz));
         }

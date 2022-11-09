@@ -132,7 +132,7 @@ public class ReportHelperGherkin {
 
     public void closeReport() throws  WebEngineException {
         String applicationName = "application";
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfiguration();
+        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getDefaultGlobalConfiguration();
         if(globalConfigProperties.isPresent()){
             applicationName = globalConfigProperties.get().getApplication().getName();
         }

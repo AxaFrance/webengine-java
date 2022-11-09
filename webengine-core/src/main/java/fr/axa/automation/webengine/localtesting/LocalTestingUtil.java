@@ -36,9 +36,9 @@ public class LocalTestingUtil {
         return localTestingArguments;
     }
 
-    public void startLocalTesting(String propertyFileName) throws Exception {
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfigPropertiesByName(propertyFileName);
-        if(isLocalTestingActivate(propertyFileName)){
+    public void startLocalTesting(String resourceNameOrPathAndFileName) throws Exception {
+        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfigPropertiesByName(resourceNameOrPathAndFileName);
+        if(isLocalTestingActivate(resourceNameOrPathAndFileName)){
             local = new Local();
             local.start(createLocalTestingArguments(globalConfigProperties.get()));
             loggerService.info("Start action - Check if local testing is running : "+local.isRunning());
@@ -52,9 +52,9 @@ public class LocalTestingUtil {
         }
     }
 
-    private boolean isLocalTestingActivate(String propertyFileName) throws Exception {
+    private boolean isLocalTestingActivate(String resourceNameOrPathAndFileName) throws Exception {
         boolean activate = false;
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfigPropertiesByName(propertyFileName);
+        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfigPropertiesByName(resourceNameOrPathAndFileName);
         if(isLocalTestingConfExist(globalConfigProperties)) {
             LocalTesting localTesting = globalConfigProperties.get().getAppiumSettings().getLocalTesting();
             if (localTesting.isActivate()) {
