@@ -5,7 +5,7 @@ import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
-import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.localtesting.LocalTestingRunner;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.PropertiesUtilV2;
@@ -24,11 +24,11 @@ import java.util.*;
 @Data
 public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
 
-    LoggerService loggerService;
+    ILoggerService loggerService;
     ITestCaseExecutor testCaseExecutor;
     LocalTestingRunner localTestingRunner = LocalTestingRunner.getInstance();
 
-    public AbstractTestSuiteExecutor(LoggerService loggerService, ITestCaseExecutor testCaseExecutor) {
+    public AbstractTestSuiteExecutor(ILoggerService loggerService, ITestCaseExecutor testCaseExecutor) {
         this.loggerService = loggerService;
         this.testCaseExecutor = testCaseExecutor;
     }

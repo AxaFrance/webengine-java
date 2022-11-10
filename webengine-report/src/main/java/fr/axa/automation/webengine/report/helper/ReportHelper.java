@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
-import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.report.constante.ReportPath;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FileUtil;
@@ -25,12 +25,12 @@ import java.util.*;
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
-public class ReportHelper {
+public class ReportHelper implements IReportHelper{
 
-    final LoggerService loggerService;
+    final ILoggerService loggerService;
 
     @Autowired
-    public ReportHelper(LoggerService loggerService) {
+    public ReportHelper(ILoggerService loggerService) {
         this.loggerService = loggerService;
     }
 

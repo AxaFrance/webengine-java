@@ -7,7 +7,7 @@ import java.util.StringJoiner;
 
 @Component
 @Slf4j
-public class LoggerService {
+public class LoggerService implements ILoggerService{
     private static final String PREFIX = "";
     private static final String SUFFIX = "";
 

@@ -13,9 +13,9 @@ import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.helper.BrowserTypeHelper;
 import fr.axa.automation.webengine.helper.PlatformTypeHelper;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
-import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
-import fr.axa.automation.webengine.report.helper.ReportHelper;
+import fr.axa.automation.webengine.report.helper.IReportHelper;
 import fr.axa.automation.webengine.util.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -38,12 +38,12 @@ public class BootProject {
     private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT,ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
     private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA,ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM,ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
-    final LoggerService loggerService;
+    final ILoggerService loggerService;
     final ITestSuiteExecutor testSuiteExecutor;
-    final ReportHelper reportHelper;
+    final IReportHelper reportHelper;
 
     @Autowired
-    public BootProject(LoggerService loggerService, ITestSuiteExecutor testSuiteExecutor, ReportHelper reportHelper) {
+    public BootProject(ILoggerService loggerService, ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper) {
         this.loggerService = loggerService;
         this.testSuiteExecutor = testSuiteExecutor;
         this.reportHelper = reportHelper;
@@ -186,20 +186,6 @@ public class BootProject {
         return settings;
     }
 
-    private String getBrowser(CommandLine cmd) throws WebEngineException{
-        String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
-        if(browser==null){
-            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
-            if(globalConfigProperties.isPresent()){
-                browser = globalConfigProperties.get().getApplication().getBrowserName();
-            }
-            if(StringUtils.isEmpty(browser)){
-                browser = Browser.getDefaultBrowser().getValue();
-            }
-        }
-        return browser;
-    }
-
     private String getPlatform(CommandLine cmd) throws WebEngineException {
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
         if(platform==null){
@@ -212,6 +198,20 @@ public class BootProject {
             }
         }
         return platform;
+    }
+
+    private String getBrowser(CommandLine cmd) throws WebEngineException{
+        String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
+        if(browser==null){
+            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
+            if(globalConfigProperties.isPresent()){
+                browser = globalConfigProperties.get().getApplication().getBrowserName();
+            }
+            if(StringUtils.isEmpty(browser)){
+                browser = Browser.getDefaultBrowser().getValue();
+            }
+        }
+        return browser;
     }
 
     private String getOutputDir(CommandLine cmd) throws WebEngineException {
