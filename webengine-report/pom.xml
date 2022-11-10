@@ -3,12 +3,12 @@
     <parent>
         <artifactId>webengine-parent</artifactId>
         <groupId>fr.axa.automation.webengine</groupId>
-        <version>1.3.0</version>
+        <version>1.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>webengine-report</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>webengine-report</name>
 
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>fr.axa.automation.webengine</groupId>
             <artifactId>webengine-util</artifactId>
-            <version>1.3.0</version>
+            <version>1.4.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
