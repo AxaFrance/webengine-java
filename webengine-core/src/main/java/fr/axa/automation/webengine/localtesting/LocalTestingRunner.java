@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.localtesting;
 
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceDecorator;
+import fr.axa.automation.webengine.util.PropertiesUtilV2;
 
 public class LocalTestingRunner {
 
@@ -33,7 +34,7 @@ public class LocalTestingRunner {
     }
 
     public String getDefaultApplicationFileName() {
-        return LocalTestingUtil.APPLICATION_FILE_NAME;
+        return PropertiesUtilV2.APPLICATION_FILE_NAME;
     }
 
     public void finished() {

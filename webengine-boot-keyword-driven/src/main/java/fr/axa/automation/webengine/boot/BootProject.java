@@ -28,7 +28,16 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.Optional;
+import java.util.Collections;
+
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -123,10 +132,12 @@ public class BootProject {
         if (CollectionUtils.isNotEmpty(requiredParametersList) && CollectionUtils.isNotEmpty(testDataList)) {
             for (Variable variable : requiredParametersList) {
                 Variable variableFound = TestDataUtil.getVariableOfTestCase(testDataList, testCaseName, variable.getName());
-                if (variableFound == null && variable.getValue() != null) {
-                    additionalDataList.add(variable);
-                } else {
-                    missingDataList.add(variable);
+                if(variableFound == null){
+                    if (variable.getValue() != null) {
+                        additionalDataList.add(variable);
+                    } else {
+                        missingDataList.add(variable);
+                    }
                 }
             }
         }

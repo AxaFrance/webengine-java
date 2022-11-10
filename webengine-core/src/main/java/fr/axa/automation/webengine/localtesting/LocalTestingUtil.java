@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public class LocalTestingUtil {
 
-    public static final String APPLICATION_FILE_NAME = "application-properties.yml";
+
     public static final String KEY = "key";
-    Local local ;
-    LoggerService loggerService;
+    private Local local ;
+    private LoggerService loggerService;
 
     public LocalTestingUtil() {
         this.loggerService = new LoggerService();
