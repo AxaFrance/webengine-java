@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>webengine-report</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>${project.parent.version}</version>
     <packaging>jar</packaging>
     <name>webengine-report</name>
 
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>fr.axa.automation.webengine</groupId>
             <artifactId>webengine-util</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
     </dependencies>

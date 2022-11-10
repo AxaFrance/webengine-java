@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>webengine-util</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>${project.parent.version}</version>
     <packaging>jar</packaging>
     <name>webengine-util</name>
 
@@ -44,18 +44,6 @@
             <groupId>com.sun.istack</groupId>
             <artifactId>istack-commons-runtime</artifactId>
         </dependency>
-
-        <!--
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        -->
 
         <dependency>
             <groupId>org.yaml</groupId>
