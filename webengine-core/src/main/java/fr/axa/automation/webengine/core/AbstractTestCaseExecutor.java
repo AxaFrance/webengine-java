@@ -2,10 +2,12 @@ package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
-import fr.axa.automation.webengine.general.IVariableConstante;
+import fr.axa.automation.webengine.general.ITestCaseContext;
 import fr.axa.automation.webengine.generated.*;
+import fr.axa.automation.webengine.helper.ActionReportDetailHelper;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
-import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.SharedContext;
@@ -24,107 +26,108 @@ import java.util.Optional;
 @Data
 public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
-     LoggerService loggerService;
+     ILoggerService loggerService;
      ITestStepExecutor testStepExecutor;
 
-     public AbstractTestCaseExecutor(LoggerService loggerService, ITestStepExecutor testStepExecutor) {
-          this.loggerService = loggerService;
+     protected AbstractTestCaseExecutor(ITestStepExecutor testStepExecutor, ILoggerService loggerService) {
           this.testStepExecutor = testStepExecutor;
+          this.loggerService = loggerService;
      }
 
-     @Override
-     public abstract Object initialize(GlobalApplicationContext globalApplicationContext) throws WebEngineException;
+     public ITestCaseContext initialize(GlobalApplicationContext globalApplicationContext, String testCaseName, ITestCase testCase) throws WebEngineException {
+          ITestCaseContext testCaseContext = initializeTestCaseContext(globalApplicationContext);
+          testCaseContext.setTestCaseName(testCaseName);
+          testCaseContext.setTestCaseToExecute(testCase);
+          return testCaseContext;
+     }
+
+     public abstract ITestCaseContext initializeTestCaseContext(GlobalApplicationContext globalApplicationContext) throws WebEngineException;
 
      @Override
-     public abstract void cleanUp(Object object) ;
+     public abstract void cleanUp(ITestCaseContext testCaseContext) ;
 
      @Override
-     public TestCaseReport run(GlobalApplicationContext globalApplicationContext, String testCaseName, ITestCase testCase) throws WebEngineException {
-          LocalDateTime startTime = LocalDateTime.now();
-          TestCaseReport testCaseReport = new TestCaseReport();
+     public TestCaseReport run(GlobalApplicationContext globalApplicationContext,ITestCaseContext testCaseContext) throws WebEngineException {
+          String testCaseName = testCaseContext.getTestCaseName();
+          TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);;
           List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
 
           List<TestData> testDataList = globalApplicationContext.getTestDataList();
           Optional<TestData> testDataByTestCase = TestDataUtil.getDataOfTestCase(testDataList,testCaseName);
           if(!testDataByTestCase.isPresent()){
-               loggerService.info("No test data for test case : "+testCaseName);
-          }
-
-          Variable variable = TestDataUtil.getVariableOfTestCase(testDataList,testCaseName, IVariableConstante.UNIQUE_ID.getValue());
-          if(variable!=null){
-               String uniqueId = variable.getValue();
-               loggerService.info("Test case name with uniqueId : "+uniqueId);
+               loggerService.info("Be careful, no test data for this test case : "+testCaseName);
           }
 
           try {
-               Object object = initialize(globalApplicationContext);
-               actionReportDetailList.addAll(runAllTestStep(globalApplicationContext, object, testCaseName, testCase));
-               cleanUp(object);
+               actionReportDetailList.addAll(runTestStep(globalApplicationContext, testCaseContext));
           }catch (Throwable e){
                testCaseReport.setResult(Result.FAILED);
                loggerService.error("Error during execution of test case : "+testCaseName,e);
           }finally {
-               testCaseReport.setTestName(testCaseName);
-               testCaseReport.setStartTime(DateUtil.localDateTimeToCalendar(startTime));
-               testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
-               testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
-               testCaseReport.setActionReports(new ArrayOfActionReport());
                testCaseReport.getActionReports().getActionReport().addAll(ActionReportHelper.getArrayOfActionReport(actionReportDetailList));
-               testCaseReport.setResult(getResultOfTestCase(actionReportDetailList));
-          }
-
+               testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
+               testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
+               testCaseReport.setResult(getResultOfTestCase(actionReportDetailList));          }
           return testCaseReport;
      }
 
-     protected List<ActionReportDetail> runAllTestStep(GlobalApplicationContext globalApplicationContext, Object object, String testCaseName, ITestCase testCase) throws WebEngineException {
+     protected List<ActionReportDetail> runTestStep(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
+          String testCaseName = testCaseContext.getTestCaseName();
           ActionReportDetail actionReportDetail;
           ActionReport actionReport = new ActionReport();
           List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
-          List<? extends ITestStep> testStepList = testCase.getTestStepList();
-          boolean ignoredAllTestStep = false;
-          String testStepName = "";
+          List<? extends ITestStep> testStepList = testCaseContext.getTestCaseToExecute().getTestStepList();
+          boolean ignoredAllNextTestStep = false;
+          String testStepName = "" ;
 
           if(CollectionUtils.isEmpty(testStepList)){
                throw new WebEngineException("No Test step found for this test case :"+testCaseName);
           }
 
+          SharedContext.CONTEXT_VALUE_LIST.clear();
           try {
-               SharedContext.CONTEXT_VALUE_LIST.clear();
-               for (ITestStep testStep :testStepList){
+               for (ITestStep testStep : testStepList){
                     testStepName = testStep.getClass().getSimpleName();
                     actionReport = new ActionReport();
                     actionReport.setName(testStepName);
-                    if(testCase.isIgnoredAllTestStep() || ignoredAllTestStep){
+
+                    if(testCaseContext.getTestCaseToExecute().isIgnoredAllTestStep() || ignoredAllNextTestStep){
                          actionReport.setResult(Result.IGNORED);
-                         actionReportDetailList.add(ActionReportDetail.builder().actionReport(actionReport).resultCheckPoint(true).build());
-                         loggerService.info("All test step are ignored. Test case is : " + testCaseName+" and test step name is : "+testStep.getClass().getName());
+                         actionReportDetailList.add(ActionReportDetailHelper.getActionReportDetail(actionReport, true));
+                         loggerService.info("All test step are ignored. Test case is : "+ testCaseName +" and test step name is : "+ testStep.getClass().getName());
                     }else{
-                         actionReportDetail = runTestStep(globalApplicationContext,object,testCaseName,testStep);
-                         ignoredAllTestStep = verifyCheckpoint(actionReportDetail);
+                         actionReportDetail = testStepExecutor.run(globalApplicationContext,testCaseContext,testStep);
+                         ignoredAllNextTestStep = verifyCheckpoint(actionReportDetail);
                          actionReportDetailList.add(actionReportDetail);
                     }
                }
           }catch (Throwable e){
-               loggerService.info("Fatal exception during step : " + testStepName+" and test case name is : "+testCaseName+". All test step are cancelled.");
+               loggerService.info("Fatal exception during step : "+ testStepName +" and test case name is : "+ testCaseName +". All test step are cancelled.");
                actionReport.setResult(Result.CRITICAL_ERROR);
                actionReport.setLog(ExceptionUtils.getStackTrace(e));
-               actionReportDetailList.add(ActionReportDetail.builder().actionReport(actionReport).resultCheckPoint(true).build());
+               actionReportDetailList.add(ActionReportDetailHelper.getActionReportDetail(actionReport, false));
           }
-
           return actionReportDetailList;
      }
 
+     private boolean verifyCheckpoint(ActionReportDetail actionReportDetail){
+          boolean ignored = false;
+          if (actionReportDetail != null && actionReportDetail.getActionReport() != null) {
+               Result result = actionReportDetail.getActionReport().getResult();
+               if (result == Result.CRITICAL_ERROR || !actionReportDetail.isResultCheckPoint()) {
+                    ignored = true;
+               }
+          }
+          return ignored;
+     }
+
      private Result getResultOfTestCase(List<ActionReportDetail> actionReportDetailList) {
-          Result result = null;
+          Result result = Result.PASSED;
           if(CollectionUtils.isNotEmpty(actionReportDetailList)){
                for (ActionReportDetail actionReportDetail:actionReportDetailList) {
                     if (actionReportDetail != null && actionReportDetail.getActionReport() != null) {
                          result = actionReportDetail.getActionReport().getResult();
-                         if (actionReportDetail.isResultCheckPoint() && (result == Result.FAILED || result == Result.CRITICAL_ERROR)) {
-                              result = Result.FAILED;
-                              break;
-                         }
-                         if(!actionReportDetail.isResultCheckPoint()) {
+                         if (result == Result.FAILED || result == Result.CRITICAL_ERROR || !actionReportDetail.isResultCheckPoint()) {
                               result = Result.FAILED;
                               break;
                          }
@@ -132,23 +135,5 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
                }
           }
           return result;
-     }
-
-     private boolean verifyCheckpoint(ActionReportDetail actionReportDetail){
-          boolean ignored = false;
-          if (actionReportDetail != null && actionReportDetail.getActionReport() != null) {
-               Result result = actionReportDetail.getActionReport().getResult();
-               if (actionReportDetail.isResultCheckPoint() && result == Result.CRITICAL_ERROR) {
-                    ignored = true;
-               }
-               if(!actionReportDetail.isResultCheckPoint()) {
-                    ignored = true;
-               }
-          }
-          return ignored;
-     }
-
-     protected ActionReportDetail runTestStep(GlobalApplicationContext globalApplicationContext, Object object, String testCaseName, ITestStep testStep) throws WebEngineException {
-          return testStepExecutor.run(globalApplicationContext,object,testCaseName,testStep);
      }
 }

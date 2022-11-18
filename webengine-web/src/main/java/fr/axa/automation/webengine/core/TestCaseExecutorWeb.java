@@ -2,7 +2,10 @@ package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
-import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.general.GlobalTestCaseContext;
+import fr.axa.automation.webengine.general.ITestCaseContext;
+import fr.axa.automation.webengine.general.TestCaseContext;
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.util.BrowserFactory;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
@@ -15,16 +18,16 @@ import java.util.Optional;
 public class TestCaseExecutorWeb extends AbstractTestCaseExecutor {
 
     @Autowired
-    public TestCaseExecutorWeb(LoggerService loggerService, ITestStepExecutor testStepExecutor) {
-        super(loggerService, testStepExecutor);
+    public TestCaseExecutorWeb(ITestStepExecutor testStepExecutor, ILoggerService loggerService ) {
+        super(testStepExecutor,loggerService);
     }
 
     @Override
-    public Object initialize(GlobalApplicationContext globalApplicationContext) throws WebEngineException {
+    public ITestCaseContext initializeTestCaseContext(GlobalApplicationContext globalApplicationContext) throws WebEngineException {
         try {
             Optional<WebDriver> optional = BrowserFactory.getDriver(globalApplicationContext.getSettings());
             if(optional.isPresent()){
-                return optional.get();
+                return TestCaseContext.builder().webDriver(optional.get()).build();
             }
         } catch (Exception e) {
             throw new WebEngineException("Error during get driver",e);
@@ -33,10 +36,10 @@ public class TestCaseExecutorWeb extends AbstractTestCaseExecutor {
     }
 
     @Override
-    public void cleanUp(Object object) {
-//        ((WebDriver)object).close();
+    public void cleanUp(ITestCaseContext testCaseContext) {
         try {
-            ((WebDriver)object).quit();
+            ((TestCaseContext)testCaseContext).getWebDriver().quit();
+            loggerService.info("Browser close properly");
         }catch (NoSuchSessionException e){
             loggerService.warn("Warning during quit browser",e);
         }

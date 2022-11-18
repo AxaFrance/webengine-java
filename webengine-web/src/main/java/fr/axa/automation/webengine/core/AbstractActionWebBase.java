@@ -69,7 +69,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     }
 
     public void screenShot(String name) throws WebEngineException {
-        byte[] screenshot = ((TakesScreenshot) actionDetailContext.getContext()).getScreenshotAs(OutputType.BYTES);
+        byte[] screenshot = ((TakesScreenshot) actionDetailContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
         ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
         screenShotList.add(screenshotReport);
     }
@@ -130,7 +130,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     }
 
     protected WebDriver getWebDriver() {
-        return ((WebDriver) getActionDetailContext().getContext());
+        return ((WebDriver) getActionDetailContext().getWebDriver());
     }
 
     protected void addInformation(String information){

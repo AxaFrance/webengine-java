@@ -5,5 +5,5 @@ import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 
 public interface IActionExecutor {
-    ActionReportDetail run(GlobalApplicationContext globalApplicationContext, IAction actionDetail) throws WebEngineException;
+    ActionReportDetail run(IAction actionDetail) throws WebEngineException;
 }

@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.core;
+package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.Variable;

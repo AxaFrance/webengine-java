@@ -8,17 +8,17 @@ import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ActionReportHelper {
 
     public static List<ActionReport> getArrayOfActionReport(List<ActionReportDetail> actionReportDetailList){
         List<ActionReport> actionReportList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(actionReportDetailList)){
-            for (ActionReportDetail actionReportDetail:actionReportDetailList) {
-                actionReportList.add(actionReportDetail.getActionReport());
-            }
+            actionReportDetailList.stream().forEach(actionReportDetail -> actionReportList.add(actionReportDetail.getActionReport()));
         }
         return actionReportList;
     }
@@ -27,11 +27,12 @@ public class ActionReportHelper {
         ActionReport actionReport = new ActionReport();
         actionReport.setName(name);
         actionReport.setStartTime(Calendar.getInstance());
-        ArrayOfVariable arrayOfVariable = new ArrayOfVariable();
-        actionReport.setContextValues(arrayOfVariable);
+        actionReport.setContextValues(new ArrayOfVariable());
         actionReport.setScreenshots(new ArrayOfScreenshotReport());
         actionReport.setResult(Result.NONE);
         return actionReport;
     }
+
+
 
 }

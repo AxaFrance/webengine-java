@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ActionExecutorWeb extends AbstractActionExecutor {
 
     @Autowired
-    public ActionExecutorWeb(LoggerService loggerService) {
+    public ActionExecutorWeb(ILoggerService loggerService) {
         super(loggerService);
     }
 }

@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.listener;
 
-import fr.axa.automation.webengine.localtesting.LocalTestingRunner;
-import fr.axa.automation.webengine.localtesting.LocalTestingUtil;
+import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
+import fr.axa.automation.webengine.localtesting.LocalTestingProvider;
 import fr.axa.automation.webengine.util.PropertiesUtilV2;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.EventPublisher;
@@ -17,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebengineLocalTestingListener implements EventListener {
 
-    LocalTestingRunner localTestingRunner = LocalTestingRunner.getInstance();
+    ILocalTestingRunner localTestingRunner = LocalTestingProvider.getInstance();
 
     public void setEventPublisher(EventPublisher eventPublisher) {
         eventPublisher.registerHandlerFor(TestRunStarted.class, this::runStarted);
@@ -25,7 +25,7 @@ public class WebengineLocalTestingListener implements EventListener {
     }
 
     private void runStarted(TestRunStarted event) {
-        localTestingRunner.started(getApplicationFileName());
+        localTestingRunner.startLocalTesting(getApplicationFileName());
     }
 
     protected String getApplicationFileName() {
@@ -33,6 +33,6 @@ public class WebengineLocalTestingListener implements EventListener {
     }
 
     private void runFinished(TestRunFinished event) {
-        localTestingRunner.finished();
+        localTestingRunner.stopLocalTesting();
     }
 }

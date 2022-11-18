@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.ReportHelper;
+import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.util.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +23,7 @@ import java.util.*;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ReportHelperGherkin {
+public class ReportGherkinHelper implements IReportGherkinHelper {
 
     TestSuiteReport testSuiteReport;
     Map<String,TestCaseReport> testCaseReportMap;
@@ -38,14 +39,14 @@ public class ReportHelperGherkin {
         TEST_CASE_NAME_NORMALIZE,TEST_STEP_NAME_NORMALIZE,TEST_CASE_AND_TEST_STEP_NAME_NORMALIZE
     }
 
-    private ReportHelperGherkin() {
+    private ReportGherkinHelper() {
     }
 
     private static class ReportHelperGherkinHolder{
-        private final static ReportHelperGherkin instance = new ReportHelperGherkin();
+        private static final ReportGherkinHelper instance = new ReportGherkinHelper();
     }
 
-    public static ReportHelperGherkin getInstance(){
+    public static ReportGherkinHelper getInstance(){
         return ReportHelperGherkinHolder.instance;
     }
 
@@ -62,23 +63,15 @@ public class ReportHelperGherkin {
         testSuiteReport.setStartTime(Calendar.getInstance());
     }
 
-    public TestCaseReport createTestCaseReport(String testCaseName){
-        TestCaseReport testCaseReport = new TestCaseReport();
-        testCaseReport.setTestName(testCaseName);
-        testCaseReport.setStartTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
-        testCaseReport.setActionReports(new ArrayOfActionReport());
-        return testCaseReport;
-    }
-
     private Map<NameNormalizeKey,String> getNormalizeTestCaseName(String testCaseName){
-        Map<NameNormalizeKey,String> normalizeNameMap = new HashMap<>();
+        Map<NameNormalizeKey,String> normalizeNameMap = new EnumMap(NameNormalizeKey.class);
         String testCaseNameNormalize = StringUtil.removeSpecialCharacters(testCaseName);
         normalizeNameMap.put(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE,testCaseNameNormalize);
         return normalizeNameMap;
     }
 
     private Map<NameNormalizeKey,String> getNormalizeName(String testCaseName, String testStepName){
-        Map<NameNormalizeKey,String> normalizeNameMap = new HashMap<>();
+        Map<NameNormalizeKey,String> normalizeNameMap = new EnumMap(NameNormalizeKey.class);
         String testCaseNameNormalize = getNormalizeTestCaseName(testCaseName).get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE);
         String testStepNameNormalize = StringUtil.removeSpecialCharacters(testStepName);
         String testCaseAndTestStepNameNormalize = new StringJoiner(":").add(testCaseNameNormalize).add(testStepNameNormalize).toString();
@@ -89,7 +82,7 @@ public class ReportHelperGherkin {
     }
 
     public void addTestCaseReport(String testCaseName){
-        TestCaseReport testCaseReport = createTestCaseReport(testCaseName);
+        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
         Map<NameNormalizeKey,String> normalizeName = getNormalizeTestCaseName(testCaseName);
         testCaseReportMap.put(normalizeName.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE),testCaseReport);
     }

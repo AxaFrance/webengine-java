@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
+import fr.axa.automation.webengine.general.ITestCaseContext;
 import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
@@ -22,7 +23,7 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
 
     IActionExecutor actionExecutor;
 
-    public AbstractTestStepExecutor(IActionExecutor actionExecutor) {
+    protected AbstractTestStepExecutor(IActionExecutor actionExecutor) {
         this.actionExecutor = actionExecutor;
     }
 
@@ -33,12 +34,18 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
     public void cleanUp(Object object) {
     }
 
-    public ActionReportDetail run(GlobalApplicationContext globalApplicationContext, Object context, String testCaseName, ITestStep testStep) throws WebEngineException {
-        IAction action = getAction(globalApplicationContext, context, testCaseName, testStep);
-        return actionExecutor.run(globalApplicationContext, action);
+    public ActionReportDetail run(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
+        IAction action = getAction(globalApplicationContext, testCaseContext, testStep);
+        return actionExecutor.run(action);
     }
 
-    protected Class<? extends IAction> getActionClass(GlobalApplicationContext globalApplicationContext, ITestStep testStep) throws WebEngineException {
+    protected IAction getAction(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
+        Class<? extends IAction> clazz = getActionClass(globalApplicationContext,testStep);
+        ActionContext actionContext = getActionContext(globalApplicationContext, testCaseContext);
+        return ClassUtil.createAndPopulateAction(clazz, "setActionDetailContext", actionContext);
+    }
+
+    protected Class<? extends IAction> getActionClass(GlobalApplicationContext globalApplicationContext, ITestStep testStep) {
         Class<? extends IAction> clazz = testStep.getAction();
         if(globalApplicationContext.getSettings().getPlatform()!= Platform.WINDOWS && testStep.getMobileAction()!=null){
             clazz = testStep.getMobileAction();
@@ -46,20 +53,14 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
         return clazz;
     }
 
-    protected IAction getAction(GlobalApplicationContext globalApplicationContext, Object context, String testCaseName, ITestStep testStep) throws WebEngineException {
-        Class<? extends IAction> clazz = getActionClass(globalApplicationContext,testStep);
-        ActionContext actionContext = getActionContext(globalApplicationContext, context, testCaseName);
-        return ClassUtil.createAndPopulateAction(clazz, "setActionDetailContext", actionContext);
-    }
-
-    protected ActionContext getActionContext(GlobalApplicationContext globalApplicationContext, Object context, String testCaseName){
+    protected ActionContext getActionContext(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext){
         List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestData();
-        Optional<TestData> testDataByTestCase = TestDataUtil.getDataOfTestCase(testDataList,testCaseName);
-        TestCaseAdditionalInformation testCaseAdditionalInformation = globalApplicationContext.getTestCaseAdditionnalInformationList().get(testCaseName);
+        Optional<TestData> testDataByTestCase = TestDataUtil.getDataOfTestCase(testDataList,testCaseContext.getTestCaseName());
+        TestCaseAdditionalInformation testCaseAdditionalInformation = globalApplicationContext.getTestCaseAdditionnalInformationList().get(testCaseContext.getTestCaseName());
 
         return ActionContext.builder()
-                .testCaseName(testCaseName)
-                .context(context)
+                .testCaseName(testCaseContext.getTestCaseName())
+                .webDriver(testCaseContext.getWebDriver())
                 .environmentVariables(globalApplicationContext.getEnvironmentVariables())
                 .testCaseData(testDataByTestCase.orElse(null))
                 .settings(globalApplicationContext.getSettings())

@@ -4,77 +4,83 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
 public abstract class AbstractActionBase implements IAction {
-    LoggerService loggerService = new LoggerService();
+
+    ILoggerService loggerService ;
     ActionContext actionDetailContext;
-    List<ScreenshotReport> screenShotList = new ArrayList<>();
+    List<ScreenshotReport> screenShotList;
     Result result;
-    StringBuffer information = new StringBuffer();
+    StringBuilder information;
 
-
-    public AbstractActionBase() {
+    protected AbstractActionBase() {
+        loggerService = new LoggerService();
+        screenShotList = new ArrayList<>();
+        information = new StringBuilder();
     }
 
-    public AbstractActionBase(ActionContext actionDetailContext) {
+    protected AbstractActionBase(ActionContext actionDetailContext) {
         this.actionDetailContext = actionDetailContext;
     }
 
     @Override
     public ActionReport runAction() throws Exception {
         ActionReport actionReport = ActionReportHelper.getActionReport(getClass().getSimpleName());
-        doAction();
-        if(getResult()!=null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)){
-            screenShot("Error in this step "+getClass().getSimpleName());
+        String errorMessage = "Error during execution of +"+getClass().getSimpleName()+" class, method doAction";
+        try{
+            doAction();
+            screenShotByResult(errorMessage);
+        }catch (Throwable throwable){
+            screenShot(errorMessage);
         }
         actionReport.setEndTime(Calendar.getInstance());
         return actionReport;
     }
 
-    @Override
-    public abstract void doAction() throws Exception;
+    private void screenShotByResult(String errorMessage) throws WebEngineException {
+        if(getResult()!=null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)){
+            screenShot(errorMessage);
+        }
+    }
 
     @Override
     public boolean runCheckpoint() throws Exception{
         boolean checkpoint;
+        String errorMessage = "Error during execution of +"+getClass().getSimpleName()+" class, method doCheckpoint";
         try {
             checkpoint = doCheckpoint();
             if(!checkpoint){
-                screenShot("Error in this action +"+getClass().getSimpleName()+", phase doCheckpoint");
+                screenShot(errorMessage);
             }
-        }catch (Exception exception){
+        }catch (Throwable exception){
             checkpoint = false;
+            loggerService.error(errorMessage,exception);
             screenShot("Error in this action +"+getClass().getSimpleName()+", phase doCheckpoint");
         }
         return checkpoint;
     }
-
-    public abstract boolean doCheckpoint() throws Exception;
-
-    @Override
-    public abstract void screenShot(String name) throws WebEngineException;
 
     protected void setContextValue(Variable contextValue){
         SharedContext.CONTEXT_VALUE_LIST.add(contextValue);
     }
 
     protected String getContexteValue(String contextName){
-        for (Variable variable: SharedContext.CONTEXT_VALUE_LIST) {
-            if(variable.getName().equalsIgnoreCase(contextName)){
-                return variable.getValue();
-            }
-        }
-        return null;
+        List<Variable> contextFoundList = SharedContext.CONTEXT_VALUE_LIST.stream().filter(variable -> variable.getName().equalsIgnoreCase(contextName)).collect(Collectors.toList());
+        return CollectionUtils.isNotEmpty(contextFoundList)?contextFoundList.get(0).getValue():null;
     }
+
 }

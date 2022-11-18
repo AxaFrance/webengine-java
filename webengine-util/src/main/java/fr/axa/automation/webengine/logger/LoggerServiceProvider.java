@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.logger;
 
-public class LoggerServiceDecorator {
+public class LoggerServiceProvider {
 
-    private LoggerServiceDecorator() {
+    private LoggerServiceProvider() {
     }
 
     private static class LoggerServiceHolder{

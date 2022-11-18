@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class ActionContext {
     String testCaseName;
-    Object context; //Driver
+    Object webDriver; //Driver
     EnvironmentVariables environmentVariables;
     TestData testCaseData;
     TestCaseAdditionalInformation testCaseAdditionalInformation;

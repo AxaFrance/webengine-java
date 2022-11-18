@@ -1,10 +1,10 @@
 package fr.axa.automation.webengine.listener;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.logger.LoggerServiceDecorator;
+import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.report.ReportDetail;
-import fr.axa.automation.webengine.report.ReportHelperGherkin;
+import fr.axa.automation.webengine.report.ReportGherkinHelper;
 import fr.axa.automation.webengine.status.StatusMapping;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
@@ -21,8 +21,13 @@ import java.util.StringJoiner;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebengineReportListener implements EventListener {
 
-    LoggerService loggerService;
-    ReportHelperGherkin reportHelperGherkin;
+    ILoggerService loggerService;
+    ReportGherkinHelper reportGherkinHelper;
+
+    public WebengineReportListener() {
+        loggerService = LoggerServiceProvider.getInstance();
+        reportGherkinHelper = ReportGherkinHelper.getInstance();
+    }
 
     public void setEventPublisher(EventPublisher eventPublisher) {
         eventPublisher.registerHandlerFor(TestRunStarted.class, this::runStarted);
@@ -35,11 +40,9 @@ public class WebengineReportListener implements EventListener {
     }
 
     private void runStarted(TestRunStarted event) {
-        reportHelperGherkin = ReportHelperGherkin.getInstance();
-        loggerService = LoggerServiceDecorator.getInstance();
         loggerService.info("Run started");
         try {
-            reportHelperGherkin.createReport();
+            reportGherkinHelper.createReport();
         } catch (UnknownHostException e) {
             loggerService.error("Erreur lors de la création du rapport : ", e);
         }
@@ -48,7 +51,7 @@ public class WebengineReportListener implements EventListener {
     private void runFinished(TestRunFinished event) {
         loggerService.info("Run finished");
         try {
-            reportHelperGherkin.closeReport();
+            reportGherkinHelper.closeReport();
         } catch (WebEngineException e) {
             loggerService.error("Erreur lors de la fermeture du rapport : ", e);
         }
@@ -56,20 +59,20 @@ public class WebengineReportListener implements EventListener {
 
     private void featureRead(TestSourceRead testSourceRead) {
         String currentfeatureName = testSourceRead.getSource();
-        reportHelperGherkin.setCurrentfeatureName(currentfeatureName);
-        System.out.println("feature : "+currentfeatureName+" read");
+        reportGherkinHelper.setCurrentfeatureName(currentfeatureName);
+        loggerService.info("feature : "+currentfeatureName+" read");
     }
 
     private void scenarioStarted(TestCaseStarted testCaseStarted) {
-        System.out.println("scenario read");
+        loggerService.info("scenario read : "+testCaseStarted.getTestCase().getName());
         String currentScenarioName = testCaseStarted.getTestCase().getName();
-        reportHelperGherkin.setCurrentScenarioName(currentScenarioName);
-        reportHelperGherkin.addTestCaseReport(currentScenarioName);
+        reportGherkinHelper.setCurrentScenarioName(currentScenarioName);
+        reportGherkinHelper.addTestCaseReport(currentScenarioName);
     }
 
     private void scenarioFinished(TestCaseFinished testCaseFinished) {
-        System.out.println("scenario finished");
-        reportHelperGherkin.updateTestCaseReport(testCaseFinished.getTestCase().getName(),StatusMapping.MAPPING.get(testCaseFinished.getResult().getStatus()));
+        loggerService.info("scenario finished : "+testCaseFinished.getTestCase().getName());
+        reportGherkinHelper.updateTestCaseReport(testCaseFinished.getTestCase().getName(),StatusMapping.MAPPING.get(testCaseFinished.getResult().getStatus()));
     }
 
     private String getTestStepName(TestStep testStep) {
@@ -83,11 +86,11 @@ public class WebengineReportListener implements EventListener {
     }
 
     private void stepStarted(TestStepStarted testStepStarted) {
-        System.out.println("step read");
         String currentStepName = getTestStepName(testStepStarted.getTestStep());
-        reportHelperGherkin.setCurrentStepName(currentStepName);
-        reportHelperGherkin.setInformation(new StringJoiner("\n"));
-        reportHelperGherkin.addTestStepReport(testStepStarted.getTestCase().getName(), currentStepName);
+        loggerService.info("step read : "+currentStepName);
+        reportGherkinHelper.setCurrentStepName(currentStepName);
+        reportGherkinHelper.setInformation(new StringJoiner("\n"));
+        reportGherkinHelper.addTestStepReport(testStepStarted.getTestCase().getName(), currentStepName);
     }
 
     private void stepFinished(TestStepFinished testStepFinished) {
@@ -96,6 +99,6 @@ public class WebengineReportListener implements EventListener {
                                                           .stepName(stepName)
                                                           .result(StatusMapping.MAPPING.get(testStepFinished.getResult().getStatus()))
                                                           .throwable(testStepFinished.getResult().getError()).build();
-        reportHelperGherkin.updateTestStepReport(reportDetail);
+        reportGherkinHelper.updateTestStepReport(reportDetail);
     }
 }
