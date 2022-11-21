@@ -1,6 +1,8 @@
 package fr.axa.automation.webengine.util;
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.Rectangle;
@@ -16,14 +18,15 @@ import java.awt.image.RenderedImage;
  * @version 1.0
  * @since   2022-08-29
  */
+
+@Slf4j
 public class ActiveWindowScreenShot {
     public static RenderedImage getGeneratedCurrentDesktopImage() {
-        Robot robot = null;
         try {
-            robot = new Robot();
+            Robot robot = new Robot();
             return robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
         } catch (AWTException e) {
-            e.printStackTrace();
+            log.error("Error lors de la prise du screenshot",e);
         }
         return new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height,Image.SCALE_DEFAULT);
     }

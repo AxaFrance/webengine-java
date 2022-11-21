@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ITestCase {
     List<? extends ITestStep> getTestStepList();
-    default Boolean isIgnoredAllTestStep() {
+    default boolean isIgnoredAllTestStep() {
         return false;
     }
     default List<Variable> getContextValues() {

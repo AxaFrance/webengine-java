@@ -34,6 +34,7 @@ public abstract class AbstractActionBase implements IAction {
     }
 
     protected AbstractActionBase(ActionContext actionDetailContext) {
+        this();
         this.actionDetailContext = actionDetailContext;
     }
 
@@ -43,18 +44,20 @@ public abstract class AbstractActionBase implements IAction {
         String errorMessage = "Error during execution of +"+getClass().getSimpleName()+" class, method doAction";
         try{
             doAction();
-            screenShotByResult(errorMessage);
+            if(isResultFailedOrCriticalError()){
+                actionReport.setResult(getResult());
+                screenShot(errorMessage);
+            }
         }catch (Throwable throwable){
             screenShot(errorMessage);
+        }finally {
+            actionReport.setEndTime(Calendar.getInstance());
         }
-        actionReport.setEndTime(Calendar.getInstance());
         return actionReport;
     }
 
-    private void screenShotByResult(String errorMessage) throws WebEngineException {
-        if(getResult()!=null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)){
-            screenShot(errorMessage);
-        }
+    protected boolean isResultFailedOrCriticalError() {
+        return getResult() != null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR);
     }
 
     @Override

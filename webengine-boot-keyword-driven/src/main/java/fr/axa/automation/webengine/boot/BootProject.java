@@ -152,7 +152,7 @@ public class BootProject {
 
     private ITestSuite getTestSuite() throws WebEngineException {
         Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList();
-        ITestSuite testSuite = TestSuiteHelper.getTestSuite(testSuiteList);
+        ITestSuite testSuite = TestSuiteHelper.filterTestSuite(testSuiteList);
         if (testSuite == null) {
             throw new WebEngineException("TestSuite class is null. No TestSuite class found in the project");
         }

@@ -74,8 +74,6 @@ public class PropertiesUtilV2 {
         return this.getClass().getClassLoader().getResourceAsStream(resourceName);
     }
 
-    //    ----------------------------------------------------------------------------------------------
-
     public Optional<GlobalConfigProperties> getGlobalConfigPropertiesByName(String resourceNameOrPathAndFileName) throws WebEngineException {
         GlobalConfigProperties globalConfigProperties = loadPropertiesFile(resourceNameOrPathAndFileName,GlobalConfigProperties.class);
         Optional<GlobalConfigProperties> optionalGlobalConfigProperties = Optional.empty();
@@ -97,7 +95,7 @@ public class PropertiesUtilV2 {
         return Optional.empty();
     }
 
-    //--Use by project, be careful
+    //--!!!!!Use by project like e-declaration, axa.fr..., be careful
     public <T> Optional<T> getPropertiesByClass(List<String> propertiesFileList, String fileName, Class<T> clazz) throws WebEngineException {
         Optional<String> applicationPropertiesFile = ListUtil.findFirst(propertiesFileList,fileName);
         if(applicationPropertiesFile.isPresent()){

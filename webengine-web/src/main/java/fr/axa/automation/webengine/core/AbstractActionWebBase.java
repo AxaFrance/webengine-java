@@ -10,6 +10,7 @@ import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.EnvironmentVariablesHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.helper.TestCaseDataHelper;
+import fr.axa.automation.webengine.report.builder.ActionReportBuilder;
 import fr.axa.automation.webengine.util.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -27,45 +28,53 @@ import java.util.Optional;
 @Data
 public abstract class AbstractActionWebBase extends AbstractActionBase {
 
-    public AbstractActionWebBase() {
+    protected AbstractActionWebBase() {
         super();
     }
 
-    public AbstractActionWebBase(ActionContext actionDetailContext) {
+    protected AbstractActionWebBase(ActionContext actionDetailContext) {
         super(actionDetailContext);
     }
 
     @Override
     public ActionReport runAction() throws Exception {
-        String erroMessage = "";
-        ActionReport actionReport = ActionReportHelper.getActionReport(getClass().getSimpleName());
+        ActionReportBuilder actionReportBuilder = null;
+        String className = getClass().getSimpleName();
+        String errorMessage = "Error during execution of this action : " + className;
+        ActionReport actionReport = ActionReportHelper.getActionReport(className);
         try {
             doAction();
             actionReport.setResult(Result.PASSED);
-            if (getResult() != null && (getResult() == Result.FAILED || getResult() == Result.CRITICAL_ERROR)) {
+            if (isResultFailedOrCriticalError()) {
                 actionReport.setResult(getResult());
-                screenShot("Error in this action " + getClass().getSimpleName());
+                screenShot(errorMessage);
             }
         } catch (NoSuchElementException e) {
-            erroMessage = "Web element not present in this action : " + getClass().getSimpleName();
-            screenShot(erroMessage);
-            actionReport.setResult(Result.CRITICAL_ERROR);
-            actionReport.setLog(erroMessage);
-            loggerService.error(erroMessage, e);
+            errorMessage += "Web element not present. ";
+            actionReportBuilder = screenShotAndGetActionReportBuilder(errorMessage,  e);
         } catch (Throwable e) {
-            erroMessage = "Error during execution of act : " + getClass().getSimpleName();
-            screenShot(erroMessage);
-            actionReport.setResult(Result.CRITICAL_ERROR);
-            actionReport.setLog(erroMessage);
-            loggerService.error(erroMessage, e);
+            actionReportBuilder = screenShotAndGetActionReportBuilder(errorMessage,  e);
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
             actionReport.getContextValues().getVariable().addAll(SharedContext.CONTEXT_VALUE_LIST);
             actionReport.setLog(information.toString());
+            if(actionReportBuilder!=null){
+                actionReport.setResult(actionReportBuilder.getResult());
+                actionReport.setLog(actionReport.getLog()+actionReportBuilder.getLog());
+            }
             actionReport.getScreenshots().getScreenshotReport().addAll(screenShotList);
         }
-
         return actionReport;
+    }
+
+    private ActionReportBuilder screenShotAndGetActionReportBuilder(String errorMessage, Throwable e) throws WebEngineException {
+        loggerService.error(errorMessage, e);
+        screenShot(errorMessage);
+        return ActionReportBuilder.builder().result(Result.CRITICAL_ERROR).log(errorMessage).build();
+    }
+
+    public void screenShot() throws WebEngineException {
+        screenShot("");
     }
 
     public void screenShot(String name) throws WebEngineException {
@@ -84,22 +93,23 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         }
     }
 
-
-    public void screenShot() throws WebEngineException {
-        screenShot("");
-    }
-
     protected Optional<String> getEnvironnementValue(String name) {
-        Optional<String> value = Optional.empty();
         Optional<Variable> variable = EnvironmentVariablesHelper.getEnvironnementValue(name, getActionDetailContext().getEnvironmentVariables().getVariable());
-        if (!variable.isPresent() || StringUtils.isEmpty(variable.get().getValue().trim())) {
-            value = Optional.empty();
-        }else{
-            value = Optional.of(variable.get().getValue());
-        }
-        return value;
+        return getVaribaleByParameter(variable);
     }
 
+    protected Optional<String> getParameter(String name) {
+        Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
+        return getVaribaleByParameter(variable);
+    }
+
+    private Optional<String> getVaribaleByParameter(Optional<Variable> variable) {
+        if (variable.isPresent() && StringUtils.isNotEmpty(variable.get().getValue().trim())) {
+            return Optional.of(variable.get().getValue().trim());
+        }
+        return Optional.empty();
+    }
+    
     protected String getEnvironnementValueWithException(String name) throws WebEngineException {
         Optional<String> environnementValue = getEnvironnementValue(name);
         if (environnementValue.isPresent()) {
@@ -107,17 +117,6 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         } else {
             throw new WebEngineException("La variable d'environnement " + name + " n'est pas présente");
         }
-    }
-
-    protected Optional<String> getParameter(String name) {
-        Optional<String> value = Optional.empty();
-        Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
-        if (!variable.isPresent() || StringUtils.isEmpty(variable.get().getValue().trim())) {
-            value = Optional.empty();
-        }else{
-            value = Optional.of(variable.get().getValue());
-        }
-        return value;
     }
 
     protected String getParameterWithException(String name) throws WebEngineException {

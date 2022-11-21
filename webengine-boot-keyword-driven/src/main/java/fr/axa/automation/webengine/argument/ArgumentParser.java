@@ -24,9 +24,7 @@ public class ArgumentParser {
 
     public static Options getOptionList(List<ArgumentOption> argumentOptionList) {
         Options options = new Options();
-        for (ArgumentOption argumentOption :argumentOptionList) {
-            options.addOption(getOption(argumentOption));
-        }
+        argumentOptionList.stream().forEach(argumentOption -> options.addOption(getOption(argumentOption)));
         return options;
     }
 
@@ -42,10 +40,7 @@ public class ArgumentParser {
     public static String[] splitArguments(String[] args,String regex,int limit) {
         List<String> newArgsList = new ArrayList<>();
         List<String> argsList = Arrays.asList(args);
-        for (String argument:argsList){
-            newArgsList.addAll(Arrays.asList(argument.split(regex, limit)));
-        }
-        String[] array = new String[newArgsList.size()];
-        return newArgsList.toArray(array);
+        argsList.stream().forEach(argument -> newArgsList.addAll(Arrays.asList(argument.split(regex, limit))));
+        return (String[]) newArgsList.toArray(new String[newArgsList.size()]);
     }
 }

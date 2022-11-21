@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class TestSuiteHelper {
 
-    public static ITestSuite getTestSuite(Set<Class<? extends ITestSuite>> testSuiteList) throws WebEngineException {
+    public static ITestSuite filterTestSuite(Set<Class<? extends ITestSuite>> testSuiteList) throws WebEngineException {
         ITestSuite testSuite = null;
         if(CollectionUtils.isNotEmpty(testSuiteList)){
             Optional<Class<? extends ITestSuite>> clazz = testSuiteList.stream().filter(ts -> !ts.getSimpleName().equalsIgnoreCase(AbstractTestSuite.class.getSimpleName())).findFirst();

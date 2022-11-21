@@ -26,6 +26,7 @@ public abstract class AbstractElementDescription {
     }
 
     public AbstractElementDescription(WebDriver webDriver) {
+        this();
         this.useDriver = webDriver;
     }
 

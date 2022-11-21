@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public class VariableHelper {
 
-
     public static void addItem(List<Variable> variableList, Variable variable) throws WebEngineException {
         if(variableList==null){
             throw new WebEngineException("Parameter variableList is null");
@@ -36,5 +35,4 @@ public class VariableHelper {
         variable.setValue(value);
         return variable;
     }
-
 }

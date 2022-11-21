@@ -8,10 +8,8 @@ import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ActionReportHelper {
 
@@ -32,7 +30,4 @@ public class ActionReportHelper {
         actionReport.setResult(Result.NONE);
         return actionReport;
     }
-
-
-
 }
