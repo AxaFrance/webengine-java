@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -316,7 +317,7 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public boolean waitUntilXpath(Long timeOutInSeconds) throws InterruptedException {
         By byXpath = By.xpath("//*[contains(text(),'"+this.innerText+"')]");
-        WebElement webElement = (new WebDriverWait(getUseDriver(), timeOutInSeconds)
+        WebElement webElement = (new WebDriverWait(getUseDriver(), Duration.ofSeconds(timeOutInSeconds))
                 .ignoring(StaleElementReferenceException.class).ignoring(NoSuchElementException.class))
                 .until(ExpectedConditions.presenceOfElementLocated(byXpath));
         return webElement!=null;

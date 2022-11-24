@@ -5,7 +5,7 @@ import fr.axa.automation.webengine.general.ActionContext;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class ClassUtil extends CommonClassUtil{
+public class ClassUtil {
 
     public static <T> T createAndPopulateAction(Class clazz, String methodName,Object... parameters) throws WebEngineException {
         T object = (T) CommonClassUtil.create(clazz);

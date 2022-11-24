@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import lombok.AccessLevel;
@@ -20,24 +21,18 @@ import java.util.Optional;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PropertiesUtilV2 {
-    LoggerService loggerService;
+public class PropertiesUtil {
+
+    ILoggerService loggerService;
+
     GlobalConfigProperties globalConfigProperties;
     Map<String, Object> propertyFileMap;
     public static final String APPLICATION_FILE_NAME = "application-properties.yml";
     public static final String APPLICATION_FILE_NAME_WITHOUT_POSTFIX = "application-properties";
 
-    public PropertiesUtilV2() {
+    public PropertiesUtil() {
         this.loggerService = new LoggerService();
-        propertyFileMap = new HashMap<>();
-    }
-
-    private static class PropertiesUtilHolder{
-        private final static PropertiesUtilV2 INSTANCE = new PropertiesUtilV2();
-    }
-
-    public static PropertiesUtilV2 getInstance(){
-        return PropertiesUtilV2.PropertiesUtilHolder.INSTANCE;
+        this.propertyFileMap = new HashMap<>();
     }
 
     public <T>T loadPropertiesFile(String resourceOrPathAndFileName, Class<T> clazz) throws WebEngineException {

@@ -23,35 +23,15 @@ import java.util.Optional;
 
 public class BrowserFactory {
 
-    private static GlobalConfigProperties getGlobalConfig(Settings settings) throws WebEngineException {
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getGlobalConfiguration(settings.getPropertiesFileList(),PropertiesUtilV2.APPLICATION_FILE_NAME_WITHOUT_POSTFIX);
-        if(!globalConfigProperties.isPresent()){
-            globalConfigProperties = Optional.of(GlobalConfigProperties.builder().build());
-        }
-        ApplicationProperties applicationProperties = ApplicationProperties.builder().platformName(settings.getPlatform().name()).browserName(settings.getBrowser().name()).build();
-        globalConfigProperties.get().setApplication(applicationProperties);
-        return globalConfigProperties.get();
-    }
-
-    public static Optional<WebDriver> getDriver(Settings settings) throws WebEngineException {
-        GlobalConfigProperties globalConfigProperties = getGlobalConfig(settings);
-        Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
-        if(platform == Platform.WINDOWS){
-            return getDesktopDriver(globalConfigProperties);
-        }else if(platform == Platform.ANDROID || platform == Platform.IOS){
-            return getAppiumDriver(globalConfigProperties);
-        }else{
-            throw new WebEngineException("Not recognized the 'platform' parameter.");
-        }
-    }
+    public static final String URL_CLOUD_BROWSERSTACK = "@hub-cloud.browserstack.com/wd/hub";
 
     public static Optional<WebDriver> getDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
-        if(platform == Platform.WINDOWS){
+        if (platform == Platform.WINDOWS) {
             return getDesktopDriver(globalConfigProperties);
-        }else if(platform == Platform.ANDROID || platform == Platform.IOS){
+        } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
             return getAppiumDriver(globalConfigProperties);
-        }else{
+        } else {
             throw new WebEngineException("Not recognized the 'platform' parameter.");
         }
     }
@@ -64,12 +44,12 @@ public class BrowserFactory {
 
     public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser) throws WebEngineException {
         Optional<WebDriver> webDriver = Optional.empty();
-        if(platform == Platform.WINDOWS){
-            if(browser == Browser.CHROME){
+        if (platform == Platform.WINDOWS) {
+            if (browser == Browser.CHROME) {
                 webDriver = ChromeDriverUtil.getChromeDriver();
-            }else if(browser == Browser.CHROMIUM_EDGE){
+            } else if (browser == Browser.CHROMIUM_EDGE) {
                 webDriver = EdgeDriverUtil.getEdgeDriver();
-            }else if(browser == Browser.FIREFOX){
+            } else if (browser == Browser.FIREFOX) {
                 webDriver = FirefoxDriverUtil.getFirefoxDriver();
             }
             webDriver.ifPresent(driver -> driver.manage().deleteAllCookies());
@@ -81,40 +61,32 @@ public class BrowserFactory {
         Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
         try {
             AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
-            if(appiumSettings!=null){
-                if(platform == Platform.ANDROID) {
+            if (appiumSettings != null) {
+                if (platform == Platform.ANDROID) {
                     return (Optional<T>) Optional.of(new AndroidDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfigProperties)));
-                }else if(platform == Platform.IOS){
+                } else if (platform == Platform.IOS) {
                     return (Optional<T>) Optional.of(new IOSDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfigProperties)));
                 } else {
                     throw new WebEngineException("Platform not recognized for getting Appium driver");
                 }
-            }else{
-                throw  new WebEngineException("Appium settings are null. Need the 'application-properties.file' property file ");
+            } else {
+                throw new WebEngineException("Appium settings are null. Need the 'application-properties.file' property file ");
             }
         } catch (MalformedURLException e) {
-            throw  new WebEngineException("Error during getting Appium driver",e);
+            throw new WebEngineException("Error during getting Appium driver", e);
         }
     }
 
     private static DesiredCapabilities getAppiumOption(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         Browser browser = Browser.valueOf(globalConfigProperties.getApplication().getBrowserName());
-//        Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
-//        String automationName = platform == Platform.ANDROID ? "UiAutomator2" : "Safari";
-
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME,browser.getValue());
-
-//        desiredCapabilities.setCapability("appium:platformName",platform.getValue());
-//        desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,automationName);
-//        desiredCapabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,90);
-//        desiredCapabilities.setCapability("nativeWebScreenshot","true");
+        desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME, browser.getValue());
 
         Map<String, Object> browserStackOptions = new HashMap<>();
         AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
-        if(appiumSettings!=null){
+        if (appiumSettings != null) {
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
-            if(MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())){
+            if (MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())) {
                 capabilitiesProperties.getDesiredCapabilitiesMap().forEach((key, value) -> browserStackOptions.put(key, value));
             }
         }
@@ -122,14 +94,14 @@ public class BrowserFactory {
         return desiredCapabilities;
     }
 
-    private static String getURLBrowserStack(AppiumSettingsProperties appiumSettings) throws WebEngineException{
-        if(appiumSettings!=null){
-            if(appiumSettings.getGridConnection().contains("browserstack.com")){
-                return "https://"+appiumSettings.getUserName()+":"+appiumSettings.getPassword()+"@hub-cloud.browserstack.com/wd/hub";
-            }else {
+    private static String getURLBrowserStack(AppiumSettingsProperties appiumSettings) throws WebEngineException {
+        if (appiumSettings != null) {
+            if (appiumSettings.getGridConnection().contains("browserstack.com")) {
+                return "https://" + appiumSettings.getUserName() + ":" + appiumSettings.getPassword() + URL_CLOUD_BROWSERSTACK;
+            } else {
                 return appiumSettings.getGridConnection();
             }
         }
-        throw  new WebEngineException("Appium Settings are null. Check your application-properties.yml or your custom config ");
+        throw new WebEngineException("Appium Settings are null. Check your application-properties.yml or your custom config ");
     }
 }

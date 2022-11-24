@@ -104,7 +104,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         Map<NameNormalizeKey,String> normalizeNameMap = getNormalizeName(reportDetail.getTestCaseName(),reportDetail.getStepName());
         TestCaseReport testCaseReport = testCaseReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE));
         ActionReport actionReport = getActionReport(reportDetail);
-        byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShot.getGeneratedCurrentDesktopImage());
+        byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage());
         actionReport.getScreenshots().getScreenshotReport().add(ScreenshotHelper.getScreenshotReport(reportDetail.getStepName(),screenshot));
         testCaseReport.getActionReports().getActionReport().add(actionReport);
     }
@@ -125,7 +125,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
 
     public void closeReport() throws  WebEngineException {
         String applicationName = "application";
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilV2.getInstance().getDefaultGlobalConfiguration();
+        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesUtilProvider.getInstance().getDefaultGlobalConfiguration();
         if(globalConfigProperties.isPresent()){
             applicationName = globalConfigProperties.get().getApplication().getName();
         }

@@ -8,8 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 public class CommonClassUtil {
 
     public static <T> T create(Class<T> clazz) throws WebEngineException {
-        Class classToLoad = null;
-        Object object = null;
+        Class classToLoad;
+        Object object;
         try {
             classToLoad = Class.forName(clazz.getName());
             object = (T)classToLoad.newInstance();

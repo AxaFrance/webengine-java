@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public abstract class AbstractPageModel {
             timeout = timeoutInSecond[0];
         }
 
-        Wait wait = new WebDriverWait(this.useDriver, timeout);
+        Wait wait = new WebDriverWait(this.useDriver, Duration.ofSeconds(timeout));
         wait.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
     }
 

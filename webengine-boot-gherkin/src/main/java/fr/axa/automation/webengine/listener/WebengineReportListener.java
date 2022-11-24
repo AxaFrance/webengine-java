@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.listener;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
+import fr.axa.automation.webengine.report.IReportGherkinHelper;
 import fr.axa.automation.webengine.report.ReportDetail;
 import fr.axa.automation.webengine.report.ReportGherkinHelper;
 import fr.axa.automation.webengine.status.StatusMapping;
@@ -22,7 +23,7 @@ import java.util.StringJoiner;
 public class WebengineReportListener implements EventListener {
 
     ILoggerService loggerService;
-    ReportGherkinHelper reportGherkinHelper;
+    IReportGherkinHelper reportGherkinHelper;
 
     public WebengineReportListener() {
         loggerService = LoggerServiceProvider.getInstance();

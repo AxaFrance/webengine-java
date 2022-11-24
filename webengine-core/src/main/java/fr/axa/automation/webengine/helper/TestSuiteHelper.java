@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.core.AbstractTestSuite;
 import fr.axa.automation.webengine.core.ITestSuite;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.ClassUtil;
+import fr.axa.automation.webengine.util.CommonClassUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Optional;
@@ -16,7 +17,7 @@ public class TestSuiteHelper {
         if(CollectionUtils.isNotEmpty(testSuiteList)){
             Optional<Class<? extends ITestSuite>> clazz = testSuiteList.stream().filter(ts -> !ts.getSimpleName().equalsIgnoreCase(AbstractTestSuite.class.getSimpleName())).findFirst();
             if(clazz.isPresent()) {
-                testSuite = (ITestSuite) ClassUtil.create(clazz.get());
+                testSuite = CommonClassUtil.create(clazz.get());
             }
         }
         return testSuite;

@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.Optional;
 import java.util.Collections;
 
 
@@ -43,18 +42,25 @@ import java.util.Collections;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProject {
+
     private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+
     private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
     final ILoggerService loggerService;
+
     final ITestSuiteExecutor testSuiteExecutor;
+
     final IReportHelper reportHelper;
 
+    final GlobalConfigProperties globalConfigProperties;
+
     @Autowired
-    public BootProject(ILoggerService loggerService, ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper) {
+    public BootProject(ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {
         this.loggerService = loggerService;
         this.testSuiteExecutor = testSuiteExecutor;
         this.reportHelper = reportHelper;
+        this.globalConfigProperties = globalConfigProperties;
     }
 
     public void runFromFramework(String... args) throws Exception {
@@ -194,12 +200,11 @@ public class BootProject {
         return settings;
     }
 
-    private String getPlatform(CommandLine cmd) throws WebEngineException {
+    private String getPlatform(CommandLine cmd) {
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
         if (platform == null) {
-            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
-            if (globalConfigProperties.isPresent()) {
-                platform = globalConfigProperties.get().getApplication().getPlatformName();
+            if (globalConfigProperties!=null) {
+                platform = globalConfigProperties.getPlateform();
             }
             if (StringUtils.isEmpty(platform)) {
                 platform = Platform.getDefaultPlatform().getValue();
@@ -208,12 +213,11 @@ public class BootProject {
         return platform;
     }
 
-    private String getBrowser(CommandLine cmd) throws WebEngineException {
+    private String getBrowser(CommandLine cmd) {
         String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
         if (browser == null) {
-            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
-            if (globalConfigProperties.isPresent()) {
-                browser = globalConfigProperties.get().getApplication().getBrowserName();
+            if (globalConfigProperties!=null) {
+                browser = globalConfigProperties.getBrowser();
             }
             if (StringUtils.isEmpty(browser)) {
                 browser = Browser.getDefaultBrowser().getValue();
@@ -222,14 +226,13 @@ public class BootProject {
         return browser;
     }
 
-    private String getOutputDir(CommandLine cmd) throws WebEngineException {
+    private String getOutputDir(CommandLine cmd) {
         String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
         if (outputDir != null) {
             outputDir += File.separator;
         } else {
-            Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(cmd);
-            if (globalConfigProperties.isPresent()) {
-                outputDir = globalConfigProperties.get().getApplication().getOutputDir();
+            if (globalConfigProperties!=null) {
+                outputDir = globalConfigProperties.getOutputDir();
             }
             if (StringUtils.isEmpty(outputDir)) {
                 outputDir = FileUtil.getDefaultRunResultDirectory();
@@ -238,10 +241,10 @@ public class BootProject {
         return outputDir;
     }
 
-    private Optional<GlobalConfigProperties> getGlobalConfigProperties(CommandLine cmd) throws WebEngineException {
-        List<String> propertiesFileList = getPropertiesFiles(cmd);
-        return PropertiesUtilV2.getInstance().getGlobalConfiguration(propertiesFileList, PropertiesUtilV2.APPLICATION_FILE_NAME_WITHOUT_POSTFIX);
-    }
+//    private Optional<GlobalConfigProperties> getGlobalConfigProperties(CommandLine cmd) throws WebEngineException {
+//        List<String> propertiesFileList = getPropertiesFiles(cmd);
+//        return PropertiesUtilProvider.getInstance().getGlobalConfiguration(propertiesFileList, PropertiesUtil.APPLICATION_FILE_NAME_WITHOUT_POSTFIX);
+//    }
 
     private List<String> getPropertiesFiles(CommandLine cmd) {
         List<String> propertiesFileList = Collections.<String>emptyList();

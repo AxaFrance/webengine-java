@@ -27,6 +27,8 @@ import java.util.*;
 @Slf4j
 public class ReportHelper implements IReportHelper{
 
+    public static final String DATA_DRIVEN_TEST_SUITE_REPORT_NAME = "DataDrivenTestSuite-";
+    public static final String JUNIT_REPORT_NAME = "Junit-";
     final ILoggerService loggerService;
 
     @Autowired
@@ -45,27 +47,24 @@ public class ReportHelper implements IReportHelper{
 
     public String generateWebengineReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws WebEngineException {
         Path path = FileUtil.createDirectories(outputPath + testName );
-
-        StringBuilder composeFilePath = new StringBuilder("DataDrivenTestSuite-"+testName);
-        String fileName = composeFilePath.append("_")
-                        .append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat()))
-                        .append(".xml").toString();
+        String fileName = getFileName(DATA_DRIVEN_TEST_SUITE_REPORT_NAME, testName);
         String completePath = path.toString()+"\\"+fileName;
         loggerService.info("Create report : "+completePath);
         FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport,"http://www.axa.fr/WebEngine/2022","ns");
         return completePath;
     }
 
+    private static String getFileName(String x, String testName) {
+        StringBuilder composeFilePath = new StringBuilder(x + testName);
+        return composeFilePath.append("_").append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat())).append(".xml").toString();
+    }
 
     public String generateJUnitReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws  WebEngineException {
         Testsuite testsuite = createJUnitTestSuite(testSuiteReport, testName);
         testsuite.getTestcase().addAll(getTestcases(testSuiteReport));
 
         Path path = FileUtil.createDirectories(outputPath + testName );
-        StringBuilder composeFilePath = new StringBuilder("Junit-"+testName);
-        String fileName = composeFilePath.append("_")
-                .append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat()))
-                .append(".xml").toString();
+        String fileName = getFileName(JUNIT_REPORT_NAME, testName);
         String completePath = path.toString()+"\\"+fileName;
         loggerService.info("Create Junit report : "+path.toString()+"\\"+fileName);
         FileUtil.saveAsXML(path.toString(),fileName,testsuite);

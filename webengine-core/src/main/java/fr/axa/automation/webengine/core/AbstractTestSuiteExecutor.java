@@ -9,7 +9,7 @@ import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.util.ListUtil;
-import fr.axa.automation.webengine.util.PropertiesUtilV2;
+import fr.axa.automation.webengine.util.PropertiesUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -42,10 +42,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
     }
 
     private void runLocalTesting(GlobalApplicationContext globalApplicationContext) {
-        Optional<String> resourceNameOrPathAndFileName = ListUtil.findFirst(globalApplicationContext.getSettings().getPropertiesFileList(), PropertiesUtilV2.APPLICATION_FILE_NAME_WITHOUT_POSTFIX);
-        if (resourceNameOrPathAndFileName.isPresent()) {
-            localTestingRunner.startLocalTesting(resourceNameOrPathAndFileName.get());
-        }
+        localTestingRunner.startLocalTesting();
     }
 
     public void cleanUp(Object object) {

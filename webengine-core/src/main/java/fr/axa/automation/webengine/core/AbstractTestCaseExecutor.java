@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.generated.*;
 import fr.axa.automation.webengine.helper.ActionReportDetailHelper;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.DateUtil;
@@ -26,11 +27,14 @@ import java.util.Optional;
 @Data
 public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
-     ILoggerService loggerService;
      ITestStepExecutor testStepExecutor;
+     GlobalConfigProperties globalConfigProperties;
 
-     protected AbstractTestCaseExecutor(ITestStepExecutor testStepExecutor, ILoggerService loggerService) {
+     ILoggerService loggerService;
+
+     protected AbstractTestCaseExecutor(ITestStepExecutor testStepExecutor, GlobalConfigProperties globalConfigProperties, ILoggerService loggerService) {
           this.testStepExecutor = testStepExecutor;
+          this.globalConfigProperties = globalConfigProperties;
           this.loggerService = loggerService;
      }
 
