@@ -1,3 +1,5 @@
+Installer la JDK avec le certificats AXA !
+
 # Command for run the project with desktop mode
 java -jar WebRunner.jar "-a:C:\work\projet-git\solaris-automation-keyword-driven\target\solaris-automation-1.0-SNAPSHOT.jar"
                         "-data:C:\work\projet-git\Automatisation_Edecla_Front\src\main\resources\TEST_SUITE_RECETTE.xml"
@@ -31,12 +33,15 @@ appiumSettings:
       force: true
       forcelocal: true
       binarypath: C:\\BrowserStack\\BrowserStackLocal.exe
+      localIdentifier: XXXXYYYY
   capabilities:
     desiredCapabilitiesMap:
-      geoLocation: FR
+      geoLocation: FR => en fonction des applications
       deviceName: Samsung Galaxy S20 Ultra
       osVersion: 10.0
       projectName: e-decla-automation
       buildName: e-decla-automation-mobile
       sessionName: Samsung
       local: true
+      networkLogs: true
+      localIdentifier: XXXXYYYY

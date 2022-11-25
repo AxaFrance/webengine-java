@@ -3,9 +3,7 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.Browser;
 import fr.axa.automation.webengine.general.Platform;
-import fr.axa.automation.webengine.general.Settings;
 import fr.axa.automation.webengine.properties.AppiumSettingsProperties;
-import fr.axa.automation.webengine.properties.ApplicationProperties;
 import fr.axa.automation.webengine.properties.CapabilitiesProperties;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import io.appium.java_client.android.AndroidDriver;
@@ -22,8 +20,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class BrowserFactory {
-
-    public static final String URL_CLOUD_BROWSERSTACK = "@hub-cloud.browserstack.com/wd/hub";
 
     public static Optional<WebDriver> getDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
@@ -97,7 +93,7 @@ public class BrowserFactory {
     private static String getURLBrowserStack(AppiumSettingsProperties appiumSettings) throws WebEngineException {
         if (appiumSettings != null) {
             if (appiumSettings.getGridConnection().contains("browserstack.com")) {
-                return "https://" + appiumSettings.getUserName() + ":" + appiumSettings.getPassword() + URL_CLOUD_BROWSERSTACK;
+                return "https://" + appiumSettings.getUserName() + ":" + appiumSettings.getPassword() + "@" +appiumSettings.getGridConnection().split("(?i)https://")[1];
             } else {
                 return appiumSettings.getGridConnection();
             }
