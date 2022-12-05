@@ -18,7 +18,7 @@ public class Settings {
     List<String> propertiesFileList;
     Platform platform;
     Browser browser;
-    @Builder.Default Integer synchronzationTimeout = 20;
+    @Builder.Default Integer synchronizationTimeout = 20;
     String logDir;
     String logFileName;
     String appId;

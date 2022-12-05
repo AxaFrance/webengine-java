@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -53,7 +54,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
      @Override
      public TestCaseReport run(GlobalApplicationContext globalApplicationContext,ITestCaseContext testCaseContext) throws WebEngineException {
           String testCaseName = testCaseContext.getTestCaseName();
-          TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);;
+          TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
           List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
 
           List<TestData> testDataList = globalApplicationContext.getTestDataList();
@@ -127,16 +128,33 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
      private Result getResultOfTestCase(List<ActionReportDetail> actionReportDetailList) {
           Result result = Result.PASSED;
+          if(getResultActionReport(actionReportDetailList) == Result.FAILED || getResultCheckPoint(actionReportDetailList) == Result.FAILED ){
+               return Result.FAILED;
+          }
+          return result;
+     }
+
+     private Result getResultActionReport(List<ActionReportDetail> actionReportDetailList) {
+          Result result = Result.PASSED;
+          if (CollectionUtils.isNotEmpty(actionReportDetailList)) {
+               List<ActionReportDetail> actionReportDetailFilterList = actionReportDetailList.stream().filter(actionReportDetail ->
+                       actionReportDetail != null &&
+                       actionReportDetail.getActionReport() != null &&
+                       (actionReportDetail.getActionReport().getResult() == Result.FAILED || actionReportDetail.getActionReport().getResult() == Result.CRITICAL_ERROR)
+               ).collect(Collectors.toList());
+               return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
+          }
+          return result;
+     }
+
+     private Result getResultCheckPoint(List<ActionReportDetail> actionReportDetailList) {
+          Result result = Result.PASSED;
           if(CollectionUtils.isNotEmpty(actionReportDetailList)){
-               for (ActionReportDetail actionReportDetail:actionReportDetailList) {
-                    if (actionReportDetail != null && actionReportDetail.getActionReport() != null) {
-                         result = actionReportDetail.getActionReport().getResult();
-                         if (result == Result.FAILED || result == Result.CRITICAL_ERROR || !actionReportDetail.isResultCheckPoint()) {
-                              result = Result.FAILED;
-                              break;
-                         }
-                    }
-               }
+               List<ActionReportDetail> actionReportDetailFilterList = actionReportDetailList.stream().filter(actionReportDetail ->
+                       actionReportDetail!=null &&
+                       !actionReportDetail.isResultCheckPoint()
+               ).collect(Collectors.toList());
+               return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
           }
           return result;
      }

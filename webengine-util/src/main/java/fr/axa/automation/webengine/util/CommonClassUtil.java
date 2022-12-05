@@ -16,7 +16,6 @@ public class CommonClassUtil {
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             throw new WebEngineException("Error during create instance of class :"+clazz.getSimpleName(),e);
         }
-
         return (T)object;
     }
 

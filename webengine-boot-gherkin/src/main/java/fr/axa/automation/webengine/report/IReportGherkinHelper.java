@@ -13,7 +13,7 @@ public interface IReportGherkinHelper {
     void addTestCaseReport(String testCaseName);
     void addTestStepReport(String testCaseName, String testStepName);
     void updateTestStepReport(ReportDetail reportDetail);
-    void setCurrentfeatureName(String currentfeatureName);
+    void setCurrentFeatureName(String currentFeatureName);
     void setCurrentScenarioName(String currentScenarioName);
     void setCurrentStepName(String currentStepName);
     void setInformation(StringJoiner information);

@@ -32,7 +32,7 @@ public abstract class AbstractPageModel {
         setUseDriver(webDriver);
         Class currentClazz = this.getClass();
         List<Field> fieldList = Arrays.asList(currentClazz.getDeclaredFields());
-        Type type = null;
+        Type type ;
         if(CollectionUtils.isNotEmpty( fieldList)){
             for(Field  field : fieldList) {
                 type = field.getType();
@@ -50,7 +50,7 @@ public abstract class AbstractPageModel {
     }
 
     public void sync(long... timeoutInSecond) throws InterruptedException {
-        long timeout = SettingsWeb.TIMEOUT_SECONDES;
+        long timeout = SettingsWeb.TIMEOUT_SECONDS;
         if(ArrayUtils.isNotEmpty(timeoutInSecond)){
             timeout = timeoutInSecond[0];
         }

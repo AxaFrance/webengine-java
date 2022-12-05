@@ -43,9 +43,9 @@ import java.util.Collections;
 @Slf4j
 public class BootProject {
 
-    private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+    private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
-    private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONNEMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+    private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
     final ILoggerService loggerService;
 
@@ -173,10 +173,11 @@ public class BootProject {
     }
 
     private EnvironmentVariables getEnvironmentVariables(CommandLine cmd) throws WebEngineException {
-        String environnementVariablesFilePath = cmd.getOptionValue(ArgumentOption.ENVIRONNEMENT_VARIABLE.getOption());
-        loggerService.info("Loading environment data running: " + environnementVariablesFilePath);
-        EnvironmentVariables environmentVariables = XmlUtil.unmarshall(environnementVariablesFilePath, EnvironmentVariables.class);
-        loggerService.info("Loading environment data succeed: " + environnementVariablesFilePath);
+        String environmentVariablesFilePath
+                = cmd.getOptionValue(ArgumentOption.ENVIRONMENT_VARIABLE.getOption());
+        loggerService.info("Loading environment data running: " + environmentVariablesFilePath);
+        EnvironmentVariables environmentVariables = XmlUtil.unmarshall(environmentVariablesFilePath, EnvironmentVariables.class);
+        loggerService.info("Loading environment data succeed: " + environmentVariablesFilePath);
         return environmentVariables;
     }
 
@@ -241,13 +242,8 @@ public class BootProject {
         return outputDir;
     }
 
-//    private Optional<GlobalConfigProperties> getGlobalConfigProperties(CommandLine cmd) throws WebEngineException {
-//        List<String> propertiesFileList = getPropertiesFiles(cmd);
-//        return PropertiesUtilProvider.getInstance().getGlobalConfiguration(propertiesFileList, PropertiesUtil.APPLICATION_FILE_NAME_WITHOUT_POSTFIX);
-//    }
-
     private List<String> getPropertiesFiles(CommandLine cmd) {
-        List<String> propertiesFileList = Collections.<String>emptyList();
+        List<String> propertiesFileList = Collections.emptyList();
         String propertiesFiles = cmd.getOptionValue(ArgumentOption.PROPERTIES_FILE_LIST.getOption());
         if (propertiesFiles != null) {
             propertiesFileList = Arrays.asList(propertiesFiles.split(";"));

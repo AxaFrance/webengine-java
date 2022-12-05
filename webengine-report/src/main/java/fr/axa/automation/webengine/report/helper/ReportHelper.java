@@ -29,6 +29,8 @@ public class ReportHelper implements IReportHelper{
 
     public static final String DATA_DRIVEN_TEST_SUITE_REPORT_NAME = "DataDrivenTestSuite-";
     public static final String JUNIT_REPORT_NAME = "Junit-";
+    public static final String NAMESPACE_WEBENGINE_REPORT = "http://www.axa.fr/WebEngine/2022";
+    public static final String NS = "ns";
     final ILoggerService loggerService;
 
     @Autowired
@@ -50,7 +52,7 @@ public class ReportHelper implements IReportHelper{
         String fileName = getFileName(DATA_DRIVEN_TEST_SUITE_REPORT_NAME, testName);
         String completePath = path.toString()+"\\"+fileName;
         loggerService.info("Create report : "+completePath);
-        FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport,"http://www.axa.fr/WebEngine/2022","ns");
+        FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport, NAMESPACE_WEBENGINE_REPORT, NS);
         return completePath;
     }
 
@@ -66,7 +68,7 @@ public class ReportHelper implements IReportHelper{
         Path path = FileUtil.createDirectories(outputPath + testName );
         String fileName = getFileName(JUNIT_REPORT_NAME, testName);
         String completePath = path.toString()+"\\"+fileName;
-        loggerService.info("Create Junit report : "+path.toString()+"\\"+fileName);
+        loggerService.info("Create Junit report : "+path+"\\"+fileName);
         FileUtil.saveAsXML(path.toString(),fileName,testsuite);
         return completePath;
     }

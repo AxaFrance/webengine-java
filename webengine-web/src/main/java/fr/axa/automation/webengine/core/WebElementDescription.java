@@ -78,7 +78,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public WebElement internalFindElement() {
         Collection<WebElement> elements = internalFindElements();
         if (CollectionUtils.isNotEmpty(elements) && elements.size() > 1) {
-            throw new MultipleElementException("Multiple element has found with the given selection criteria for this web element : "+toString());
+            throw new MultipleElementException("Multiple element has found with the given selection criteria for this web element : ");
         } else {
             return elements.iterator().next();
         }
@@ -111,15 +111,15 @@ public class WebElementDescription extends AbstractElementDescription {
             webElementList = calculWebElementByCriteria(webElementList, webElementByXpathList);
         }
         if (StringUtils.isNotEmpty(this.linkText)) {
-            Collection<WebElement> webElementByLinkList = getInternalindElementByLinkText(this.linkText);
+            Collection<WebElement> webElementByLinkList = getInternalFindElementByLinkText(this.linkText);
             webElementList = calculWebElementByCriteria(webElementList, webElementByLinkList);
         }
         if (StringUtils.isNotEmpty(this.tagName)) {
-            Collection<WebElement> webElementByTagName = getInternalindElementByTagName(this.tagName);
+            Collection<WebElement> webElementByTagName = getInternalFindElementByTagName(this.tagName);
             webElementList = calculWebElementByCriteria(webElementList, webElementByTagName);
         }
         if (StringUtils.isNotEmpty(this.cssSelector)) {
-            Collection<WebElement> webElementByCssSelector = getInternalindElementByCssSelector(this.cssSelector);
+            Collection<WebElement> webElementByCssSelector = getInternalFindElementByCssSelector(this.cssSelector);
             webElementList = calculWebElementByCriteria(webElementList, webElementByCssSelector);
         }
         if (StringUtils.isNotEmpty(this.xPath)) {
@@ -142,7 +142,7 @@ public class WebElementDescription extends AbstractElementDescription {
             for (String attribute : attributes) {
                 cssSelector.add(attribute);
             }
-            Collection<WebElement> webElementByAttributeList = getInternalindElementByCssSelector(cssSelector.toString());
+            Collection<WebElement> webElementByAttributeList = getInternalFindElementByCssSelector(cssSelector.toString());
             webElementList = calculWebElementByCriteria(webElementList, webElementByAttributeList);
         }
         if (CollectionUtils.isEmpty(webElementList)) {
@@ -152,16 +152,16 @@ public class WebElementDescription extends AbstractElementDescription {
         return webElementList;
     }
 
-    private List<WebElement> getInternalindElementByCssSelector(String cssSelector) {
+    private List<WebElement> getInternalFindElementByCssSelector(String cssSelector) {
         return useDriver.findElements(By.cssSelector(cssSelector));
     }
 
-    private List<WebElement> getInternalindElementByTagName(String tagName) {
+    private List<WebElement> getInternalFindElementByTagName(String tagName) {
         return useDriver.findElements(By.tagName(tagName.toUpperCase()));
 
     }
 
-    private List<WebElement> getInternalindElementByLinkText(String linkText) {
+    private List<WebElement> getInternalFindElementByLinkText(String linkText) {
         return useDriver.findElements(By.linkText(linkText));
     }
 

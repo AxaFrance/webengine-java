@@ -31,7 +31,6 @@ public class WebengineLocalTestingListener implements EventListener {
     protected String getApplicationFileName() {
         return PropertiesUtil.APPLICATION_FILE_NAME;
     }
-
     private void runFinished(TestRunFinished event) {
         localTestingRunner.stopLocalTesting();
     }

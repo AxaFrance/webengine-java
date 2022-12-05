@@ -45,7 +45,7 @@ public class WebengineReportListener implements EventListener {
         try {
             reportGherkinHelper.createReport();
         } catch (UnknownHostException e) {
-            loggerService.error("Erreur lors de la création du rapport : ", e);
+            loggerService.error("Error during creating report : ", e);
         }
     }
 
@@ -54,13 +54,13 @@ public class WebengineReportListener implements EventListener {
         try {
             reportGherkinHelper.closeReport();
         } catch (WebEngineException e) {
-            loggerService.error("Erreur lors de la fermeture du rapport : ", e);
+            loggerService.error("Error during closing report : ", e);
         }
     }
 
     private void featureRead(TestSourceRead testSourceRead) {
         String currentfeatureName = testSourceRead.getSource();
-        reportGherkinHelper.setCurrentfeatureName(currentfeatureName);
+        reportGherkinHelper.setCurrentFeatureName(currentfeatureName);
         loggerService.info("feature : "+currentfeatureName+" read");
     }
 

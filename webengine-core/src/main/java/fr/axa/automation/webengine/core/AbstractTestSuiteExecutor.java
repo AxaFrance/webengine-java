@@ -8,8 +8,6 @@ import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.util.ListUtil;
-import fr.axa.automation.webengine.util.PropertiesUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -85,7 +83,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
         for (AbstractMap.SimpleEntry<String, ? extends ITestCase> entry : testCaseList) {
             String testCaseName = entry.getKey();
             ITestCase testCase = entry.getValue();
-            if (canRunTestCase(testCaseName, globalApplicationContext)) {
+            if (isCanRunTestCase(testCaseName, globalApplicationContext)) {
                 ITestCaseContext testCaseContext = testCaseExecutor.initialize(globalApplicationContext,testCaseName,testCase);
                 TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
                 testCaseExecutor.cleanUp(testCaseContext);
@@ -95,7 +93,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
         return testCaseReportList;
     }
 
-    protected boolean canRunTestCase(String testCaseName, GlobalApplicationContext globalApplicationContext) {
+    protected boolean isCanRunTestCase(String testCaseName, GlobalApplicationContext globalApplicationContext) {
         Map<String, TestCaseAdditionalInformation> testCaseAdditionalInformationMap = globalApplicationContext.getTestCaseAdditionnalInformationList();
         if (MapUtils.isNotEmpty(testCaseAdditionalInformationMap)) {
             TestCaseAdditionalInformation testCaseAdditionalInformation = testCaseAdditionalInformationMap.get(testCaseName);

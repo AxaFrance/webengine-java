@@ -83,7 +83,7 @@ public class BrowserFactory {
         if (appiumSettings != null) {
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
             if (MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())) {
-                capabilitiesProperties.getDesiredCapabilitiesMap().forEach((key, value) -> browserStackOptions.put(key, value));
+                browserStackOptions.putAll(capabilitiesProperties.getDesiredCapabilitiesMap());
             }
         }
         desiredCapabilities.setCapability("bstack:options", browserStackOptions);

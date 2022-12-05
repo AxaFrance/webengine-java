@@ -14,6 +14,5 @@ public class StatusMapping {
         MAPPING.put(Status.FAILED,Result.FAILED);
         MAPPING.put(Status.AMBIGUOUS,Result.NONE);
         MAPPING.put(Status.SKIPPED,Result.IGNORED);
-        MAPPING.put(Status.FAILED,Result.CRITICAL_ERROR);
     }
 }

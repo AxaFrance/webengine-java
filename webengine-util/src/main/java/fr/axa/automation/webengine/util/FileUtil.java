@@ -24,7 +24,7 @@ public class FileUtil {
         try {
             return Files.createDirectories(Paths.get(path));
         } catch (IOException e) {
-            throw new WebEngineException("Erreur lors de la création du répertoire : " + path.toString(),e);
+            throw new WebEngineException("Error during creating directory : " + path,e);
         }
     }
 

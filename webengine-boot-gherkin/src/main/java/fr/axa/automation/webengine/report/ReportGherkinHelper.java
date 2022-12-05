@@ -29,7 +29,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
     Map<String,TestCaseReport> testCaseReportMap;
     Map<String,ActionReport> actionReportMap;
 
-    String currentfeatureName;
+    String currentFeatureName;
     String currentScenarioName;
     String currentStepName;
     StringJoiner information;

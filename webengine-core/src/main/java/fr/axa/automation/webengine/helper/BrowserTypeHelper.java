@@ -2,8 +2,6 @@ package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.Browser;
-import fr.axa.automation.webengine.generated.Variable;
-import fr.axa.automation.webengine.util.SharedContext;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Arrays;
@@ -18,7 +16,7 @@ public class BrowserTypeHelper {
         if(CollectionUtils.isNotEmpty(browserFoundList)){
             return browserFoundList.get(0);
         }
-        throw new WebEngineException("unrecognized Browser value. Possible values are : "+browserTypesList.toString());
+        throw new WebEngineException("unrecognized Browser value. Possible values are : " + browserTypesList);
     }
 
 }

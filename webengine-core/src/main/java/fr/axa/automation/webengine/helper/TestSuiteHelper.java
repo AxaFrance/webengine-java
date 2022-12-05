@@ -3,7 +3,6 @@ package fr.axa.automation.webengine.helper;
 import fr.axa.automation.webengine.core.AbstractTestSuite;
 import fr.axa.automation.webengine.core.ITestSuite;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.util.ClassUtil;
 import fr.axa.automation.webengine.util.CommonClassUtil;
 import org.apache.commons.collections4.CollectionUtils;
 

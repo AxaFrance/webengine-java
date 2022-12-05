@@ -104,10 +104,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     }
 
     private Optional<String> getVaribaleByParameter(Optional<Variable> variable) {
-        if (variable.isPresent() && StringUtils.isNotEmpty(variable.get().getValue().trim())) {
-            return Optional.of(variable.get().getValue().trim());
-        }
-        return Optional.empty();
+        return (variable.isPresent() && StringUtils.isNotEmpty(variable.get().getValue().trim())) ? Optional.of(variable.get().getValue().trim()) : Optional.empty();
     }
     
     protected String getEnvironnementValueWithException(String name) throws WebEngineException {

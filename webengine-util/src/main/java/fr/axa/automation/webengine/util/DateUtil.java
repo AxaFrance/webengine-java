@@ -40,15 +40,4 @@ public class DateUtil {
         return Duration.between(localDateTime1,localDateTime2).toMillis();
     }
 
-    public static void main(String[] args){
-        String date = getDateTime("dd/MM/yyyy");
-        String date2 = getDateTime("d MMM yyyy",Locale.FRENCH);
-        String heure = getDateTime("HH",Locale.FRENCH);
-        String minute = getDateTime("mm",Locale.FRENCH);
-        System.out.println(date);
-        System.out.println(date2);
-        System.out.println(heure);
-        System.out.println(minute);
-    }
-
 }

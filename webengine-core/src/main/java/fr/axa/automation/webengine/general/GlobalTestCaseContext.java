@@ -4,7 +4,6 @@ package fr.axa.automation.webengine.general;
 import fr.axa.automation.webengine.core.ITestCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 

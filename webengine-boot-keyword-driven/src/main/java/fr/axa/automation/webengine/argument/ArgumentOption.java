@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 public enum ArgumentOption {
 
     PROJECT                 ("a",           true,true, "Project to run"),
-    ENVIRONNEMENT_VARIABLE  ("env",         true,true, "Environnement variable"),
+    ENVIRONMENT_VARIABLE("env",         true,true, "Environnement variable"),
     TEST_DATA               ("data",        true,true, "Data for project"),
     PROPERTIES_FILE_LIST    ("pfl",  true,false, "properties file list for configuration (separation by ';')"),
     PLATFORM                ("platform",    true,false, "Platform"),

@@ -48,7 +48,7 @@ public abstract class AbstractElementDescription {
     }
 
     protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDES);
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDS);
         Exception exception = new Exception();
 
         while (LocalDateTime.now().isBefore(timeOut)) {
@@ -56,7 +56,7 @@ public abstract class AbstractElementDescription {
                 return function.call(param);
             } catch (Exception e ) {
                 exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDS);
             }
         }
 
@@ -66,7 +66,7 @@ public abstract class AbstractElementDescription {
     protected abstract WebElement internalFindElement() ;
 
     public WebElement findElement() throws Exception {
-        return findElement(SettingsWeb.TIMEOUT_SECONDES);
+        return findElement(SettingsWeb.TIMEOUT_SECONDS);
     }
 
     public WebElement findElement(int timeOutSecond) throws Exception {
@@ -82,7 +82,7 @@ public abstract class AbstractElementDescription {
                 return element;
             } catch (Exception e) {
                 exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDES);
+                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDS);
             }
         }
         log.debug("End find element and no element found, throw exception at : "+LocalDateTime.now());
@@ -105,7 +105,7 @@ public abstract class AbstractElementDescription {
     }
 
     public Collection<WebElement> findElements() throws Exception {
-        return (Collection<WebElement>) findElement(SettingsWeb.TIMEOUT_SECONDES);
+        return (Collection<WebElement>) findElement(SettingsWeb.TIMEOUT_SECONDS);
     }
 
     public abstract Collection<WebElement> internalFindElements() ;
@@ -120,7 +120,7 @@ public abstract class AbstractElementDescription {
     }
 
     public Boolean exists() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> exists(SettingsWeb.TIMEOUT_SECONDES);
+        IFunction<Void, Boolean> fun = (x) -> exists(SettingsWeb.TIMEOUT_SECONDS);
         return retry(fun,null);
     }
 

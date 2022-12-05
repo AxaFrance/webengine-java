@@ -19,9 +19,9 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private Local local ;
 
-    private ILoggerService loggerService;
+    private final ILoggerService loggerService;
 
-    private GlobalConfigProperties globalConfigProperties;
+    private final GlobalConfigProperties globalConfigProperties;
 
     @Autowired
     public LocalTestingRunner(ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {
@@ -68,9 +68,8 @@ public class LocalTestingRunner implements ILocalTestingRunner{
     private HashMap<String,String> getLocalTestingArguments(GlobalConfigProperties globalConfigProperties ){
         HashMap<String,String> localTestingArguments = new HashMap<>();
         localTestingArguments.put(KEY, globalConfigProperties.getAppiumSettings().getPassword());
-        LocalTesting localTesting = globalConfigProperties.getAppiumSettings().getLocalTesting();
-        localTesting.getArguments().forEach(localTestingArguments::put);
-        loggerService.info("Local testing arguments : "+localTestingArguments.toString());
+        localTestingArguments.putAll(globalConfigProperties.getAppiumSettings().getLocalTesting().getArguments());
+        loggerService.info("Local testing arguments : "+localTestingArguments);
         return localTestingArguments;
     }
 

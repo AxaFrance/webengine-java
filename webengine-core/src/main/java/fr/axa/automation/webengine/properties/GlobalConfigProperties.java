@@ -3,6 +3,8 @@ package fr.axa.automation.webengine.properties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 @Data
@@ -11,16 +13,14 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-@ConfigurationProperties
+//@ConfigurationProperties(prefix = "",ignoreUnknownFields = true)
+//@ConfigurationPropertiesScan("fr.axa.automation.webengine.properties.GlobalConfigProperties")
 public class GlobalConfigProperties {
     ApplicationProperties application;
     AppiumSettingsProperties appiumSettings;
 
     public boolean isLocalTestingConfExist() {
-        if (this.getAppiumSettings() != null && this.getAppiumSettings().getLocalTesting() != null) {
-            return true;
-        }
-        return false;
+        return (this.getAppiumSettings() != null && this.getAppiumSettings().getLocalTesting() != null) ? true : false;
     }
 
     public String getPlateform(){
@@ -34,5 +34,4 @@ public class GlobalConfigProperties {
     public String getOutputDir(){
         return this != null && this.getApplication() != null ? this.getApplication().getOutputDir() : null;
     }
-
 }

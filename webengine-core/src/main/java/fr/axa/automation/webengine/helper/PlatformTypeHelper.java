@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.Browser;
 import fr.axa.automation.webengine.general.Platform;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -18,7 +17,7 @@ public class PlatformTypeHelper {
         if(CollectionUtils.isNotEmpty(platformFoundList)){
             return platformFoundList.get(0);
         }
-        throw new WebEngineException("unrecognized Platform value. Possible values are : "+platformList.toString());
+        throw new WebEngineException("unrecognized Platform value. Possible values are : "+platformList);
     }
 
 }

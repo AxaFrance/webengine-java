@@ -38,9 +38,6 @@ public class JarUtil {
     }
 
     public static <T> Set<Class<? extends T>> findAllClass(Class<T> clazz) {
-//        Don't Delete this two lines, need to debug all class from external class loaded
-//        Reflections reflections = new Reflections("fr.axa", new SubTypesScanner(false));
-//        Set<Class> classes = reflections.getSubTypesOf(Object.class).stream().collect(Collectors.toSet());
         Reflections reflections = new Reflections();
         return reflections.getSubTypesOf(clazz);
     }
