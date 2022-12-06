@@ -35,6 +35,11 @@ public abstract class AbstractElementDescription {
         return this;
     }
 
+
+    protected abstract WebElement internalFindElement() ;
+
+    public abstract Collection<WebElement> internalFindElements() ;
+
     public void waitInMillisecondes(Long milliseconds) throws InterruptedException {
         Thread.sleep(milliseconds);
     }
@@ -61,8 +66,6 @@ public abstract class AbstractElementDescription {
         }
         throw exception;
     }
-
-    protected abstract WebElement internalFindElement() ;
 
     public WebElement findElement() throws Exception {
         return findElement(SettingsWeb.TIMEOUT_SECONDS);
@@ -105,17 +108,6 @@ public abstract class AbstractElementDescription {
 
     public Collection<WebElement> findElements() throws Exception {
         return (Collection<WebElement>) findElement(SettingsWeb.TIMEOUT_SECONDS);
-    }
-
-    public abstract Collection<WebElement> internalFindElements() ;
-
-    public Collection<WebElement> findElements(int timeoutSecond) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeoutSecond);
-        Collection<WebElement> webElementCollection = null;
-        while (LocalDateTime.now().isBefore(timeOut) && webElementCollection == null) {
-            webElementCollection = internalFindElements();
-        }
-        return webElementCollection;
     }
 
     public Boolean exists() throws Exception {
