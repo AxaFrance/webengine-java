@@ -37,10 +37,9 @@ public class ArgumentParser {
                         .desc(argumentOption.getDescription()).build();
     }
 
-    public static String[] splitArguments(String[] args,String regex,int limit) {
+    public static String[] splitArguments(List<String> args,String regex,int limit) {
         List<String> newArgsList = new ArrayList<>();
-        List<String> argsList = Arrays.asList(args);
-        argsList.stream().forEach(argument -> newArgsList.addAll(Arrays.asList(argument.split(regex, limit))));
+        args.stream().forEach(argument -> newArgsList.addAll(Arrays.asList(argument.split(regex, limit))));
         return (String[]) newArgsList.toArray(new String[newArgsList.size()]);
     }
 }

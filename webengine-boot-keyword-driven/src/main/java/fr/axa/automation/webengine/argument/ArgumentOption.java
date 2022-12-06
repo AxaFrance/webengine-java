@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Arrays;
+import java.util.List;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor
@@ -25,4 +28,9 @@ public enum ArgumentOption {
     final Boolean hasArg;
     final Boolean required;
     final String description;
+
+    public static boolean isOptionForProject(String option){
+        return Arrays.stream(ArgumentOption.values()).anyMatch(argumentOption -> option.startsWith("-"+argumentOption.getOption()));
+
+    }
 }

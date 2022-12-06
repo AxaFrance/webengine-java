@@ -36,6 +36,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -68,16 +69,30 @@ public class BootProject {
     }
 
     public void runFromProject(String... args) throws Exception {
+        loggerService.info("Arguments : "+ Arrays.asList(args));
         run(ARGUMENT_OPTION_PROJECT, false, args);
     }
 
     public void run(List<ArgumentOption> argumentOptionList, boolean loadProject, String... args) throws Exception {
-        String[] newArgs = ArgumentParser.splitArguments(args, IConstant.SEPARATOR_ARG, 2);
-        CommandLine commandLine = ArgumentParser.getOption(newArgs, ArgumentParser.getOptionList(argumentOptionList));
+        List<String> argumentListForProject = getArgumentsForProject(args);
+        String[] argumentsListSeparatedByOptionAndVaue = getArgumentsSeparatedByOptionAndValue(argumentListForProject);
+        CommandLine commandLine = ArgumentParser.getOption(argumentsListSeparatedByOptionAndVaue, ArgumentParser.getOptionList(argumentOptionList));
         if (loadProject) {
             loadProject(commandLine);
         }
         runTestSuite(commandLine);
+    }
+
+    private String[] getArgumentsSeparatedByOptionAndValue(List<String> filterArguments) {
+        String[] argumentsForProject = ArgumentParser.splitArguments(filterArguments, IConstant.SEPARATOR_ARG, 2);
+        loggerService.info("Arguments after decomposition : "+Arrays.asList(argumentsForProject));
+        return argumentsForProject;
+    }
+
+    private List<String> getArgumentsForProject(String[] args) {
+        List<String> filterArguments = Arrays.stream(args).filter(arg ->  ArgumentOption.isOptionForProject(arg)).collect(Collectors.toList());
+        loggerService.info("Arguments after filter : "+filterArguments);
+        return filterArguments;
     }
 
     private void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
@@ -119,8 +134,8 @@ public class BootProject {
         if (testSuite != null) {
             for (AbstractMap.SimpleEntry<String, ? extends ITestCase> entry : testSuite.getTestCaseList()) {
                 String testCaseName = entry.getKey();
-                List<? extends ITestStep> testStepDetailList = entry.getValue().getTestStepList();
-                for (ITestStep testStep : testStepDetailList) {
+                List<? extends ITestStep> testStepList = entry.getValue().getTestStepList();
+                for (ITestStep testStep : testStepList) {
                     map.put(testCaseName, getTestCaseAdditionalInformation(testSuiteData.getTestData(), testCaseName, testStep));
                 }
             }
@@ -135,13 +150,13 @@ public class BootProject {
         List<Variable> missingDataList = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(requiredParametersList) && CollectionUtils.isNotEmpty(testDataList)) {
-            for (Variable variable : requiredParametersList) {
-                Variable variableFound = TestDataUtil.getVariableOfTestCase(testDataList, testCaseName, variable.getName());
+            for (Variable requiredParameter : requiredParametersList) {
+                Variable variableFound = TestDataUtil.getVariableOfTestCase(testDataList, testCaseName, requiredParameter.getName());
                 if (variableFound == null) {
-                    if (variable.getValue() != null) {
-                        additionalDataList.add(variable);
-                    } else {
-                        missingDataList.add(variable);
+                    if(requiredParameter.getValue() != null){
+                        additionalDataList.add(requiredParameter);
+                    }else{
+                        missingDataList.add(requiredParameter);
                     }
                 }
             }

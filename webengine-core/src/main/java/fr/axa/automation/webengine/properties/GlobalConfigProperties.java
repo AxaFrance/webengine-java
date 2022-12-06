@@ -12,9 +12,8 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
-//@ConfigurationProperties(prefix = "",ignoreUnknownFields = true)
-//@ConfigurationPropertiesScan("fr.axa.automation.webengine.properties.GlobalConfigProperties")
+@ConfigurationProperties
+@ConfigurationPropertiesScan
 public class GlobalConfigProperties {
     ApplicationProperties application;
     AppiumSettingsProperties appiumSettings;

@@ -13,6 +13,8 @@ import java.util.StringJoiner;
 
 public class FileUtil {
 
+    public static final String TARGET_DIRECTORY = "target";
+
     public static void encodeToFile(Object object, String fileName) throws IOException {
         try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(fileName))) {
             encoder.writeObject(object);
@@ -50,9 +52,10 @@ public class FileUtil {
     }
 
     public static String getDefaultRunResultDirectory(){
-        StringJoiner stringJoiner = new StringJoiner(File.separator);
-        stringJoiner.add(".").add("target").add("run-result-");
-        return stringJoiner.toString();
+        Path currentAbsolutePath = Paths.get("").toAbsolutePath();
+        StringJoiner directory = new StringJoiner(File.separator);
+        directory.add(currentAbsolutePath.toString()).add(currentAbsolutePath.getParent().toString().equalsIgnoreCase(TARGET_DIRECTORY) ? "" : TARGET_DIRECTORY).add("run-result-");
+        return directory.toString();
     }
 }
 

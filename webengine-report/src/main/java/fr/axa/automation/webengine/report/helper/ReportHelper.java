@@ -50,9 +50,8 @@ public class ReportHelper implements IReportHelper{
     public String generateWebengineReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws WebEngineException {
         Path path = FileUtil.createDirectories(outputPath + testName );
         String fileName = getFileName(DATA_DRIVEN_TEST_SUITE_REPORT_NAME, testName);
-        String completePath = path.toString()+"\\"+fileName;
+        String completePath = FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport, NAMESPACE_WEBENGINE_REPORT, NS);
         loggerService.info("Create report : "+completePath);
-        FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport, NAMESPACE_WEBENGINE_REPORT, NS);
         return completePath;
     }
 
@@ -64,12 +63,10 @@ public class ReportHelper implements IReportHelper{
     public String generateJUnitReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws  WebEngineException {
         Testsuite testsuite = createJUnitTestSuite(testSuiteReport, testName);
         testsuite.getTestcase().addAll(getTestcases(testSuiteReport));
-
         Path path = FileUtil.createDirectories(outputPath + testName );
         String fileName = getFileName(JUNIT_REPORT_NAME, testName);
-        String completePath = path.toString()+"\\"+fileName;
-        loggerService.info("Create Junit report : "+path+"\\"+fileName);
-        FileUtil.saveAsXML(path.toString(),fileName,testsuite);
+        String completePath = FileUtil.saveAsXML(path.toString(),fileName,testsuite);
+        loggerService.info("Create Junit report : "+completePath);
         return completePath;
     }
 
