@@ -59,7 +59,6 @@ public abstract class AbstractElementDescription {
                 waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDS);
             }
         }
-
         throw exception;
     }
 

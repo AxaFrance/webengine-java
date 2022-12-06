@@ -31,9 +31,11 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public static final String INNER_HTML = "innerHTML";
     public static final String OUTER_HTML = "outerHTML";
+
     public static final String OK = "OK";
 
     String id;
+
     String name;
     String innerText;
     Collection<HtmlAttribute> attributeList;
@@ -135,16 +137,12 @@ public class WebElementDescription extends AbstractElementDescription {
         }
         if (CollectionUtils.isNotEmpty(this.attributeList)) {
             List<String> attributes = new ArrayList<>();
-            for (HtmlAttribute htmlAttribute : this.attributeList) {
-                attributes.add("[{" + htmlAttribute.getName() + "}=\"{" + htmlAttribute.getValue() + "}\"]");
-            }
-            StringJoiner cssSelector = new StringJoiner("");
-            for (String attribute : attributes) {
-                cssSelector.add(attribute);
-            }
-            Collection<WebElement> webElementByAttributeList = getInternalFindElementByCssSelector(cssSelector.toString());
+            this.attributeList.stream().forEach(htmlAttribute -> attributes.add("[{" + htmlAttribute.getName() + "}=\"{" + htmlAttribute.getValue() + "}\"]"));
+            String cssSelector = String.join("",attributes);
+            Collection<WebElement> webElementByAttributeList = getInternalFindElementByCssSelector(cssSelector);
             webElementList = calculWebElementByCriteria(webElementList, webElementByAttributeList);
         }
+
         if (CollectionUtils.isEmpty(webElementList)) {
             throw new NoSuchElementException("No such WebElement if found in the page");
         }
@@ -158,7 +156,6 @@ public class WebElementDescription extends AbstractElementDescription {
 
     private List<WebElement> getInternalFindElementByTagName(String tagName) {
         return useDriver.findElements(By.tagName(tagName.toUpperCase()));
-
     }
 
     private List<WebElement> getInternalFindElementByLinkText(String linkText) {
@@ -315,7 +312,7 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,value);
     }
 
-    public boolean waitUntilXpath(Long timeOutInSeconds) throws InterruptedException {
+    public boolean waitUntilXpath(Long timeOutInSeconds) {
         By byXpath = By.xpath("//*[contains(text(),'"+this.innerText+"')]");
         WebElement webElement = (new WebDriverWait(getUseDriver(), Duration.ofSeconds(timeOutInSeconds))
                 .ignoring(StaleElementReferenceException.class).ignoring(NoSuchElementException.class))
