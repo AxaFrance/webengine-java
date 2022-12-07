@@ -19,7 +19,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -144,7 +143,7 @@ public class WebElementDescription extends AbstractElementDescription {
         }
 
         if (CollectionUtils.isEmpty(webElementList)) {
-            throw new NoSuchElementException("No such WebElement if found in the page");
+            throw new NoSuchElementException("No such WebElement found in the page");
         }
 
         return webElementList;
@@ -254,7 +253,6 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-
     public void dragAndDropTo(AbstractElementDescription element) throws Exception {
         WebElement e1 = findElement();
         WebElement e2 = element.findElement();
@@ -263,8 +261,11 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     public Select asSelect() throws Exception {
-        WebElement element = findElement();
-        return new Select(element);
+        IFunction<Void, Select> fun = (x) -> {
+            WebElement element = findElement();
+            return new Select(element);
+        };
+        return retry(fun,null);
     }
 
     public void selectByText(String text) throws Exception {

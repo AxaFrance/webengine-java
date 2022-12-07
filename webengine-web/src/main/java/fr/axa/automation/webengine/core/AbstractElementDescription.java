@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.function.Function;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
@@ -74,20 +75,22 @@ public abstract class AbstractElementDescription {
     public WebElement findElement(int timeOutSecond) throws Exception {
         LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeOutSecond);
         Exception exception = new Exception();
+        UUID uuid = UUID.randomUUID();
 
-        log.debug("Start find elements. Time is : "+LocalDateTime.now());
-        log.debug("Define time out is : "+timeOutSecond);
+        log.debug(uuid+"-Element search  "+toString()+" at "+LocalDateTime.now()+". Defined time out is :"+timeOutSecond);
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
                 WebElement element = internalFindElement();
-                log.debug("Element is found at : "+LocalDateTime.now());
+                if(element!=null){
+                    log.debug(uuid+"-Element founded "+toString()+" at "+LocalDateTime.now());
+                }
                 return element;
             } catch (Exception e) {
                 exception = e;
                 waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDS);
             }
         }
-        log.debug("End find element and no element found, throw exception at : "+LocalDateTime.now());
+        log.debug(uuid+"-Time out search "+LocalDateTime.now());
         throw exception;
     }
 
