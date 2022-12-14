@@ -19,8 +19,8 @@ public class CommonClassUtil {
         return (T)object;
     }
 
-    public static <T> T create(Class clazz, Class<T> t, Object object,Class<?>... constructorParameters) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Constructor constructor = Class.forName(clazz.getName()).getConstructor(constructorParameters);
+    public static <T> T create(Class<T> clazz, Object[] object,Class[] constructor1) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Constructor constructor = Class.forName(clazz.getName()).getDeclaredConstructor(constructor1);
         return (T)constructor.newInstance(object);
     }
 }

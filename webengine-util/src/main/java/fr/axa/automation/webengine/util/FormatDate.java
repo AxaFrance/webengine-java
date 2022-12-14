@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum FormatDate {
+    YYYYMMDD_HH("yyyyMMdd_hh"),
     YYYYMMDD_HHMMSS("yyyyMMdd_hhmmss");
     final String format;
 }

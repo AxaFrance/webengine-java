@@ -188,8 +188,7 @@ public class BootProject {
     }
 
     private EnvironmentVariables getEnvironmentVariables(CommandLine cmd) throws WebEngineException {
-        String environmentVariablesFilePath
-                = cmd.getOptionValue(ArgumentOption.ENVIRONMENT_VARIABLE.getOption());
+        String environmentVariablesFilePath = cmd.getOptionValue(ArgumentOption.ENVIRONMENT_VARIABLE.getOption());
         loggerService.info("Loading environment data running: " + environmentVariablesFilePath);
         EnvironmentVariables environmentVariables = XmlUtil.unmarshall(environmentVariablesFilePath, EnvironmentVariables.class);
         loggerService.info("Loading environment data succeed: " + environmentVariablesFilePath);
@@ -251,7 +250,7 @@ public class BootProject {
                 outputDir = globalConfigProperties.getOutputDir();
             }
             if (StringUtils.isEmpty(outputDir)) {
-                outputDir = FileUtil.getDefaultRunResultDirectory();
+                outputDir = FileUtil.createDirectoryInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY);
             }
         }
         return outputDir;

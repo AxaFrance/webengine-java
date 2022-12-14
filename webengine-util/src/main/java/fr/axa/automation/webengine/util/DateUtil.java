@@ -3,8 +3,10 @@ package fr.axa.automation.webengine.util;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -21,10 +23,11 @@ public class DateUtil {
     }
 
     public static Calendar localDateTimeToCalendar(LocalDateTime localDateTime) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Date date = Date.from(localDateTime.atZone(zoneId).toInstant());
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
-        calendar.set(localDateTime.getYear(), localDateTime.getMonthValue()-1, localDateTime.getDayOfMonth(),
-                localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
+        calendar.setTime(date);
         return calendar;
     }
 
@@ -34,10 +37,9 @@ public class DateUtil {
         return LocalDateTime.ofInstant(calendar.toInstant(), zoneId);
     }
 
-    public static Long getDiff(Calendar calendar1, Calendar calendar2){
-        LocalDateTime localDateTime1 = getLocalDateTime(calendar1);
-        LocalDateTime localDateTime2 = getLocalDateTime(calendar2);
+    public static Long getDiff(Calendar startCalendar, Calendar endCalendar){
+        LocalDateTime localDateTime1 = getLocalDateTime(startCalendar);
+        LocalDateTime localDateTime2 = getLocalDateTime(endCalendar);
         return Duration.between(localDateTime1,localDateTime2).toMillis();
     }
-
 }

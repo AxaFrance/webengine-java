@@ -65,7 +65,7 @@ public class ReportHelper implements IReportHelper{
         testsuite.getTestcase().addAll(getTestcases(testSuiteReport));
         Path path = FileUtil.createDirectories(outputPath + testName );
         String fileName = getFileName(JUNIT_REPORT_NAME, testName);
-        String completePath = FileUtil.saveAsXML(path.toString(),fileName,testsuite);
+        String completePath = FileUtil.saveAsXml(path.toString(),fileName,testsuite);
         loggerService.info("Create Junit report : "+completePath);
         return completePath;
     }
@@ -110,7 +110,7 @@ public class ReportHelper implements IReportHelper{
         Testsuite.Testcase testcase = new Testsuite.Testcase();
         testcase.setName(testCaseReport.getTestName());
         if(testSuiteReport.getEndTime()!=null && testSuiteReport.getStartTime()!=null) {
-            testcase.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getEndTime(), testSuiteReport.getStartTime())));
+            testcase.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getStartTime(),testSuiteReport.getEndTime() )));
         }
         testcase.setClassname(testCaseReport.getTestName());
         return testcase;
@@ -121,7 +121,7 @@ public class ReportHelper implements IReportHelper{
         testsuite.setName(StringUtils.isEmpty(testName) ? testName : "WebEngine Test Suite");
         testsuite.setTimestamp(Calendar.getInstance());
         if(testSuiteReport.getEndTime()!=null && testSuiteReport.getStartTime()!=null){
-            testsuite.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getEndTime(),testSuiteReport.getStartTime())));
+            testsuite.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getStartTime(),testSuiteReport.getEndTime())));
         }
         testsuite.setHostname(testSuiteReport.getHostName());
         testsuite.setSystemOut(testSuiteReport.getSystemOut());

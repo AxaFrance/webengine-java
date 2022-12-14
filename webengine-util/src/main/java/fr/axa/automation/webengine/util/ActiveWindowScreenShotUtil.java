@@ -26,9 +26,8 @@ public class ActiveWindowScreenShotUtil {
             Robot robot = new Robot();
             return robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
         } catch (AWTException e) {
-            log.error("Error lors de la prise du screenshot",e);
+            return new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height,Image.SCALE_DEFAULT);
         }
-        return new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height,Image.SCALE_DEFAULT);
     }
 }
 
