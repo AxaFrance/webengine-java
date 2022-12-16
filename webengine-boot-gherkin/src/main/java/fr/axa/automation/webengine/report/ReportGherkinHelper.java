@@ -132,6 +132,6 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         testSuiteReport.setEndTime(Calendar.getInstance());
         testSuiteReport.getTestResult().addAll(testCaseReportMap.values());
         ReportHelper reportHelper =  new ReportHelper(new LoggerService());
-        reportHelper.generateAllReport(testSuiteReport,applicationName,FileUtil.createDirectoryInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
+        reportHelper.generateAllReport(testSuiteReport,applicationName,FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
     }
 }

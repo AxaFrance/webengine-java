@@ -38,26 +38,27 @@ class FileUtilTest {
 
     private void saveAsXML(String namespace, String prefixe) throws WebEngineException {
         String path;
+        String fileName = "userObjectToXml.xml";
         if(StringUtils.isEmpty(namespace) && StringUtils.isEmpty(prefixe)){
-            path = FileUtil.saveAsXml(FileUtilForTest.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST),"userObjectToXml",UserUtilForTest.getNewUserTest());
+            path = FileUtil.saveAsXml(FileUtilForTest.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST), fileName,UserUtilForTest.getNewUserWithPackageInfo());
         }else{
-            path = FileUtil.saveAsXml(FileUtilForTest.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST),"userObjectToXml",UserUtilForTest.getNewUserTest(),namespace,prefixe);
+            path = FileUtil.saveAsXml(FileUtilForTest.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST), fileName,UserUtilForTest.getNewUserWithPackageInfo(),namespace,prefixe);
         }
         Assertions.assertTrue(Files.exists(Paths.get(path)));
     }
 
     @Test
     public void testCreateDirectoryInTmpDirectory() {
-        File file = FileUtil.createDirectoryInTmpDirectory("test-create-directory");
+        File file = FileUtil.createDirectoryInTmpDirectory("test-create-directory-in-tmp");
         logger.info("Create directory in temp directory : "+file.getAbsolutePath());
         Assertions.assertTrue(Files.exists(Paths.get(file.getAbsolutePath())));
     }
 
     @Test
     public void testCreateDirectoryInTargetDirectory() {
-        String filePath = FileUtil.createDirectoryInTargetDirectory("test-create-directory");
+        String filePath = FileUtil.getPathInTargetDirectory("test-create-directory-in-target");
         logger.info("Create directory in target directory : "+ filePath);
-        Assertions.assertTrue(Files.exists(Paths.get(filePath)));
+        Assertions.assertTrue(filePath.contains("\\target\\"));
     }
 
     @Test

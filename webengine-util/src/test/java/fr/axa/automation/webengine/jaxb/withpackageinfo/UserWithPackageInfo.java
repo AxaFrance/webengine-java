@@ -1,11 +1,8 @@
-package fr.axa.automation.webengine.jaxb;
+package fr.axa.automation.webengine.jaxb.withpackageinfo;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
-@XmlRootElement(name = "Users")
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {
         "id",
         "firstName",
@@ -13,15 +10,22 @@ import javax.xml.bind.annotation.XmlType;
         "age",
         "gender"
 })
-public class User {
+public class UserWithPackageInfo {
+    @XmlAttribute(name = "id")
     private int id;
+    @XmlElement(name = "firstName")
     private String firstName;
+    @XmlElement(name = "lastName")
     private String lastName;
+    @XmlElement(name = "age")
     private int age;
+    @XmlElement(name = "gender")
     private String gender;
+    @XmlTransient
     private String password;
 
-    @XmlAttribute
+
+
     public int getId() {
         return id;
     }
@@ -62,7 +66,7 @@ public class User {
         this.gender = gender;
     }
 
-    @XmlTransient
+
     public String getPassword() {
         return password;
     }

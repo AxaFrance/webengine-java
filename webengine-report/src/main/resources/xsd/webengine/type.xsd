@@ -46,9 +46,9 @@
             <xs:element minOccurs="1" maxOccurs="1" name="Result" type="tns:Result"/>
             <xs:element minOccurs="1" maxOccurs="1" name="StartTime" type="xs:dateTime"/>
             <xs:element minOccurs="1" maxOccurs="1" name="EndTime" type="xs:dateTime"/>
-            <xs:element minOccurs="0" maxOccurs="1" name="TestData" type="tns:ArrayOfVariable" />
-            <xs:element minOccurs="0" maxOccurs="1" name="ContextValues" type="tns:ArrayOfVariable" />
-            <xs:element minOccurs="0" maxOccurs="1" name="GlobalContextValues" type="tns:ArrayOfVariable" />
+            <xs:element minOccurs="0" maxOccurs="1" name="TestData" type="tns:ArrayOfVariable"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="ContextValues" type="tns:ArrayOfVariable"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="GlobalContextValues" type="tns:ArrayOfVariable"/>
             <xs:element minOccurs="0" maxOccurs="1" name="ActionReports" type="tns:ArrayOfActionReport"/>
         </xs:sequence>
     </xs:complexType>
@@ -72,7 +72,8 @@
 
     <xs:complexType name="ArrayOfActionReport">
         <xs:sequence>
-            <xs:element minOccurs="0" maxOccurs="unbounded" name="ActionReport" nillable="true" type="tns:ActionReport"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="ActionReport" nillable="true"
+                        type="tns:ActionReport"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="ActionReport">
@@ -81,7 +82,7 @@
             <xs:element minOccurs="1" maxOccurs="1" name="Result" type="tns:Result"/>
             <xs:element minOccurs="1" maxOccurs="1" name="StartTime" type="xs:dateTime"/>
             <xs:element minOccurs="1" maxOccurs="1" name="EndTime" type="xs:dateTime"/>
-            <xs:element minOccurs="0" maxOccurs="1" name="ContextValues" type="tns:ArrayOfVariable" />
+            <xs:element minOccurs="0" maxOccurs="1" name="ContextValues" type="tns:ArrayOfVariable"/>
             <xs:element minOccurs="0" maxOccurs="1" name="SubActionReports" type="tns:ArrayOfActionReport"/>
             <xs:element minOccurs="0" maxOccurs="1" name="Screenshots" type="tns:ArrayOfScreenshotReport"/>
             <xs:element minOccurs="0" maxOccurs="1" name="Log" type="xs:string"/>
@@ -89,7 +90,8 @@
     </xs:complexType>
     <xs:complexType name="ArrayOfScreenshotReport">
         <xs:sequence>
-            <xs:element minOccurs="0" maxOccurs="unbounded" name="ScreenshotReport" nillable="true" type="tns:ScreenshotReport"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="ScreenshotReport" nillable="true"
+                        type="tns:ScreenshotReport"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="ScreenshotReport">

@@ -13,6 +13,6 @@ public class FileUtilForTest {
     }
 
     public static String createDirectoryInTarget(String subDirectory) throws WebEngineException {
-        return FileUtil.createDirectories(FileUtil.createDirectoryInTargetDirectory(subDirectory)).toAbsolutePath().toString();
+        return FileUtil.createDirectories(FileUtil.getPathInTargetDirectory(subDirectory)).toAbsolutePath().toString();
     }
 }

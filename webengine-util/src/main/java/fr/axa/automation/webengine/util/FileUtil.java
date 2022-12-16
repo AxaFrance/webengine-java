@@ -1,6 +1,8 @@
 package fr.axa.automation.webengine.util;
 
+import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringJoiner;
 
 public class FileUtil {
@@ -25,15 +29,17 @@ public class FileUtil {
     }
 
     public static String saveAsXml(String path, String fileName, Object object) throws WebEngineException {
-        Path filePath = Paths.get(path,fileName);
-        XmlUtil.marshallWithoutNamespace(filePath.toString(),object);
-        return filePath.toString();
+//        Path filePath = Paths.get(path,fileName);
+//        return XmlUtil.marshallWithoutNamespace(filePath.toString(),object).getAbsolutePath();
+        return saveAsXml(path,fileName,object,"","");
     }
 
     public static String saveAsXml(String path, String fileName, Object object,String namespace, String prefixe) throws WebEngineException {
         Path filePath = Paths.get(path,fileName);
-        XmlUtil.marshallWithNamespace(filePath.toString(),object,namespace,prefixe);
-        return filePath.toString();
+//        return XmlUtil.marshallWithNamespace(filePath.toString(),object,namespace,prefixe).getAbsolutePath();
+        Map<String, String> namespaceAndPrefixMap  = new HashMap() {{put(namespace, prefixe);}};
+        InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath.toAbsolutePath().toString()).objectToMarshall(object).namespaceRoot(namespace).namespacePrefixMapper(new NamespacePrefixerWebengine(namespaceAndPrefixMap)).build();
+        return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
     }
 
     public static File createDirectoryInTmpDirectory(String directoryName){
@@ -45,7 +51,7 @@ public class FileUtil {
         return directory;
     }
 
-    public static String createDirectoryInTargetDirectory(String directoryToCreate){
+    public static String getPathInTargetDirectory(String directoryToCreate){
         StringJoiner directory = new StringJoiner(File.separator);
         Path currentAbsolutePath = Paths.get("").toAbsolutePath();
         directory.add(currentAbsolutePath.toString()).add(getPathTargetDirectory(currentAbsolutePath)).add(directoryToCreate);

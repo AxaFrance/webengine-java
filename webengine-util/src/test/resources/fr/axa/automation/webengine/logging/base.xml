@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+    <include resource="fr/axa/automation/webengine/logging/console-appender.xml" />
+    <include resource="fr/axa/automation/webengine/logging/file-appender.xml" />
+    <logger name="org.reflections" level="ERROR" />
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="APPENDER-FILE"/>
+    </root>
+</included>

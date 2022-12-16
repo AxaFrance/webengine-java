@@ -250,7 +250,7 @@ public class BootProject {
                 outputDir = globalConfigProperties.getOutputDir();
             }
             if (StringUtils.isEmpty(outputDir)) {
-                outputDir = FileUtil.createDirectoryInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY);
+                outputDir = FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY);
             }
         }
         return outputDir;
