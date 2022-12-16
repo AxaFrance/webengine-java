@@ -21,9 +21,8 @@ class DateUtilTest {
     static final Logger logger = LoggerFactory.getLogger(FileUtilTest .class);
 
     private String getCurrentDate() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HH");
-        LocalDateTime now = LocalDateTime.now();
-        return dtf.format(now);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd-HH");
+        return dtf.format(LocalDateTime.now());
     }
 
     @Test

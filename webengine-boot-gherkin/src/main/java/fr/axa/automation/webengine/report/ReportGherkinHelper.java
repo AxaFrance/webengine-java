@@ -6,6 +6,7 @@ import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.report.helper.JunitReportHelper;
 import fr.axa.automation.webengine.report.helper.ReportHelper;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.util.*;
@@ -131,7 +132,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         }
         testSuiteReport.setEndTime(Calendar.getInstance());
         testSuiteReport.getTestResult().addAll(testCaseReportMap.values());
-        ReportHelper reportHelper =  new ReportHelper(new LoggerService());
+        ReportHelper reportHelper =  new ReportHelper(new JunitReportHelper(),new LoggerService());
         reportHelper.generateAllReport(testSuiteReport,applicationName,FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
     }
 }

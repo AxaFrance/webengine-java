@@ -2,12 +2,15 @@ package fr.axa.automation.webengine;
 
 import fr.axa.automation.webengine.boot.BootProject;
 import fr.axa.automation.webengine.logger.LoggerService;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 

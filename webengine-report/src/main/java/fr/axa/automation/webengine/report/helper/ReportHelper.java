@@ -1,10 +1,7 @@
 package fr.axa.automation.webengine.report.helper;
 
-import fr.axa.automation.junit.generated.ObjectFactory;
 import fr.axa.automation.junit.generated.Testsuite;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.generated.Result;
-import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.report.constante.ReportPath;
@@ -14,120 +11,60 @@ import fr.axa.automation.webengine.util.FormatDate;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class ReportHelper implements IReportHelper{
 
-    public static final String DATA_DRIVEN_TEST_SUITE_REPORT_NAME = "DataDrivenTestSuite-";
-    public static final String JUNIT_REPORT_NAME = "Junit-";
+    public static final String WEBENGINE_REPORT_NAME = "webengine-report";
+    public static final String JUNIT_REPORT_NAME = "junit-report";
     public static final String NAMESPACE_WEBENGINE_REPORT = "http://www.axa.fr/WebEngine/2022";
     public static final String NS = "ns";
+
+    final IJunitReportHelper junitReportHelper;
     final ILoggerService loggerService;
 
     @Autowired
-    public ReportHelper(ILoggerService loggerService) {
+    public ReportHelper(IJunitReportHelper junitReportHelper,ILoggerService loggerService) {
+        this.junitReportHelper = junitReportHelper;
         this.loggerService = loggerService;
     }
 
-    public Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws  WebEngineException {
+    public Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
         Map<ReportPath,String> path = new HashMap<>();
-        String webEngineReport = generateWebengineReport(testSuiteReport,testName,outputPath);
-        String JunitReport = generateJUnitReport(testSuiteReport,testName,outputPath);
+        String webEngineReport = generateWebengineReport(testSuiteReport, outputPath);
+        String JunitReport = generateJUnitReport(testSuiteReport, testSuiteName, outputPath);
         path.put(ReportPath.WEBENGINE_REPORT,webEngineReport);
         path.put(ReportPath.JUNITREPORT,JunitReport);
         return path;
     }
 
-    public String generateWebengineReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws WebEngineException {
-        Path path = FileUtil.createDirectories(outputPath + testName );
-        String fileName = getFileName(DATA_DRIVEN_TEST_SUITE_REPORT_NAME, testName);
+    public String generateWebengineReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
+        Path path = FileUtil.createDirectories(outputPath);
+        String fileName = getFileName(WEBENGINE_REPORT_NAME);
         String completePath = FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport, NAMESPACE_WEBENGINE_REPORT, NS);
-        loggerService.info("Create report : "+completePath);
+        loggerService.info("Create webengine report in : "+completePath);
         return completePath;
     }
 
-    private static String getFileName(String x, String testName) {
-        StringBuilder composeFilePath = new StringBuilder(x + testName);
-        return composeFilePath.append("_").append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat())).append(".xml").toString();
-    }
-
-    public String generateJUnitReport(TestSuiteReport testSuiteReport, String testName, String outputPath) throws  WebEngineException {
-        Testsuite testsuite = createJUnitTestSuite(testSuiteReport, testName);
-        testsuite.getTestcase().addAll(getTestcases(testSuiteReport));
-        Path path = FileUtil.createDirectories(outputPath + testName );
-        String fileName = getFileName(JUNIT_REPORT_NAME, testName);
+    public String generateJUnitReport(TestSuiteReport testSuiteReport, String testSuiteName,String outputPath) throws  WebEngineException {
+        Testsuite testsuite = junitReportHelper.createJUnitTestSuite(testSuiteReport,testSuiteName);
+        Path path = FileUtil.createDirectories(outputPath);
+        String fileName = getFileName(JUNIT_REPORT_NAME);
         String completePath = FileUtil.saveAsXml(path.toString(),fileName,testsuite);
-        loggerService.info("Create Junit report : "+completePath);
+        loggerService.info("Create Junit report in : "+completePath);
         return completePath;
     }
 
-    private List<Testsuite.Testcase> getTestcases(TestSuiteReport testSuiteReport) {
-        List<Testsuite.Testcase> testcaseList = new ArrayList<>();
-        for (TestCaseReport testCaseReport : testSuiteReport.getTestResult()) {
-            Testsuite.Testcase testcase = createJunitTestCase(testSuiteReport, testCaseReport);
-            if(testCaseReport.getResult() == Result.FAILED){
-                testcase.setFailure(createTestCaseFailure(testCaseReport));
-            } else if(testCaseReport.getResult()==Result.IGNORED){
-                testcase.setSkipped(createTestCaseSkipped(testCaseReport));
-            }else if (testCaseReport.getResult()==Result.CRITICAL_ERROR){
-                testcase.setError(createTestCaseError(testCaseReport));
-            }
-            testcaseList.add(testcase);
-        }
-        return testcaseList;
-    }
-
-    private Testsuite.Testcase.Failure createTestCaseFailure(TestCaseReport testCaseReport) {
-        Testsuite.Testcase.Failure failure = new Testsuite.Testcase.Failure();
-        failure.setMessage(testCaseReport.getLog());
-        failure.setType(Result.FAILED.name());
-        return failure;
-    }
-
-    private Testsuite.Testcase.Skipped createTestCaseSkipped(TestCaseReport testCaseReport) {
-        Testsuite.Testcase.Skipped skipped = new Testsuite.Testcase.Skipped();
-        skipped.setMessage(Result.IGNORED.name());
-        return skipped;
-    }
-
-    private Testsuite.Testcase.Error createTestCaseError(TestCaseReport testCaseReport) {
-        Testsuite.Testcase.Error error = new Testsuite.Testcase.Error();
-        error.setMessage(testCaseReport.getLog());
-        error.setType(Result.CRITICAL_ERROR.name());
-        return error;
-    }
-
-    private Testsuite.Testcase createJunitTestCase(TestSuiteReport testSuiteReport, TestCaseReport testCaseReport) {
-        Testsuite.Testcase testcase = new Testsuite.Testcase();
-        testcase.setName(testCaseReport.getTestName());
-        if(testSuiteReport.getEndTime()!=null && testSuiteReport.getStartTime()!=null) {
-            testcase.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getStartTime(),testSuiteReport.getEndTime() )));
-        }
-        testcase.setClassname(testCaseReport.getTestName());
-        return testcase;
-    }
-
-    private Testsuite createJUnitTestSuite(TestSuiteReport testSuiteReport, String testName) {
-        Testsuite testsuite = new ObjectFactory().createTestsuite();
-        testsuite.setName(StringUtils.isEmpty(testName) ? testName : "WebEngine Test Suite");
-        testsuite.setTimestamp(Calendar.getInstance());
-        if(testSuiteReport.getEndTime()!=null && testSuiteReport.getStartTime()!=null){
-            testsuite.setTime(BigDecimal.valueOf(DateUtil.getDiff(testSuiteReport.getStartTime(),testSuiteReport.getEndTime())));
-        }
-        testsuite.setHostname(testSuiteReport.getHostName());
-        testsuite.setSystemOut(testSuiteReport.getSystemOut());
-        testsuite.setSystemErr(testSuiteReport.getSystemError());
-        testsuite.setErrors(Long.valueOf(testSuiteReport.getTestResult().stream().filter(elt->elt.getResult()== Result.FAILED).count()).intValue());
-        testsuite.setTests(testSuiteReport.getTestResult().size());
-        return testsuite;
+    private static String getFileName(String prefixe) {
+        StringBuilder composeFilePath = new StringBuilder(prefixe);
+        return composeFilePath.append("-").append(DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat())).append(".xml").toString();
     }
 }

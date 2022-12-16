@@ -11,13 +11,11 @@ public class TestCaseReportHelper {
     public static TestCaseReport createTestCaseReport(String testCaseName){
         return createTestCaseReport(testCaseName,LocalDateTime.now());
     }
-
     public static TestCaseReport createTestCaseReport(String testCaseName, LocalDateTime localDateTime){
         TestCaseReport testCaseReport = new TestCaseReport();
         testCaseReport.setTestName(testCaseName);
-        testCaseReport.setStartTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
+        testCaseReport.setStartTime(DateUtil.localDateTimeToCalendar(localDateTime));
         testCaseReport.setActionReports(new ArrayOfActionReport());
         return testCaseReport;
     }
-
 }

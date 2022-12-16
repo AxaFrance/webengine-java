@@ -18,7 +18,7 @@ import java.util.StringJoiner;
 public class FileUtil {
 
     public static final String TARGET_DIRECTORY = "target";
-    public static final String RUN_RESULT_DIRECTORY = "run-result-";
+    public static final String RUN_RESULT_DIRECTORY = "report-test-result";
 
     public static Path createDirectories(String path) throws WebEngineException {
         try {
@@ -29,14 +29,11 @@ public class FileUtil {
     }
 
     public static String saveAsXml(String path, String fileName, Object object) throws WebEngineException {
-//        Path filePath = Paths.get(path,fileName);
-//        return XmlUtil.marshallWithoutNamespace(filePath.toString(),object).getAbsolutePath();
         return saveAsXml(path,fileName,object,"","");
     }
 
     public static String saveAsXml(String path, String fileName, Object object,String namespace, String prefixe) throws WebEngineException {
         Path filePath = Paths.get(path,fileName);
-//        return XmlUtil.marshallWithNamespace(filePath.toString(),object,namespace,prefixe).getAbsolutePath();
         Map<String, String> namespaceAndPrefixMap  = new HashMap() {{put(namespace, prefixe);}};
         InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath.toAbsolutePath().toString()).objectToMarshall(object).namespaceRoot(namespace).namespacePrefixMapper(new NamespacePrefixerWebengine(namespaceAndPrefixMap)).build();
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
