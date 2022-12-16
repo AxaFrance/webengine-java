@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,25 +43,27 @@ public class ReportHelper implements IReportHelper{
         String webEngineReport = generateWebengineReport(testSuiteReport, outputPath);
         String JunitReport = generateJUnitReport(testSuiteReport, testSuiteName, outputPath);
         path.put(ReportPath.WEBENGINE_REPORT,webEngineReport);
-        path.put(ReportPath.JUNITREPORT,JunitReport);
+        path.put(ReportPath.JUNIT_REPORT,JunitReport);
         return path;
     }
 
     public String generateWebengineReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
-        Path path = FileUtil.createDirectories(outputPath);
+        Path directoryPath = FileUtil.createDirectories(outputPath);
         String fileName = getFileName(WEBENGINE_REPORT_NAME);
-        String completePath = FileUtil.saveAsXml(path.toString(),fileName,testSuiteReport, NAMESPACE_WEBENGINE_REPORT, NS);
-        loggerService.info("Create webengine report in : "+completePath);
-        return completePath;
+        Path completePath = Paths.get(directoryPath.toString(),fileName);
+        String resultPath = FileUtil.saveAsXml(completePath,testSuiteReport, NAMESPACE_WEBENGINE_REPORT, NS);
+        loggerService.info("Create webengine report in : "+resultPath);
+        return resultPath;
     }
 
     public String generateJUnitReport(TestSuiteReport testSuiteReport, String testSuiteName,String outputPath) throws  WebEngineException {
         Testsuite testsuite = junitReportHelper.createJUnitTestSuite(testSuiteReport,testSuiteName);
-        Path path = FileUtil.createDirectories(outputPath);
+        Path directoryPath = FileUtil.createDirectories(outputPath);
         String fileName = getFileName(JUNIT_REPORT_NAME);
-        String completePath = FileUtil.saveAsXml(path.toString(),fileName,testsuite);
-        loggerService.info("Create Junit report in : "+completePath);
-        return completePath;
+        Path completePath = Paths.get(directoryPath.toString(),fileName);
+        String resultPath = FileUtil.saveAsXml(completePath,testsuite);
+        loggerService.info("Create Junit report in : "+resultPath);
+        return resultPath;
     }
 
     private static String getFileName(String prefixe) {

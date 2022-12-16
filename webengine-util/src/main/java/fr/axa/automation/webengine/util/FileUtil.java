@@ -3,9 +3,9 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
+import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -28,12 +28,11 @@ public class FileUtil {
         }
     }
 
-    public static String saveAsXml(String path, String fileName, Object object) throws WebEngineException {
-        return saveAsXml(path,fileName,object,"","");
+    public static String saveAsXml(Path filePath, Object object) throws WebEngineException {
+        return saveAsXml(filePath,object,"","");
     }
 
-    public static String saveAsXml(String path, String fileName, Object object,String namespace, String prefixe) throws WebEngineException {
-        Path filePath = Paths.get(path,fileName);
+    public static String saveAsXml(Path filePath, Object object,String namespace, String prefixe) throws WebEngineException {
         Map<String, String> namespaceAndPrefixMap  = new HashMap() {{put(namespace, prefixe);}};
         InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath.toAbsolutePath().toString()).objectToMarshall(object).namespaceRoot(namespace).namespacePrefixMapper(new NamespacePrefixerWebengine(namespaceAndPrefixMap)).build();
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
@@ -46,6 +45,10 @@ public class FileUtil {
             directory.mkdirs();
         }
         return directory;
+    }
+
+    public static String createDirectoryInTarget(String subDirectory) throws WebEngineException {
+        return FileUtil.createDirectories(FileUtil.getPathInTargetDirectory(subDirectory)).toAbsolutePath().toString();
     }
 
     public static String getPathInTargetDirectory(String directoryToCreate){
@@ -71,6 +74,12 @@ public class FileUtil {
         } else {
             return new File(resource.toURI());
         }
+    }
+
+    public static boolean assertContent(File fileContentExpected, File fileContentResult) throws IOException {
+        Reader reader1 = new BufferedReader(new FileReader(fileContentExpected));
+        Reader reader2 = new BufferedReader(new FileReader(fileContentResult));
+        return IOUtils.contentEqualsIgnoreEOL(reader1, reader2);
     }
 }
 

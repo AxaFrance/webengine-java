@@ -26,7 +26,7 @@ class DateUtilTest {
     }
 
     @Test
-    void getDateTime() {
+    void testGetDateTime() {
         String dateWithHour = getCurrentDate();
         logger.info("Date with hour :"+dateWithHour);
         String dateWithTime = DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat());
@@ -35,7 +35,7 @@ class DateUtilTest {
     }
 
     @Test
-    void getDateTimeWithLocal() {
+    void testGetDateTimeWithLocal() {
         String dateWithHour = getCurrentDate();
         logger.info("Date with hour :"+dateWithHour);
         String dateWithTime = DateUtil.getDateTime(FormatDate.YYYYMMDD_HHMMSS.getFormat(),Locale.FRENCH);
@@ -44,7 +44,7 @@ class DateUtilTest {
     }
 
     @Test
-    void localDateTimeToCalendar() {
+    void testLocalDateTimeToCalendar() {
         ZoneId zoneId = ZoneId.systemDefault();
         LocalDateTime localDateTime = LocalDateTime.of(2022,12,15,12,00,00);
         Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
@@ -54,7 +54,7 @@ class DateUtilTest {
     }
 
     @Test
-    void getLocalDateTime() {
+    void testGetLocalDateTime() {
         LocalDateTime localDateTime = LocalDateTime.of(2022, 12, 15, 12, 00, 00);
         Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
         LocalDateTime localDateTimeResult = DateUtil.getLocalDateTime(calendar);
@@ -62,7 +62,7 @@ class DateUtilTest {
     }
 
     @Test
-    void getDiff() {
+    void testGetDiffCalendar() {
         LocalDateTime localDateTimeStart = LocalDateTime.of(2022, 12, 15, 12, 00, 00);
         LocalDateTime localDateTimeEnd = LocalDateTime.of(2022, 12, 16, 12, 00, 00);
         Calendar calendarStart = DateUtil.localDateTimeToCalendar(localDateTimeStart);

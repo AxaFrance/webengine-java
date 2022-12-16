@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ImageUtilTest {
 
     @Test
-    void getImage() {
+    void testGetImage() {
         byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage());
         Assertions.assertNotNull(screenshot);
     }

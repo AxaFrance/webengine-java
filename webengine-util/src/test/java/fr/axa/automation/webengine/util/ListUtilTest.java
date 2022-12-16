@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ListUtilTest {
 
     @Test
-    void findFirst() {
+    void testFindFirst() {
         List<String> list = Arrays.asList("One","Two","Three");
         Optional<String> firstOptional = ListUtil.findFirst(list,"One");
         if(firstOptional.isPresent()){

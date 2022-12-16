@@ -8,11 +8,9 @@ public class FileUtilForTest {
     public static final String DIRECTORY_RESULT_UNIT_TEST = "result-unit-test";
 
     public static String createFileInTargetDirectory(String subDirectory,String fileName) throws WebEngineException {
-        String path = createDirectoryInTarget(subDirectory);
+        String path = FileUtil.createDirectoryInTarget(subDirectory);
         return new File(path + File.separator + fileName).getAbsolutePath();
     }
 
-    public static String createDirectoryInTarget(String subDirectory) throws WebEngineException {
-        return FileUtil.createDirectories(FileUtil.getPathInTargetDirectory(subDirectory)).toAbsolutePath().toString();
-    }
+
 }

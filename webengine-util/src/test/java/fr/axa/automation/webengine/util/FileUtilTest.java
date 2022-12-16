@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,14 +38,15 @@ class FileUtilTest {
     }
 
     private void saveAsXML(String namespace, String prefixe) throws WebEngineException {
-        String path;
+        String pathResult;
         String fileName = "userObjectToXml.xml";
+        Path xmlFilePath = Paths.get(FileUtil.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST),fileName);
         if(StringUtils.isEmpty(namespace) && StringUtils.isEmpty(prefixe)){
-            path = FileUtil.saveAsXml(FileUtilForTest.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST), fileName,UserUtilForTest.getNewUserWithPackageInfo());
+            pathResult = FileUtil.saveAsXml(xmlFilePath,UserUtilForTest.getNewUserWithPackageInfo());
         }else{
-            path = FileUtil.saveAsXml(FileUtilForTest.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST), fileName,UserUtilForTest.getNewUserWithPackageInfo(),namespace,prefixe);
+            pathResult = FileUtil.saveAsXml(xmlFilePath,UserUtilForTest.getNewUserWithPackageInfo(),namespace,prefixe);
         }
-        Assertions.assertTrue(Files.exists(Paths.get(path)));
+        Assertions.assertTrue(Files.exists(Paths.get(pathResult)));
     }
 
     @Test
@@ -55,9 +57,17 @@ class FileUtilTest {
     }
 
     @Test
-    public void testCreateDirectoryInTargetDirectory() {
+    public void testCreateDirectoryInTargetDirectory() throws WebEngineException {
+        String path = FileUtil.createDirectoryInTarget("test-create-directory-in-tmp");
+        logger.info("Define directory in target directory : : "+path);
+        Assertions.assertTrue(Files.exists(Paths.get(path)));
+    }
+
+
+    @Test
+    public void testGetPathDirectoryInTargetDirectory() {
         String filePath = FileUtil.getPathInTargetDirectory("test-create-directory-in-target");
-        logger.info("Create directory in target directory : "+ filePath);
+        logger.info("Define directory in target directory : "+ filePath);
         Assertions.assertTrue(filePath.contains("\\target\\"));
     }
 
@@ -82,5 +92,17 @@ class FileUtilTest {
         File file = FileUtil.getFileFromResource("jaxb-users.xml");
         logger.info("Get file from resource : "+file.getAbsolutePath());
         Assertions.assertTrue(Files.exists(Paths.get(file.getAbsolutePath())));
+    }
+
+    @Test
+    void testAssertContentToFalse() throws URISyntaxException, IOException {
+        boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"), FileUtil.getFileFromResource("xml/user-with-initial-namespace.xml"));
+        Assertions.assertFalse(resultCompareFile);
+    }
+
+    @Test
+    void testAssertContentToTrue() throws URISyntaxException, IOException {
+        boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"), FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"));
+        Assertions.assertTrue(resultCompareFile);
     }
 }

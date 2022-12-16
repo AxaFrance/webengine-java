@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nsc:UserWithPackageInfo xmlns:nsc="http://www.axa.fr/WebEngine/2022" id="1">
+    <nsc:firstName>Ramesh</nsc:firstName>
+    <nsc:lastName>Fadatare</nsc:lastName>
+    <nsc:age>25</nsc:age>
+    <nsc:gender>Male</nsc:gender>
+</nsc:UserWithPackageInfo>
