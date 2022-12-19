@@ -60,7 +60,7 @@
                             <generatePackage>fr.axa.automation.webengine.generated</generatePackage>
                             <generateDirectory>${project.build.directory}/generated-sources/webengine
                             </generateDirectory>
-                            <bindingDirectory>src/main/resources/xsd/binding</bindingDirectory>
+                            <bindingDirectory>src/main/resources/xsd/global-binding</bindingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -75,7 +75,8 @@
                             </schemaIncludes>
                             <generatePackage>fr.axa.automation.junit.generated</generatePackage>
                             <generateDirectory>${project.build.directory}/generated-sources/junit</generateDirectory>
-                            <bindingDirectory>src/main/resources/xsd/binding</bindingDirectory>
+                            <bindingDirectory>src/main/resources/xsd/junit-binding</bindingDirectory>
+                            <extension>true</extension>
                         </configuration>
                     </execution>
                 </executions>

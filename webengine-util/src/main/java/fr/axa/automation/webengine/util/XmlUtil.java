@@ -1,8 +1,10 @@
 package fr.axa.automation.webengine.util;
 
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import javax.xml.bind.*;
@@ -12,6 +14,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class XmlUtil {
 
@@ -38,12 +41,14 @@ public class XmlUtil {
             jaxbContext = JAXBContext.newInstance(objectToMarshall.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            if(inputMarshallDTO.getNamespacePrefixMapper()!=null){
-                jaxbMarshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", inputMarshallDTO.getNamespacePrefixMapper());
+
+            Optional<NamespacePrefixMapper> namespacePrefixMapper = getNamespacePrefixMapper(inputMarshallDTO);
+            if(namespacePrefixMapper.isPresent()){
+                jaxbMarshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", namespacePrefixMapper.get());
             }
-            String namespaceRoot = inputMarshallDTO.getNamespaceRoot()!=null?inputMarshallDTO.getNamespaceRoot():"";
-            QName qname = new QName(namespaceRoot, objectToMarshall.getClass().getSimpleName(),"");
-            JAXBElement jaxbElement = new JAXBElement( qname, objectToMarshall.getClass(), objectToMarshall );
+
+            QName qname = getQName(inputMarshallDTO);
+            JAXBElement jaxbElement = new JAXBElement(qname, objectToMarshall.getClass(), objectToMarshall);
             jaxbMarshaller.marshal(jaxbElement, file);
             return file;
         } catch (JAXBException e) {
@@ -51,37 +56,18 @@ public class XmlUtil {
         }
     }
 
-//    public static File marshallWithoutNamespace(String filePath, Object object) throws WebEngineException {
-//        JAXBContext jaxbContext;
-//        try {
-//            File file = new File(filePath);
-//            jaxbContext = JAXBContext.newInstance(object.getClass());
-//            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-//            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//            JAXBElement jaxbElement = new JAXBElement( new QName("", object.getClass().getSimpleName().toLowerCase(),""), object.getClass(), object );
-//            jaxbMarshaller.marshal(jaxbElement, file);
-//            return file;
-//        } catch (JAXBException e) {
-//            throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
-//        }
-//    }
-//
-//
-//
-//    public static File marshallWithNamespace(String filePath, Object object, String namespace, String prefixe) throws WebEngineException {
-//        JAXBContext jaxbContext ;
-//        try {
-//            File file = new File(filePath);
-//            jaxbContext = JAXBContext.newInstance(object.getClass());
-//            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-//            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//            Map<String, String> namespaceAndPrefixMap  = new HashMap() {{put(namespace, prefixe);}};
-//            jaxbMarshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixerWebengine(namespaceAndPrefixMap));
-//            JAXBElement jaxbElement = new JAXBElement( new QName(namespace, object.getClass().getSimpleName(),prefixe), object.getClass(), object );
-//            jaxbMarshaller.marshal(jaxbElement, file);
-//            return file;
-//        } catch (JAXBException e) {
-//            throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
-//        }
-//    }
+    private static QName getQName(InputMarshallDTO inputMarshallDTO) {
+        String objectToMarshall = inputMarshallDTO.isUpperCaseRootElement() ? inputMarshallDTO.getObjectToMarshall().getClass().getSimpleName() : inputMarshallDTO.getObjectToMarshall().getClass().getSimpleName().toLowerCase();
+        return new QName(inputMarshallDTO.getNamespace(), objectToMarshall, inputMarshallDTO.getPrefix());
+    }
+
+    private static Optional<NamespacePrefixMapper> getNamespacePrefixMapper(InputMarshallDTO inputMarshallDTO) {
+        if (StringUtils.isNotEmpty(inputMarshallDTO.getNamespace()) && StringUtils.isNotEmpty(inputMarshallDTO.getPrefix())) {
+            Map<String, String> namespaceAndPrefixMap = new HashMap() {{
+                put(inputMarshallDTO.getNamespace(), inputMarshallDTO.getPrefix());
+            }};
+            return Optional.of(new NamespacePrefixerWebengine(namespaceAndPrefixMap));
+        }
+        return Optional.empty();
+    }
 }

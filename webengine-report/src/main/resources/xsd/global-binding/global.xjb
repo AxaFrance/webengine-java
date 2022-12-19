@@ -3,13 +3,18 @@
                jaxb:extensionBindingPrefixes="xjc">
     <jaxb:globalBindings>
         <jaxb:serializable uid="1"/>
+
         <jaxb:javaType name="java.util.Calendar" xmlType="xsd:dateTime"
                        parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime"
                        printMethod="javax.xml.bind.DatatypeConverter.printDateTime"/>
+
         <jaxb:javaType name="java.util.Calendar" xmlType="xsd:date"
-                       parseMethod="javax.xml.bind.DatatypeConverter.parseDate" printMethod="javax.xml.bind.DatatypeConverter.printDate"/>
+                       parseMethod="javax.xml.bind.DatatypeConverter.parseDate"
+                       printMethod="javax.xml.bind.DatatypeConverter.printDate"/>
+
         <jaxb:javaType name="java.util.Calendar" xmlType="xsd:time"
-                       parseMethod="javax.xml.bind.DatatypeConverter.parseTime" printMethod="javax.xml.bind.DatatypeConverter.printTime"/>
+                       parseMethod="javax.xml.bind.DatatypeConverter.parseTime"
+                       printMethod="javax.xml.bind.DatatypeConverter.printTime"/>
 
 
     </jaxb:globalBindings>

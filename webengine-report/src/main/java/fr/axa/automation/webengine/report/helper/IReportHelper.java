@@ -8,6 +8,5 @@ import java.util.Map;
 
 public interface IReportHelper {
     Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws WebEngineException;
-    String generateWebengineReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException;
-    String generateJUnitReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException;
+
 }

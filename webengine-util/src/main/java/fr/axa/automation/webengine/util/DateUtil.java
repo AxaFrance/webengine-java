@@ -1,10 +1,11 @@
 package fr.axa.automation.webengine.util;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -20,6 +21,11 @@ public class DateUtil {
     public static String getDateTime(String format, Locale locale){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format).withLocale(locale);
         return dateTimeFormatter.format(LocalDateTime.now());
+    }
+
+    public static String getDateTime(Calendar calendar,FormatDate formatDate){
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat(formatDate.getFormat());
+        return dateTimeFormatter.format(new Date(calendar.getTimeInMillis()));
     }
 
     public static Calendar localDateTimeToCalendar(LocalDateTime localDateTime) {

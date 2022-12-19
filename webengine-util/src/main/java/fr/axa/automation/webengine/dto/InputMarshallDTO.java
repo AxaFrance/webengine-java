@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import javax.xml.namespace.QName;
+
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -13,6 +15,9 @@ public class InputMarshallDTO {
     String fileDestinationPath;
     Object objectToMarshall;
     @Builder.Default
-    String namespaceRoot = "";
-    NamespacePrefixMapper namespacePrefixMapper;
+    boolean upperCaseRootElement=true;
+    @Builder.Default
+    String namespace = "";
+    @Builder.Default
+    String prefix = "";
 }

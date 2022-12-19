@@ -1,18 +1,24 @@
 package fr.axa.automation.webengine.util;
 
+import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.jaxb.withpackageinfo.UserWithPackageInfo;
+import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 class FileUtilTest {
 
@@ -29,7 +35,7 @@ class FileUtilTest {
 
     @Test
     public void testSaveAsXMLWithoutNamespace() throws WebEngineException {
-        saveAsXML(null,null);
+        saveAsXML("","");
     }
 
     @Test
@@ -41,12 +47,13 @@ class FileUtilTest {
         String pathResult;
         String fileName = "userObjectToXml.xml";
         Path xmlFilePath = Paths.get(FileUtil.createDirectoryInTarget(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST),fileName);
-        if(StringUtils.isEmpty(namespace) && StringUtils.isEmpty(prefixe)){
-            pathResult = FileUtil.saveAsXml(xmlFilePath,UserUtilForTest.getNewUserWithPackageInfo());
-        }else{
-            pathResult = FileUtil.saveAsXml(xmlFilePath,UserUtilForTest.getNewUserWithPackageInfo(),namespace,prefixe);
-        }
+        pathResult = FileUtil.saveAsXml(getInputMarshallDTO(xmlFilePath, UserUtilForTest.getNewUserWithPackageInfo(), namespace, prefixe));
+
         Assertions.assertTrue(Files.exists(Paths.get(pathResult)));
+    }
+
+    private static InputMarshallDTO getInputMarshallDTO(Path xmlFilePath, Object objectToMarshall, String namespace, String prefix) {
+        return InputMarshallDTO.builder().fileDestinationPath(xmlFilePath.toAbsolutePath().toString()).objectToMarshall(objectToMarshall).namespace(namespace).prefix(prefix).build();
     }
 
     @Test

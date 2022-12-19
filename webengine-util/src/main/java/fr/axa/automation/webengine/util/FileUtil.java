@@ -2,7 +2,6 @@ package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -11,8 +10,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringJoiner;
 
 public class FileUtil {
@@ -28,13 +25,7 @@ public class FileUtil {
         }
     }
 
-    public static String saveAsXml(Path filePath, Object object) throws WebEngineException {
-        return saveAsXml(filePath,object,"","");
-    }
-
-    public static String saveAsXml(Path filePath, Object object,String namespace, String prefixe) throws WebEngineException {
-        Map<String, String> namespaceAndPrefixMap  = new HashMap() {{put(namespace, prefixe);}};
-        InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath.toAbsolutePath().toString()).objectToMarshall(object).namespaceRoot(namespace).namespacePrefixMapper(new NamespacePrefixerWebengine(namespaceAndPrefixMap)).build();
+    public static String saveAsXml(InputMarshallDTO inputMarshallDTO) throws WebEngineException {
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
     }
 

@@ -33,6 +33,13 @@ class DateUtilTest {
         logger.info("Date with time :"+dateWithTime);
         Assertions.assertTrue(dateWithTime.startsWith(dateWithHour));
     }
+    @Test
+    void testGetDateTime2() {
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.of(2022,12,15,12,00,00);
+        Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
+        logger.info("Date with hour :"+DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS));
+    }
 
     @Test
     void testGetDateTimeWithLocal() {
@@ -71,4 +78,6 @@ class DateUtilTest {
         logger.info("Diff calendar :"+diff);
         Assertions.assertEquals(86400000,diff);
     }
+
+
 }
