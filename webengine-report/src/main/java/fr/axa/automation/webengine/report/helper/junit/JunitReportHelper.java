@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.report.helper;
+package fr.axa.automation.webengine.report.helper.junit;
 
 import fr.axa.automation.junit.generated.ObjectFactory;
 import fr.axa.automation.junit.generated.Testsuite;
@@ -8,6 +8,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.report.helper.ReportFileNameHelper;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FileUtil;
 import lombok.AccessLevel;
@@ -41,7 +42,7 @@ public class JunitReportHelper implements IJunitReportHelper {
     public String generateJUnitReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws WebEngineException {
         Testsuite testsuite = createJUnitTestSuite(testSuiteReport,testSuiteName);
         Path directoryPath = FileUtil.createDirectories(outputPath);
-        String fileName = ReportFileName.getFileName(JUNIT_REPORT_NAME);
+        String fileName = ReportFileNameHelper.getFileName(JUNIT_REPORT_NAME);
         Path completePath = Paths.get(directoryPath.toString(),fileName);
         InputMarshallDTO inputMarshallDTO = getInputMarshallDTO(testsuite, completePath);
         String junitReportPath = FileUtil.saveAsXml(inputMarshallDTO);
@@ -68,8 +69,8 @@ public class JunitReportHelper implements IJunitReportHelper {
         testsuite.setProperties(new Testsuite.Properties());
         testsuite.setSystemOut(StringUtils.isNotEmpty(testSuiteReport.getSystemOut()) ? testSuiteReport.getSystemOut() : "");
         testsuite.setSystemErr(StringUtils.isNotEmpty(testSuiteReport.getSystemError()) ? testSuiteReport.getSystemError() : "");
-        testsuite.setErrors(Long.valueOf(testSuiteReport.getTestResult().stream().filter(elt->elt.getResult()== Result.FAILED).count()).intValue());
-        testsuite.setTests(testSuiteReport.getTestResult().size());
+        testsuite.setErrors(Long.valueOf(testSuiteReport.getTestResults().stream().filter(elt->elt.getResult()== Result.FAILED).count()).intValue());
+        testsuite.setTests(testSuiteReport.getTestResults().size());
         testsuite.getTestcases().addAll(getTestcases(testSuiteReport));
         return testsuite;
     }
@@ -77,7 +78,7 @@ public class JunitReportHelper implements IJunitReportHelper {
     @Override
     public List<Testsuite.Testcase> getTestcases(TestSuiteReport testSuiteReport) {
         List<Testsuite.Testcase> testcaseList = new ArrayList<>();
-        for (TestCaseReport testCaseReport : testSuiteReport.getTestResult()) {
+        for (TestCaseReport testCaseReport : testSuiteReport.getTestResults()) {
             Testsuite.Testcase testcase = createJunitTestCase(testSuiteReport, testCaseReport);
             if(testCaseReport.getResult() == Result.FAILED){
                 testcase.setFailure(createTestCaseFailure(testCaseReport));

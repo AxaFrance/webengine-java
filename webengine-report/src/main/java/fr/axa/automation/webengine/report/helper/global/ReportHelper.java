@@ -1,9 +1,11 @@
-package fr.axa.automation.webengine.report.helper;
+package fr.axa.automation.webengine.report.helper.global;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.report.constante.ReportPath;
+import fr.axa.automation.webengine.report.helper.frmk.IWebengineReportHelper;
+import fr.axa.automation.webengine.report.helper.junit.IJunitReportHelper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;

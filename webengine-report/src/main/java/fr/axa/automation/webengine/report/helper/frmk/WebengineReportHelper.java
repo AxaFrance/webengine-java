@@ -1,11 +1,11 @@
-package fr.axa.automation.webengine.report.helper;
+package fr.axa.automation.webengine.report.helper.frmk;
 
 
-import fr.axa.automation.junit.generated.Testsuite;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.report.helper.ReportFileNameHelper;
 import fr.axa.automation.webengine.util.FileUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -34,7 +34,7 @@ public class WebengineReportHelper implements IWebengineReportHelper {
     @Override
     public String generateWebengineReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
         Path directoryPath = FileUtil.createDirectories(outputPath);
-        String fileName = ReportFileName.getFileName(WEBENGINE_REPORT_NAME);
+        String fileName = ReportFileNameHelper.getFileName(WEBENGINE_REPORT_NAME);
         Path completePath = Paths.get(directoryPath.toString(),fileName);
         String webengineReportPath = FileUtil.saveAsXml(getInputMarshallDTO(testSuiteReport,completePath));
         loggerService.info("Create webengine report in : "+webengineReportPath);

@@ -48,7 +48,7 @@
         <snakeyaml.version>1.2</snakeyaml.version>
         <browserstack-local-java.version>1.0.6</browserstack-local-java.version>
         <junit.jupiter.version>5.9.0</junit.jupiter.version>
-        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
         <cluecumber-report-plugin.version>2.9.4</cluecumber-report-plugin.version>
         <gson.version>2.10</gson.version>
     </properties>

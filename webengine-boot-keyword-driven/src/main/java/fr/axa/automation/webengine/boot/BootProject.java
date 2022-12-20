@@ -15,7 +15,7 @@ import fr.axa.automation.webengine.helper.PlatformTypeHelper;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
-import fr.axa.automation.webengine.report.helper.IReportHelper;
+import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import fr.axa.automation.webengine.util.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

@@ -61,6 +61,7 @@
                             <generateDirectory>${project.build.directory}/generated-sources/webengine
                             </generateDirectory>
                             <bindingDirectory>src/main/resources/xsd/global-binding</bindingDirectory>
+                            <extension>true</extension>
                         </configuration>
                     </execution>
                     <execution>
@@ -100,6 +101,18 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <excludes>
+                        <exclude>fr.axa.automation.webengine.report.object.*</exclude>
+                        <exclude>fr.axa.automation.webengine.report.constante.*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
         </plugins>

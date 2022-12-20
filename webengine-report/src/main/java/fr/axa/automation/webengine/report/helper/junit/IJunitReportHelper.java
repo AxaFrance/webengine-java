@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.report.helper;
+package fr.axa.automation.webengine.report.helper.junit;
 
 import fr.axa.automation.junit.generated.Testsuite;
 import fr.axa.automation.webengine.exception.WebEngineException;

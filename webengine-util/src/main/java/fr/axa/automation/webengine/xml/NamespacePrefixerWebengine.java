@@ -26,13 +26,4 @@ public class NamespacePrefixerWebengine extends NamespacePrefixMapper {
         }
         return namespaceAndPrefixMap.getOrDefault(namespaceUri,DEFAULT_PREFIXE);
     }
-
-//    @Override
-//    public String[] getPreDeclaredNamespaceUris() {
-//        if(MapUtils.isNotEmpty(namespaceAndPrefixMap)){
-//            return Arrays.stream(namespaceAndPrefixMap.keySet().toArray()).toArray(String[]::new);
-//        }
-//        String[] preDeclaredNamespace = {DEFAULT_NAMESPACE};
-//        return preDeclaredNamespace;
-//    }
 }
