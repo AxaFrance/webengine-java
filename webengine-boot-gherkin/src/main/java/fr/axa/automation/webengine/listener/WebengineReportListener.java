@@ -41,20 +41,20 @@ public class WebengineReportListener implements EventListener {
     }
 
     private void runStarted(TestRunStarted event) {
-        loggerService.info("Run started");
+        loggerService.info("Test Run started");
         try {
             reportGherkinHelper.createReport();
         } catch (UnknownHostException e) {
-            loggerService.error("Error during creating report : ", e);
+            loggerService.error("[Gherkin] Error during creating report : ", e);
         }
     }
 
     private void runFinished(TestRunFinished event) {
-        loggerService.info("Run finished");
+        loggerService.info("Test Run finished");
         try {
             reportGherkinHelper.closeReport();
         } catch (WebEngineException e) {
-            loggerService.error("Error during closing report : ", e);
+            loggerService.error("[Gherkin] Error during closing report : ", e);
         }
     }
 

@@ -13,7 +13,7 @@ public class ScreenshotHelper {
         List<ScreenshotReport> screenshotReportList = new ArrayList<>();
         ScreenshotReport screenshotReport = getScreenshotReport(name, dataInbase64);
         screenshotReportList.add(screenshotReport);
-        arrayOfScreenshotReport.getScreenshotReport().addAll(screenshotReportList);
+        arrayOfScreenshotReport.getScreenshotReports().addAll(screenshotReportList);
         return arrayOfScreenshotReport;
     }
 

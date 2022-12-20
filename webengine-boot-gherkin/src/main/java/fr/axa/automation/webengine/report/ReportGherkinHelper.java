@@ -107,8 +107,8 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         TestCaseReport testCaseReport = testCaseReportMap.get(normalizeNameMap.get(NameNormalizeKey.TEST_CASE_NAME_NORMALIZE));
         ActionReport actionReport = getActionReport(reportDetail);
         byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage());
-        actionReport.getScreenshots().getScreenshotReport().add(ScreenshotHelper.getScreenshotReport(reportDetail.getStepName(),screenshot));
-        testCaseReport.getActionReports().getActionReport().add(actionReport);
+        actionReport.getScreenshots().getScreenshotReports().add(ScreenshotHelper.getScreenshotReport(reportDetail.getStepName(),screenshot));
+        testCaseReport.getActionReports().getActionReports().add(actionReport);
     }
 
 
@@ -132,7 +132,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
             applicationName = globalConfigProperties.get().getApplication().getName();
         }
         testSuiteReport.setEndTime(Calendar.getInstance());
-        testSuiteReport.getTestResult().addAll(testCaseReportMap.values());
+        testSuiteReport.getTestResults().addAll(testCaseReportMap.values());
         ReportHelper reportHelper =  new ReportHelper(new WebengineReportHelper(new LoggerService()),new JunitReportHelper(new LoggerService()),new LoggerService());
         reportHelper.generateAllReport(testSuiteReport,applicationName,FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
     }

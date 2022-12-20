@@ -22,6 +22,6 @@ public class GlobalApplicationContext {
     Map<String, TestCaseAdditionalInformation> testCaseAdditionnalInformationList;
 
     public List<TestData> getTestDataList(){
-        return getTestSuiteData().getTestData();
+        return getTestSuiteData().getTestDatas();
     }
 }

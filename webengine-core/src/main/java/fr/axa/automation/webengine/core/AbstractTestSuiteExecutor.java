@@ -68,7 +68,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
             testSuiteReport.setHostName(InetAddress.getLocalHost().getHostName());
             testSuiteReport.setStartTime(startTime);
             testSuiteReport.setEnvironmentVariables(globalApplicationContext.getEnvironmentVariables());
-            testSuiteReport.getTestResult().addAll(testCaseReportList);
+            testSuiteReport.getTestResults().addAll(testCaseReportList);
             testSuiteReport.setEndTime(Calendar.getInstance());
         }
 

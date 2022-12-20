@@ -15,7 +15,7 @@ public class TestDataUtil {
     }
 
     public static Optional<Variable> getVariableOfTestCase(TestData testData, String variableName) {
-        return testData.getData().getVariable().stream()
+        return testData.getData().getVariables().stream()
                                     .filter(elt-> variableName.equalsIgnoreCase(elt.getName()))
                                     .findFirst();
     }

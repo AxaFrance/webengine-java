@@ -69,7 +69,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
                testCaseReport.setResult(Result.FAILED);
                loggerService.error("Error during execution of test case : "+testCaseName,e);
           }finally {
-               testCaseReport.getActionReports().getActionReport().addAll(ActionReportHelper.getArrayOfActionReport(actionReportDetailList));
+               testCaseReport.getActionReports().getActionReports().addAll(ActionReportHelper.getArrayOfActionReport(actionReportDetailList));
                testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
                testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
                testCaseReport.setResult(getResultOfTestCase(actionReportDetailList));          }

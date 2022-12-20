@@ -136,7 +136,7 @@ public class BootProject {
                 String testCaseName = entry.getKey();
                 List<? extends ITestStep> testStepList = entry.getValue().getTestStepList();
                 for (ITestStep testStep : testStepList) {
-                    map.put(testCaseName, getTestCaseAdditionalInformation(testSuiteData.getTestData(), testCaseName, testStep));
+                    map.put(testCaseName, getTestCaseAdditionalInformation(testSuiteData.getTestDatas(), testCaseName, testStep));
                 }
             }
         }

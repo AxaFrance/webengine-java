@@ -56,13 +56,13 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
             actionReportBuilder = screenShotAndGetActionReportBuilder(errorMessage,  e);
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
-            actionReport.getContextValues().getVariable().addAll(SharedContext.CONTEXT_VALUE_LIST);
+            actionReport.getContextValues().getVariables().addAll(SharedContext.CONTEXT_VALUE_LIST);
             actionReport.setLog(information.toString());
             if(actionReportBuilder!=null){
                 actionReport.setResult(actionReportBuilder.getResult());
                 actionReport.setLog(actionReport.getLog()+actionReportBuilder.getLog());
             }
-            actionReport.getScreenshots().getScreenshotReport().addAll(screenShotList);
+            actionReport.getScreenshots().getScreenshotReports().addAll(screenShotList);
         }
         return actionReport;
     }
@@ -94,12 +94,12 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
     }
 
     protected Optional<String> getEnvironnementValue(String name) {
-        Optional<Variable> variable = EnvironmentVariablesHelper.getEnvironnementValue(name, getActionDetailContext().getEnvironmentVariables().getVariable());
+        Optional<Variable> variable = EnvironmentVariablesHelper.getEnvironnementValue(name, getActionDetailContext().getEnvironmentVariables().getVariables());
         return getVaribaleByParameter(variable);
     }
 
     protected Optional<String> getParameter(String name) {
-        Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariable());
+        Optional<Variable> variable = TestCaseDataHelper.getValue(name, getActionDetailContext().getTestCaseData().getData().getVariables());
         return getVaribaleByParameter(variable);
     }
 

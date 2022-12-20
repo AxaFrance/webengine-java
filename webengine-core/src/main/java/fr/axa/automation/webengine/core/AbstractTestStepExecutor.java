@@ -54,7 +54,7 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
     }
 
     protected ActionContext getActionContext(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext){
-        List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestData();
+        List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestDatas();
         Optional<TestData> testDataByTestCase = TestDataUtil.getDataOfTestCase(testDataList,testCaseContext.getTestCaseName());
         TestCaseAdditionalInformation testCaseAdditionalInformation = globalApplicationContext.getTestCaseAdditionnalInformationList().get(testCaseContext.getTestCaseName());
 
