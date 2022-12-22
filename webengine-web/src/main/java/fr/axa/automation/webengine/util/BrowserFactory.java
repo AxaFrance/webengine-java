@@ -3,6 +3,8 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.Browser;
 import fr.axa.automation.webengine.general.Platform;
+import fr.axa.automation.webengine.helper.BrowserTypeHelper;
+import fr.axa.automation.webengine.helper.PlatformTypeHelper;
 import fr.axa.automation.webengine.properties.AppiumSettingsProperties;
 import fr.axa.automation.webengine.properties.CapabilitiesProperties;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
@@ -36,6 +38,10 @@ public class BrowserFactory {
         Platform platform = Platform.valueOf(globalConfigProperties.getApplication().getPlatformName());
         Browser browser = Browser.valueOf(globalConfigProperties.getApplication().getBrowserName());
         return getWebDriver(platform, browser);
+    }
+
+    public static Optional<WebDriver> getWebDriver(String platform, String browser) throws WebEngineException {
+        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser));
     }
 
     public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser) throws WebEngineException {

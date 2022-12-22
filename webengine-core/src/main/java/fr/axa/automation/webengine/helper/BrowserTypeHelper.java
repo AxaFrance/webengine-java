@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 public class BrowserTypeHelper {
 
     public static Browser getBrowser(String browserFill) throws WebEngineException {
-        List<Browser> browserTypesList = Arrays.asList(Browser.values());
-        List<Browser> browserFoundList = browserTypesList.stream().filter(browser -> browser.getValue().equalsIgnoreCase(browserFill)).collect(Collectors.toList());
+        List<Browser> browserEnumList = Arrays.asList(Browser.values());
+        List<Browser> browserFoundList = browserEnumList.stream().filter(browser -> browser.getValue().equalsIgnoreCase(browserFill)).collect(Collectors.toList());
         if(CollectionUtils.isNotEmpty(browserFoundList)){
             return browserFoundList.get(0);
         }
-        throw new WebEngineException("unrecognized Browser value. Possible values are : " + browserTypesList);
+        throw new WebEngineException("unrecognized Browser value. Possible values are : " + browserEnumList.stream().map(b -> b.getValue()).collect(Collectors.toList()));
     }
 
 }
