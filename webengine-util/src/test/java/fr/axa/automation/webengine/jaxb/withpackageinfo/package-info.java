@@ -9,4 +9,3 @@
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package fr.axa.automation.webengine.jaxb.withpackageinfo;
 
-import javax.xml.bind.annotation.XmlNs;

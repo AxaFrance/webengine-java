@@ -10,15 +10,15 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ActionReportHelper {
 
-    public static List<ActionReport> getArrayOfActionReport(List<ActionReportDetail> actionReportDetailList){
-        List<ActionReport> actionReportList = new ArrayList<>();
+    public static List<ActionReport> getActionReportList(List<ActionReportDetail> actionReportDetailList){
         if(CollectionUtils.isNotEmpty(actionReportDetailList)){
-            actionReportDetailList.stream().forEach(actionReportDetail -> actionReportList.add(actionReportDetail.getActionReport()));
+            return actionReportDetailList.stream().map(actionReportDetail -> actionReportDetail.getActionReport()).collect(Collectors.toList());
         }
-        return actionReportList;
+        return new ArrayList<>();
     }
 
     public static ActionReport getActionReport(String name) {

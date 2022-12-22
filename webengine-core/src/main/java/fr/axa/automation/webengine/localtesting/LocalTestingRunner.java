@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.properties.LocalTesting;
-import fr.axa.automation.webengine.util.PropertiesUtilProvider;
+import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,7 +58,7 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private Optional<GlobalConfigProperties> getGlobalConfigProperties(String resourceNameOrPathAndFileName) {
         try {
-            return PropertiesUtilProvider.getInstance().getGlobalConfigPropertiesByName(resourceNameOrPathAndFileName);
+            return PropertiesHelperProvider.getInstance().getGlobalConfigPropertiesByName(resourceNameOrPathAndFileName);
         }catch(WebEngineException e){
             loggerService.error("No File "+resourceNameOrPathAndFileName+" found or error during loading file",e);
         }

@@ -4,6 +4,8 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class CommonClassUtil {
 
@@ -22,5 +24,18 @@ public class CommonClassUtil {
     public static <T> T create(Class<T> clazz, Object[] object,Class[] constructor1) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Constructor constructor = Class.forName(clazz.getName()).getDeclaredConstructor(constructor1);
         return (T)constructor.newInstance(object);
+    }
+
+    public static <T> T createAndCallMethod(Class clazz, String methodName,Object... parameters) throws WebEngineException {
+        T object = (T) create(clazz);
+        try {
+            List<Class> parameterTypeList = ListUtil.getClasses(parameters);
+            Class[] parameterTypeArray = parameterTypeList.stream().toArray(c -> new Class[c]);
+            Method method = object.getClass().getMethod(methodName,parameterTypeArray);
+            method.invoke(object,parameters);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | IllegalArgumentException e) {
+            throw new WebEngineException("Error during call method "+methodName+" instance of class :"+clazz.getSimpleName(),e);
+        }
+        return object;
     }
 }

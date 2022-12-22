@@ -61,7 +61,7 @@ public class FileUtil {
         ClassLoader classLoader = FileUtil.class.getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
-            throw new IllegalArgumentException("file not found! " + fileName);
+            throw new IllegalArgumentException("The file "+fileName+" not found in resource directory ");
         } else {
             return new File(resource.toURI());
         }
@@ -71,6 +71,29 @@ public class FileUtil {
         Reader reader1 = new BufferedReader(new FileReader(fileContentExpected));
         Reader reader2 = new BufferedReader(new FileReader(fileContentResult));
         return IOUtils.contentEqualsIgnoreEOL(reader1, reader2);
+    }
+
+    public static InputStream getInputStreamByPathOrResource(String fileOrResource) throws IOException {
+        try {
+            return new FileInputStream(fileOrResource);
+        } catch (FileNotFoundException fileNotFoundException) {
+            return getInputStreamFromResource(fileOrResource);
+        }
+    }
+
+    public static InputStream getInputStreamFromResource(String resourceName) {
+        ClassLoader classLoader = FileUtil.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(resourceName);
+        if(inputStream==null){
+            throw new IllegalArgumentException("The resource file "+resourceName+" not found in resource directory ");
+        }
+        return inputStream;
+    }
+
+    public static String getCurrentPath() throws IOException {
+        File currentDirFile = new File(".");
+        String path = currentDirFile.getAbsolutePath();
+        return path.substring(0, path.length() - 1);
     }
 }
 

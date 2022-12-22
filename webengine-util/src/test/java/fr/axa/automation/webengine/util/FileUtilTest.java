@@ -2,23 +2,18 @@ package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.jaxb.withpackageinfo.UserWithPackageInfo;
-import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 class FileUtilTest {
 
@@ -99,6 +94,22 @@ class FileUtilTest {
         File file = FileUtil.getFileFromResource("jaxb-users.xml");
         logger.info("Get file from resource : "+file.getAbsolutePath());
         Assertions.assertTrue(Files.exists(Paths.get(file.getAbsolutePath())));
+    }
+
+    @Test
+    void testGetInputStreamByResource() throws  IOException {
+        InputStream inputStream = FileUtil.getInputStreamByPathOrResource("jaxb-users.xml");
+        Assertions.assertNotNull(inputStream);
+    }
+
+    @Test
+    void testGetInputStreamByPath() throws  IOException {
+        String currentDirectoryPath = FileUtil.getCurrentPath();
+        String completePathToFile = currentDirectoryPath + "src\\test\\resources\\jaxb-users.xml";
+        logger.info("Current path : "+currentDirectoryPath);
+        logger.info("Complete path to directory : "+completePathToFile);
+        InputStream inputStream = FileUtil.getInputStreamByPathOrResource(completePathToFile);
+        Assertions.assertNotNull(inputStream);
     }
 
     @Test

@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.listener;
 
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.localtesting.LocalTestingProvider;
-import fr.axa.automation.webengine.util.PropertiesUtil;
+import fr.axa.automation.webengine.helper.PropertiesHelper;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.EventPublisher;
 import io.cucumber.plugin.event.TestRunFinished;
@@ -29,7 +29,7 @@ public class WebengineLocalTestingListener implements EventListener {
     }
 
     protected String getApplicationFileName() {
-        return PropertiesUtil.APPLICATION_FILE_NAME;
+        return PropertiesHelper.APPLICATION_FILE_NAME;
     }
     private void runFinished(TestRunFinished event) {
         localTestingRunner.stopLocalTesting();

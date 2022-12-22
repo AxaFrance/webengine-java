@@ -1,9 +1,5 @@
 package fr.axa.automation.webengine.jaxb.withoutpackageinfo;
 
-import fr.axa.automation.webengine.jaxb.withpackageinfo.UserWithPackageInfo;
-
-import javax.xml.bind.annotation.*;
-
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)

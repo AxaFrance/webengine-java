@@ -3,8 +3,6 @@ package fr.axa.automation.webengine.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class StringUtilTest {
 
     public static final String SPECIAL_CHARACTERS = "Je suis allé chercher mon chien à l'étrangers";

@@ -7,7 +7,7 @@ import fr.axa.automation.webengine.general.ITestCaseContext;
 import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
-import fr.axa.automation.webengine.util.ClassUtil;
+import fr.axa.automation.webengine.util.CommonClassUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -42,7 +42,7 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
     protected IAction getAction(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
         Class<? extends IAction> clazz = getActionClass(globalApplicationContext,testStep);
         ActionContext actionContext = getActionContext(globalApplicationContext, testCaseContext);
-        return ClassUtil.createAndPopulateAction(clazz, "setActionDetailContext", actionContext);
+        return CommonClassUtil.createAndCallMethod(clazz, "setActionDetailContext", actionContext);
     }
 
     protected Class<? extends IAction> getActionClass(GlobalApplicationContext globalApplicationContext, ITestStep testStep) {
