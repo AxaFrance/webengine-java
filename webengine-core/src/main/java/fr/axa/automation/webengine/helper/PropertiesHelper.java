@@ -4,16 +4,13 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
-import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.PropertiesUtil;
-import fr.axa.automation.webengine.util.YamlUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +69,4 @@ public class PropertiesHelper {
         }
         return Optional.empty();
     }
-
-
-
 }

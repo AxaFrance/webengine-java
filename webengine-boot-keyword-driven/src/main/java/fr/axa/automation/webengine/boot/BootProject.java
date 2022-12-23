@@ -206,39 +206,39 @@ public class BootProject {
     private Settings getSettings(CommandLine cmd) throws WebEngineException {
         loggerService.info("Loading settings running ");
         List<String> propertiesFileList = getPropertiesFiles(cmd);
-        String platform = getPlatform(cmd);
-        String browser = getBrowser(cmd);
+        Platform platform = getPlatform(cmd);
+        Browser browser = getBrowser(cmd);
         String outputDir = getOutputDir(cmd);
 
-        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(PlatformTypeHelper.getPlatform(platform)).browser(BrowserTypeHelper.getBrowser(browser)).logDir(outputDir).build();
+        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(platform).browser(browser).logDir(outputDir).build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;
     }
 
-    private String getPlatform(CommandLine cmd) {
+    private Platform getPlatform(CommandLine cmd) throws WebEngineException {
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
         if (platform == null) {
-            if (globalConfigProperties!=null) {
-                platform = globalConfigProperties.getPlateform();
+            if (globalConfigProperties != null && StringUtils.isNotEmpty(globalConfigProperties.getPlateform())) {
+                return PlatformTypeHelper.getPlatform(globalConfigProperties.getPlateform());
+            } else {
+                return Platform.getDefaultPlatform();
             }
-            if (StringUtils.isEmpty(platform)) {
-                platform = Platform.getDefaultPlatform().getValue();
-            }
+        } else {
+            return PlatformTypeHelper.getPlatform(platform);
         }
-        return platform;
     }
 
-    private String getBrowser(CommandLine cmd) {
+    private Browser getBrowser(CommandLine cmd) throws WebEngineException {
         String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
         if (browser == null) {
-            if (globalConfigProperties!=null) {
-                browser = globalConfigProperties.getBrowser();
+            if (globalConfigProperties != null && StringUtils.isNotEmpty(globalConfigProperties.getBrowser())) {
+                return BrowserTypeHelper.getBrowser(globalConfigProperties.getBrowser());
+            } else {
+                return Browser.getDefaultBrowser();
             }
-            if (StringUtils.isEmpty(browser)) {
-                browser = Browser.getDefaultBrowser().getValue();
-            }
+        } else {
+            return BrowserTypeHelper.getBrowser(browser);
         }
-        return browser;
     }
 
     private String getOutputDir(CommandLine cmd) {

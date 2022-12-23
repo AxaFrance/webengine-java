@@ -4,8 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 @Data
 @Builder
@@ -23,11 +21,11 @@ public class GlobalConfigProperties {
     }
 
     public String getPlateform(){
-        return this != null && this.getApplication() != null ? this.getApplication().getPlatformName() : null;
+        return this != null && this.getApplication() != null ? this.getApplication().getPlatform().getValue() : null;
     }
 
     public String getBrowser(){
-        return this != null && this.getApplication() != null ? this.getApplication().getBrowserName() : null;
+        return this != null && this.getApplication() != null ? this.getApplication().getBrowser().getValue() : null;
     }
 
     public String getOutputDir(){

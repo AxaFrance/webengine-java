@@ -10,8 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class BrowserTypeHelperTest {
 
     @Test
-    void testGetBrowserWithRightValue() throws WebEngineException {
-        Assertions.assertEquals(Browser.CHROME,BrowserTypeHelper.getBrowser("Chrome"));
+    void testGetBrowserWithEnumValue() throws WebEngineException {
+        Assertions.assertEquals(Browser.CHROMIUM_EDGE,BrowserTypeHelper.getBrowser("ChromiumEdge"));
+    }
+
+    @Test
+    void testGetBrowserWithEnumName() throws WebEngineException {
+        Assertions.assertEquals(Browser.CHROMIUM_EDGE,BrowserTypeHelper.getBrowser("CHROMIUM_EDGE"));
     }
 
     @Test
