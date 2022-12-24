@@ -10,7 +10,7 @@ public class TestDataUtil {
 
     public static Optional<TestData> getDataOfTestCase(List<TestData> testDataList, String testCaseName) {
         return testDataList.stream()
-                            .filter(elt -> elt.getTestName().equals(testCaseName))
+                            .filter(testData -> testData.getTestName().equals(testCaseName))
                             .findFirst();
     }
 
