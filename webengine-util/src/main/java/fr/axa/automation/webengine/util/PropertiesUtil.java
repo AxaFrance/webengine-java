@@ -11,16 +11,22 @@ public class PropertiesUtil {
 
     private static final ILoggerService loggerService = new LoggerService();
 
+
     public static <T> T loadPropertiesFile(String pathfileName, Class<T> clazz) throws WebEngineException {
         try (InputStream inputStream = FileUtil.getInputStreamByPathOrResource(pathfileName)) {
-            if (inputStream == null) {
-                loggerService.info("No " + pathfileName + " file found.");
-                throw new FileNotFoundException("No " + pathfileName + " file found.");
-            } else {
+            if (inputStream != null) {
                 return (T) YamlUtil.loadYaml(clazz, inputStream);
             }
-        } catch (Exception e) {
+        }catch (FileNotFoundException fileNotFoundException){
+            displayWarningMsg(pathfileName);
+        }catch (Exception e) {
             throw new WebEngineException("Error during reading " + pathfileName + " file", e);
         }
+        return null;
+    }
+
+    private static void displayWarningMsg(String pathfileName) {
+        String msg = "No " + pathfileName + " file found.";
+        loggerService.warn(msg,new FileNotFoundException(msg));
     }
 }

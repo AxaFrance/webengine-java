@@ -58,7 +58,7 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private Optional<GlobalConfigProperties> getGlobalConfigProperties(String resourceNameOrPathAndFileName) {
         try {
-            return PropertiesHelperProvider.getInstance().getGlobalConfigPropertiesByName(resourceNameOrPathAndFileName);
+            return PropertiesHelperProvider.getInstance().getGlobalConfigurationByName(resourceNameOrPathAndFileName);
         }catch(WebEngineException e){
             loggerService.error("No File "+resourceNameOrPathAndFileName+" found or error during loading file",e);
         }

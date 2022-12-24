@@ -21,11 +21,11 @@ public class GlobalConfigProperties {
     }
 
     public String getPlateform(){
-        return this != null && this.getApplication() != null ? this.getApplication().getPlatform().getValue() : null;
+        return this != null && this.getApplication() != null ? this.getApplication().getPlatformName() : null;
     }
 
     public String getBrowser(){
-        return this != null && this.getApplication() != null ? this.getApplication().getBrowser().getValue() : null;
+        return this != null && this.getApplication() != null ? this.getApplication().getBrowserName() : null;
     }
 
     public String getOutputDir(){

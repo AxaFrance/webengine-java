@@ -14,8 +14,8 @@ public class GlobalConfigPropertiesHelper {
     }
 
     public static ApplicationProperties getApplicationProperties(Settings settings) {
-        return ApplicationProperties.builder().platform(settings.getPlatform())
-                                                .browser(settings.getBrowser())
+        return ApplicationProperties.builder().platformName(settings.getPlatform().name())
+                                                .browserName(settings.getBrowser().name())
                                                 .outputDir(settings.getLogDir())
                                                 .build();
     }

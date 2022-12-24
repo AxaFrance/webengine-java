@@ -81,11 +81,11 @@ public class FileUtil {
         }
     }
 
-    public static InputStream getInputStreamFromResource(String resourceName) {
+    public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = FileUtil.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(resourceName);
         if(inputStream==null){
-            throw new IllegalArgumentException("The resource file "+resourceName+" not found in resource directory ");
+            throw new FileNotFoundException("The resource file "+resourceName+" not found in resource directory ");
         }
         return inputStream;
     }

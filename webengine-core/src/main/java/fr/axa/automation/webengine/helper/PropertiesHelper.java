@@ -25,8 +25,8 @@ public class PropertiesHelper {
 
     Map<String, Object> propertyFileMap;
 
-    public static final String APPLICATION_FILE_NAME = "application-properties.yml";
-    public static final String APPLICATION_FILE_NAME_WITHOUT_POSTFIX = "application-properties";
+    public static final String APPLICATION_FILE_NAME = "application.yml";
+    public static final String APPLICATION_FILE_NAME_WITHOUT_POSTFIX = "application";
 
     public PropertiesHelper() {
         this.loggerService = new LoggerService();
@@ -36,7 +36,8 @@ public class PropertiesHelper {
     public <T> Optional<T> getPropertiesByClass(List<String> propertiesFileList, String fileName, Class<T> clazz) throws WebEngineException {
         Optional<String> applicationPropertiesFile = ListUtil.findFirst(propertiesFileList,fileName);
         if(applicationPropertiesFile.isPresent()){
-            return Optional.of(loadPropertiesFile(applicationPropertiesFile.get(),clazz));
+            T t = loadPropertiesFile(applicationPropertiesFile.get(),clazz);
+            return t!=null ? Optional.of(t) : Optional.empty();
         }
         return Optional.empty();
     }
@@ -50,19 +51,19 @@ public class PropertiesHelper {
 
 
     public Optional<GlobalConfigProperties> getDefaultGlobalConfiguration() throws WebEngineException{
-        return getGlobalConfigPropertiesByName(APPLICATION_FILE_NAME);
+        return getGlobalConfigurationByName(APPLICATION_FILE_NAME);
     }
 
     //--!!!!!Use by project like e-declaration, axa.fr..., be careful
     public Optional<GlobalConfigProperties> getGlobalConfiguration(List<String> propertiesFileList, String resourceNameOrPathAndFileName) throws WebEngineException{
         Optional<String> applicationPropertiesFile = ListUtil.findFirst(propertiesFileList,resourceNameOrPathAndFileName);
         if(applicationPropertiesFile.isPresent()){
-            return getGlobalConfigPropertiesByName(applicationPropertiesFile.get());
+            return getGlobalConfigurationByName(applicationPropertiesFile.get());
         }
         return Optional.empty();
     }
 
-    public Optional<GlobalConfigProperties> getGlobalConfigPropertiesByName(String resourceNameOrPathAndFileName) throws WebEngineException {
+    public Optional<GlobalConfigProperties> getGlobalConfigurationByName(String resourceNameOrPathAndFileName) throws WebEngineException {
         GlobalConfigProperties globalConfigProperties = loadPropertiesFile(resourceNameOrPathAndFileName,GlobalConfigProperties.class);
         if(globalConfigProperties!=null){
             return Optional.of(globalConfigProperties);

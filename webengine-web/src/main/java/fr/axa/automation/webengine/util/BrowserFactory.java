@@ -24,7 +24,7 @@ import java.util.Optional;
 public class BrowserFactory {
 
     public static Optional<WebDriver> getDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = globalConfigProperties.getApplication().getPlatform();
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
         if (platform == Platform.WINDOWS) {
             return getDesktopDriver(globalConfigProperties);
         } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
@@ -35,8 +35,8 @@ public class BrowserFactory {
     }
 
     public static Optional<WebDriver> getDesktopDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = globalConfigProperties.getApplication().getPlatform();
-        Browser browser = globalConfigProperties.getApplication().getBrowser();
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getApplication().getBrowserName());
         return getWebDriver(platform, browser);
     }
 
@@ -60,7 +60,7 @@ public class BrowserFactory {
     }
 
     public static <T extends WebDriver> Optional<T> getAppiumDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = globalConfigProperties.getApplication().getPlatform();
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
         try {
             AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
             if (appiumSettings != null) {
@@ -80,7 +80,7 @@ public class BrowserFactory {
     }
 
     private static DesiredCapabilities getAppiumOption(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Browser browser = globalConfigProperties.getApplication().getBrowser();
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getApplication().getBrowserName());
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME, browser.getValue());
 
