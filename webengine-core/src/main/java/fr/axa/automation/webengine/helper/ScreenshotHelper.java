@@ -3,16 +3,20 @@ package fr.axa.automation.webengine.helper;
 import fr.axa.automation.webengine.generated.ArrayOfScreenshotReport;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ScreenshotHelper {
 
     public static ArrayOfScreenshotReport getArrayOfScreenshotReport(String name, byte[] dataInbase64){
-        ArrayOfScreenshotReport arrayOfScreenshotReport = new ArrayOfScreenshotReport();
-        List<ScreenshotReport> screenshotReportList = new ArrayList<>();
         ScreenshotReport screenshotReport = getScreenshotReport(name, dataInbase64);
-        screenshotReportList.add(screenshotReport);
+        List<ScreenshotReport> screenshotReportList = Arrays.asList(screenshotReport);
+        ArrayOfScreenshotReport arrayOfScreenshotReport = getArrayOfScreenshotReport(screenshotReportList);
+        return arrayOfScreenshotReport;
+    }
+
+    private static ArrayOfScreenshotReport getArrayOfScreenshotReport(List<ScreenshotReport> screenshotReportList) {
+        ArrayOfScreenshotReport arrayOfScreenshotReport = new ArrayOfScreenshotReport();
         arrayOfScreenshotReport.getScreenshotReports().addAll(screenshotReportList);
         return arrayOfScreenshotReport;
     }
@@ -23,5 +27,4 @@ public class ScreenshotHelper {
         screenshotReport.setData(dataInbase64);
         return screenshotReport;
     }
-
 }
