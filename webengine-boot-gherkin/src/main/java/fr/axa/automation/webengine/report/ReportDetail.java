@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 public class ReportDetail {
+    String featureName;
     String testCaseName;
     String stepName;
     Result result;

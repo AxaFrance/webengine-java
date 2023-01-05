@@ -9,12 +9,8 @@ import java.util.StringJoiner;
 public interface IReportGherkinHelper {
     void createReport() throws UnknownHostException;
     void closeReport() throws WebEngineException;
-    void updateTestCaseReport(String testCaseName, Result result);
-    void addTestCaseReport(String testCaseName);
-    void addTestStepReport(String testCaseName, String testStepName);
+    void addTestCaseReport(String featureName,String testCaseName);
+    void updateTestCaseReport(String featureName,String testCaseName, Result result);
+    void addTestStepReport(String featureName,String testCaseName, String testStepName);
     void updateTestStepReport(ReportDetail reportDetail);
-    void setCurrentFeatureName(String currentFeatureName);
-    void setCurrentScenarioName(String currentScenarioName);
-    void setCurrentStepName(String currentStepName);
-    void setInformation(StringJoiner information);
 }

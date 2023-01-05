@@ -9,7 +9,7 @@
       </Variable>
       <Variable>
         <Name>COMMENTAIRE</Name>
-        <Value />
+        <Value></Value>
       </Variable>
     </Data>
   </TestData>
@@ -17,8 +17,8 @@
     <TestName>TEST_CASE_2</TestName>
     <Data>
       <Variable>
-        <Name>TEST_CASE_2_NAME</Name>
-        <Value>Test case 2</Value>
+        <Name>TEST_CASE_2_VARIABLE</Name>
+        <Value>Test case 2 variable value</Value>
       </Variable>
       <Variable>
         <Name>COMMENTAIRE</Name>
