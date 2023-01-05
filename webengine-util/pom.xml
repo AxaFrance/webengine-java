@@ -76,6 +76,18 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>fr/axa/automation/webengine/dto/*</exclude>
+                        <exclude>fr/axa/automation/webengine/exception/*</exclude>
+                        <exclude>fr/axa/automation/webengine/xml/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>
