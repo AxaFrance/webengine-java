@@ -80,7 +80,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -113,8 +112,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
         </dependency>
-
-
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
