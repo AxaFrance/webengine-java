@@ -16,6 +16,8 @@ java -jar WebRunner.jar "-a:C:\work\projet-git\solaris-automation-keyword-driven
                         "-browser:Chrome"
                         -m
                         -showreport
+
+
 You need to have the "application-properties.yml" in the resource directory
 Exemple of this file :
 
@@ -45,3 +47,7 @@ appiumSettings:
       local: true
       networkLogs: true
       localIdentifier: XXXXYYYY
+
+
+If you want ton run test with tag
+mvn test -Dcucumber.filter.tags="@FirstStep"
