@@ -32,7 +32,6 @@ public class SampleFormStep extends AbstractStep {
         super.afterScenario();
     }
 
-
     @Given("^I visit the test page \"([^\"]*)\"$")
     public void visitTheTestPage(String url) {
         addInformation("Open WebEngine test page");

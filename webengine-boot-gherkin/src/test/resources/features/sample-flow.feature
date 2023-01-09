@@ -15,6 +15,8 @@ Feature: Test du parcours
     And I enter a date "11/01/2023"
     And I enter a password "azerty123456"
     And I click on the third the next button
+    And I click on the OK button in the pop up after i'm done
+    Then I see the Done title
 
 
 

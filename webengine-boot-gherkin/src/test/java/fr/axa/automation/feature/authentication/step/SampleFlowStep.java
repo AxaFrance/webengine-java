@@ -1,17 +1,16 @@
 package fr.axa.automation.feature.authentication.step;
 
-import fr.axa.automation.feature.authentication.model.WebEngineFirstStepPage;
-import fr.axa.automation.feature.authentication.model.WebEngineHomeTestPage;
-import fr.axa.automation.feature.authentication.model.WebEngineSecondStepPage;
-import fr.axa.automation.feature.authentication.model.WebEngineThirdStepPage;
+import fr.axa.automation.feature.authentication.model.*;
 import fr.axa.automation.webengine.step.AbstractStep;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.junit.jupiter.api.Assertions;
 
 
 @Getter
@@ -26,6 +25,8 @@ public class SampleFlowStep extends AbstractStep {
 
     WebEngineThirdStepPage webEngineThirdStepPage;
 
+    WebEngineFourthStepPage webEngineFourthStepPage;
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -33,6 +34,7 @@ public class SampleFlowStep extends AbstractStep {
         webEngineFirstStepPage = new  WebEngineFirstStepPage(webDriver);
         webEngineSecondStepPage = new  WebEngineSecondStepPage(webDriver);
         webEngineThirdStepPage = new  WebEngineThirdStepPage(webDriver);
+        webEngineFourthStepPage = new WebEngineFourthStepPage(webDriver);
     }
 
     @After
@@ -97,5 +99,15 @@ public class SampleFlowStep extends AbstractStep {
     @And("^I click on the third the next button$")
     public void clickThirdButtonOKInThePopup() throws Exception {
         getWebEngineThirdStepPage().getNextStep().click();
+    }
+
+    @And("^I click on the OK button in the pop up after i'm done$")
+    public void clickButtonOKInThePopup() throws Exception {
+        getWebDriver().switchTo().alert().accept();
+    }
+
+    @Then("^I see the Done title$")
+    public void seeDone() throws Exception {
+        Assertions.assertEquals("DONE",getWebEngineFourthStepPage().getDoneTitle().getText());
     }
 }
