@@ -3,39 +3,33 @@ package fr.axa.automation.webengine.boot;
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.argument.ArgumentParser;
 import fr.axa.automation.webengine.constante.IConstant;
-import fr.axa.automation.webengine.core.*;
+import fr.axa.automation.webengine.core.AbstractTestSuite;
+import fr.axa.automation.webengine.core.ITestSuite;
+import fr.axa.automation.webengine.core.ITestSuiteExecutor;
+import fr.axa.automation.webengine.core.TestCaseAdditionalInformation;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.Browser;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
-import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.general.Settings;
-import fr.axa.automation.webengine.generated.*;
-import fr.axa.automation.webengine.helper.BrowserTypeHelper;
-import fr.axa.automation.webengine.helper.PlatformTypeHelper;
+import fr.axa.automation.webengine.generated.EnvironmentVariables;
+import fr.axa.automation.webengine.generated.TestSuiteData;
+import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
-import fr.axa.automation.webengine.util.*;
+import fr.axa.automation.webengine.util.JarUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 
@@ -44,9 +38,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BootProject {
 
-    private static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
-    private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
+    static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT);
 
     final ILoggerService loggerService;
 
@@ -75,18 +69,13 @@ public class BootProject {
 
     public void run(List<ArgumentOption> argumentOptionList, boolean loadProject, String... args) throws Exception {
         List<String> argumentListForProject = getArgumentsForProject(args);
-        String[] argumentsListSeparatedByOptionAndVaue = getArgumentsSeparatedByOptionAndValue(argumentListForProject);
-        CommandLine commandLine = ArgumentParser.getOption(argumentsListSeparatedByOptionAndVaue, ArgumentParser.getOptionList(argumentOptionList));
+        String[] argumentsListSeparatedByOptionAndValue = getArgumentsSeparatedByOptionAndValue(argumentListForProject);
+        CommandLine commandLine = ArgumentParser.getOption(argumentsListSeparatedByOptionAndValue, ArgumentParser.getOptionList(argumentOptionList));
         if (loadProject) {
-            loadProject(commandLine);
+            String projectPath = commandLine.getOptionValue(ArgumentOption.PROJECT.getOption());
+            loadProject(projectPath);
         }
         runTestSuite(commandLine);
-    }
-
-    private String[] getArgumentsSeparatedByOptionAndValue(List<String> filterArguments) {
-        String[] argumentsForProject = ArgumentParser.splitArguments(filterArguments, IConstant.SEPARATOR_ARG, 2);
-        loggerService.info("Arguments after decomposition : "+Arrays.asList(argumentsForProject));
-        return argumentsForProject;
     }
 
     private List<String> getArgumentsForProject(String[] args) {
@@ -95,12 +84,24 @@ public class BootProject {
         return filterArguments;
     }
 
+    private String[] getArgumentsSeparatedByOptionAndValue(List<String> filterArguments) {
+        String[] argumentsForProject = ArgumentParser.splitArguments(filterArguments, IConstant.SEPARATOR_ARG, 2);
+        loggerService.info("Arguments after decomposition : "+Arrays.asList(argumentsForProject));
+        return argumentsForProject;
+    }
+
+    private void loadProject(String projectPath) throws WebEngineException {
+        loggerService.info("Loading project : " + projectPath + " is running");
+        JarUtil.loadLibrary(new File(projectPath));
+        loggerService.info("Loading project : " + projectPath + " is succeed");
+    }
+
     private void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
-        TestSuiteData testSuiteData = getTestSuiteData(commandLine);
-        Settings settings = getSettings(commandLine);
-        EnvironmentVariables environmentVariables = getEnvironmentVariables(commandLine);
-        ITestSuite testSuite = getTestSuite();
-        Map<String, TestCaseAdditionalInformation> testCaseAdditionalInformationMap = getTestCaseAdditionalInformation(testSuite, testSuiteData);
+        TestSuiteData testSuiteData = TestSuiteHelper.getTestSuiteData(commandLine);
+        Settings settings = TestSuiteHelper.getSettings(commandLine, globalConfigProperties);
+        EnvironmentVariables environmentVariables = TestSuiteHelper.getEnvironmentVariables(commandLine);
+        ITestSuite testSuite = TestSuiteHelper.getTestSuite();
+        Map<String, TestCaseAdditionalInformation> testCaseAdditionalInformationMap = TestSuiteHelper.getTestCaseAdditionalInformation(testSuite, testSuiteData);
 
         GlobalApplicationContext globalApplicationContext = GlobalApplicationContext.builder()
                 .settings(settings)
@@ -127,141 +128,5 @@ public class BootProject {
         loggerService.info("Start report ");
         reportHelper.generateAllReport(testSuiteReport, testSuite.getClass().getSimpleName(), settings.getLogDir());
         loggerService.info("End report ");
-    }
-
-    private Map<String, TestCaseAdditionalInformation> getTestCaseAdditionalInformation(ITestSuite testSuite, TestSuiteData testSuiteData) throws WebEngineException {
-        Map<String, TestCaseAdditionalInformation> map = new HashMap<>();
-        if (testSuite != null) {
-            for (AbstractMap.SimpleEntry<String, ? extends ITestCase> entry : testSuite.getTestCaseList()) {
-                String testCaseName = entry.getKey();
-                List<? extends ITestStep> testStepList = entry.getValue().getTestStepList();
-                for (ITestStep testStep : testStepList) {
-                    map.put(testCaseName, getTestCaseAdditionalInformation(testSuiteData.getTestDatas(), testCaseName, testStep));
-                }
-            }
-        }
-        return map;
-    }
-
-    private TestCaseAdditionalInformation getTestCaseAdditionalInformation(List<TestData> testDataList, String testCaseName, ITestStep testStep) throws WebEngineException {
-        IAction action = CommonClassUtil.create(testStep.getAction());
-        List<Variable> requiredParametersList = action.getRequiredParameters();
-        List<Variable> additionalDataList = new ArrayList<>();
-        List<Variable> missingDataList = new ArrayList<>();
-
-        if (CollectionUtils.isNotEmpty(requiredParametersList) && CollectionUtils.isNotEmpty(testDataList)) {
-            for (Variable requiredParameter : requiredParametersList) {
-                Variable variableFound = TestDataUtil.getVariableOfTestCase(testDataList, testCaseName, requiredParameter.getName());
-                if (variableFound == null) {
-                    if(requiredParameter.getValue() != null){
-                        additionalDataList.add(requiredParameter);
-                    }else{
-                        missingDataList.add(requiredParameter);
-                    }
-                }
-            }
-        }
-        return TestCaseAdditionalInformation.builder().additionalDataList(additionalDataList).missingDataList(missingDataList).canRun(CollectionUtils.isEmpty(missingDataList)).build();
-    }
-
-    private void loadProject(CommandLine cmd) throws WebEngineException {
-        String projectPath = cmd.getOptionValue(ArgumentOption.PROJECT.getOption());
-        loggerService.info("Loading project : " + projectPath + " is running");
-        JarUtil.loadLibrary(new File(projectPath));
-        loggerService.info("Loading project : " + projectPath + " is succeed");
-    }
-
-    private ITestSuite getTestSuite() throws WebEngineException {
-        Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList();
-        ITestSuite testSuite = TestSuiteHelper.filterTestSuite(testSuiteList);
-        if (testSuite == null) {
-            throw new WebEngineException("TestSuite class is null. No TestSuite class found in the project");
-        }
-        return testSuite;
-    }
-
-    private Set<Class<? extends ITestSuite>> getTestSuiteList() {
-        loggerService.info("Find Test Suite Class is running ");
-        Set<Class<? extends ITestSuite>> testSuiteList = JarUtil.findAllClass(ITestSuite.class);
-        loggerService.info("Find Test Suite Class is succeed. Class founded is : " + testSuiteList.toString());
-        return testSuiteList;
-    }
-
-    private EnvironmentVariables getEnvironmentVariables(CommandLine cmd) throws WebEngineException {
-        String environmentVariablesFilePath = cmd.getOptionValue(ArgumentOption.ENVIRONMENT_VARIABLE.getOption());
-        loggerService.info("Loading environment data running: " + environmentVariablesFilePath);
-        EnvironmentVariables environmentVariables = XmlUtil.unmarshall(environmentVariablesFilePath, EnvironmentVariables.class);
-        loggerService.info("Loading environment data succeed: " + environmentVariablesFilePath);
-        return environmentVariables;
-    }
-
-    private TestSuiteData getTestSuiteData(CommandLine cmd) throws WebEngineException {
-        String testDataFile = cmd.getOptionValue(ArgumentOption.TEST_DATA.getOption());
-        loggerService.info("Loading test data running: " + testDataFile);
-        TestSuiteData testSuiteData = XmlUtil.unmarshall(testDataFile, TestSuiteData.class);
-        loggerService.info("Loading test data is succeed " + testDataFile);
-        return testSuiteData;
-    }
-
-    private Settings getSettings(CommandLine cmd) throws WebEngineException {
-        loggerService.info("Loading settings running ");
-        List<String> propertiesFileList = getPropertiesFiles(cmd);
-        Platform platform = getPlatform(cmd);
-        Browser browser = getBrowser(cmd);
-        String outputDir = getOutputDir(cmd);
-
-        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(platform).browser(browser).logDir(outputDir).build();
-        loggerService.info("Loading settings running is succeed : " + settings.toString());
-        return settings;
-    }
-
-    private Platform getPlatform(CommandLine cmd) throws WebEngineException {
-        String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
-        if (platform == null) {
-            if (globalConfigProperties != null && StringUtils.isNotEmpty(globalConfigProperties.getPlateform())) {
-                return PlatformTypeHelper.getPlatform(globalConfigProperties.getPlateform());
-            } else {
-                return Platform.getDefaultPlatform();
-            }
-        } else {
-            return PlatformTypeHelper.getPlatform(platform);
-        }
-    }
-
-    private Browser getBrowser(CommandLine cmd) throws WebEngineException {
-        String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
-        if (browser == null) {
-            if (globalConfigProperties != null && StringUtils.isNotEmpty(globalConfigProperties.getBrowser())) {
-                return BrowserTypeHelper.getBrowser(globalConfigProperties.getBrowser());
-            } else {
-                return Browser.getDefaultBrowser();
-            }
-        } else {
-            return BrowserTypeHelper.getBrowser(browser);
-        }
-    }
-
-    private String getOutputDir(CommandLine cmd) {
-        String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
-        if (outputDir != null) {
-            outputDir += File.separator;
-        } else {
-            if (globalConfigProperties!=null) {
-                outputDir = globalConfigProperties.getOutputDir();
-            }
-            if (StringUtils.isEmpty(outputDir)) {
-                outputDir = FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY);
-            }
-        }
-        return outputDir;
-    }
-
-    private List<String> getPropertiesFiles(CommandLine cmd) {
-        List<String> propertiesFileList = Collections.emptyList();
-        String propertiesFiles = cmd.getOptionValue(ArgumentOption.PROPERTIES_FILE_LIST.getOption());
-        if (propertiesFiles != null) {
-            propertiesFileList = Arrays.asList(propertiesFiles.split(";"));
-        }
-        return propertiesFileList;
     }
 }
