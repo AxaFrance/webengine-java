@@ -12,7 +12,7 @@ import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.context.SharedContext;
-import fr.axa.automation.webengine.util.TestDataUtil;
+import fr.axa.automation.webengine.helper.TestDataHelper;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -58,7 +58,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
           List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
 
           List<TestData> testDataList = globalApplicationContext.getTestDataList();
-          Optional<TestData> testDataByTestCase = TestDataUtil.getDataOfTestCase(testDataList,testCaseName);
+          Optional<TestData> testDataByTestCase = TestDataHelper.getDataOfTestCase(testDataList,testCaseName);
           if(!testDataByTestCase.isPresent()){
                loggerService.info("Be careful, no test data for this test case : "+testCaseName);
           }

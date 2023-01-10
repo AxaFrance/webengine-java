@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.util;
+package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.generated.Variable;
@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.generated.Variable;
 import java.util.List;
 import java.util.Optional;
 
-public class TestDataUtil {
+public class TestDataHelper {
 
     public static Optional<TestData> getDataOfTestCase(List<TestData> testDataList, String testCaseName) {
         return testDataList.stream()

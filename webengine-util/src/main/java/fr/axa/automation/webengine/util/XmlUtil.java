@@ -12,6 +12,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,13 +22,13 @@ public class XmlUtil {
     public static <T> T unmarshall(String filePath, Class<T> returnType) throws WebEngineException {
         JAXBContext jaxbContext;
         try {
-            File file = new File(filePath);
+            File file = FileUtil.getFileByPathOrResource(filePath);
             Source source = new StreamSource(file);
             jaxbContext = JAXBContext.newInstance(returnType);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             JAXBElement jaxbElement = jaxbUnmarshaller.unmarshal(source, returnType);
             return (T) jaxbElement.getValue();
-        } catch (JAXBException e) {
+        } catch (JAXBException | FileNotFoundException e) {
             throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
         }
     }
@@ -36,7 +37,7 @@ public class XmlUtil {
         JAXBContext jaxbContext;
         Assert.notNull(inputMarshallDTO,"Input parameter is null");
         try {
-            File file = new File(inputMarshallDTO.getFileDestinationPath());
+            File file = FileUtil.getFileByPathOrResource(inputMarshallDTO.getFileDestinationPath());
             Object objectToMarshall = inputMarshallDTO.getObjectToMarshall();
             jaxbContext = JAXBContext.newInstance(objectToMarshall.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -51,7 +52,7 @@ public class XmlUtil {
             JAXBElement jaxbElement = new JAXBElement(qname, objectToMarshall.getClass(), objectToMarshall);
             jaxbMarshaller.marshal(jaxbElement, file);
             return file;
-        } catch (JAXBException e) {
+        } catch (JAXBException | FileNotFoundException e) {
             throw new WebEngineException("Error during parsing XML data for file : "+inputMarshallDTO.getFileDestinationPath(), e);
         }
     }

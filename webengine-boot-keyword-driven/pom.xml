@@ -41,8 +41,26 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <excludes>
+                        <exclude>fr.axa.automation.webengine.argument.ArgumentOption.java</exclude>
+                        <exclude>fr.axa.automation.webengine.constante.*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>fr/axa/automation/webengine/argument/ArgumentOption.class</exclude>
+                        <exclude>fr/axa/automation/webengine/constante/*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
         </plugins>

@@ -30,7 +30,7 @@ public class XmlUtilTest {
     @Test
     public void testMarshallWithoutNamespaceAndPackageInfo() throws WebEngineException, IOException, URISyntaxException {
         UserWithoutPackageInfo user = UserUtilForTest.getNewUserWithoutPackageInfo();
-        String filePath = FileUtilForTest.createFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-without-namespace-and-package-info.xml");
+        String filePath = FileUtilForTest.getPathFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-without-namespace-and-package-info.xml");
         InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath).objectToMarshall(user).build();
         File fileResult = XmlUtil.marshall(inputMarshallDTO);
         boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-without-namespace-and-package-info.xml"), fileResult);
@@ -40,7 +40,7 @@ public class XmlUtilTest {
     @Test
     public void testMarshallWithInitialNamespace() throws WebEngineException, IOException, URISyntaxException {
         UserWithPackageInfo user = UserUtilForTest.getNewUserWithPackageInfo();
-        String filePath = FileUtilForTest.createFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-with-initial-namespace.xml");
+        String filePath = FileUtilForTest.getPathFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-with-initial-namespace.xml");
         InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath).objectToMarshall(user).build();
         File fileResult = XmlUtil.marshall(inputMarshallDTO);
         boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-with-initial-namespace.xml"), fileResult);
@@ -50,7 +50,7 @@ public class XmlUtilTest {
     @Test
     public void testMarshallWithCustomNamespace() throws WebEngineException, IOException, URISyntaxException {
         UserWithPackageInfo user = UserUtilForTest.getNewUserWithPackageInfo();
-        String filePath = FileUtilForTest.createFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-with-custom-namespace.xml");
+        String filePath = FileUtilForTest.getPathFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-with-custom-namespace.xml");
         String namespace = "http://www.axa.fr/WebEngine/2022";
         Map<String, String> namespaceAndPrefixMap = new HashMap() {{
             put(namespace, "nsc");
@@ -64,7 +64,7 @@ public class XmlUtilTest {
     @Test
     public void testMarshallWithoutNamespace() throws WebEngineException, IOException, URISyntaxException {
         UserWithPackageInfo user = UserUtilForTest.getNewUserWithPackageInfo();
-        String filePath = FileUtilForTest.createFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-without-namespace.xml");
+        String filePath = FileUtilForTest.getPathFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-without-namespace.xml");
         Map<String, String> namespaceAndPrefixMap = new HashMap() {{
             put("", "");
         }};

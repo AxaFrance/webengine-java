@@ -30,7 +30,7 @@ import java.util.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TestSuiteHelper {
 
-    static final LoggerService loggerService = LoggerServiceProvider.getInstance();
+    private static final LoggerService loggerService = LoggerServiceProvider.getInstance();
 
     public static ITestSuite getTestSuite() throws WebEngineException {
         Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList();
@@ -41,14 +41,14 @@ public class TestSuiteHelper {
         return testSuite;
     }
 
-    public static Set<Class<? extends ITestSuite>> getTestSuiteList() {
+    private static Set<Class<? extends ITestSuite>> getTestSuiteList() {
         loggerService.info("Find Test Suite Class is running ");
         Set<Class<? extends ITestSuite>> testSuiteList = JarUtil.findAllClass(ITestSuite.class);
         loggerService.info("Find Test Suite Class is succeed. Class founded is : " + testSuiteList.toString());
         return testSuiteList;
     }
 
-    public static ITestSuite filterTestSuite(Set<Class<? extends ITestSuite>> testSuiteList) throws WebEngineException {
+    private static ITestSuite filterTestSuite(Set<Class<? extends ITestSuite>> testSuiteList) throws WebEngineException {
         ITestSuite testSuite = null;
         if(CollectionUtils.isNotEmpty(testSuiteList)){
             Optional<Class<? extends ITestSuite>> clazz = testSuiteList.stream().filter(ts -> !ts.getSimpleName().equalsIgnoreCase(AbstractTestSuite.class.getSimpleName())).findFirst();
@@ -159,7 +159,7 @@ public class TestSuiteHelper {
 
         if (CollectionUtils.isNotEmpty(requiredParametersList) && CollectionUtils.isNotEmpty(testDataList)) {
             for (Variable requiredParameter : requiredParametersList) {
-                Variable variableFound = TestDataUtil.getVariableOfTestCase(testDataList, testCaseName, requiredParameter.getName());
+                Variable variableFound = TestDataHelper.getVariableOfTestCase(testDataList, testCaseName, requiredParameter.getName());
                 if (variableFound == null) {
                     if(requiredParameter.getValue() != null){
                         additionalDataList.add(requiredParameter);

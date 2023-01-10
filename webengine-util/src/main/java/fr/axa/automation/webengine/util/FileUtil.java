@@ -81,6 +81,19 @@ public class FileUtil {
         }
     }
 
+    public static File getFileByPathOrResource(String fileOrResource) throws FileNotFoundException {
+        try {
+            URL url = FileUtil.class.getClassLoader().getResource(fileOrResource);
+            if(url!=null){
+                return new File(url.toURI());
+            }else{
+                return new File(fileOrResource);
+            }
+        }catch (Exception e){
+            throw new FileNotFoundException("The resource file "+fileOrResource+" not found in resource directory ");
+        }
+    }
+
     public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = FileUtil.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(resourceName);

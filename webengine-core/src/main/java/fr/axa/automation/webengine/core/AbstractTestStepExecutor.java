@@ -8,7 +8,7 @@ import fr.axa.automation.webengine.general.Platform;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.CommonClassUtil;
-import fr.axa.automation.webengine.util.TestDataUtil;
+import fr.axa.automation.webengine.helper.TestDataHelper;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -56,7 +56,7 @@ public abstract class AbstractTestStepExecutor implements ITestStepExecutor {
 
     protected ActionContext getActionContext(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext){
         List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestDatas();
-        Optional<TestData> testDataByTestCase = TestDataUtil.getDataOfTestCase(testDataList,testCaseContext.getTestCaseName());
+        Optional<TestData> testDataByTestCase = TestDataHelper.getDataOfTestCase(testDataList,testCaseContext.getTestCaseName());
         TestCaseAdditionalInformation testCaseAdditionalInformation = globalApplicationContext.getTestCaseAdditionnalInformationList().get(testCaseContext.getTestCaseName());
 
         return ActionContext.builder()
