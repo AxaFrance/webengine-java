@@ -4,7 +4,6 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.generated.TestSuiteData;
 import fr.axa.automation.webengine.generated.Variable;
-import fr.axa.automation.webengine.helper.TestDataHelper;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.XmlUtil;
 import org.junit.jupiter.api.Assertions;
@@ -29,14 +28,14 @@ class TestDataHelperTest {
     }
 
     private Optional<TestData> getDataOfTestCase(String testCaseName) throws WebEngineException, URISyntaxException {
-        TestSuiteData testSuiteData = XmlUtil.unmarshall(FileUtil.getFileFromResource("data/data.xml").getAbsolutePath(), TestSuiteData.class);
+        TestSuiteData testSuiteData = XmlUtil.unmarshall(FileUtil.getFileFromResource("input/data.xml").getAbsolutePath(), TestSuiteData.class);
         Optional<TestData> testData = TestDataHelper.getDataOfTestCase(testSuiteData.getTestDatas(),testCaseName);
         return testData;
     }
 
     @Test
     void getVariableOfTestCase() throws URISyntaxException, WebEngineException {
-        TestSuiteData testSuiteData = XmlUtil.unmarshall(FileUtil.getFileFromResource("data/data.xml").getAbsolutePath(), TestSuiteData.class);
+        TestSuiteData testSuiteData = XmlUtil.unmarshall(FileUtil.getFileFromResource("input/data.xml").getAbsolutePath(), TestSuiteData.class);
         Variable variable = TestDataHelper.getVariableOfTestCase(testSuiteData.getTestDatas(),TEST_CASE_2,TEST_CASE_2_VARIABLE);
         if(variable!=null){
             Assertions.assertEquals(TEST_CASE_2_VARIABLE_VALUE,variable.getValue());
