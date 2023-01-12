@@ -3,7 +3,7 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.reflections.Reflections;
+
 import java.net.URLClassLoader;
 import java.net.URL;
 import java.util.Arrays;
@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.io.File;
 
@@ -37,8 +36,4 @@ public class JarUtil {
         }
     }
 
-    public static <T> Set<Class<? extends T>> findAllClass(Class<T> clazz) {
-        Reflections reflections = new Reflections();
-        return reflections.getSubTypesOf(clazz);
-    }
 }

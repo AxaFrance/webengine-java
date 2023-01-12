@@ -1,11 +1,13 @@
 package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
+import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 public class CommonClassUtil {
 
@@ -37,5 +39,10 @@ public class CommonClassUtil {
             throw new WebEngineException("Error during call method "+methodName+" instance of class :"+clazz.getSimpleName(),e);
         }
         return object;
+    }
+
+    public static <T> Set<Class<? extends T>> findAllClass(Class<T> clazz) {
+        Reflections reflections = new Reflections();
+        return reflections.getSubTypesOf(clazz);
     }
 }

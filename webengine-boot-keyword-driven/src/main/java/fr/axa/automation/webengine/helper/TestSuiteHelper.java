@@ -43,7 +43,7 @@ public class TestSuiteHelper {
 
     private static Set<Class<? extends ITestSuite>> getTestSuiteList() {
         loggerService.info("Find Test Suite Class is running ");
-        Set<Class<? extends ITestSuite>> testSuiteList = JarUtil.findAllClass(ITestSuite.class);
+        Set<Class<? extends ITestSuite>> testSuiteList = CommonClassUtil.findAllClass(ITestSuite.class);
         loggerService.info("Find Test Suite Class is succeed. Class founded is : " + testSuiteList.toString());
         return testSuiteList;
     }

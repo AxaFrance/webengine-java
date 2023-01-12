@@ -24,7 +24,7 @@ class JarUtilTest {
     void findAllClass(){
         loadLibrary();
         List<Class> propertiesList = Arrays.asList(PropertiesFactory.class, SortedPropertiesFactory.class);
-        Set<Class<? extends AbstractPropertiesFactory>> propertiesFactoryList = JarUtil.findAllClass(AbstractPropertiesFactory.class);
+        Set<Class<? extends AbstractPropertiesFactory>> propertiesFactoryList = CommonClassUtil.findAllClass(AbstractPropertiesFactory.class);
         List<Class<? extends AbstractPropertiesFactory>> propertiesFactoryFilterList = propertiesFactoryList.stream().filter(clazz -> propertiesList.contains(clazz)).collect(Collectors.toList());
         Assertions.assertTrue(propertiesFactoryFilterList.size()==2);
     }
