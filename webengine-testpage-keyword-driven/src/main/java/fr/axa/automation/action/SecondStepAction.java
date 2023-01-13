@@ -1,0 +1,32 @@
+package fr.axa.automation.action;
+
+import fr.axa.automation.appmodels.WebEngineFirstStepPage;
+import fr.axa.automation.appmodels.WebEngineSecondStepPage;
+import fr.axa.automation.parameter.IParameter;
+import fr.axa.automation.webengine.core.AbstractActionWebBase;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class SecondStepAction extends AbstractActionWebBase {
+
+    WebEngineSecondStepPage webEngineSecondStepPage;
+
+    public SecondStepAction() {
+    }
+
+    @Override
+    public void doAction() throws Exception {
+        String comment = getParameterWithException(IParameter.COMMENT);
+        webEngineSecondStepPage = new WebEngineSecondStepPage(getWebDriver());
+        webEngineSecondStepPage.getResultTextarea().setValue(comment);
+        webEngineSecondStepPage.getHornsCheckbox().click();
+        webEngineSecondStepPage.getNextStep().click();
+        screenShot();
+        addInformation("Second step succeed");
+    }
+
+    @Override
+    public boolean doCheckpoint() throws Exception {
+        return true;
+    }
+}
