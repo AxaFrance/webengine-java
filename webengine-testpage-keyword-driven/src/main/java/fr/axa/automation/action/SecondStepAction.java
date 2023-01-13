@@ -1,6 +1,5 @@
 package fr.axa.automation.action;
 
-import fr.axa.automation.appmodels.WebEngineFirstStepPage;
 import fr.axa.automation.appmodels.WebEngineSecondStepPage;
 import fr.axa.automation.parameter.IParameter;
 import fr.axa.automation.webengine.core.AbstractActionWebBase;

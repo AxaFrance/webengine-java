@@ -7,6 +7,6 @@ class LoggerServiceProviderTest {
 
     @Test
     void getInstance() {
-        Assertions.assertTrue(LoggerServiceProvider.getInstance() instanceof  LoggerService); ;
+        Assertions.assertTrue(LoggerServiceProvider.getInstance() instanceof  LoggerService);
     }
 }

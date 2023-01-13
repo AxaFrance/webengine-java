@@ -4,7 +4,6 @@ import fr.axa.automation.appmodels.WebEngineHomeTestPage;
 import fr.axa.automation.parameter.IParameter;
 import fr.axa.automation.webengine.core.AbstractActionWebBase;
 import fr.axa.automation.webengine.helper.VariableHelper;
-import fr.axa.automation.webengine.generated.Result;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

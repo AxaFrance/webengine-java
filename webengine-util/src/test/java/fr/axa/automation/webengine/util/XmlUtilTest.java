@@ -52,9 +52,6 @@ public class XmlUtilTest {
         UserWithPackageInfo user = UserUtilForTest.getNewUserWithPackageInfo();
         String filePath = FileUtilForTest.getPathFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-with-custom-namespace.xml");
         String namespace = "http://www.axa.fr/WebEngine/2022";
-        Map<String, String> namespaceAndPrefixMap = new HashMap() {{
-            put(namespace, "nsc");
-        }};
         InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath).objectToMarshall(user).namespace(namespace).prefix("nsc").build();
         File fileResult = XmlUtil.marshall(inputMarshallDTO);
         boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"), fileResult);
@@ -65,9 +62,6 @@ public class XmlUtilTest {
     public void testMarshallWithoutNamespace() throws WebEngineException, IOException, URISyntaxException {
         UserWithPackageInfo user = UserUtilForTest.getNewUserWithPackageInfo();
         String filePath = FileUtilForTest.getPathFileInTargetDirectory(FileUtilForTest.DIRECTORY_RESULT_UNIT_TEST, "user-without-namespace.xml");
-        Map<String, String> namespaceAndPrefixMap = new HashMap() {{
-            put("", "");
-        }};
         InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath).objectToMarshall(user).namespace("http://www.axa.fr/WebEngine/2022").prefix("").build();
         File fileResult = XmlUtil.marshall(inputMarshallDTO);
         boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-without-namespace.xml"), fileResult);

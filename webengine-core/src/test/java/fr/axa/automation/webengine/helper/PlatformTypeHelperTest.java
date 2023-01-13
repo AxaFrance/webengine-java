@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.Browser;
 import fr.axa.automation.webengine.general.Platform;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

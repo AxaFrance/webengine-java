@@ -64,8 +64,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
 
     private TestCaseReport getTestCaseReport(String featureName, String testCaseName, String doubleTwoPoints) {
         String normalizeTestCaseName = StringUtil.getNormalizeString(new String[]{featureName, testCaseName}, doubleTwoPoints);
-        TestCaseReport testCaseReport = testCaseReportMap.get(normalizeTestCaseName);
-        return testCaseReport;
+        return testCaseReportMap.get(normalizeTestCaseName);
     }
 
     public void addTestStepReport(String featureName,String testCaseName, String testStepName){

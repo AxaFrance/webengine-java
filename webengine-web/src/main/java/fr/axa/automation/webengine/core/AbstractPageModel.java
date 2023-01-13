@@ -30,7 +30,7 @@ public abstract class AbstractPageModel {
 
     protected void populateDriver(WebDriver webDriver) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         setUseDriver(webDriver);
-        Class currentClazz = this.getClass();
+        Class<? extends AbstractPageModel> currentClazz = this.getClass();
         List<Field> fieldList = Arrays.asList(currentClazz.getDeclaredFields());
         Type type ;
         if(CollectionUtils.isNotEmpty( fieldList)){
@@ -55,7 +55,7 @@ public abstract class AbstractPageModel {
             timeout = timeoutInSecond[0];
         }
 
-        Wait wait = new WebDriverWait(this.useDriver, Duration.ofSeconds(timeout));
+        Wait<WebDriver> wait = new WebDriverWait(this.useDriver, Duration.ofSeconds(timeout));
         wait.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
     }
 

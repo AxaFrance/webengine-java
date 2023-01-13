@@ -1,12 +1,10 @@
 package fr.axa.automation.feature.authentication.step;
 
-import fr.axa.automation.feature.authentication.constante.IConstanteMessageError;
 import fr.axa.automation.feature.authentication.model.WebEngineHomeTestPage;
 import fr.axa.automation.webengine.step.AbstractStep;
 import io.cucumber.java.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.AccessLevel;
 import lombok.Getter;

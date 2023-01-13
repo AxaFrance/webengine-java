@@ -26,7 +26,7 @@ public class XmlUtil {
             Source source = new StreamSource(file);
             jaxbContext = JAXBContext.newInstance(returnType);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            JAXBElement jaxbElement = jaxbUnmarshaller.unmarshal(source, returnType);
+            JAXBElement<T> jaxbElement = jaxbUnmarshaller.unmarshal(source, returnType);
             return (T) jaxbElement.getValue();
         } catch (JAXBException | FileNotFoundException e) {
             throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);

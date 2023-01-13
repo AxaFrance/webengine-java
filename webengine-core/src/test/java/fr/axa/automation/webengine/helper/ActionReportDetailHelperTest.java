@@ -4,8 +4,6 @@ import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ActionReportDetailHelperTest {
 
     @Test

@@ -4,7 +4,6 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.Result;
 
 import java.net.UnknownHostException;
-import java.util.StringJoiner;
 
 public interface IReportGherkinHelper {
     void createReport() throws UnknownHostException;

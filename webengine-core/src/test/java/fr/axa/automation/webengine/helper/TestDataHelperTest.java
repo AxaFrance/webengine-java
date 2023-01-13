@@ -22,15 +22,12 @@ class TestDataHelperTest {
     @Test
     void testGetDataOfTestCase() throws URISyntaxException, WebEngineException {
         Optional<TestData> testData = getDataOfTestCase(TEST_CASE_1);
-        if(testData.isPresent()){
-            Assertions.assertEquals(TEST_CASE_1,testData.get().getTestName());
-        }
+        testData.ifPresent(data -> Assertions.assertEquals(TEST_CASE_1, data.getTestName()));
     }
 
     private Optional<TestData> getDataOfTestCase(String testCaseName) throws WebEngineException, URISyntaxException {
         TestSuiteData testSuiteData = XmlUtil.unmarshall(FileUtil.getFileFromResource("input/data.xml").getAbsolutePath(), TestSuiteData.class);
-        Optional<TestData> testData = TestDataHelper.getDataOfTestCase(testSuiteData.getTestDatas(),testCaseName);
-        return testData;
+        return TestDataHelper.getDataOfTestCase(testSuiteData.getTestDatas(),testCaseName);
     }
 
     @Test
@@ -47,9 +44,7 @@ class TestDataHelperTest {
         Optional<TestData> testData = getDataOfTestCase(TEST_CASE_1);
         if(testData.isPresent()){
             Optional<Variable> variable = TestDataHelper.getVariableOfTestCase(testData.get(),TEST_CASE_2_VARIABLE);
-            if(variable.isPresent()){
-                Assertions.assertEquals(TEST_CASE_2_VARIABLE_VALUE,variable.get());
-            }
+            variable.ifPresent(value -> Assertions.assertEquals(TEST_CASE_2_VARIABLE_VALUE, value.getValue()));
         }
     }
 }

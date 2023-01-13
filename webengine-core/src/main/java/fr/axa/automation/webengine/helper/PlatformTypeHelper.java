@@ -14,12 +14,12 @@ public class PlatformTypeHelper {
     public static Platform getPlatform(String platformFill) throws WebEngineException {
         List<Platform> platformList = Arrays.asList(Platform.values());
 
-        Platform platform = foundPlatform(platformFill, getPlatformPredicateWithName(platformFill));
+        Platform platform = foundPlatform(getPlatformPredicateWithName(platformFill));
         if (platform != null) {
             return platform;
         }
 
-        platform = foundPlatform(platformFill, getPlatformPredicateWithValue(platformFill));
+        platform = foundPlatform(getPlatformPredicateWithValue(platformFill));
         if (platform != null) {
             return platform;
         }
@@ -35,7 +35,7 @@ public class PlatformTypeHelper {
         return platform -> platform.getValue().equalsIgnoreCase(platformFill);
     }
 
-    private static Platform foundPlatform(String platformFill, Predicate predicate) {
+    private static Platform foundPlatform(Predicate predicate) {
         List<Platform> platformList = Arrays.asList(Platform.values());
         List<Platform> platformFoundList = (List<Platform>) platformList.stream().filter(predicate).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(platformFoundList)) {

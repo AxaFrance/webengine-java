@@ -1,7 +1,6 @@
 package fr.axa.automation.teststep;
 
 import fr.axa.automation.action.FirstStepAction;
-import fr.axa.automation.action.HomeAction;
 import fr.axa.automation.webengine.core.IAction;
 import fr.axa.automation.webengine.core.ITestStep;
 

@@ -11,8 +11,7 @@ public class ScreenshotHelper {
     public static ArrayOfScreenshotReport getArrayOfScreenshotReport(String name, byte[] dataInbase64){
         ScreenshotReport screenshotReport = getScreenshotReport(name, dataInbase64);
         List<ScreenshotReport> screenshotReportList = Arrays.asList(screenshotReport);
-        ArrayOfScreenshotReport arrayOfScreenshotReport = getArrayOfScreenshotReport(screenshotReportList);
-        return arrayOfScreenshotReport;
+        return getArrayOfScreenshotReport(screenshotReportList);
     }
 
     private static ArrayOfScreenshotReport getArrayOfScreenshotReport(List<ScreenshotReport> screenshotReportList) {

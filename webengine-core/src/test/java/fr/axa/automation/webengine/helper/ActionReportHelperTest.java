@@ -18,15 +18,13 @@ class ActionReportHelperTest {
     void testGetArrayOfActionReport() {
         List<ActionReportDetail> actionReportDetailList = getActionReportDetailList();
         List<ActionReport> actionReportList = ActionReportHelper.getActionReportList(actionReportDetailList);
-        List<String> nameActionList = actionReportList.stream().map(actionReport -> actionReport.getName()).collect(Collectors.toList());
-        Assertions.assertArrayEquals(new String[]{LOGIN_ACTION, VISUALISATION_ACTION},nameActionList.toArray());
+        Assertions.assertArrayEquals(new String[]{LOGIN_ACTION, VISUALISATION_ACTION}, actionReportList.stream().map(ActionReport::getName).toArray());
     }
 
     private List<ActionReportDetail> getActionReportDetailList() {
         ActionReportDetail actionReportDetail1 = ActionReportDetail.builder().actionReport(ActionReportHelper.getActionReport(LOGIN_ACTION)).resultCheckPoint(true).build();
         ActionReportDetail actionReportDetail2 = ActionReportDetail.builder().actionReport(ActionReportHelper.getActionReport(VISUALISATION_ACTION)).resultCheckPoint(true).build();
-        List<ActionReportDetail> actionReportDetailList = Arrays.asList(actionReportDetail1,actionReportDetail2);
-        return actionReportDetailList;
+        return Arrays.asList(actionReportDetail1,actionReportDetail2);
     }
 
     @Test

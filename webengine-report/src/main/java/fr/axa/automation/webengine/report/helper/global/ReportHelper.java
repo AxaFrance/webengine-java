@@ -34,6 +34,7 @@ public class ReportHelper implements IReportHelper{
 
     public Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
         Map<ReportPath,String> path = new HashMap<>();
+        loggerService.info("Start Generation of Junit and Webengine Report");
         String webEngineReport = webengineReportHelper.generateWebengineReport(testSuiteReport, outputPath);
         path.put(ReportPath.WEBENGINE_REPORT,webEngineReport);
         String JunitReport = junitReportHelper.generateJUnitReport(testSuiteReport, testSuiteName, outputPath);

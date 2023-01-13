@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ScreenshotHelperTest {
 
     private static final String SCREENSHOT_NAME = "login";
