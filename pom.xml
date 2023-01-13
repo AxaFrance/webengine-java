@@ -41,7 +41,7 @@
         <jackson-databind.version>2.13.2.2</jackson-databind.version>
         <jackson-dataformat-yaml.version>2.13.2</jackson-dataformat-yaml.version>
         <istack-commons-runtime.version>2.16</istack-commons-runtime.version>
-        <snakeyaml.version>1.2</snakeyaml.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
         <gson.version>2.10</gson.version>
 
         <jna-platform.version>4.2.2</jna-platform.version>
@@ -72,6 +72,7 @@
         <module>webengine-web</module>
         <module>webengine-runner</module>
         <module>webengine-boot-keyword-driven</module>
+        <module>webengine-testpage-keyword-driven</module>
         <module>webengine-boot-gherkin</module>
     </modules>
 
@@ -113,12 +114,66 @@
             <version>${jackson-databind.version}</version>
         </dependency>
 
+
+        <!-- JUNIT 5 -->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit-platform-suite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit-platform-suite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-api</artifactId>
+            <version>${junit-platform-suite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <version>${junit-platform-suite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+            <version>${junit-platform-suite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-engine</artifactId>
+            <version>${junit-platform-suite.version}</version>
+        </dependency>
+
+
+        <!-- END JUNIT 5 -->
+
 
         <dependency>
             <groupId>org.mockito</groupId>
@@ -139,6 +194,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!--
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            -->
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -266,11 +331,21 @@
                 <version>${istack-commons-runtime.version}</version>
             </dependency>
 
+            <!-- CUCUMBER JUNIT 4 -->
+            <!--
             <dependency>
                 <groupId>io.cucumber</groupId>
                 <artifactId>cucumber-junit</artifactId>
                 <version>${cucumber.version}</version>
             </dependency>
+            -->
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-junit-platform-engine</artifactId>
+                <version>${cucumber.version}</version>
+                <scope>test</scope>
+            </dependency>
+
 
             <dependency>
                 <groupId>io.cucumber</groupId>
@@ -299,7 +374,7 @@
             <dependency>
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}1</version>
+                <version>${snakeyaml.version}</version>
             </dependency>
 
             <dependency>
