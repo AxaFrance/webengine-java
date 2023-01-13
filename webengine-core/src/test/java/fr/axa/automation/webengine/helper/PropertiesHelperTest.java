@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 class PropertiesHelperTest {
@@ -41,7 +42,7 @@ class PropertiesHelperTest {
     void testGetGlobalConfiguration() throws WebEngineException {
         String fileName = "properties/application-windows-chromiumedge.yml";
         PropertiesHelper propertiesHelper = PropertiesHelperProvider.getInstance();
-        Optional<GlobalConfigProperties> globalConfigProperties = propertiesHelper.getGlobalConfiguration(Arrays.asList(fileName),fileName);
+        Optional<GlobalConfigProperties> globalConfigProperties = propertiesHelper.getGlobalConfiguration(Collections.singletonList(fileName),fileName);
         Assertions.assertNotNull(globalConfigProperties.get());
         Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getApplication().getPlatformName()));
     }

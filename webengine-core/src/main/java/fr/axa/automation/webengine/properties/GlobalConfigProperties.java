@@ -17,7 +17,7 @@ public class GlobalConfigProperties {
     AppiumSettingsProperties appiumSettings;
 
     public boolean isLocalTestingConfExist() {
-        return (this.getAppiumSettings() != null && this.getAppiumSettings().getLocalTesting() != null) ? true : false;
+        return this.getAppiumSettings() != null && this.getAppiumSettings().getLocalTesting() != null;
     }
 
     public String getPlateform(){

@@ -53,7 +53,7 @@ class DateUtilTest {
         Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
         Date date = calendar.getTime();
         LocalDateTime localDateTimeResult = date.toInstant().atZone(zoneId).toLocalDateTime();
-        Assertions.assertTrue(localDateTime.equals(localDateTimeResult));
+        Assertions.assertEquals(localDateTime, localDateTimeResult);
     }
 
     @Test
@@ -61,7 +61,7 @@ class DateUtilTest {
         LocalDateTime localDateTime = LocalDateTime.of(2022, 12, 15, 12, 00, 00);
         Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
         LocalDateTime localDateTimeResult = DateUtil.getLocalDateTime(calendar);
-        Assertions.assertTrue(localDateTime.equals(localDateTimeResult));
+        Assertions.assertEquals(localDateTime, localDateTimeResult);
     }
 
     @Test

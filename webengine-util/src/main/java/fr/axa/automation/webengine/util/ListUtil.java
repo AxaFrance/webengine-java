@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class ListUtil {
     public static Optional<String> findFirst(List<String> list, String search)  {
         Optional<String> findFirstOptional = list.stream().filter(s->s.contains(search)).findFirst();
-        return findFirstOptional.isPresent() ? findFirstOptional : Optional.empty();
+        return findFirstOptional;
     }
 
     public static List<Class> getClasses(Object[] parameters) {

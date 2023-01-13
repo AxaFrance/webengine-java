@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 class ActionReportHelperTest {
     public final static String LOGIN_ACTION = "LoginAction";

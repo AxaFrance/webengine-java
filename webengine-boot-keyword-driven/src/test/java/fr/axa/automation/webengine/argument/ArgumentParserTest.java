@@ -33,8 +33,8 @@ class ArgumentParserTest {
     void testGetOption() {
         Option option = ArgumentParser.getOption(ArgumentOption.PROJECT);
         Assertions.assertEquals("a",option.getOpt());
-        Assertions.assertEquals(true,option.hasArg());
-        Assertions.assertEquals(true,option.isRequired());
+        Assertions.assertTrue(option.hasArg());
+        Assertions.assertTrue(option.isRequired());
         Assertions.assertEquals("Project to run",option.getDescription());
     }
 

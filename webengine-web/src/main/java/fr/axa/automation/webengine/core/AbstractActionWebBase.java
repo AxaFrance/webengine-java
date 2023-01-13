@@ -77,7 +77,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         screenShot("");
     }
 
-    public void screenShot(String name) throws WebEngineException {
+    public void screenShot(String name) {
         byte[] screenshot = ((TakesScreenshot) actionDetailContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
         ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
         screenShotList.add(screenshotReport);

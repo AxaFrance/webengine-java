@@ -4,13 +4,14 @@ import fr.axa.automation.webengine.generated.ArrayOfScreenshotReport;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ScreenshotHelper {
 
     public static ArrayOfScreenshotReport getArrayOfScreenshotReport(String name, byte[] dataInbase64){
         ScreenshotReport screenshotReport = getScreenshotReport(name, dataInbase64);
-        List<ScreenshotReport> screenshotReportList = Arrays.asList(screenshotReport);
+        List<ScreenshotReport> screenshotReportList = Collections.singletonList(screenshotReport);
         return getArrayOfScreenshotReport(screenshotReportList);
     }
 

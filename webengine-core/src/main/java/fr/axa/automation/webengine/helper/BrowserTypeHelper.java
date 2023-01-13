@@ -13,12 +13,12 @@ public class BrowserTypeHelper {
 
     public static Browser getBrowser(String browserFill) throws WebEngineException {
         List<Browser> browserEnumList = Arrays.asList(Browser.values());
-        Browser browser = foundBrowser(browserFill, getBrowserPredicateWithName(browserFill));
+        Browser browser = foundBrowser(getBrowserPredicateWithName(browserFill));
         if (browser != null) {
             return browser;
         }
 
-        browser = foundBrowser(browserFill, getBrowserPredicateWithValue(browserFill));
+        browser = foundBrowser(getBrowserPredicateWithValue(browserFill));
         if (browser != null) {
             return browser;
         }
@@ -34,7 +34,7 @@ public class BrowserTypeHelper {
         return browser -> browser.getValue().equalsIgnoreCase(browserFill);
     }
 
-    private static Browser foundBrowser(String browserFill, Predicate predicate) {
+    private static Browser foundBrowser(Predicate predicate) {
         List<Browser> browserList = Arrays.asList(Browser.values());
         List<Browser> browserFoundList = (List<Browser>) browserList.stream().filter(predicate).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(browserFoundList)) {
