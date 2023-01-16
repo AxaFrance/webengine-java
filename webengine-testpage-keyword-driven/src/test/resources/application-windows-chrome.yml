@@ -1,5 +1,5 @@
 application:
-    name: robot
+    name: spoolnet-automation
     platformName: WINDOWS
     browserName: CHROME
 appiumSettings:
@@ -19,7 +19,7 @@ appiumSettings:
             deviceName: Samsung Galaxy S20 Ultra
             osVersion: 10.0
             projectName: spoolnet-automation
-            buildName: robot-mobile
+            buildName: spoolnet-automation-mobile
             sessionName: Samsung
             local: true
             networkLogs: true
