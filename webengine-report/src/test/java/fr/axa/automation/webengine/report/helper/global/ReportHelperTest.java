@@ -8,6 +8,7 @@ import fr.axa.automation.webengine.report.constante.ReportPath;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
 import fr.axa.automation.webengine.util.FileUtil;
+import fr.axa.automation.webengine.util.FileUtilForTest;
 import fr.axa.automation.webengine.util.XmlValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,12 @@ class ReportHelperTest {
         boolean resultCompareWebengineReportFile = FileUtil.assertContent(FileUtil.getFileFromResource("report-test-result/webengine-report.xml"), new File(reportMap.get(ReportPath.WEBENGINE_REPORT)));
         Assertions.assertTrue(resultCompareWebengineReportFile);
 
+        FileUtilForTest.displayContent(reportMap.get(ReportPath.WEBENGINE_REPORT));
+
         boolean resultValidateJunitReportFile = XmlValidator.validateXMLSchema(FileUtil.getFileFromResource("xsd/junit-report-schema.xsd"),new File(reportMap.get(ReportPath.JUNIT_REPORT)));
         Assertions.assertTrue(resultValidateJunitReportFile);
+
+        FileUtilForTest.displayContent(reportMap.get(ReportPath.JUNIT_REPORT));
     }
 
     private TestSuiteReport getTestSuiteReport() throws URISyntaxException, IOException {
