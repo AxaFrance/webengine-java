@@ -33,7 +33,6 @@ class ReportHelperTest {
         FileUtil.displayContent(reportMap.get(ReportPath.WEBENGINE_REPORT));
         Assertions.assertTrue(resultCompareWebengineReportFile);
 
-
         boolean resultValidateJunitReportFile = XmlValidator.validateXMLSchema(FileUtil.getFileFromResource("xsd/junit-report-schema.xsd"),new File(reportMap.get(ReportPath.JUNIT_REPORT)));
         FileUtil.displayContent(reportMap.get(ReportPath.JUNIT_REPORT));
         Assertions.assertTrue(resultValidateJunitReportFile);
