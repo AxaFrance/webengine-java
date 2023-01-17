@@ -14,7 +14,7 @@ import java.util.Locale;
 
 class DateUtilTest {
 
-    static final Logger logger = LoggerFactory.getLogger(FileUtilTest .class);
+    static final Logger logger = LoggerFactory.getLogger(DateUtilTest .class);
 
     private String getCurrentDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd-HH");

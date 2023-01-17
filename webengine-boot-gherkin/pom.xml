@@ -61,7 +61,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <excludes>
                         <exclude>fr.axa.automation.webengine.context.*</exclude>
                         <exclude>fr.axa.automation.webengine.report.ReportDetail.java</exclude>

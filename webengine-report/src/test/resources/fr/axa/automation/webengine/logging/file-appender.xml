@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <property name="LOGS_FILE" value="webengine.log"/>
+    <appender name="APPENDER-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${java.io.tmpdir}${LOGS_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${java.io.tmpdir}${LOGS_FILE}.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] ${HOSTNAME} %-5level %logger{36} - %m%n</pattern>
+        </encoder>
+    </appender>
+</included>

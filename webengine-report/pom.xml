@@ -103,7 +103,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>${argLine} -Dfile.encoding=UTF-8</argLine>
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <excludes>
                         <exclude>fr.axa.automation.webengine.report.object.*</exclude>
                         <exclude>fr.axa.automation.webengine.report.constante.*</exclude>
