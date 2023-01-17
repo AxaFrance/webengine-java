@@ -38,6 +38,14 @@ class DateUtilTest {
     }
 
     @Test
+    void testGetDateTime3() {
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.of(2022,12,15,12,00,00);
+        Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
+        logger.info("Date with hour :"+DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS,Locale.getDefault()));
+    }
+
+    @Test
     void testGetDateTimeWithLocal() {
         String dateWithHour = getCurrentDate();
         logger.info("Date with hour :"+dateWithHour);

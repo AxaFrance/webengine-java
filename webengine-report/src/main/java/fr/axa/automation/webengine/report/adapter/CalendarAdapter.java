@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.util.FormatDate;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class CalendarAdapter extends XmlAdapter<String, Calendar> {
 
@@ -15,6 +16,6 @@ public class CalendarAdapter extends XmlAdapter<String, Calendar> {
 
     @Override
     public String marshal(Calendar calendar) throws Exception {
-        return DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS);
+        return DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS, Locale.getDefault());
     }
 }
