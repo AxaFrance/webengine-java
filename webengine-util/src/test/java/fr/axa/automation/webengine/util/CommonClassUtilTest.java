@@ -13,7 +13,7 @@ import java.util.Properties;
 
 class CommonClassUtilTest {
 
-    static final Logger logger = LoggerFactory.getLogger(CommonClassUtilTest .class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonClassUtilTest .class);
 
     @Test
     void testCreateWith() throws WebEngineException {

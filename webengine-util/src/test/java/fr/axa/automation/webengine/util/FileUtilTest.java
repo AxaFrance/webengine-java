@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 class FileUtilTest {
 
     public static final String TEST_CREATE_DIRECTORY = "test-create-directory";
-    static final Logger logger = LoggerFactory.getLogger(FileUtilTest .class);
+    public static final Logger logger = LoggerFactory.getLogger(FileUtilTest .class);
 
     @Test
     public void testCreateDirectories() throws WebEngineException {
