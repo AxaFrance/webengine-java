@@ -2,6 +2,8 @@ package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -11,11 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 public class FileUtil {
 
     public static final String TARGET_DIRECTORY = "target";
     public static final String RUN_RESULT_DIRECTORY = "report-test-result";
+
+    public static final ILoggerService loggerService = LoggerServiceProvider.getInstance();
 
     public static Path createDirectories(String path) throws WebEngineException {
         try {
@@ -107,6 +112,14 @@ public class FileUtil {
         File currentDirFile = new File(".");
         String path = currentDirFile.getAbsolutePath();
         return path.substring(0, path.length() - 1);
+    }
+
+    public static void displayContent(String fileName){
+        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
+            stream.forEach(loggerService::info);
+        } catch (IOException e) {
+            loggerService.error("Error during displaying content of file",e);
+        }
     }
 }
 

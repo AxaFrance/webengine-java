@@ -3,19 +3,14 @@ package fr.axa.automation.webengine.report.helper.global;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
-import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.report.constante.ReportPath;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
 import fr.axa.automation.webengine.util.FileUtil;
-import fr.axa.automation.webengine.util.FileUtilForTest;
 import fr.axa.automation.webengine.util.XmlValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -35,12 +30,12 @@ class ReportHelperTest {
 
         Map<ReportPath,String> reportMap =  reportHelper.generateAllReport(testSuiteReport,"TestSuiteName",path);
         boolean resultCompareWebengineReportFile = FileUtil.assertContent(FileUtil.getFileFromResource("report-test-result/webengine-report.xml"), new File(reportMap.get(ReportPath.WEBENGINE_REPORT)));
-        FileUtilForTest.displayContent(reportMap.get(ReportPath.WEBENGINE_REPORT));
+        FileUtil.displayContent(reportMap.get(ReportPath.WEBENGINE_REPORT));
         Assertions.assertTrue(resultCompareWebengineReportFile);
 
 
         boolean resultValidateJunitReportFile = XmlValidator.validateXMLSchema(FileUtil.getFileFromResource("xsd/junit-report-schema.xsd"),new File(reportMap.get(ReportPath.JUNIT_REPORT)));
-        FileUtilForTest.displayContent(reportMap.get(ReportPath.JUNIT_REPORT));
+        FileUtil.displayContent(reportMap.get(ReportPath.JUNIT_REPORT));
         Assertions.assertTrue(resultValidateJunitReportFile);
 
     }

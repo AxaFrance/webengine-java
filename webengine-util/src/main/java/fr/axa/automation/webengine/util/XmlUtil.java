@@ -42,7 +42,8 @@ public class XmlUtil {
             jaxbContext = JAXBContext.newInstance(objectToMarshall.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
+//            jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, Charset.defaultCharset().name());
+            jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
             Optional<NamespacePrefixMapper> namespacePrefixMapper = getNamespacePrefixMapper(inputMarshallDTO);
             if(namespacePrefixMapper.isPresent()){
                 jaxbMarshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", namespacePrefixMapper.get());

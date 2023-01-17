@@ -53,6 +53,7 @@ public class XmlUtilTest {
         InputMarshallDTO inputMarshallDTO = InputMarshallDTO.builder().fileDestinationPath(filePath).objectToMarshall(user).namespace(namespace).prefix("nsc").build();
         File fileResult = XmlUtil.marshall(inputMarshallDTO);
         boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"), fileResult);
+        FileUtil.displayContent(fileResult.getAbsolutePath());
         Assertions.assertTrue(resultCompareFile);
     }
 
