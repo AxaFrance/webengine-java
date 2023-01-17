@@ -35,14 +35,14 @@ class ReportHelperTest {
 
         Map<ReportPath,String> reportMap =  reportHelper.generateAllReport(testSuiteReport,"TestSuiteName",path);
         boolean resultCompareWebengineReportFile = FileUtil.assertContent(FileUtil.getFileFromResource("report-test-result/webengine-report.xml"), new File(reportMap.get(ReportPath.WEBENGINE_REPORT)));
+        FileUtilForTest.displayContent(reportMap.get(ReportPath.WEBENGINE_REPORT));
         Assertions.assertTrue(resultCompareWebengineReportFile);
 
-        FileUtilForTest.displayContent(reportMap.get(ReportPath.WEBENGINE_REPORT));
 
         boolean resultValidateJunitReportFile = XmlValidator.validateXMLSchema(FileUtil.getFileFromResource("xsd/junit-report-schema.xsd"),new File(reportMap.get(ReportPath.JUNIT_REPORT)));
+        FileUtilForTest.displayContent(reportMap.get(ReportPath.JUNIT_REPORT));
         Assertions.assertTrue(resultValidateJunitReportFile);
 
-        FileUtilForTest.displayContent(reportMap.get(ReportPath.JUNIT_REPORT));
     }
 
     private TestSuiteReport getTestSuiteReport() throws URISyntaxException, IOException {
