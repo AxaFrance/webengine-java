@@ -32,6 +32,13 @@ public class DateUtil {
         return dateTimeFormatter.format(new Date(calendar.getTimeInMillis()));
     }
 
+    public static String getDateTime(Calendar calendar,FormatDate formatDate,  Locale locale, String timeZone){
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat(formatDate.getFormat(),locale);
+        dateTimeFormatter.setTimeZone(TimeZone.getTimeZone(timeZone));
+        return dateTimeFormatter.format(new Date(calendar.getTimeInMillis()));
+    }
+
+
     public static Calendar localDateTimeToCalendar(LocalDateTime localDateTime) {
         ZoneId zoneId = ZoneId.systemDefault();
         Date date = Date.from(localDateTime.atZone(zoneId).toInstant());

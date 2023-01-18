@@ -3,8 +3,8 @@
     <ns:TestResult>
         <ns:TestName>AFFICHAGE_DOCUMENT_SPOOLNET</ns:TestName>
         <ns:Result>Failed</ns:Result>
-        <ns:StartTime>2022-11-18T11:11:11</ns:StartTime>
-        <ns:EndTime>2022-11-18T11:11:35</ns:EndTime>
+        <ns:StartTime>2022-11-18T11:07:11</ns:StartTime>
+        <ns:EndTime>2022-11-18T11:08:35</ns:EndTime>
         <ns:TestData>
             <ns:Variable>
                 <ns:Name>TESTCASE</ns:Name>
@@ -19,8 +19,8 @@
             <ns:ActionReport>
                 <ns:Name>LoginAction</ns:Name>
                 <ns:Result>CriticalError</ns:Result>
-                <ns:StartTime>2022-11-18T11:11:15</ns:StartTime>
-                <ns:EndTime>2022-11-18T11:11:34</ns:EndTime>
+                <ns:StartTime>2022-11-18T11:07:15</ns:StartTime>
+                <ns:EndTime>2022-11-18T11:08:34</ns:EndTime>
                 <ns:ContextValues>
                     <ns:Variable>
                         <ns:Name>TESTCASE</ns:Name>
@@ -55,8 +55,8 @@
             <ns:Value>https://declaration-sinistre-pp.axa.fr/#/auto/claim</ns:Value>
         </ns:Variable>
     </ns:EnvironmentVariables>
-    <ns:StartTime>2022-11-18T11:11:11</ns:StartTime>
-    <ns:EndTime>2022-11-18T11:11:35</ns:EndTime>
+    <ns:StartTime>2022-11-18T11:07:11</ns:StartTime>
+    <ns:EndTime>2022-11-18T11:08:35</ns:EndTime>
     <ns:HostName>DESKTOP-4PEPTM0</ns:HostName>
     <ns:SystemOut></ns:SystemOut>
     <ns:SystemError></ns:SystemError>

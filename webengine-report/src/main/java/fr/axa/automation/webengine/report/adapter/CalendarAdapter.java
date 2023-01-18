@@ -16,6 +16,6 @@ public class CalendarAdapter extends XmlAdapter<String, Calendar> {
 
     @Override
     public String marshal(Calendar calendar) throws Exception {
-        return DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS, Locale.FRENCH);
+        return DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS, Locale.FRENCH, "Europe/paris");
     }
 }
