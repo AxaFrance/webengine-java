@@ -69,7 +69,7 @@ public class JunitReportHelper implements IJunitReportHelper {
         testsuite.setProperties(new Testsuite.Properties());
         testsuite.setSystemOut(StringUtils.isNotEmpty(testSuiteReport.getSystemOut()) ? testSuiteReport.getSystemOut() : "");
         testsuite.setSystemErr(StringUtils.isNotEmpty(testSuiteReport.getSystemError()) ? testSuiteReport.getSystemError() : "");
-        testsuite.setErrors(Long.valueOf(testSuiteReport.getTestResults().stream().filter(elt->elt.getResult()== Result.FAILED).count()).intValue());
+        testsuite.setErrors((int)(testSuiteReport.getTestResults().stream().filter(elt->elt.getResult()== Result.FAILED).count()));
         testsuite.setTests(testSuiteReport.getTestResults().size());
         testsuite.getTestcases().addAll(getTestcases(testSuiteReport));
         return testsuite;
