@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.MultipleElementException;
+import fr.axa.automation.webengine.exception.WebEngineException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -85,7 +86,7 @@ public class WebElementDescription extends AbstractElementDescription {
         }
     }
 
-    private Collection<WebElement> calculWebElementByCriteria(Collection<WebElement> webElementList, Collection<WebElement> webElementListToJoin) {
+    private Collection<WebElement> mergeWebElement(Collection<WebElement> webElementList, Collection<WebElement> webElementListToJoin) {
         Collection<WebElement> newWebElementList;
         if (CollectionUtils.isEmpty(webElementList) && CollectionUtils.isEmpty(webElementListToJoin)) {
             return null;
@@ -105,27 +106,27 @@ public class WebElementDescription extends AbstractElementDescription {
         }
         if (StringUtils.isNotEmpty(this.name)) {
             Collection<WebElement> webElementByNameList = getInternalFindElementsByName(this.name);
-            webElementList = calculWebElementByCriteria(webElementList, webElementByNameList);
+            webElementList = mergeWebElement(webElementList, webElementByNameList);
         }
         if (StringUtils.isNotEmpty(this.className)) {
             Collection<WebElement> webElementByXpathList = getInternalFindElementByClassName(this.className);
-            webElementList = calculWebElementByCriteria(webElementList, webElementByXpathList);
+            webElementList = mergeWebElement(webElementList, webElementByXpathList);
         }
         if (StringUtils.isNotEmpty(this.linkText)) {
             Collection<WebElement> webElementByLinkList = getInternalFindElementByLinkText(this.linkText);
-            webElementList = calculWebElementByCriteria(webElementList, webElementByLinkList);
+            webElementList = mergeWebElement(webElementList, webElementByLinkList);
         }
         if (StringUtils.isNotEmpty(this.tagName)) {
             Collection<WebElement> webElementByTagName = getInternalFindElementByTagName(this.tagName);
-            webElementList = calculWebElementByCriteria(webElementList, webElementByTagName);
+            webElementList = mergeWebElement(webElementList, webElementByTagName);
         }
         if (StringUtils.isNotEmpty(this.cssSelector)) {
             Collection<WebElement> webElementByCssSelector = getInternalFindElementByCssSelector(this.cssSelector);
-            webElementList = calculWebElementByCriteria(webElementList, webElementByCssSelector);
+            webElementList = mergeWebElement(webElementList, webElementByCssSelector);
         }
         if (StringUtils.isNotEmpty(this.xPath)) {
             Collection<WebElement> webElementByCssSelector = getInternalFindElementByXpath(this.xPath);
-            webElementList = calculWebElementByCriteria(webElementList, webElementByCssSelector);
+            webElementList = mergeWebElement(webElementList, webElementByCssSelector);
         }
         if (StringUtils.isNotEmpty(this.innerText)) {
             if (CollectionUtils.isNotEmpty(webElementList)) {
@@ -139,7 +140,7 @@ public class WebElementDescription extends AbstractElementDescription {
             this.attributeList.stream().forEach(htmlAttribute -> attributes.add("[{" + htmlAttribute.getName() + "}=\"{" + htmlAttribute.getValue() + "}\"]"));
             String cssSelector = String.join("",attributes);
             Collection<WebElement> webElementByAttributeList = getInternalFindElementByCssSelector(cssSelector);
-            webElementList = calculWebElementByCriteria(webElementList, webElementByAttributeList);
+            webElementList = mergeWebElement(webElementList, webElementByAttributeList);
         }
 
         if (CollectionUtils.isEmpty(webElementList)) {
@@ -179,7 +180,7 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     @Override
-    protected Function<Void, byte[]> internalGetScreenshot() throws Exception {
+    protected Function<Void, byte[]> internalGetScreenshot() {
         return (x) -> {
             try {
                 WebElement element = findElement();
@@ -306,7 +307,11 @@ public class WebElementDescription extends AbstractElementDescription {
             Collection<WebElement> elementCollection = this.internalFindElements();
             if (CollectionUtils.isNotEmpty(elementCollection)) {
                 WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(x)).findFirst().orElse(null);
-                webElementFilter.click();
+                if(webElementFilter!=null) {
+                    webElementFilter.click();
+                }else{
+                    throw new WebEngineException("Element is null");
+                }
             }
             return null;
         };
