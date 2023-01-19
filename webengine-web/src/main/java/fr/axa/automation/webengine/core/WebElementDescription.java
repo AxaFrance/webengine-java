@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.util.ListUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,17 +10,15 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -86,97 +85,102 @@ public class WebElementDescription extends AbstractElementDescription {
         }
     }
 
-    private Collection<WebElement> mergeWebElement(Collection<WebElement> webElementList, Collection<WebElement> webElementListToJoin) {
-        Collection<WebElement> newWebElementList;
-        if (CollectionUtils.isEmpty(webElementList) && CollectionUtils.isEmpty(webElementListToJoin)) {
-            return null;
-        } else if (CollectionUtils.isEmpty(webElementList)) {
-            newWebElementList = webElementListToJoin;
-        } else {
-            newWebElementList = webElementList.stream().filter(one -> webElementListToJoin.stream().anyMatch(two -> ((RemoteWebElement) two).getId().equals(((RemoteWebElement) one).getId()))).collect(Collectors.toList());
-        }
-        return newWebElementList;
-    }
-
-    @Override
     public Collection<WebElement> internalFindElements() {
-        Collection<WebElement> webElementList = null;
-        if (StringUtils.isNotEmpty(this.id)) {
-            webElementList = getInternalFindElementsById(this.id);
-        }
-        if (StringUtils.isNotEmpty(this.name)) {
-            Collection<WebElement> webElementByNameList = getInternalFindElementsByName(this.name);
-            webElementList = mergeWebElement(webElementList, webElementByNameList);
-        }
-        if (StringUtils.isNotEmpty(this.className)) {
-            Collection<WebElement> webElementByXpathList = getInternalFindElementByClassName(this.className);
-            webElementList = mergeWebElement(webElementList, webElementByXpathList);
-        }
-        if (StringUtils.isNotEmpty(this.linkText)) {
-            Collection<WebElement> webElementByLinkList = getInternalFindElementByLinkText(this.linkText);
-            webElementList = mergeWebElement(webElementList, webElementByLinkList);
-        }
-        if (StringUtils.isNotEmpty(this.tagName)) {
-            Collection<WebElement> webElementByTagName = getInternalFindElementByTagName(this.tagName);
-            webElementList = mergeWebElement(webElementList, webElementByTagName);
-        }
-        if (StringUtils.isNotEmpty(this.cssSelector)) {
-            Collection<WebElement> webElementByCssSelector = getInternalFindElementByCssSelector(this.cssSelector);
-            webElementList = mergeWebElement(webElementList, webElementByCssSelector);
-        }
-        if (StringUtils.isNotEmpty(this.xPath)) {
-            Collection<WebElement> webElementByCssSelector = getInternalFindElementByXpath(this.xPath);
-            webElementList = mergeWebElement(webElementList, webElementByCssSelector);
-        }
-        if (StringUtils.isNotEmpty(this.innerText)) {
-            if (CollectionUtils.isNotEmpty(webElementList)) {
-                webElementList = webElementList.stream().filter(x -> this.innerText.equalsIgnoreCase(x.getText())).collect(Collectors.toList());
-            } else {
-                webElementList = getInternalFindElementByXpath("//*[text()='" + this.innerText + "']");
+        final List<WebElement> elements = new ArrayList<>();
+        Map<String, Collection<WebElement>> findElementsMap = new HashMap<>();
+        findElementsMap.put("id", getInternalFindElementsById(this.id));
+        findElementsMap.put("name", getInternalFindElementsByName(this.name));
+        findElementsMap.put("className", getInternalFindElementByClassName(this.className));
+        findElementsMap.put("linkText", getInternalFindElementByLinkText(this.linkText));
+        findElementsMap.put("tagName", getInternalFindElementByTagName(this.tagName));
+        findElementsMap.put("cssSelector", getInternalFindElementByCssSelector(this.cssSelector));
+        findElementsMap.put("xPath", getInternalFindElementByXpath(this.xPath));
+        findElementsMap.put("attributeList", getInternalFindElementByAttributeList(this.attributeList));
+
+        findElementsMap.forEach((k, v) -> elements.addAll(findElementsMap.get(k)));
+
+        List<WebElement> webElementBYInnerTextList = (List<WebElement>) getInternalFindElementByInnerText(this.innerText,elements);
+        elements.addAll(webElementBYInnerTextList);
+
+        if (CollectionUtils.isNotEmpty(elements)) {
+            if(elements.size()==1){
+                return elements;
+            }else {
+                return ListUtil.findDuplicateElements(elements);
             }
         }
-        if (CollectionUtils.isNotEmpty(this.attributeList)) {
+
+        throw new NoSuchElementException("No such WebElement found in the page");
+    }
+
+    private Collection<WebElement> getInternalFindElementByAttributeList(Collection<HtmlAttribute> attributeList) {
+        if (CollectionUtils.isNotEmpty(attributeList)) {
             List<String> attributes = new ArrayList<>();
-            this.attributeList.stream().forEach(htmlAttribute -> attributes.add("[{" + htmlAttribute.getName() + "}=\"{" + htmlAttribute.getValue() + "}\"]"));
-            String cssSelector = String.join("",attributes);
-            Collection<WebElement> webElementByAttributeList = getInternalFindElementByCssSelector(cssSelector);
-            webElementList = mergeWebElement(webElementList, webElementByAttributeList);
+            attributeList.stream().forEach(htmlAttribute -> attributes.add("[{" + htmlAttribute.getName() + "}=\"{" + htmlAttribute.getValue() + "}\"]"));
+            String cssSelector = String.join("", attributes);
+            return getInternalFindElementByCssSelector(cssSelector);
         }
+        return new ArrayList<>();
+    }
 
-        if (CollectionUtils.isEmpty(webElementList)) {
-            throw new NoSuchElementException("No such WebElement found in the page");
+    private Collection<WebElement> getInternalFindElementByInnerText(String innerText,Collection<WebElement> webElementList) {
+        if (StringUtils.isNotEmpty(innerText)) {
+            if (CollectionUtils.isNotEmpty(webElementList)) {
+                return webElementList.stream().filter(webElement -> innerText.equalsIgnoreCase(webElement.getText())).collect(Collectors.toList());
+            }
+            return getInternalFindElementByXpath("//*[text()='" + innerText + "']");
         }
-
-        return webElementList;
+        return new ArrayList<>();
     }
 
     private List<WebElement> getInternalFindElementByCssSelector(String cssSelector) {
-        return useDriver.findElements(By.cssSelector(cssSelector));
+        if(StringUtils.isNotEmpty(cssSelector)) {
+            return useDriver.findElements(By.cssSelector(cssSelector));
+        }
+        return new ArrayList<>();
     }
 
     private List<WebElement> getInternalFindElementByTagName(String tagName) {
-        return useDriver.findElements(By.tagName(tagName.toUpperCase()));
+        if(StringUtils.isNotEmpty(tagName)) {
+            return useDriver.findElements(By.tagName(tagName.toUpperCase()));
+        }
+        return new ArrayList<>();
     }
 
     private List<WebElement> getInternalFindElementByLinkText(String linkText) {
-        return useDriver.findElements(By.linkText(linkText));
+        if(StringUtils.isNotEmpty(linkText)) {
+            return useDriver.findElements(By.linkText(linkText));
+        }
+        return new ArrayList<>();
     }
 
     private Collection<WebElement> getInternalFindElementByClassName(String className) {
-        String xPath = "//*[contains(@class, '{" + className + "}')]";
-        return useDriver.findElements(By.xpath(xPath));
+        if(StringUtils.isNotEmpty(className)) {
+            String xPath = "//*[contains(@class, '{" + className + "}')]";
+            return useDriver.findElements(By.xpath(xPath));
+        }
+        return new ArrayList<>();
     }
 
     private Collection<WebElement> getInternalFindElementByXpath(String xPath) {
-        return useDriver.findElements(By.xpath(xPath));
+        if(StringUtils.isNotEmpty(xPath)) {
+            return useDriver.findElements(By.xpath(xPath));
+        }
+        return new ArrayList<>();
     }
 
     private Collection<WebElement> getInternalFindElementsByName(String name) {
-        return useDriver.findElements(By.name(name));
+        if(StringUtils.isNotEmpty(name)) {
+            return useDriver.findElements(By.name(name));
+        }
+        return new ArrayList<>();
     }
 
     private Collection<WebElement> getInternalFindElementsById(String id) {
-        return useDriver.findElements(By.id(this.id));
+        if(StringUtils.isNotEmpty(id)){
+            return useDriver.findElements(By.id(id));
+        }
+        return new ArrayList<>();
     }
 
     @Override
