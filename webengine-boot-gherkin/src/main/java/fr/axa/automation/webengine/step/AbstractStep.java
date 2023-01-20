@@ -39,8 +39,11 @@ public abstract class AbstractStep {
 
     protected void addInformation(String information){
         if(CollectionUtils.isNotEmpty(ExecutionDetail.STEP_IN_PROGRESS)){
-            String key = ExecutionDetail.STEP_IN_PROGRESS.stream().reduce((one,two) -> two).get();
-            SharedInformation.addInformation(key,information);
+            Optional<String> optionalKey = ExecutionDetail.STEP_IN_PROGRESS.stream().reduce((one,two) -> two);
+            if(optionalKey.isPresent()){
+                String key = optionalKey.get();
+                SharedInformation.addInformation(key,information);
+            }
         }
     }
 
