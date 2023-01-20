@@ -86,6 +86,7 @@
                 </executions>
                 <configuration>
                     <excludes>
+                        <exclude>fr/axa/automation/webengine/Application.class</exclude>
                         <exclude>fr/axa/automation/webengine/dto/*</exclude>
                         <exclude>fr/axa/automation/webengine/exception/*</exclude>
                         <exclude>fr/axa/automation/webengine/xml/*</exclude>
