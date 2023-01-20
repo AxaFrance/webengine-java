@@ -14,6 +14,7 @@ import io.cucumber.java.Before;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.collections4.CollectionUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Optional;
@@ -37,8 +38,10 @@ public abstract class AbstractStep {
     }
 
     protected void addInformation(String information){
-        String key = ExecutionDetail.STEP_IN_PROGRESS.stream().reduce((one,two) -> two).get();
-        SharedInformation.addInformation(key,information);
+        if(CollectionUtils.isNotEmpty(ExecutionDetail.STEP_IN_PROGRESS)){
+            String key = ExecutionDetail.STEP_IN_PROGRESS.stream().reduce((one,two) -> two).get();
+            SharedInformation.addInformation(key,information);
+        }
     }
 
     protected void initializeDriver() throws Exception {

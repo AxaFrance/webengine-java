@@ -34,15 +34,18 @@ class DateUtilTest {
         ZoneId zoneId = ZoneId.systemDefault();
         LocalDateTime localDateTime = LocalDateTime.of(2022,12,15,12,00,00);
         Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
-        logger.info("Date with hour :"+DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS));
+        String dateTime = DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS);
+        logger.info("Date with hour :"+dateTime);
+        Assertions.assertEquals("2022-12-15T12:00:00",dateTime);
     }
 
     @Test
     void testGetDateTime3() {
-        ZoneId zoneId = ZoneId.systemDefault();
         LocalDateTime localDateTime = LocalDateTime.of(2022,12,15,12,00,00);
         Calendar calendar = DateUtil.localDateTimeToCalendar(localDateTime);
-        logger.info("Date with hour :"+DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS,Locale.getDefault()));
+        String dateTime = DateUtil.getDateTime(calendar,FormatDate.YYYYMMDD_T_HHMMSS,Locale.getDefault());
+        logger.info("Date with hour :"+dateTime);
+        Assertions.assertEquals("2022-12-15T12:00:00",dateTime);
     }
 
     @Test

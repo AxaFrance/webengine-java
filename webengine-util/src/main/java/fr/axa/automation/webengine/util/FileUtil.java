@@ -63,7 +63,7 @@ public class FileUtil {
     }
 
     public static File getFileFromResource(String fileName) throws URISyntaxException {
-        ClassLoader classLoader = FileUtil.class.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
             throw new IllegalArgumentException("The file "+fileName+" not found in resource directory ");
@@ -73,9 +73,10 @@ public class FileUtil {
     }
 
     public static boolean assertContent(File fileContentExpected, File fileContentResult) throws IOException {
-        Reader reader1 = new BufferedReader(new FileReader(fileContentExpected));
-        Reader reader2 = new BufferedReader(new FileReader(fileContentResult));
-        return IOUtils.contentEqualsIgnoreEOL(reader1, reader2);
+        try(Reader reader1 = new BufferedReader(new FileReader(fileContentExpected));
+            Reader reader2 = new BufferedReader(new FileReader(fileContentResult))){
+            return IOUtils.contentEqualsIgnoreEOL(reader1, reader2);
+        }
     }
 
     public static InputStream getInputStreamByPathOrResource(String fileOrResource) throws IOException {
@@ -88,7 +89,7 @@ public class FileUtil {
 
     public static File getFileByPathOrResource(String fileOrResource) throws FileNotFoundException {
         try {
-            URL url = FileUtil.class.getClassLoader().getResource(fileOrResource);
+            URL url = Thread.currentThread().getContextClassLoader().getResource(fileOrResource);
             if(url!=null){
                 return new File(url.toURI());
             }else{
@@ -100,7 +101,7 @@ public class FileUtil {
     }
 
     public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
-        ClassLoader classLoader = FileUtil.class.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(resourceName);
         if(inputStream==null){
             throw new FileNotFoundException("The resource file "+resourceName+" not found in resource directory ");

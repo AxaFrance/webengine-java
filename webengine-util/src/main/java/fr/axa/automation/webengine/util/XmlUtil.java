@@ -65,9 +65,8 @@ public class XmlUtil {
 
     private static Optional<NamespacePrefixMapper> getNamespacePrefixMapper(InputMarshallDTO inputMarshallDTO) {
         if (StringUtils.isNotEmpty(inputMarshallDTO.getNamespace()) && StringUtils.isNotEmpty(inputMarshallDTO.getPrefix())) {
-            Map<String, String> namespaceAndPrefixMap = new HashMap() {{
-                put(inputMarshallDTO.getNamespace(), inputMarshallDTO.getPrefix());
-            }};
+            Map<String, String> namespaceAndPrefixMap = new HashMap() ;
+            namespaceAndPrefixMap.put(inputMarshallDTO.getNamespace(), inputMarshallDTO.getPrefix());
             return Optional.of(new NamespacePrefixerWebengine(namespaceAndPrefixMap));
         }
         return Optional.empty();
