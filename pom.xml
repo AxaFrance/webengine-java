@@ -178,7 +178,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>2.21.0</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -342,7 +341,6 @@
                 <groupId>io.cucumber</groupId>
                 <artifactId>cucumber-junit-platform-engine</artifactId>
                 <version>${cucumber.version}</version>
-                <scope>test</scope>
             </dependency>
 
 
