@@ -44,9 +44,11 @@ public class SampleFlowStep extends AbstractStep {
 
 
     @Given("^I visit the test page \"([^\"]*)\" for running journey$")
-    public void visitTheTestPage(String url) {
+    public void visitTheTestPage(String url) throws InterruptedException {
         addInformation("Open WebEngine test page");
         getWebDriver().get(url);
+        getWebEngineHomeTestPage().sync(3); //Just for code coverage
+        getWebEngineHomeTestPage().maximize();//Just for code coverage
     }
 
     @And("^I click on the link Start step 1$")
