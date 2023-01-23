@@ -5,5 +5,3 @@ Feature: Test du formulaire dans la page d'accueil
     When I press on the OK button
     And I see a pop up
     And I click on the OK button in the pop up
-
-

@@ -1,4 +1,4 @@
-package fr.axa.automation.feature.authentication.model;
+package fr.axa.automation.feature.model;
 
 import fr.axa.automation.webengine.core.AbstractPageModel;
 import fr.axa.automation.webengine.core.WebElementDescription;

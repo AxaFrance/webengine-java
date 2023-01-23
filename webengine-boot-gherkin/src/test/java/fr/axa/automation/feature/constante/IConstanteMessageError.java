@@ -1,4 +1,4 @@
-package fr.axa.automation.feature.authentication.constante;
+package fr.axa.automation.feature.constante;
 
 public interface IConstanteMessageError {
     String AUTHENTICATION_ERROR_MESSAGE = "Error lors de l'authentication";

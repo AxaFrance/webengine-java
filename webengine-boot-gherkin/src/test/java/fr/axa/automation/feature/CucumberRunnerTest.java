@@ -1,4 +1,4 @@
-package fr.axa.automation.feature.authentication;
+package fr.axa.automation.feature;
 
 import org.junit.platform.suite.api.*;
 

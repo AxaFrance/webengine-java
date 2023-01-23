@@ -1,8 +1,9 @@
-package fr.axa.automation.feature.authentication.step;
+package fr.axa.automation.feature.step;
 
-import fr.axa.automation.feature.authentication.model.WebEngineHomeTestPage;
+import fr.axa.automation.feature.model.WebEngineHomeTestPage;
 import fr.axa.automation.webengine.step.AbstractStep;
-import io.cucumber.java.*;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Assertions;
 public class SampleFormStep extends AbstractStep {
 
     WebEngineHomeTestPage pageModel;
-
 
     @Before
     public void setUp() throws Exception {

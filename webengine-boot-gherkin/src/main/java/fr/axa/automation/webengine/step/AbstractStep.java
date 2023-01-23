@@ -26,13 +26,11 @@ public abstract class AbstractStep {
     WebDriver webDriver;
     LoggerService loggerService;
 
-    @Before
     protected void setUp() throws Exception {
         initializeDriver();
         initializeLogger();
     }
 
-    @After
     protected void afterScenario()  throws Exception {
         quiDriver();
     }

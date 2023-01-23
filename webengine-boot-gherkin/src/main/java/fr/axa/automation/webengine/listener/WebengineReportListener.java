@@ -113,7 +113,6 @@ public class WebengineReportListener implements ConcurrentEventListener {
         }
     }
 
-
     private void stepFinished(TestStepFinished testStepFinished) {
         if(isNotHookStep(testStepFinished)) {
             String currentStepName = getTestStepNameByTestStep(testStepFinished.getTestStep());

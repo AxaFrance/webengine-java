@@ -1,7 +1,7 @@
 application:
     name: solaris-automation-gherkin
     platformName: WINDOWS
-    browserName: CHROME
+    browserName: CHROMIUMEDGE
 appiumSettings:
     gridConnection: https://hub-cloud.browserstack.com/wd/hub
     userName: XXXXXXX

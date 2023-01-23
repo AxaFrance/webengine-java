@@ -1,6 +1,6 @@
-package fr.axa.automation.feature.authentication.step;
+package fr.axa.automation.feature.step;
 
-import fr.axa.automation.feature.authentication.model.*;
+import fr.axa.automation.feature.model.*;
 import fr.axa.automation.webengine.step.AbstractStep;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;

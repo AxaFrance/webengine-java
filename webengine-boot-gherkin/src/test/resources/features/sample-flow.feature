@@ -17,6 +17,3 @@ Feature: Test du parcours
     And I click on the third the next button
     And I click on the OK button in the pop up after i'm done
     Then I see the Done title
-
-
-
