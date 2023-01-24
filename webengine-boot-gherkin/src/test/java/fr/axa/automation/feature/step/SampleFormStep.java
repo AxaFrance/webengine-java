@@ -11,29 +11,26 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.WebDriver;
 
 
 @Getter
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class SampleFormStep extends AbstractStep {
 
+    WebDriver driver;
     WebEngineHomeTestPage pageModel;
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        pageModel = new WebEngineHomeTestPage(webDriver);
+    public SampleFormStep() throws Exception {
+        driver = Hook.webDriver;
+        pageModel = new WebEngineHomeTestPage(driver);
     }
 
-    @After
-    public void afterScenario() throws Exception {
-        super.afterScenario();
-    }
 
     @Given("^I visit the test page \"([^\"]*)\"$")
     public void visitTheTestPage(String url) {
         addInformation("Open WebEngine test page");
-        getWebDriver().get(url);
+        driver.get(url);
     }
 
     @When("^I press on the OK button$")
@@ -45,12 +42,12 @@ public class SampleFormStep extends AbstractStep {
     @And("^I see a pop up$")
     public void seePopUpAndEnterText() throws Exception {
         addInformation("I See a pop up and i enter a text");
-        String textInAlert = getWebDriver().switchTo().alert().getText();
+        String textInAlert = driver.switchTo().alert().getText();
         Assertions.assertEquals("hello world!",textInAlert);
     }
 
     @And("^I click on the OK button in the pop up$")
     public void clickButtonOKInThePopup() throws Exception {
-        getWebDriver().switchTo().alert().accept();
+        driver.switchTo().alert().accept();
     }
 }

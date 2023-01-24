@@ -11,12 +11,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.WebDriver;
 
 
 @Getter
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class SampleFlowStep extends AbstractStep {
 
+    WebDriver driver;
     WebEngineHomeTestPage webEngineHomeTestPage;
 
     WebEngineFirstStepPage webEngineFirstStepPage;
@@ -27,26 +29,19 @@ public class SampleFlowStep extends AbstractStep {
 
     WebEngineFourthStepPage webEngineFourthStepPage;
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        webEngineHomeTestPage = new WebEngineHomeTestPage(webDriver);
-        webEngineFirstStepPage = new  WebEngineFirstStepPage(webDriver);
-        webEngineSecondStepPage = new  WebEngineSecondStepPage(webDriver);
-        webEngineThirdStepPage = new  WebEngineThirdStepPage(webDriver);
-        webEngineFourthStepPage = new WebEngineFourthStepPage(webDriver);
+    public SampleFlowStep() throws Exception {
+        driver = Hook.webDriver;
+        webEngineHomeTestPage = new WebEngineHomeTestPage(driver);
+        webEngineFirstStepPage = new  WebEngineFirstStepPage(driver);
+        webEngineSecondStepPage = new  WebEngineSecondStepPage(driver);
+        webEngineThirdStepPage = new  WebEngineThirdStepPage(driver);
+        webEngineFourthStepPage = new WebEngineFourthStepPage(driver);
     }
-
-    @After
-    public void afterScenario() throws Exception {
-        super.afterScenario();
-    }
-
 
     @Given("^I visit the test page \"([^\"]*)\" for running journey$")
     public void visitTheTestPage(String url) throws InterruptedException {
         addInformation("Open WebEngine test page");
-        getWebDriver().get(url);
+        driver.get(url);
         getWebEngineHomeTestPage().sync(3); //Just for code coverage
         getWebEngineHomeTestPage().maximize();//Just for code coverage
     }
@@ -105,7 +100,7 @@ public class SampleFlowStep extends AbstractStep {
 
     @And("^I click on the OK button in the pop up after i'm done$")
     public void clickButtonOKInThePopup() throws Exception {
-        getWebDriver().switchTo().alert().accept();
+        driver.switchTo().alert().accept();
     }
 
     @Then("^I see the Done title$")
