@@ -63,6 +63,12 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-testpage-linear</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
