@@ -7,7 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.Optional;
 
-public class ChromeDriverUtil {
+public final class ChromeDriverUtil {
 
     private ChromeDriverUtil() {
     }

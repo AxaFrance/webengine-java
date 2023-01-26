@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.util.DateUtil;
 
 import java.time.LocalDateTime;
 
-public class TestCaseReportHelper {
+public final class TestCaseReportHelper {
 
     private TestCaseReportHelper() {
     }

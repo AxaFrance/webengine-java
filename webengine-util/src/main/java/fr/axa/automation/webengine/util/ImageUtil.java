@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Slf4j
-public class ImageUtil {
+public final class ImageUtil {
 
     public static final String JPG = "jpg";
 

@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
-public class CommonClassUtil {
+public final class CommonClassUtil {
 
     private CommonClassUtil() {
     }

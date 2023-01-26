@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.generated.Variable;
 import java.util.List;
 import java.util.Optional;
 
-public class TestDataHelper {
+public final class TestDataHelper {
 
     private TestDataHelper() {
     }

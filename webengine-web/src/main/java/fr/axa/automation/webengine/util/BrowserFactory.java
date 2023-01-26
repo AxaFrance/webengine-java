@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class BrowserFactory {
+public final class BrowserFactory {
 
     private BrowserFactory() {
     }

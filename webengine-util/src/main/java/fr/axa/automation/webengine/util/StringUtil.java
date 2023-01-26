@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class StringUtil {
+public final class StringUtil {
 
     public static final String UNDERSCORE = "_";
     public static final String EMPTY = "";

@@ -25,10 +25,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.util.*;
 
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class TestSuiteHelper {
+
+public final class TestSuiteHelper {
 
     private TestSuiteHelper() {
     }

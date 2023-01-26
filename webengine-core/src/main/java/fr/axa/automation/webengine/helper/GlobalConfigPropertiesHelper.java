@@ -4,7 +4,7 @@ import fr.axa.automation.webengine.general.Settings;
 import fr.axa.automation.webengine.properties.ApplicationProperties;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 
-public class GlobalConfigPropertiesHelper {
+public final class GlobalConfigPropertiesHelper {
 
     private GlobalConfigPropertiesHelper() {
     }

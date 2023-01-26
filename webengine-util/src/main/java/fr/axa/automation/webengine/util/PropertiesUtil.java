@@ -7,7 +7,7 @@ import fr.axa.automation.webengine.logger.LoggerService;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class PropertiesUtil {
+public final class PropertiesUtil {
 
     private PropertiesUtil() {
     }

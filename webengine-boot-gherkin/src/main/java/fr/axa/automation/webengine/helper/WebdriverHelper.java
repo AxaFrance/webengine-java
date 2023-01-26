@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.Optional;
 
-public class WebdriverHelper {
+public final class WebdriverHelper {
 
     private WebdriverHelper() {
     }

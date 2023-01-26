@@ -3,7 +3,7 @@ package fr.axa.automation.webengine.report.helper;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FormatDate;
 
-public class ReportFileNameHelper {
+public final class ReportFileNameHelper {
 
     private ReportFileNameHelper() {
     }

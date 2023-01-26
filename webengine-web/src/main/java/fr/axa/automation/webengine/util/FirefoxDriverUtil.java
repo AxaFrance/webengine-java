@@ -7,7 +7,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.Optional;
 
-public class FirefoxDriverUtil {
+public final class FirefoxDriverUtil {
+
+    private FirefoxDriverUtil() {
+    }
 
     public static Optional<WebDriver> getFirefoxDriver() throws WebEngineException {
         WebDriverManager.firefoxdriver().setup();

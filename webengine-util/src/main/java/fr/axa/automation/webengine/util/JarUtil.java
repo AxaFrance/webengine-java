@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.io.File;
 
 @Slf4j
-public class JarUtil {
+public final class JarUtil {
 
     private JarUtil() {
     }

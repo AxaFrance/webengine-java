@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
-public class FileUtil {
+public final class FileUtil {
 
     private FileUtil() {
     }

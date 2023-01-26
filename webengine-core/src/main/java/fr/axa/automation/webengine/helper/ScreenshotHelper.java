@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ScreenshotHelper {
+public final class ScreenshotHelper {
 
     private ScreenshotHelper() {
     }

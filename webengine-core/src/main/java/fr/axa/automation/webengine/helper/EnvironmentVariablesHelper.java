@@ -11,10 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@Data
-@Slf4j
-public class EnvironmentVariablesHelper {
+
+public final class EnvironmentVariablesHelper {
 
     private EnvironmentVariablesHelper() {
     }

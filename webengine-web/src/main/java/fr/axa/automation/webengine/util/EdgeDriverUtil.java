@@ -7,7 +7,10 @@ import org.openqa.selenium.edge.EdgeDriver;
 
 import java.util.Optional;
 
-public class EdgeDriverUtil {
+public final class EdgeDriverUtil {
+
+    private EdgeDriverUtil() {
+    }
 
     public static Optional<WebDriver> getEdgeDriver() throws WebEngineException {
         WebDriverManager.edgedriver().setup();

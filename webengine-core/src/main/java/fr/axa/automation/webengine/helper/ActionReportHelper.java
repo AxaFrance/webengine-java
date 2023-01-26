@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ActionReportHelper {
+public final class ActionReportHelper {
 
     private ActionReportHelper() {
     }

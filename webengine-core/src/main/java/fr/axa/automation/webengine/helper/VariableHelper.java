@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.generated.Variable;
 
-public class VariableHelper {
+public final class VariableHelper {
 
     private VariableHelper() {
     }

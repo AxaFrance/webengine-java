@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class PlatformTypeHelper {
+public final class PlatformTypeHelper {
 
     private PlatformTypeHelper() {
     }

@@ -16,7 +16,7 @@ import java.awt.image.RenderedImage;
  */
 
 @Slf4j
-public class ActiveWindowScreenShotUtil {
+public final class ActiveWindowScreenShotUtil {
 
     private ActiveWindowScreenShotUtil() {
     }

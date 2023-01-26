@@ -6,7 +6,7 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.InputStream;
 
-public class YamlUtil {
+public final class YamlUtil {
 
     private YamlUtil() {
     }
