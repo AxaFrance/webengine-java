@@ -17,6 +17,10 @@ import java.awt.image.RenderedImage;
 
 @Slf4j
 public class ActiveWindowScreenShotUtil {
+
+    private ActiveWindowScreenShotUtil() {
+    }
+
     public static RenderedImage getGeneratedCurrentDesktopImage() {
         try {
             Robot robot = new Robot();

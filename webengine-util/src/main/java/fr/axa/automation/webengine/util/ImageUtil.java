@@ -12,6 +12,9 @@ public class ImageUtil {
 
     public static final String JPG = "jpg";
 
+    private ImageUtil() {
+    }
+
     public static byte[] getImage(RenderedImage image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {

@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 public class BrowserTypeHelper {
 
+    private BrowserTypeHelper() {
+    }
+
     public static Browser getBrowser(String browserFill) throws WebEngineException {
         List<Browser> browserEnumList = Arrays.asList(Browser.values());
         Browser browser = foundBrowser(getBrowserPredicateWithName(browserFill));

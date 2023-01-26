@@ -12,6 +12,9 @@ import java.util.TimeZone;
 
 public class DateUtil {
 
+    private DateUtil() {
+    }
+
     public static String getDateTime(String format){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
         return dateTimeFormatter.format(LocalDateTime.now());

@@ -16,6 +16,9 @@ import java.util.Optional;
 @Slf4j
 public class EnvironmentVariablesHelper {
 
+    private EnvironmentVariablesHelper() {
+    }
+
     public static Optional<Variable> getEnvironnementValue(String name, List<Variable> environnementVariableList){
         Optional<Variable> variable = Optional.empty();
         if(StringUtils.isNotEmpty(name) && CollectionUtils.isNotEmpty(environnementVariableList)){

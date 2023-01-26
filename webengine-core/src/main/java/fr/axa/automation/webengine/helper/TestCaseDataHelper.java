@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public class TestCaseDataHelper {
 
+    private TestCaseDataHelper() {
+    }
+
     public static Optional<Variable> getValue(String name, List<Variable> dataList){
         if(StringUtils.isNotEmpty(name) && CollectionUtils.isNotEmpty(dataList)){
             return dataList.stream().filter(x->name.equalsIgnoreCase(x.getName())).findFirst();

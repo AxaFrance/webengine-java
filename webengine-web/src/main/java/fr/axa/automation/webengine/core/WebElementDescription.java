@@ -211,6 +211,13 @@ public class WebElementDescription extends AbstractElementDescription {
         actions.moveToElement(webElement).contextClick().build().perform();
     }
 
+    public void dragAndDropTo(AbstractElementDescription element) throws Exception {
+        WebElement e1 = findElement();
+        WebElement e2 = element.findElement();
+        Actions act = new Actions(useDriver);
+        act.dragAndDrop(e1, e2).build().perform();
+    }
+
     public void dragAndDropTo(WebElement element) throws Exception {
         WebElement findWebElement = findElement();
         Actions actions = new Actions(useDriver);
@@ -258,12 +265,7 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-    public void dragAndDropTo(AbstractElementDescription element) throws Exception {
-        WebElement e1 = findElement();
-        WebElement e2 = element.findElement();
-        Actions act = new Actions(useDriver);
-        act.dragAndDrop(e1, e2).build().perform();
-    }
+
 
     public Select asSelect() throws Exception {
         IFunction<Void, Select> fun = (x) -> {

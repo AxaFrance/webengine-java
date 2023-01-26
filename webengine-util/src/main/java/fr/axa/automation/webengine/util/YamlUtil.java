@@ -8,6 +8,9 @@ import java.io.InputStream;
 
 public class YamlUtil {
 
+    private YamlUtil() {
+    }
+
     public static <T> Yaml getYaml(Class<T> clazz) {
         Representer representer = new Representer();
         representer.getPropertyUtils().setSkipMissingProperties(true);

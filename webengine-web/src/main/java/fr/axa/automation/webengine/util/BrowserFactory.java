@@ -23,6 +23,9 @@ import java.util.Optional;
 
 public class BrowserFactory {
 
+    private BrowserFactory() {
+    }
+
     public static Optional<WebDriver> getDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
         if (platform == Platform.WINDOWS) {

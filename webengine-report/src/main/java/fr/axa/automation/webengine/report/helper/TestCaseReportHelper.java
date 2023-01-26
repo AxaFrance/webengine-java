@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 public class TestCaseReportHelper {
 
+    private TestCaseReportHelper() {
+    }
+
     public static TestCaseReport createTestCaseReport(String testCaseName){
         return createTestCaseReport(testCaseName,LocalDateTime.now());
     }

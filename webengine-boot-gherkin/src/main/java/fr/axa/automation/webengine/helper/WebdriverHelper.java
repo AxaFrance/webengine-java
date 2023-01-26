@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public class WebdriverHelper {
 
+    private WebdriverHelper() {
+    }
+
     public static WebDriver initializeDriver() throws Exception {
         Optional<WebDriver> driver = getDriver();
         if(driver.isPresent()){

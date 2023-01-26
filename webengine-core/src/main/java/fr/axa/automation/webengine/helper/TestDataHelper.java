@@ -8,12 +8,14 @@ import java.util.Optional;
 
 public class TestDataHelper {
 
+    private TestDataHelper() {
+    }
+
     public static Optional<TestData> getDataOfTestCase(List<TestData> testDataList, String testCaseName) {
         return testDataList.stream()
                             .filter(testData -> testData.getTestName().equals(testCaseName))
                             .findFirst();
     }
-
     public static Variable getVariableOfTestCase(List<TestData> testDataList, String testCaseName, String variableName) {
         Optional<TestData> testData = getDataOfTestCase(testDataList,testCaseName);
         if(testData.isPresent()){

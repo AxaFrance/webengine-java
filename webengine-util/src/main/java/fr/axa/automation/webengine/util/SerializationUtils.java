@@ -7,6 +7,9 @@ import java.io.IOException;
 
 public class SerializationUtils {
 
+    private SerializationUtils() {
+    }
+
     public static <T> T clone(T object) throws IOException {
         final ObjectMapper objMapper = new ObjectMapper();
         String jsonStr= objMapper.writeValueAsString(object);

@@ -6,7 +6,7 @@ Feature: Test du parcours
 
   @flow
   Scenario: Step1
-    And I choose the language with value "fr"
+    And I choose the language with text "Français"
     And I want to buy a coffee
     And I click on the first next button
     And I write a comment like "Test comment"

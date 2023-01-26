@@ -19,6 +19,9 @@ import java.util.Optional;
 
 public class XmlUtil {
 
+    private XmlUtil() {
+    }
+
     public static <T> T unmarshall(String filePath, Class<T> returnType) throws WebEngineException {
         JAXBContext jaxbContext;
         try {

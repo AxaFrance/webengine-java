@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 
 public class ActionReportHelper {
 
+    private ActionReportHelper() {
+    }
+
     public static List<ActionReport> getActionReportList(List<ActionReportDetail> actionReportDetailList){
         if(CollectionUtils.isNotEmpty(actionReportDetailList)){
             return actionReportDetailList.stream().map(actionReportDetail -> actionReportDetail.getActionReport()).collect(Collectors.toList());

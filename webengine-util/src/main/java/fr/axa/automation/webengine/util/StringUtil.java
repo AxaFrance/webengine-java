@@ -6,9 +6,11 @@ public class StringUtil {
 
     public static final String UNDERSCORE = "_";
     public static final String EMPTY = "";
-
     public static final String DOUBLE_TWO_POINTS = "::";
     public static final String CHARACTERS_TO_REPLACE = "[ ']";
+
+    private StringUtil() {
+    }
 
     public static String removeSpecialCharacters(String text){
         return StringUtils.stripAccents(text).replaceAll(CHARACTERS_TO_REPLACE, UNDERSCORE).toUpperCase();

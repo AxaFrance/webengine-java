@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 public class PlatformTypeHelper {
 
+    private PlatformTypeHelper() {
+    }
+
     public static Platform getPlatform(String platformFill) throws WebEngineException {
         List<Platform> platformList = Arrays.asList(Platform.values());
 

@@ -11,7 +11,6 @@ public class HomeAction extends AbstractActionWebBase {
 
     WebEngineHomeTestPage webEngineHomeTestPage;
 
-
     public HomeAction() {
     }
 
@@ -20,6 +19,8 @@ public class HomeAction extends AbstractActionWebBase {
         webEngineHomeTestPage = new WebEngineHomeTestPage(getWebDriver());
         String url = getEnvironnementValueWithException(IParameter.URL);
         getWebDriver().get(url);
+        webEngineHomeTestPage.getStartStep1Link().scrollIntoView();
+        webEngineHomeTestPage.getStartStep1Link().focus();
         webEngineHomeTestPage.getStartStep1Link().click();
         screenShot();
         addInformation("Home page");

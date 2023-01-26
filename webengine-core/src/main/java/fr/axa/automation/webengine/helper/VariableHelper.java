@@ -4,6 +4,9 @@ import fr.axa.automation.webengine.generated.Variable;
 
 public class VariableHelper {
 
+    private VariableHelper() {
+    }
+
     public static Variable getVariable(String name, String value){
         Variable variable = new Variable();
         variable.setName(name);

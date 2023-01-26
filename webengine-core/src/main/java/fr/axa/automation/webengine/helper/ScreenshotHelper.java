@@ -9,6 +9,9 @@ import java.util.List;
 
 public class ScreenshotHelper {
 
+    private ScreenshotHelper() {
+    }
+
     public static ArrayOfScreenshotReport getArrayOfScreenshotReport(String name, byte[] dataInbase64){
         ScreenshotReport screenshotReport = getScreenshotReport(name, dataInbase64);
         List<ScreenshotReport> screenshotReportList = Collections.singletonList(screenshotReport);

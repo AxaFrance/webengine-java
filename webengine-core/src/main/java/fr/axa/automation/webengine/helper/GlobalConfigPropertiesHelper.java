@@ -6,6 +6,9 @@ import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 
 public class GlobalConfigPropertiesHelper {
 
+    private GlobalConfigPropertiesHelper() {
+    }
+
     public static GlobalConfigProperties getGlobalConfigProperties(Settings settings) {
         ApplicationProperties applicationProperties = getApplicationProperties(settings);
         GlobalConfigProperties globalConfigProperties = GlobalConfigProperties.builder().build();

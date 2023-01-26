@@ -9,8 +9,10 @@ import java.io.InputStream;
 
 public class PropertiesUtil {
 
-    private static final ILoggerService loggerService = new LoggerService();
+    private PropertiesUtil() {
+    }
 
+    private static final ILoggerService loggerService = new LoggerService();
 
     public static <T> T loadPropertiesFile(String pathfileName, Class<T> clazz) throws WebEngineException {
         try (InputStream inputStream = FileUtil.getInputStreamByPathOrResource(pathfileName)) {

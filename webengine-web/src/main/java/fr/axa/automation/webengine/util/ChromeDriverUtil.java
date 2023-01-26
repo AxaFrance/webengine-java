@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public class ChromeDriverUtil {
 
+    private ChromeDriverUtil() {
+    }
+
     public static Optional<WebDriver> getChromeDriver() throws WebEngineException {
         WebDriverManager.chromedriver().setup();
         return Optional.of(new ChromeDriver());

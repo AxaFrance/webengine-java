@@ -11,6 +11,9 @@ import java.util.Set;
 
 public class CommonClassUtil {
 
+    private CommonClassUtil() {
+    }
+
     public static <T> T create(Class<T> clazz) throws WebEngineException {
         Class classToLoad;
         Object object;

@@ -4,6 +4,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ListUtil {
+
+    private ListUtil() {
+    }
+
     public static Optional<String> findFirst(List<String> list, String search)  {
         Optional<String> findFirstOptional = list.stream().filter(s->s.contains(search)).findFirst();
         return findFirstOptional;

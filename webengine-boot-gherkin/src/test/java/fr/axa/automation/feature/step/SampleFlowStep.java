@@ -52,10 +52,10 @@ public class SampleFlowStep extends AbstractStep {
         getWebEngineHomeTestPage().getStartStep1Link().click();
     }
 
-    @And("^I choose the language with value \"([^\"]*)\"$")
+    @And("^I choose the language with text \"([^\"]*)\"$")
     public void chooseTheLanguage(String language) throws Exception {
         addInformation("Choose the language");
-        getWebEngineFirstStepPage().getLanguage().selectByValue(language);
+        getWebEngineFirstStepPage().getLanguage().selectByText(language);
     }
 
     @And("^I want to buy a coffee$")

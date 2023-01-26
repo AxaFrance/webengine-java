@@ -5,6 +5,9 @@ import fr.axa.automation.webengine.report.object.ActionReportDetail;
 
 public class ActionReportDetailHelper {
 
+    private ActionReportDetailHelper() {
+    }
+
     public static ActionReportDetail getActionReportDetail(ActionReport actionReport, boolean resultCheckPoint) {
         return ActionReportDetail.builder().actionReport(actionReport).resultCheckPoint(resultCheckPoint).build();
     }

@@ -20,6 +20,9 @@ import java.io.File;
 @Slf4j
 public class JarUtil {
 
+    private JarUtil() {
+    }
+
     public static void loadLibrary(File jar) throws WebEngineException{
         try {
             URLClassLoader urlClassloader = (URLClassLoader)Thread.currentThread().getContextClassLoader();  /*We are using reflection here to circumvent encapsulation; addURL is not public*/

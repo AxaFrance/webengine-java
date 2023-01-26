@@ -56,14 +56,19 @@ public abstract class AbstractElementDescription {
     protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
         LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDS);
         Exception exception = new Exception();
+        UUID uuid = UUID.randomUUID();
 
+        log.debug(uuid+"-retry started  "+function.toString()+" at "+LocalDateTime.now()+". Defined time out is :"+timeOut);
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
-                return function.call(param);
+                R r = function.call(param);
+                log.debug(uuid+"-retry succes "+function.toString()+" at "+LocalDateTime.now());
+                return r;
             } catch (Exception e ) {
                 exception = e;
                 waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDS);
             }
+            log.debug(uuid+"-retry timeout "+function.toString()+" at "+LocalDateTime.now());
         }
         throw exception;
     }
@@ -95,18 +100,17 @@ public abstract class AbstractElementDescription {
     }
 
     public Collection<WebElement> findElements(By by) throws Exception {
-        WebElement e = findElement();
-        return e.findElements(by);
+        IFunction<By ,Collection<WebElement>> fun = (x) -> getUseDriver().findElements(x);
+        return retry(fun,by);
     }
 
     public WebElement findElement(By by) throws Exception {
-        WebElement e = findElement();
-        return e.findElement(by);
+        return findElement(by,SettingsWeb.TIMEOUT_SECONDS);
     }
 
     public WebElement findElement(By by, int timeoutSecond) throws Exception {
-        WebElement e = findElement(timeoutSecond);
-        return e.findElement(by);
+        IFunction<By ,WebElement> fun = (x) -> getUseDriver().findElement(x);
+        return retry(fun,by);
     }
 
     public Collection<WebElement> findElements() throws Exception {

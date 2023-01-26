@@ -30,6 +30,9 @@ import java.util.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TestSuiteHelper {
 
+    private TestSuiteHelper() {
+    }
+
     private static final LoggerService loggerService = LoggerServiceProvider.getInstance();
 
     public static ITestSuite getTestSuite() throws WebEngineException {

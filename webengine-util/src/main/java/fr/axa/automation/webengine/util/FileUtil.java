@@ -17,6 +17,9 @@ import java.util.stream.Stream;
 
 public class FileUtil {
 
+    private FileUtil() {
+    }
+
     public static final String TARGET_DIRECTORY = "target";
     public static final String RUN_RESULT_DIRECTORY = "report-test-result";
 
