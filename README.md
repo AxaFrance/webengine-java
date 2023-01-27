@@ -287,7 +287,12 @@ For your information, we use spring-boot for this approach
 
 For executing the project, you can run this command : 
 
-java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=-properties-chrome "-data:..\src\main\resources\data.xml" "-env:..\src\main\resources\env.xml"
+**java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=-properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml"**
+
+If you want run the project from addin excel, you can run this command 
+
+**java -jar WebRunner.jar "-a:C:\work\project\project-name-1.0.0-exec.jar" "-data:-data:C:\work\project\src\main\resources\data.xml" "-env:-data:C:\work\project\src\main\resources\env.xml" "-platform:Android" "-browser:Chrome"**
+
 
 Below an example :
 
