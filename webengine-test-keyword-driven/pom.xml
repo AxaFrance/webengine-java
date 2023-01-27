@@ -9,10 +9,10 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>webengine-testpage-keyword-driven</artifactId>
+    <artifactId>webengine-test-keyword-driven</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>webengine-testpage-keyword-driven</name>
+    <name>webengine-test-keyword-driven</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
