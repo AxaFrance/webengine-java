@@ -15,7 +15,11 @@ import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
 import fr.axa.automation.webengine.report.helper.global.ReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
-import fr.axa.automation.webengine.util.*;
+import fr.axa.automation.webengine.util.ActiveWindowScreenShotUtil;
+import fr.axa.automation.webengine.util.DateUtil;
+import fr.axa.automation.webengine.util.FileUtil;
+import fr.axa.automation.webengine.util.ImageUtil;
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +29,13 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.StringJoiner;
+
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -104,6 +114,6 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         testSuiteReport.setEndTime(Calendar.getInstance());
         testSuiteReport.getTestResults().addAll(testCaseReportMap.values());
         ReportHelper reportHelper =  new ReportHelper(new WebengineReportHelper(new LoggerService()),new JunitReportHelper(new LoggerService()),new LoggerService());
-        reportHelper.generateAllReport(testSuiteReport,applicationName,FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
+        reportHelper.generateAllReport(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
     }
 }

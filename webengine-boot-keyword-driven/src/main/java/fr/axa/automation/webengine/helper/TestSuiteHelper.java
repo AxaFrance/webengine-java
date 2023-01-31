@@ -1,7 +1,12 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
-import fr.axa.automation.webengine.core.*;
+import fr.axa.automation.webengine.core.AbstractTestSuite;
+import fr.axa.automation.webengine.core.IAction;
+import fr.axa.automation.webengine.core.ITestCase;
+import fr.axa.automation.webengine.core.ITestStep;
+import fr.axa.automation.webengine.core.ITestSuite;
+import fr.axa.automation.webengine.core.TestCaseAdditionalInformation;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.Browser;
 import fr.axa.automation.webengine.general.Platform;
@@ -21,7 +26,15 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 
 public final class TestSuiteHelper {

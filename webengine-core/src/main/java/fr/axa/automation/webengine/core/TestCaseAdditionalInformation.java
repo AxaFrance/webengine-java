@@ -1,7 +1,12 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.generated.Variable;
-import lombok.*;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;

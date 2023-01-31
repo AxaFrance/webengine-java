@@ -1,6 +1,11 @@
 package fr.axa.automation.feature.step;
 
-import fr.axa.automation.feature.model.*;
+
+import fr.axa.automation.feature.model.WebEngineFirstStepPage;
+import fr.axa.automation.feature.model.WebEngineFourthStepPage;
+import fr.axa.automation.feature.model.WebEngineHomeTestPage;
+import fr.axa.automation.feature.model.WebEngineSecondStepPage;
+import fr.axa.automation.feature.model.WebEngineThirdStepPage;
 import fr.axa.automation.webengine.step.AbstractStep;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

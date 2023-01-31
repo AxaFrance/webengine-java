@@ -7,7 +7,11 @@ import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
