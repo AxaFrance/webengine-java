@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -16,5 +18,6 @@ public class ApplicationProperties {
     String name;
     String platformName;
     String browserName;
+    List<String> browserOptionList;
     String outputDir;
 }

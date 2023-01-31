@@ -11,13 +11,16 @@ import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,7 +43,11 @@ public final class BrowserFactory {
     public static Optional<WebDriver> getDesktopDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
         Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getApplication().getBrowserName());
-        return getWebDriver(platform, browser);
+        if(CollectionUtils.isEmpty(globalConfigProperties.getApplication().getBrowserOptionList())){
+            return getWebDriver(platform, browser);
+        }else{
+            return getWebDriver(platform, browser,globalConfigProperties.getApplication().getBrowserOptionList());
+        }
     }
 
     public static Optional<WebDriver> getWebDriver(String platform, String browser) throws WebEngineException {
@@ -48,19 +55,30 @@ public final class BrowserFactory {
     }
 
     public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser) throws WebEngineException {
-        Optional<WebDriver> webDriver = Optional.empty();
+        return getWebDriver(platform,browser, Collections.emptyList());
+    }
+
+    public static Optional<WebDriver> getWebDriver(String platform, String browser, List<String> browserOptionList) throws WebEngineException {
+        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser),browserOptionList);
+    }
+
+    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, List<String> browserOptionList) throws WebEngineException {
+        WebDriver webDriver = null;
         if (platform == Platform.WINDOWS) {
             if (browser == Browser.CHROME) {
-                webDriver = ChromeDriverUtil.getChromeDriver();
+                webDriver = ChromeDriverUtil.getChromeDriver(browserOptionList);
             } else if (browser == Browser.CHROMIUM_EDGE) {
-                webDriver = EdgeDriverUtil.getEdgeDriver();
+                webDriver = EdgeDriverUtil.getEdgeDriver(browserOptionList);
             } else if (browser == Browser.FIREFOX) {
-                webDriver = FirefoxDriverUtil.getFirefoxDriver();
+                webDriver = FirefoxDriverUtil.getFirefoxDriver(browserOptionList);
+            }else{
+                throw new WebEngineException("Browser not recognized");
             }
-            webDriver.ifPresent(driver -> driver.manage().deleteAllCookies());
+            webDriver.manage().deleteAllCookies();
         }
-        return webDriver;
+        return Optional.ofNullable(webDriver);
     }
+
 
     public static <T extends WebDriver> Optional<T> getAppiumDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());

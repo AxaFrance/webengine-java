@@ -92,9 +92,10 @@ public final class TestSuiteHelper {
         List<String> propertiesFileList = getPropertiesFiles(cmd, globalConfigProperties);
         Platform platform = getPlatform(cmd, globalConfigProperties);
         Browser browser = getBrowser(cmd, globalConfigProperties);
+        List<String> browserOptionsList = getBrowserOptionList(globalConfigProperties);
         String outputDir = getOutputDir(cmd, globalConfigProperties);
 
-        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(platform).browser(browser).logDir(outputDir).build();
+        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(platform).browser(browser).browserOptionsList(browserOptionsList).logDir(outputDir).build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;
     }
@@ -132,6 +133,15 @@ public final class TestSuiteHelper {
         } else {
             return BrowserTypeHelper.getBrowser(browser);
         }
+    }
+
+    private static List<String> getBrowserOptionList(GlobalConfigProperties globalConfigProperties) {
+        if (globalConfigProperties != null && CollectionUtils.isNotEmpty(globalConfigProperties.getApplication().getBrowserOptionList())) {
+            return globalConfigProperties.getApplication().getBrowserOptionList();
+        }
+
+        return Collections.emptyList();
+
     }
 
     private static String getOutputDir(CommandLine cmd, GlobalConfigProperties globalConfigProperties) {
