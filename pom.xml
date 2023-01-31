@@ -65,7 +65,6 @@
         <cluecumber-report-plugin.version>2.9.4</cluecumber-report-plugin.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
 
-        <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/webengine-report-jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <modules>
@@ -421,10 +420,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
-                <configuration>
-                    <destFile>${sonar.coverage.jacoco.xmlReportPaths}</destFile>
-                    <append>true</append>
-                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
