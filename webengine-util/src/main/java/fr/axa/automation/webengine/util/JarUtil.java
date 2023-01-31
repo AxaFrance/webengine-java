@@ -4,18 +4,15 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.net.URLClassLoader;
-import java.net.URL;
-import java.util.Arrays;
-import java.lang.reflect.Method;
-import java.lang.NoSuchMethodException;
-import java.lang.IllegalAccessException;
-import java.net.MalformedURLException;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import java.io.File;
 
 @Slf4j
 public final class JarUtil {

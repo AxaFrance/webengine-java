@@ -1,6 +1,9 @@
 package fr.axa.automation.testcase;
 
-import fr.axa.automation.teststep.*;
+import fr.axa.automation.teststep.FirstTestStep;
+import fr.axa.automation.teststep.HomeTestStep;
+import fr.axa.automation.teststep.SecondTestStep;
+import fr.axa.automation.teststep.ThirdTestStep;
 import fr.axa.automation.webengine.core.ITestCase;
 import fr.axa.automation.webengine.core.ITestStep;
 

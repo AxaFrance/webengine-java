@@ -2,11 +2,11 @@ package fr.axa.automation.webengine.localtesting;
 
 import com.browserstack.local.Local;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.properties.LocalTesting;
-import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

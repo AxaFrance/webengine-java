@@ -1,9 +1,7 @@
 package fr.axa.automation;
 
-import fr.axa.automation.webengine.core.WebElementDescription;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.BrowserFactory;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

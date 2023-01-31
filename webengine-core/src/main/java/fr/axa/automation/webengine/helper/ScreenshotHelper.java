@@ -3,7 +3,6 @@ package fr.axa.automation.webengine.helper;
 import fr.axa.automation.webengine.generated.ArrayOfScreenshotReport;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

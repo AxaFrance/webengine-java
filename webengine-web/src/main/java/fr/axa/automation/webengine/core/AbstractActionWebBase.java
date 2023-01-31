@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.context.SharedContext;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.generated.ActionReport;
@@ -11,7 +12,6 @@ import fr.axa.automation.webengine.helper.EnvironmentVariablesHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.helper.TestCaseDataHelper;
 import fr.axa.automation.webengine.report.builder.ActionReportBuilder;
-import fr.axa.automation.webengine.context.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

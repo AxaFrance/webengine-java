@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.context.SharedContext;
 import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
@@ -8,7 +9,6 @@ import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.context.SharedContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
