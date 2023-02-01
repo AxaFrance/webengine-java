@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.general.GlobalApplicationContext;
 import fr.axa.automation.webengine.general.ITestCaseContext;
 import fr.axa.automation.webengine.generated.TestCaseReport;
+import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
@@ -87,7 +88,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
         for (AbstractMap.SimpleEntry<String, ? extends ITestCase> entry : testCaseList) {
             String testCaseName = entry.getKey();
             ITestCase testCase = entry.getValue();
-            if (isCanRunTestCase(testCaseName, globalApplicationContext)) {
+            if (isCanRunTestCase(testCaseName, globalApplicationContext) && isTestCaseExistInTestData(testCaseName, globalApplicationContext) && isTestCaseDefineInCommandLine(testCaseName,globalApplicationContext)) {
                 ITestCaseContext testCaseContext = testCaseExecutor.initialize(globalApplicationContext,testCaseName,testCase);
                 TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
                 testCaseExecutor.cleanUp(testCaseContext);
@@ -108,5 +109,37 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
             }
         }
         return true;
+    }
+
+    protected boolean isTestCaseExistInTestData(String testCaseName, GlobalApplicationContext globalApplicationContext){
+        List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestDatas();
+        boolean findTestCaseInTestData = false;
+        for (TestData testData : testDataList) {
+            if(testCaseName.equalsIgnoreCase(testData.getTestName())){
+                findTestCaseInTestData = true;
+            }
+        }
+        if(!findTestCaseInTestData){
+            loggerService.warn("Can't run test case :'" + testCaseName + "' because, it doesn't exist in testData");
+        }
+        return findTestCaseInTestData;
+    }
+
+    protected boolean isTestCaseDefineInCommandLine(String testCaseName, GlobalApplicationContext globalApplicationContext){
+        List<String> testCaseToRunList = globalApplicationContext.getSettings().getTestCaseToRunList();
+        if(CollectionUtils.isEmpty(testCaseToRunList)){
+            return true;
+        }
+        boolean findTestCaseToRun = false;
+        for (String testCaseNameToRun : testCaseToRunList) {
+            if(testCaseName.equalsIgnoreCase(testCaseNameToRun)){
+                findTestCaseToRun = true;
+            }
+        }
+
+        if(!findTestCaseToRun){
+            loggerService.warn("Can't run test case :'" + testCaseName + "' because, it doesn't exist in arguments");
+        }
+        return findTestCaseToRun;
     }
 }

@@ -19,6 +19,7 @@ public class Settings {
     Platform platform;
     Browser browser;
     List<String> browserOptionsList;
+    List<String> testCaseToRunList;
     @Builder.Default Integer synchronizationTimeout = 20;
     String logDir;
     String logFileName;

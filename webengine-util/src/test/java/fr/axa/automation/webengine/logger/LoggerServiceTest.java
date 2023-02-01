@@ -17,8 +17,14 @@ class LoggerServiceTest {
     }
 
     @Test
-    void warn() {
+    void warnWithException() {
         ILoggerService loggerService = LoggerServiceProvider.getInstance();
         loggerService.warn("WARN",new Exception());
+    }
+
+    @Test
+    void warn() {
+        ILoggerService loggerService = LoggerServiceProvider.getInstance();
+        loggerService.warn("WARN");
     }
 }

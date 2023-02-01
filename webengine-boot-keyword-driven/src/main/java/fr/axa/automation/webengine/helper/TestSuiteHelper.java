@@ -75,7 +75,7 @@ public final class TestSuiteHelper {
         String environmentVariablesFilePath = cmd.getOptionValue(ArgumentOption.ENVIRONMENT_VARIABLE.getOption());
         loggerService.info("Loading environment data running: " + environmentVariablesFilePath);
         EnvironmentVariables environmentVariables = XmlUtil.unmarshall(environmentVariablesFilePath, EnvironmentVariables.class);
-        loggerService.info("Loading environment data succeed: " + environmentVariablesFilePath);
+        loggerService.info("Loading environment data is succeed: " + environmentVariablesFilePath);
         return environmentVariables;
     }
 
@@ -89,24 +89,33 @@ public final class TestSuiteHelper {
 
     public static Settings getSettings(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         loggerService.info("Loading settings running ");
-        List<String> propertiesFileList = getPropertiesFiles(cmd, globalConfigProperties);
+        List<String> propertiesFileList = getPropertiesFiles(cmd);
         Platform platform = getPlatform(cmd, globalConfigProperties);
         Browser browser = getBrowser(cmd, globalConfigProperties);
         List<String> browserOptionsList = getBrowserOptionList(globalConfigProperties);
         String outputDir = getOutputDir(cmd, globalConfigProperties);
+        List<String> testCaseToRunList = getTestCaseToRunList(cmd);
 
-        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(platform).browser(browser).browserOptionsList(browserOptionsList).logDir(outputDir).build();
+        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(platform).browser(browser).browserOptionsList(browserOptionsList).testCaseToRunList(testCaseToRunList).logDir(outputDir).build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;
     }
 
-    private static List<String> getPropertiesFiles(CommandLine cmd, GlobalConfigProperties globalConfigProperties) {
-        List<String> propertiesFileList = Collections.emptyList();
-        String propertiesFiles = cmd.getOptionValue(ArgumentOption.PROPERTIES_FILE_LIST.getOption());
+    private static List<String> getArgumentList(CommandLine cmd, ArgumentOption argumentOption) {
+        List<String> propertiesFileList = new ArrayList<>();
+        String propertiesFiles = cmd.getOptionValue(argumentOption.getOption());
         if (propertiesFiles != null) {
             propertiesFileList = Arrays.asList(propertiesFiles.split(";"));
         }
         return propertiesFileList;
+    }
+
+    private static List<String> getPropertiesFiles(CommandLine cmd) {
+        return getArgumentList(cmd,ArgumentOption.PROPERTIES_FILE_LIST);
+    }
+
+    private static List<String> getTestCaseToRunList(CommandLine cmd){
+        return getArgumentList(cmd,ArgumentOption.TEST_CASE_TO_RUN);
     }
 
     private static Platform getPlatform(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
@@ -139,9 +148,7 @@ public final class TestSuiteHelper {
         if (globalConfigProperties != null && CollectionUtils.isNotEmpty(globalConfigProperties.getApplication().getBrowserOptionList())) {
             return globalConfigProperties.getApplication().getBrowserOptionList();
         }
-
         return Collections.emptyList();
-
     }
 
     private static String getOutputDir(CommandLine cmd, GlobalConfigProperties globalConfigProperties) {
