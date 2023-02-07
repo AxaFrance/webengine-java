@@ -1,6 +1,6 @@
-function openSelectTab(evt, cityName) {
+function openSelectedTab(evt, cityName) {
     var i, x, tablinks;
-    x = document.getElementsByClassName("city");
+    x = document.getElementsByClassName("class-container-tab");
     for (i = 0; i < x.length; i++) {
         x[i].style.display = "none";
     }
@@ -13,7 +13,7 @@ function openSelectTab(evt, cityName) {
 }
 
 
-function openSelectLineInTree() {
+function openSelectedLineInTree() {
     var toggler = document.getElementsByClassName("caret");
     var i;
 

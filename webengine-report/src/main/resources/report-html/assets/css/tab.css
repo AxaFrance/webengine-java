@@ -6,6 +6,7 @@
 
 .tab-content-container{
     width: 100%;
+    padding: 5px;
 }
 
 .w3-third {
@@ -14,53 +15,11 @@
 }
 
 @media (min-width: 601px) {
-    .w3-col.m1 {
-        width: 8.33333%
-    }
-
-    .w3-col.m2 {
-        width: 16.66666%
-    }
-
-    .w3-col.m3, .w3-quarter {
-        width: 24.99999%
-    }
 
     .w3-col.m4, .w3-third {
         width: 33.33333%
     }
 
-    .w3-col.m5 {
-        width: 41.66666%
-    }
-
-    .w3-col.m6, .w3-half {
-        width: 49.99999%
-    }
-
-    .w3-col.m7 {
-        width: 58.33333%
-    }
-
-    .w3-col.m8, .w3-twothird {
-        width: 66.66666%
-    }
-
-    .w3-col.m9, .w3-threequarter {
-        width: 74.99999%
-    }
-
-    .w3-col.m10 {
-        width: 83.33333%
-    }
-
-    .w3-col.m11 {
-        width: 91.66666%
-    }
-
-    .w3-col.m12 {
-        width: 99.99999%
-    }
 }
 
 .w3-row-padding, .w3-row-padding > .w3-half, .w3-row-padding > .w3-third, .w3-row-padding > .w3-twothird, .w3-row-padding > .w3-threequarter, .w3-row-padding > .w3-quarter, .w3-row-padding > .w3-col {
@@ -71,7 +30,7 @@
     border-bottom: 6px solid #ccc !important
 }
 
-.w3-light-grey, .w3-hover-light-grey:hover, .w3-light-gray, .w3-hover-light-gray:hover {
+.w3-hover-light-grey:hover {
     color: #000 !important;
     background-color: #f1f1f1 !important
 }
