@@ -6,7 +6,7 @@
 
 .tab-content-container{
     width: 100%;
-    padding: 5px;
+    padding: 10px;
 }
 
 .w3-third {
@@ -17,7 +17,7 @@
 @media (min-width: 601px) {
 
     .w3-col.m4, .w3-third {
-        width: 25%
+        width: 20%
     }
 
 }

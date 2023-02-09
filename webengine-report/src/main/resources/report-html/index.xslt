@@ -15,8 +15,8 @@
                 <link href="assets/css/tab.css" rel="stylesheet" />
                 <script src="assets/js/global-js.js"></script>
 
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
 
                 <title>Webengine report viewer</title>
             </head>
@@ -32,16 +32,16 @@
                     </div>
 
                     <div class="general-information scrollbar">
-                        <xsl:apply-templates select="general-information-template"/>
+                        <xsl:call-template name="general-information-template"/>
                     </div>
 
                     <div class="body-content-container">
                         <div class="tree-view-container">
-                            <xsl:apply-templates select="tree-view-template"/>
+                            <xsl:call-template name="tree-view-template"/>
                         </div>
 
                         <div class="content-view">
-                            <xsl:apply-templates select="content-view-template"/>
+<!--                            <xsl:call-template name="content-view-template"/>-->
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
         </html>
     </xsl:template>
 
-    <xsl:template match="general-information-template">
+    <xsl:template name="general-information-template">
         <div class="badge-container">
             <span class="badge badge-secondary badge-action">Test suite</span>
         </div>
@@ -98,75 +98,69 @@
         </div>
     </xsl:template>
 
-    <xsl:template match="tree-view-template">
-        <ul id="idTree">
-            <li><span class="caret"><i class="fa fa-times badge-action-red" aria-hidden="true"></i> Scénario : RC collectivité publique</span>
-                <ul class="nested">
-                    <li><span class="caret"><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Phase de connexion</span>
-                        <ul class="nested">
-                            <li><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Ouverture de la page</li>
-                            <li><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Je renseigne le login</li>
-                            <li><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Je renseigne le password</li>
-                            <li><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Je clique sur le bouton valider</li>
-                        </ul>
-                    </li>
+    <xsl:template name="status-template">
+        <xsl:param name="status" />
+        <xsl:param name="label" />
+        <xsl:if test="$status='Passed'">
+            <i class="fa fa-check badge-action-green" aria-hidden="true"></i>
+        </xsl:if>
+        <xsl:if test="$status='Failed'">
+            <i class="fa fa-times badge-action-red" aria-hidden="true"></i>
+        </xsl:if>
+        <xsl:if test="$status='Ignored'">
+            <i class="fa fa-circle badge-action-blue" aria-hidden="true"></i>
+        </xsl:if>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$label" />
+    </xsl:template>
 
-                    <li><span class="caret"><i class="fa fa-times badge-action-red" aria-hidden="true"></i> Rechercher un contrat</span>
-                        <ul class="nested">
-                            <li><i class="fa fa-times badge-action-red" aria-hidden="true"></i> Je saisi le numéro de contrat</li>
-                            <li><i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Je saisi le type de contrat</li>
-                            <li><i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Je saisi la date de réclamation</li>
-                            <li><i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Je clique sur le bo</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+    <xsl:template name="sub-tree-view-template">
+        <xsl:param name="firstNode" />
+        <ul class="nested">
+            <xsl:for-each select="$firstNode">
+                <li>
+                    <span class="caret">
+                        <xsl:call-template name="status-template">
+                            <xsl:with-param name="status" select="Result" />
+                            <xsl:with-param name="label" select="Name" />
+                        </xsl:call-template>
+                    </span>
+                    <xsl:choose>
+                        <xsl:when test="SubActionReports">
+                            <xsl:call-template name="sub-tree-view-template">
+                                <xsl:with-param name="firstNode" select="SubActionReports/ActionReport" />
+                            </xsl:call-template>
+                        </xsl:when>
+                    </xsl:choose>
+                </li>
+            </xsl:for-each>
         </ul>
     </xsl:template>
 
-    <xsl:template match="content-view-template">
-
-        <div class="tab-bar">
-            <a href="javascript:void(0)" onclick="openSelectedTab(event, 'idInformation');">
-                <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Information</div>
-            </a>
-            <a href="javascript:void(0)" onclick="openSelectedTab(event, 'idContextValue');">
-                <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Context value</div>
-            </a>
-            <a href="javascript:void(0)" onclick="openSelectedTab(event, 'idImage');">
-                <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Image</div>
-            </a>
-        </div>
-
-        <div id="idInformation" class="tab-content-container class-container-tab" style="display:none">
-            <p>
-                Exception in thread "main" java.lang.NullPointerException
-                at Printer.printString(Printer.java:13)
-                at Printer.print(Printer.java:9)
-                at Printer.main(Printer.java:19)
-            </p>
-        </div>
-
-        <div id="idContextValue" class="tab-content-container class-container-tab " style="display:none">
-            <table class="table-common">
-                <tr>
-                    <th>Context</th>
-                    <th>Value</th>
-                </tr>
-                <tr>
-                    <td>TEST</td>
-                    <td>VALUE 1</td>
-                </tr>
-                <tr>
-                    <td>TEST</td>
-                    <td>VALUE 2</td>
-                </tr>
-            </table>
-        </div>
-
-        <div id="idImage" class="tab-content-container class-container-tab" style="display:none">
-            <p>Image à insérer.</p>
-        </div>
+    <xsl:template name="tree-view-template">
+        <ul id="idTree">
+            <xsl:for-each select="TestSuiteReport/TestResult">
+                <li>
+                    <span class="caret">
+                        <xsl:call-template name="status-template">
+                            <xsl:with-param name="status" select="Result" />
+                            <xsl:with-param name="label" select="TestName" />
+                        </xsl:call-template>
+                    </span>
+                    <xsl:call-template name="sub-tree-view-template">
+                        <xsl:with-param name="firstNode" select="ActionReports/ActionReport" />
+                    </xsl:call-template>
+                </li>
+            </xsl:for-each >
+        </ul>
     </xsl:template>
+
+
+
+
+
+
+
+
 
 </xsl:stylesheet>
