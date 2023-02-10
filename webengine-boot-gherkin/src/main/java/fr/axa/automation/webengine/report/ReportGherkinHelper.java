@@ -11,10 +11,13 @@ import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.report.helper.TestCaseMetricHelper;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
+import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
 import fr.axa.automation.webengine.report.helper.global.ReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
+import fr.axa.automation.webengine.report.object.TestCaseMetric;
 import fr.axa.automation.webengine.util.ActiveWindowScreenShotUtil;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FileUtil;
@@ -111,8 +114,16 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         if(globalConfigProperties.isPresent()){
             applicationName = globalConfigProperties.get().getApplication().getName();
         }
+
+
+        TestCaseMetric testCaseMetric = TestCaseMetricHelper.getMetrics(testCaseReportMap.values());
         testSuiteReport.setEndTime(Calendar.getInstance());
         testSuiteReport.getTestResults().addAll(testCaseReportMap.values());
+        testSuiteReport.setNumberOfTestcase(testCaseMetric.getNumberOfTestCase());
+        testSuiteReport.setPassed(testCaseMetric.getNumberOfTestCasePassed());
+        testSuiteReport.setFailed(testCaseMetric.getNumberOfTestCaseFailed());
+        testSuiteReport.setIgnored(testCaseMetric.getNumberOfTestCaseIgnored());
+
         ReportHelper reportHelper =  new ReportHelper(new WebengineReportHelper(new LoggerService()),new JunitReportHelper(new LoggerService()),new LoggerService());
         reportHelper.generateAllReport(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
     }

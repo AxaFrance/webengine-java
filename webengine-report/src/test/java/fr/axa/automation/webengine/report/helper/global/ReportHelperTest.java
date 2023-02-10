@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-class ReportHelperTest {
+public class ReportHelperTest {
 
     public static final String REPORT_TEST_RESULT_DIRECTORY = "report-test-result";
 

@@ -4,6 +4,10 @@
   "hostName": "DESKTOP-4PEPTM0",
   "systemOut": "",
   "systemError": "",
+  "numberOfTestcase": "11",
+  "passed": "10",
+  "failed": "0",
+  "ignored": "1",
   "testResults": [{
     "testName": "AFFICHAGE_DOCUMENT_SPOOLNET",
     "result": "FAILED",

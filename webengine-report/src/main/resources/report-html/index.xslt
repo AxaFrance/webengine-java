@@ -76,25 +76,19 @@
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action">Number of test case : 30</span>
+            <span class="badge badge-secondary badge-action">Number of test case : <xsl:value-of select="TestSuiteReport/NumberOfTestcase"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action ">
-                <i class="fa fa-check badge-action-green" aria-hidden="true"></i> Succes test : 10 (33%)
-            </span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Succes test : <xsl:value-of select="TestSuiteReport/Passed"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action ">
-                <i class="fa fa-times badge-action-red" aria-hidden="true"></i> Failed test : 10 (33%)
-            </span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-times badge-action-red" aria-hidden="true"></i> Failed test : <xsl:value-of select="TestSuiteReport/Failed"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action ">
-                <i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Ignored test : 10 (33%)
-            </span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Ignored test : <xsl:value-of select="TestSuiteReport/Failed"/></span>
         </div>
     </xsl:template>
 
@@ -119,18 +113,24 @@
         <ul class="nested">
             <xsl:for-each select="$firstNode">
                 <li>
-                    <span class="caret">
-                        <xsl:call-template name="status-template">
-                            <xsl:with-param name="status" select="Result" />
-                            <xsl:with-param name="label" select="Name" />
-                        </xsl:call-template>
-                    </span>
                     <xsl:choose>
                         <xsl:when test="SubActionReports">
+                            <span class="caret">
+                                <xsl:call-template name="status-template">
+                                    <xsl:with-param name="status" select="Result" />
+                                    <xsl:with-param name="label" select="Name" />
+                                </xsl:call-template>
+                            </span>
                             <xsl:call-template name="sub-tree-view-template">
                                 <xsl:with-param name="firstNode" select="SubActionReports/ActionReport" />
                             </xsl:call-template>
                         </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="status-template">
+                                <xsl:with-param name="status" select="Result" />
+                                <xsl:with-param name="label" select="Name" />
+                            </xsl:call-template>
+                        </xsl:otherwise>
                     </xsl:choose>
                 </li>
             </xsl:for-each>

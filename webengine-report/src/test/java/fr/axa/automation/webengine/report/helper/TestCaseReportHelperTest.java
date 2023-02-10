@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
-class TestCaseReportHelperTest {
+public class TestCaseReportHelperTest {
 
     @Test
     void createTestCaseReport() {

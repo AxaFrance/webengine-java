@@ -9,6 +9,10 @@ import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.report.helper.TestCaseMetricHelper;
+import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
+import fr.axa.automation.webengine.report.object.TestCaseMetric;
+import fr.axa.automation.webengine.report.object.TestSuiteReportInformation;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -61,6 +65,7 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
         TestSuiteReport testSuiteReport = new TestSuiteReport();
         List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
+        String systemError = "";
 
         try {
             if (testSuite != null) {
@@ -68,13 +73,10 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
                 testCaseReportList.addAll(runTestCase(globalApplicationContext, testCaseList));
             }
         } catch (WebEngineException e) {
-            testSuiteReport.setSystemError(ExceptionUtils.getStackTrace(e));
+            systemError = ExceptionUtils.getStackTrace(e);
         } finally {
-            testSuiteReport.setHostName(InetAddress.getLocalHost().getHostName());
-            testSuiteReport.setStartTime(startTime);
-            testSuiteReport.setEnvironmentVariables(globalApplicationContext.getEnvironmentVariables());
-            testSuiteReport.getTestResults().addAll(testCaseReportList);
-            testSuiteReport.setEndTime(Calendar.getInstance());
+            TestSuiteReportInformation testSuiteReportInformation = TestSuiteReportInformation.builder().environmentVariables(globalApplicationContext.getEnvironmentVariables()).testCaseReportList(testCaseReportList).startTime(startTime).systemError(systemError).build();
+            testSuiteReport = TestSuiteReportHelper.getTestSuiteReport(testSuiteReportInformation);
         }
 
         return testSuiteReport;

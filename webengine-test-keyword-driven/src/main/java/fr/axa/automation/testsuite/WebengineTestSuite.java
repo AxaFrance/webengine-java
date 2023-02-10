@@ -20,7 +20,7 @@ public class WebengineTestSuite extends AbstractTestSuite {
         List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList = new ArrayList<>();
         testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_1,new FlowTestCase()));
         testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_2,new SimpleTestCase())); //--Doesn't run because it's not present in testData file
-        testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_3,new SimpleTestCase())); //--Doesn't run because it's not present in Argument line
+        testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_3,new SimpleTestCase())); //--Doesn't run because it's not present in Argument line, cf Class ApplicationTest
         return testCaseList;
     }
 }
