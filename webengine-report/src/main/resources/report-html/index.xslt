@@ -155,7 +155,72 @@
         </ul>
     </xsl:template>
 
+    <xsl:template name="content-view-template">
 
+        <div class="tab-bar">
+            <a href="javascript:void(0)" onclick="openSelectedTab(event, 'idInformation');">
+                <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Information</div>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openSelectedTab(event, 'idLog');">
+                <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Log</div>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openSelectedTab(event, 'idContextValue');">
+                <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Context value</div>
+            </a>
+            <a href="javascript:void(0)" onclick="openSelectedTab(event, 'idImage');">
+                <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Image</div>
+            </a>
+        </div>
+
+        <div id="idInformation" class="tab-content-container class-container-tab" style="display:none">
+            <p>Start time : 2023-02-01T15:20:26</p>
+            <p>End time : 2023-02-01T15:20:26</p>
+        </div>
+
+        <div id="idLog" class="tab-content-container class-container-tab" style="display:none">
+            <p>Log</p>
+        </div>
+
+        <div id="idContextValue" class="tab-content-container class-container-tab " style="display:none">
+            <table class="table-common">
+                <tr>
+                    <th>Context</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>TEST</td>
+                    <td>VALUE 1</td>
+                </tr>
+                <tr>
+                    <td>TEST</td>
+                    <td>VALUE 2</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="idTestData" class="tab-content-container class-container-tab" style="display:none">
+            <table class="table-common">
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>DATE</td>
+                    <td>11/03/2023</td>
+                </tr>
+                <tr>
+                    <td>COMMENT</td>
+                    <td>We test the flow</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="idImage" class="tab-content-container class-container-tab" style="display:none">
+            <p>Image à insérer.</p>
+        </div>
+    </xsl:template>
 
 
 

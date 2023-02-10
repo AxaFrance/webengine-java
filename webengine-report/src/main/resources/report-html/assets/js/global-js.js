@@ -1,4 +1,4 @@
-function openSelectedTab(evt, cityName) {
+function openSelectedTab(evt, idTab) {
     var i, x, tablinks;
     x = document.getElementsByClassName("class-container-tab");
     for (i = 0; i < x.length; i++) {
@@ -8,10 +8,9 @@ function openSelectedTab(evt, cityName) {
     for (i = 0; i < x.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
     }
-    document.getElementById(cityName).style.display = "block";
+    document.getElementById(idTab).style.display = "block";
     evt.currentTarget.firstElementChild.className += " w3-border-red";
 }
-
 
 function openSelectedLineInTree() {
     var toggler = document.getElementsByClassName("caret");

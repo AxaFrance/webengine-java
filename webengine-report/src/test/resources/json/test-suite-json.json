@@ -9,6 +9,7 @@
   "failed": "0",
   "ignored": "1",
   "testResults": [{
+    "id": "iVBORw0KGgoAAAANSUh",
     "testName": "AFFICHAGE_DOCUMENT_SPOOLNET",
     "result": "FAILED",
     "startTime": "2022-11-18T11:07:11",
@@ -28,6 +29,7 @@
     "actionReports": {
       "actionReports": [
         {
+          "id": "iVBORw0KGgoAAAANSUh10",
           "name": "LoginAction",
           "result": "CRITICAL_ERROR",
           "startTime": "2022-11-18T11:07:15",
@@ -53,6 +55,7 @@
           "log": ""
         },
         {
+          "id": "iVBORw0KGgoAAAANSUh11",
           "name": "ChoisirModeDocument",
           "result": "IGNORED"
         }
