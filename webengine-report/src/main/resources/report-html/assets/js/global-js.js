@@ -1,20 +1,17 @@
+function showTabByTreeId(id){
+    hideElement("body-right-container");
+    showElement(id);
+}
+
 function openSelectedTab(evt, idTab) {
-    var i, x, tablinks;
-    x = document.getElementsByClassName("class-container-tab");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < x.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
-    }
-    document.getElementById(idTab).style.display = "block";
-    evt.currentTarget.firstElementChild.className += " w3-border-red";
+    hideElement("class-container-tab");
+    unSelectedAllTab("tablink");
+    selectedTabById(evt,idTab);
 }
 
 function openSelectedLineInTree() {
-    var toggler = document.getElementsByClassName("caret");
     var i;
+    var toggler = document.getElementsByClassName("caret");
 
     for (i = 0; i < toggler.length; i++) {
         toggler[i].addEventListener("click", function() {
@@ -23,3 +20,29 @@ function openSelectedLineInTree() {
         });
     }
 }
+
+function showElement(id){
+    document.getElementById(idTab).style.display = "block";
+}
+
+function hideElement(className){
+    var i;
+    var tabArray = document.getElementsByClassName(className);
+    for (i = 0; i < tabArray.length; i++) {
+        tabArray[i].style.display = "none";
+    }
+}
+
+function unSelectedAllTab(className){
+    var i;
+    var tablinks = document.getElementsByClassName(className);
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
+    }
+}
+
+function selectedTabById(evt,idTab){
+    showElement(idTab);
+    evt.currentTarget.firstElementChild.className += " w3-border-red";
+}
+
