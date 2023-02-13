@@ -1,12 +1,7 @@
-function showTabByTreeId(id){
-    hideElement("body-right-container");
-    showElement(id);
-}
-
-function openSelectedTab(evt, idTab) {
+function openSelectedTab(idTab, contentIdTab) {
     hideElement("class-container-tab");
     unSelectedAllTab("tablink");
-    selectedTabById(evt,idTab);
+    selectedTabById(idTab,contentIdTab);
 }
 
 function openSelectedLineInTree() {
@@ -21,7 +16,7 @@ function openSelectedLineInTree() {
     }
 }
 
-function showElement(id){
+function showElement(idTab){
     document.getElementById(idTab).style.display = "block";
 }
 
@@ -41,8 +36,9 @@ function unSelectedAllTab(className){
     }
 }
 
-function selectedTabById(evt,idTab){
-    showElement(idTab);
-    evt.currentTarget.firstElementChild.className += " w3-border-red";
-}
+function selectedTabById(idTab,contentIdTab){
+    showElement(contentIdTab);
+    // evt.currentTarget.firstElementChild.className += " w3-border-red";
+    document.getElementById(idTab).classList.add("w3-border-red");
 
+}

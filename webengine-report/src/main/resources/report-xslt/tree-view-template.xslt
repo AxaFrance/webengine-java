@@ -14,7 +14,7 @@
             <i class="fa fa-circle badge-action-blue" aria-hidden="true"></i>
         </xsl:if>
         <xsl:text> </xsl:text>
-        <a href="javascript:void(0)" onclick="showTabByTreeId({$id});"><xsl:value-of select="$label" /></a>
+        <a href="javascript:void(0)" onclick="hideElement('body-right-container-class');showElement({$id});openSelectedTab('tab-id-information-{$id}','content-id-information-{$id}');"><xsl:value-of select="$label" /></a>
     </xsl:template>
 
     <xsl:template name="sub-tree-view-template">
@@ -48,7 +48,6 @@
         </ul>
     </xsl:template>
 
-
     <xsl:template name="tree-view-template">
         <ul id="idTree">
             <xsl:for-each select="TestSuiteReport/TestResult">
@@ -67,13 +66,5 @@
             </xsl:for-each >
         </ul>
     </xsl:template>
-
-
-
-
-
-
-
-
 
 </xsl:stylesheet>
