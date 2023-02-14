@@ -1,7 +1,12 @@
-function openSelectedTab(idTab, contentIdTab) {
+function openSelectedTab(idTab, idContentTab) {
     hideElement("class-container-tab");
     unSelectedAllTab("tablink");
-    selectedTabById(idTab,contentIdTab);
+    selectedTabById(idTab,idContentTab);
+}
+
+function selectedTabById(idTab,idContentTab){
+    showElement(idContentTab);
+    addClassToElement(idTab);
 }
 
 function openSelectedLineInTree() {
@@ -36,9 +41,14 @@ function unSelectedAllTab(className){
     }
 }
 
-function selectedTabById(idTab,contentIdTab){
-    showElement(contentIdTab);
-    // evt.currentTarget.firstElementChild.className += " w3-border-red";
+function addClassToElement(idTab) {
     document.getElementById(idTab).classList.add("w3-border-red");
+}
 
+function changeColorOfSelectedElement(event){
+    var tablinks = document.getElementsByClassName("selected-line");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace('selected-line','');
+    }
+    event.currentTarget.className += " selected-line";
 }

@@ -1,8 +1,9 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:import href="general-information-template.xslt"/>
-    <xsl:import href="tree-view-template.xslt"/>
-    <xsl:import href="content-view-template.xslt"/>
+    <xsl:import href="header/header-template.xslt"/>
+    <xsl:import href="header/sub-header-template.xslt"/>
+    <xsl:import href="panel-left/panel-left-template.xslt"/>
+    <xsl:import href="panel-right/panel-right-template.xslt"/>
 
     <xsl:template match="/">
         <html>
@@ -29,20 +30,16 @@
                 <div id="root">
 
                     <div class="site-header common-font">
-                        <div class="site-header-section site-header-section-left ">
-                            <i class="fa fa-registered fa-3x site-header-icon site-header-icon-application"></i>
-                            <div class="site-header-item">Webengine report viewer</div>
-                        </div>
+                        <xsl:call-template name="header-template"/>
                     </div>
 
                     <div class="general-information scrollbar">
-                        <xsl:call-template name="general-information-template"/>
+                        <xsl:call-template name="sub-header-template"/>
                     </div>
 
                     <div class="body-content-container">
-                        <div class="body-left-container">
+                        <div id='id-body-left-container' class="body-left-container">
                             <xsl:call-template name="tree-view-template"/>
-
                         </div>
 
                         <xsl:call-template name="content-view-template"/>

@@ -45,8 +45,8 @@ section {
 }
 
 .circle-button{
-    background-color: #c0392b!important;
-    border-color: #c0392b!important;
+    background-color: #e30026!important;
+    border-color: #e30026!important;
     color: white!important;
 }
 
@@ -90,11 +90,11 @@ section {
 }
 
 .icon-custom{
-    color: #c0392b!important;
+    color: #e30026!important;
 }
 
 .label-custom{
-    color: #c0392b!important;
+    color: #e30026!important;
     font-weight: bold;
 }
 .shadow{
@@ -110,11 +110,19 @@ section {
 .spinner{
     display: block;
     margin: 0 auto;
-    border-color: #c0392b;
+    border-color: #e30026;
 }
 
 .tab-custom{
     width: 100%;
+}
+
+.selected-line{
+    color: #e30026;
+}
+
+.selected-line{
+    color: #e30026;
 }
 
 /* ***********************scrollbar*********************** */

@@ -1,26 +1,30 @@
 .tab-bar {
     width: 100%;
     overflow: hidden;
+    display: flex;
 }
 
 
 .tab-content-container{
     width: 100%;
     padding: 10px;
+    word-break: break-all;
 }
 
 .w3-third {
-    float: left;
-    width: 100%
+    /*float: left;*/
+    /*width: 100%;*/
+    flex-grow: 1;
 }
 
-@media (min-width: 601px) {
+/*@media (min-width: 601px) {*/
 
-    .w3-col.m4, .w3-third {
-        width: 20%
-    }
+/*    .w3-third {*/
+/*        !*width: 20%;*!*/
+/*        flex-grow: 1;*/
+/*    }*/
 
-}
+/*}*/
 
 .w3-row-padding, .w3-row-padding > .w3-half, .w3-row-padding > .w3-third, .w3-row-padding > .w3-twothird, .w3-row-padding > .w3-threequarter, .w3-row-padding > .w3-quarter, .w3-row-padding > .w3-col {
     padding: 0 8px
@@ -37,4 +41,4 @@
 
 .w3-padding{padding:8px 16px!important}
 
-.w3-border-red,.w3-hover-border-red:hover{border-color:#f44336!important}
+.w3-border-red,.w3-hover-border-red:hover{border-color:#e30026!important}

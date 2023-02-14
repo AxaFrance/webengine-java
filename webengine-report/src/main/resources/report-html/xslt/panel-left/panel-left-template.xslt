@@ -14,7 +14,7 @@
             <i class="fa fa-circle badge-action-blue" aria-hidden="true"></i>
         </xsl:if>
         <xsl:text> </xsl:text>
-        <a href="javascript:void(0)" onclick="hideElement('body-right-container-class');showElement({$id});openSelectedTab('tab-id-information-{$id}','content-id-information-{$id}');"><xsl:value-of select="$label" /></a>
+        <a href="javascript:void(0)" onclick="changeColorOfSelectedElement(event);hideElement('body-right-container-class');showElement({$id});openSelectedTab('tab-id-information-{$id}','content-id-information-{$id}');"><xsl:value-of select="$label" /></a>
     </xsl:template>
 
     <xsl:template name="sub-tree-view-template">

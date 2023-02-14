@@ -1,6 +1,6 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:template name="general-information-template">
+    <xsl:template name="sub-header-template">
         <div class="badge-container">
             <span class="badge badge-secondary badge-action">Test suite</span>
         </div>
