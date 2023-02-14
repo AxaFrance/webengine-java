@@ -22,15 +22,15 @@
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Succes test : <xsl:value-of select="TestSuiteReport/Passed"/></span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Succes tests : <xsl:value-of select="TestSuiteReport/Passed"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-times badge-action-red" aria-hidden="true"></i> Failed test : <xsl:value-of select="TestSuiteReport/Failed"/></span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-times badge-action-red" aria-hidden="true"></i> Failed tests : <xsl:value-of select="TestSuiteReport/Failed"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Ignored test : <xsl:value-of select="TestSuiteReport/Failed"/></span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Ignored tests : <xsl:value-of select="TestSuiteReport/Failed"/></span>
         </div>
     </xsl:template>
 

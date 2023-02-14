@@ -7,7 +7,7 @@
              onclick="openSelectedTab('tab-id-information-{$id}', 'content-id-information-{$id}');">
             <a href="javascript:void(0)"
                onclick="openSelectedTab('tab-id-information-{$id}', 'content-id-information-{$id}');">
-                Information
+                Information / Screenshot
             </a>
         </div>
 
@@ -57,13 +57,6 @@
                 </a>
             </div>
 
-            <div id="tab-id-image-{$id}" class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding"
-                 onclick="openSelectedTab('tab-id-image-{$id}', 'content-id-image-{$id}');">
-                <a href="javascript:void(0)" onclick="openSelectedTab('tab-id-image-{$id}', 'content-id-image-{$id}');">
-                    Image
-                </a>
-            </div>
-
         </div>
     </xsl:template>
 
@@ -77,6 +70,30 @@
             <p>End time :
                 <xsl:value-of select="EndTime"/>
             </p>
+            <img
+                    src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.webp"
+                    data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/2.webp"
+                    alt="Winter Landscape"
+                    class="w-100 img-thumbnail"
+            />
+            <img
+                    src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.webp"
+                    data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/2.webp"
+                    alt="Winter Landscape"
+                    class="w-100 img-thumbnail"
+            />
+            <img
+                    src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.webp"
+                    data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/2.webp"
+                    alt="Winter Landscape"
+                    class="w-100 img-thumbnail"
+            />
+            <img
+                    src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.webp"
+                    data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/2.webp"
+                    alt="Winter Landscape"
+                    class="w-100 img-thumbnail"
+            />
         </div>
     </xsl:template>
 
@@ -105,13 +122,6 @@
             <xsl:call-template name="array-view-template">
                 <xsl:with-param name="parentTag" select="TestData"></xsl:with-param>
             </xsl:call-template>
-        </div>
-    </xsl:template>
-
-    <xsl:template name="content-tab-image-template">
-        <xsl:param name="id"/>
-        <div id="content-id-image-{$id}" class="tab-content-container class-container-tab" style="display:none">
-            <p>Image à insérer.</p>
         </div>
     </xsl:template>
 
@@ -168,10 +178,6 @@
                 <xsl:with-param name="id" select="$id"></xsl:with-param>
             </xsl:call-template>
 
-            <xsl:call-template name="content-tab-image-template">
-                <xsl:with-param name="id" select="$id"></xsl:with-param>
-            </xsl:call-template>
-
         </div>
     </xsl:template>
 
@@ -205,7 +211,6 @@
                 <xsl:with-param name="id" select="Id"/>
             </xsl:call-template>
         </xsl:for-each>
-
 
         <xsl:for-each select="//ActionReport">
             <xsl:call-template name="content-view-action-template-by-id">

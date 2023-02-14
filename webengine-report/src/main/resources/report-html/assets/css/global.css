@@ -122,7 +122,13 @@ section {
 }
 
 .selected-line{
-    color: #e30026;
+    color: #007bff!important;
+}
+
+a{
+    color: #000000!important;
+    text-decoration: none!important;
+    background-color: transparent!important;
 }
 
 /* ***********************scrollbar*********************** */
