@@ -1,0 +1,34 @@
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+    <xsl:template name="tab-test-case-template">
+        <xsl:param name="id"/>
+
+        <div class="tab-bar">
+
+            <div id="tab-id-information-{$id}" class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding"
+                 onclick="openSelectedTab('tab-id-information-{$id}', 'content-id-information-{$id}');">
+                <a href="javascript:void(0)"
+                   onclick="openSelectedTab('tab-id-information-{$id}', 'content-id-information-{$id}');">
+                    Information
+                </a>
+            </div>
+
+            <div id="tab-id-log-{$id}" class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding"
+                 onclick="openSelectedTab('tab-id-log-{$id}', 'content-id-log-{$id}');">
+                <a href="javascript:void(0)" onclick="openSelectedTab('tab-id-log-{$id}', 'content-id-log-{$id}');">
+                    Log
+                </a>
+            </div>
+
+            <div id="tab-id-test-data-{$id}" class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding"
+                 onclick="openSelectedTab('tab-id-test-data-{$id}', 'content-id-test-data-{$id}');">
+                <a href="javascript:void(0)"
+                   onclick="openSelectedTab('tab-id-test-data-{$id}', 'content-id-test-data-{$id}');">
+                    Test data
+                </a>
+            </div>
+
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>
