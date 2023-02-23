@@ -4,9 +4,12 @@ import fr.axa.automation.appmodels.WebEngineHomeTestPage;
 import fr.axa.automation.parameter.IParameter;
 import fr.axa.automation.webengine.core.AbstractActionWebBase;
 import fr.axa.automation.webengine.helper.VariableHelper;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class HomeAction extends AbstractActionWebBase {
 
     WebEngineHomeTestPage webEngineHomeTestPage;
