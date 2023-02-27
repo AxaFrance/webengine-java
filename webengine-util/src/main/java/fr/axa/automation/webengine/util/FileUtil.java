@@ -97,16 +97,12 @@ public final class FileUtil {
         }
     }
 
-    public static File getFileByPathOrResource(String fileOrResource) throws FileNotFoundException {
+    public static File getFileByPathOrResource(String fileOrResource) throws IOException {
         try {
             URL url = Thread.currentThread().getContextClassLoader().getResource(fileOrResource);
-            if(url!=null){
-                return new File(url.toURI());
-            }else{
-                return new File(fileOrResource);
-            }
+            return url != null ? new File(url.toURI()) : new File(fileOrResource);
         }catch (Exception e){
-            throw new FileNotFoundException("The resource file "+fileOrResource+" not found in resource directory ");
+            throw new IOException("The resource file "+fileOrResource+" not found in resource directory ",e);
         }
     }
 

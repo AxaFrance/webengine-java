@@ -289,6 +289,10 @@ For executing the project, you can run this command :
 
 **java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml"**
 
+With filter test case
+**java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml" "-tc:TEST_CASE_1"**
+
+
 If you want run the project from addin excel, you can run this command 
 
 **java -jar WebRunner.jar "-a:C:\work\project\project-name-1.0.0-exec.jar" "-data:-data:C:\work\project\src\main\resources\data.xml" "-env:-data:C:\work\project\src\main\resources\env.xml" "-platform:Android" "-browser:Chrome"**

@@ -16,7 +16,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +35,7 @@ public final class XmlUtil {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             JAXBElement<T> jaxbElement = jaxbUnmarshaller.unmarshal(source, returnType);
             return (T) jaxbElement.getValue();
-        } catch (JAXBException | FileNotFoundException e) {
+        } catch (JAXBException | IOException e) {
             throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
         }
     }
@@ -60,7 +60,7 @@ public final class XmlUtil {
             JAXBElement jaxbElement = new JAXBElement(qname, objectToMarshall.getClass(), objectToMarshall);
             jaxbMarshaller.marshal(jaxbElement, file);
             return file;
-        } catch (JAXBException | FileNotFoundException e) {
+        } catch (JAXBException | IOException e) {
             throw new WebEngineException("Error during parsing XML data for file : "+inputMarshallDTO.getFileDestinationPath(), e);
         }
     }
