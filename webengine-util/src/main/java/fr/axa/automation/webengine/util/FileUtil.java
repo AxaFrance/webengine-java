@@ -102,7 +102,9 @@ public final class FileUtil {
             URL url = Thread.currentThread().getContextClassLoader().getResource(fileOrResource);
             return url != null ? new File(url.toURI()) : new File(fileOrResource);
         }catch (Exception e){
-            throw new IOException("The resource file "+fileOrResource+" not found in resource directory ",e);
+            loggerService.warn("",e);
+            return new File(fileOrResource);
+//            throw new IOException("The resource file "+fileOrResource+" not found in resource directory ",e);
         }
     }
 
