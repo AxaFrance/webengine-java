@@ -145,7 +145,7 @@ public final class TestSuiteHelper {
     }
 
     private static List<String> getBrowserOptionList(GlobalConfigProperties globalConfigProperties) {
-        if (globalConfigProperties != null && CollectionUtils.isNotEmpty(globalConfigProperties.getApplication().getBrowserOptionList())) {
+        if (globalConfigProperties != null && globalConfigProperties.getApplication()!=null && CollectionUtils.isNotEmpty(globalConfigProperties.getApplication().getBrowserOptionList())) {
             return globalConfigProperties.getApplication().getBrowserOptionList();
         }
         return Collections.emptyList();
