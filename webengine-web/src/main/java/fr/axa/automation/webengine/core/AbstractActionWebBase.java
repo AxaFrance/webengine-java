@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.context.SharedContext;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.ActionContext;
+import fr.axa.automation.webengine.global.ActionContext;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.ScreenshotReport;

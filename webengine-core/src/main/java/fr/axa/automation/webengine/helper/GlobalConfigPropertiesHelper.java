@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.general.Settings;
+import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.properties.ApplicationProperties;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 

@@ -1,10 +1,14 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.api.IAction;
+import fr.axa.automation.webengine.api.IActionExecutor;
+import fr.axa.automation.webengine.api.ITestStep;
+import fr.axa.automation.webengine.api.ITestStepExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.ActionContext;
-import fr.axa.automation.webengine.general.GlobalApplicationContext;
-import fr.axa.automation.webengine.general.ITestCaseContext;
-import fr.axa.automation.webengine.general.Platform;
+import fr.axa.automation.webengine.global.ActionContext;
+import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.api.ITestCaseContext;
+import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.helper.TestDataHelper;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;

@@ -1,10 +1,13 @@
 package fr.axa.automation.webengine;
 
 import fr.axa.automation.webengine.boot.BootProject;
+import fr.axa.automation.webengine.boot.IBootProject;
+import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,12 +17,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-    final LoggerService loggerService;
+    final ILoggerService loggerService;
 
-    final BootProject bootProject;
+    final IBootProject bootProject;
 
     @Autowired
-    public Application(LoggerService loggerService,BootProject bootProject) {
+    public Application(ILoggerService loggerService, @Qualifier("bootProject") IBootProject bootProject) {
         this.loggerService = loggerService;
         this.bootProject = bootProject;
     }

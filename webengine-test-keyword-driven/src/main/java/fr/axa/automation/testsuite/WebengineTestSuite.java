@@ -3,7 +3,7 @@ package fr.axa.automation.testsuite;
 import fr.axa.automation.testcase.FlowTestCase;
 import fr.axa.automation.testcase.SimpleTestCase;
 import fr.axa.automation.webengine.core.AbstractTestSuite;
-import fr.axa.automation.webengine.core.ITestCase;
+import fr.axa.automation.webengine.api.ITestCase;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

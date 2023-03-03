@@ -55,7 +55,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>fr.axa.automation.webengine.general.*</exclude>
+                        <exclude>fr.axa.automation.webengine.global.*</exclude>
                         <exclude>fr.axa.automation.webengine.exception.*</exclude>
                     </excludes>
                 </configuration>

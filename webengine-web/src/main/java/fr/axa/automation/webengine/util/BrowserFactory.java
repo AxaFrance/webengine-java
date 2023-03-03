@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.util;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.Browser;
-import fr.axa.automation.webengine.general.Platform;
+import fr.axa.automation.webengine.global.Browser;
+import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.helper.BrowserTypeHelper;
 import fr.axa.automation.webengine.helper.PlatformTypeHelper;
 import fr.axa.automation.webengine.properties.AppiumSettingsProperties;

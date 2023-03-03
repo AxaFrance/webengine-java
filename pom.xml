@@ -80,6 +80,7 @@
         <module>webengine-test-linear</module>
 		<module>webengine-report-jacoco-aggregate</module>
         <module>webengine-drive-by-excel</module>
+        <module>webengine-cmd-line</module>
     </modules>
 
     <dependencies>

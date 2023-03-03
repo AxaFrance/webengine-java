@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.api.IFunction;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.ListUtil;

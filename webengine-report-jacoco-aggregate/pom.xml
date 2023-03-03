@@ -44,6 +44,12 @@
             <artifactId>webengine-runner</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-cmd-line</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 		
 		<dependency>
             <groupId>fr.axa.automation.webengine</groupId>

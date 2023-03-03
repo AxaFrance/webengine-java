@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.util;
 
-import fr.axa.automation.webengine.general.Browser;
-import fr.axa.automation.webengine.general.Platform;
-import fr.axa.automation.webengine.general.Settings;
+import fr.axa.automation.webengine.global.Browser;
+import fr.axa.automation.webengine.global.Platform;
+import fr.axa.automation.webengine.global.Settings;
 
 public class SettingsForTest {
 

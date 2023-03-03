@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.general.SettingsWeb;
+import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.global.SettingsWeb;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

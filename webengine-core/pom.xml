@@ -94,7 +94,7 @@
                     </additionalClasspathElements>
                     <excludes>
                         <exclude>fr.axa.automation.webengine.context.*</exclude>
-                        <exclude>fr.axa.automation.webengine.general.*</exclude>
+                        <exclude>fr.axa.automation.webengine.global.*</exclude>
                         <exclude>fr.axa.automation.webengine.localtesting.*</exclude>
                         <exclude>fr.axa.automation.webengine.properties.*</exclude>
                     </excludes>

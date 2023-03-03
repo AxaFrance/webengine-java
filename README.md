@@ -290,7 +290,7 @@ For executing the project, you can run this command :
 **java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml"**
 
 With filter test case
-**java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml" "-tc:TEST_CASE_1"**
+**java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml" "-testcase:TEST_CASE_1"**
 
 
 If you want run the project from addin excel, you can run this command 
@@ -434,7 +434,7 @@ WebengineTestSuite.java (You have to extend AbstractTestSuite)
 
 import fr.axa.automation.testcase.FlowTestCase;
 import fr.axa.automation.webengine.core.AbstractTestSuite;
-import fr.axa.automation.webengine.core.ITestCase;
+import fr.axa.automation.webengine.api.ITestCase;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -456,8 +456,8 @@ public class WebengineTestSuite extends AbstractTestSuite {
 FlowTestCase.java (you have to implements ITestCase)
 ```
 import fr.axa.automation.teststep.*;
-import fr.axa.automation.webengine.core.ITestCase;
-import fr.axa.automation.webengine.core.ITestStep;
+import fr.axa.automation.webengine.api.ITestCase;
+import fr.axa.automation.webengine.api.ITestStep;
 
 import java.util.Arrays;
 import java.util.List;
@@ -477,8 +477,8 @@ HomeTestStep.java (you have to implement ITestStep)
 package fr.axa.automation.teststep;
 
 import fr.axa.automation.action.HomeAction;
-import fr.axa.automation.webengine.core.IAction;
-import fr.axa.automation.webengine.core.ITestStep;
+import fr.axa.automation.webengine.api.IAction;
+import fr.axa.automation.webengine.api.ITestStep;
 
 public class HomeTestStep implements ITestStep {
     @Override
@@ -493,8 +493,8 @@ FirstTestStep.java (you have to implement ITestStep)
 package fr.axa.automation.teststep;
 
 import fr.axa.automation.action.FirstStepAction;
-import fr.axa.automation.webengine.core.IAction;
-import fr.axa.automation.webengine.core.ITestStep;
+import fr.axa.automation.webengine.api.IAction;
+import fr.axa.automation.webengine.api.ITestStep;
 
 public class FirstTestStep implements ITestStep {
     @Override
