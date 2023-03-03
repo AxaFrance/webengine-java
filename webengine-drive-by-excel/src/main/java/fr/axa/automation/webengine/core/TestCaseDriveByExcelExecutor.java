@@ -1,34 +1,17 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.api.ITestCase;
 import fr.axa.automation.webengine.api.ITestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.api.ITestCaseDriveByExcelExecutor;
-import fr.axa.automation.webengine.api.ITestCaseWebContext;
-import fr.axa.automation.webengine.api.ITestStepExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.generated.ActionReport;
-import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
-import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
-import fr.axa.automation.webengine.api.ITestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
-import fr.axa.automation.webengine.helper.ActionReportHelper;
-import fr.axa.automation.webengine.helper.TestDataHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.TestCaseData;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
-import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
-import fr.axa.automation.webengine.report.object.ActionReportDetail;
-import fr.axa.automation.webengine.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @Qualifier("testCaseDriveByExcelExecutor")
@@ -58,21 +41,22 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
 
     @Override
     public TestCaseReport run(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
-        String testCaseName = testCaseContext.getTestCaseName();
-        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
-        List<ActionReport> actionReportList = new ArrayList<>();
-
-        try {
-            actionReportList.addAll(runTestStep(globalApplicationContext, testCaseContext));
-        }catch (Throwable e){
-            testCaseReport.setResult(Result.FAILED);
-            loggerService.error("Error during execution of test case : "+testCaseName,e);
-        }finally {
-            testCaseReport.getActionReports().getActionReports().addAll(ActionReportHelper.getActionReportList(actionReportList));
-            testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
-            testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
-            testCaseReport.setResult(getResultOfTestCase(actionReportList));          }
-        return testCaseReport;
+//        String testCaseName = testCaseContext.getTestCaseName();
+//        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
+//        List<ActionReport> actionReportList = new ArrayList<>();
+//
+//        try {
+//            actionReportList.addAll(runTestStep(globalApplicationContext, testCaseContext));
+//        }catch (Throwable e){
+//            testCaseReport.setResult(Result.FAILED);
+//            loggerService.error("Error during execution of test case : "+testCaseName,e);
+//        }finally {
+//            testCaseReport.getActionReports().getActionReports().addAll(ActionReportHelper.getActionReportList(actionReportList));
+//            testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
+//            testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
+//            testCaseReport.setResult(getResultOfTestCase(actionReportList));          }
+//        return testCaseReport;
+        return null;
     }
 
 }

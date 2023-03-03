@@ -1,35 +1,17 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.api.ITestCase;
-import fr.axa.automation.webengine.api.ITestCaseExecutor;
-import fr.axa.automation.webengine.api.ITestStep;
-import fr.axa.automation.webengine.api.ITestStepExecutor;
-import fr.axa.automation.webengine.context.SharedContext;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
-import fr.axa.automation.webengine.api.ITestCaseContext;
-import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
-import fr.axa.automation.webengine.generated.TestCaseReport;
-import fr.axa.automation.webengine.generated.TestData;
-import fr.axa.automation.webengine.helper.ActionReportDetailHelper;
-import fr.axa.automation.webengine.helper.ActionReportHelper;
-import fr.axa.automation.webengine.helper.TestDataHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
-import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
-import fr.axa.automation.webengine.util.DateUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)

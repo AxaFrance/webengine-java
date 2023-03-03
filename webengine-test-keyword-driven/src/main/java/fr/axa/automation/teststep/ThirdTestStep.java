@@ -1,8 +1,8 @@
 package fr.axa.automation.teststep;
 
 import fr.axa.automation.action.ThirdStepAction;
-import fr.axa.automation.webengine.api.IAction;
-import fr.axa.automation.webengine.api.ITestStep;
+import fr.axa.automation.webengine.core.IAction;
+import fr.axa.automation.webengine.core.ITestStep;
 
 public class ThirdTestStep implements ITestStep {
 

@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.global;
 
 
-import fr.axa.automation.webengine.api.ITestCaseContext;
+import fr.axa.automation.webengine.core.ITestCaseContext;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

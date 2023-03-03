@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.api;
+package fr.axa.automation.webengine.core;
 
 import java.util.AbstractMap;
 import java.util.List;

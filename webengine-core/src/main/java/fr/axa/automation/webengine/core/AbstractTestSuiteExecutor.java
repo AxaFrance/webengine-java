@@ -1,7 +1,5 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.api.ITestCaseExecutor;
-import fr.axa.automation.webengine.api.ITestSuiteExecutor;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;

@@ -2,10 +2,10 @@ package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.core.AbstractTestSuite;
-import fr.axa.automation.webengine.api.IAction;
-import fr.axa.automation.webengine.api.ITestCase;
-import fr.axa.automation.webengine.api.ITestStep;
-import fr.axa.automation.webengine.api.ITestSuite;
+import fr.axa.automation.webengine.core.IAction;
+import fr.axa.automation.webengine.core.ITestCase;
+import fr.axa.automation.webengine.core.ITestStep;
+import fr.axa.automation.webengine.core.ITestSuite;
 import fr.axa.automation.webengine.core.TestCaseAdditionalInformation;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.EnvironmentVariables;

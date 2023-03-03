@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.api;
+package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.generated.Variable;
 

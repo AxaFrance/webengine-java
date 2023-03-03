@@ -1,8 +1,6 @@
 package fr.axa.automation.webengine.core;
 
 
-import fr.axa.automation.webengine.api.IAction;
-import fr.axa.automation.webengine.api.IActionExecutor;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.helper.ActionReportDetailHelper;

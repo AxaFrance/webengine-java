@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.boot;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
-import fr.axa.automation.webengine.api.ITestSuiteExecutor;
+import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.api.ITestSuiteExecutorDriveByExcel;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
