@@ -2,7 +2,10 @@ package fr.axa.automation.webengine.object;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -14,6 +17,9 @@ import java.util.List;
         "testCaseList"
 })
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TestSuiteData extends AbstractTestSuiteData{
     @JsonProperty("uid")
     private String uid;

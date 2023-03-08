@@ -12,4 +12,5 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public abstract class AbstractTestCaseContext implements ITestCaseContext {
     String testCaseName;
+    Object webDriver;
 }

@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.boot;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
-import fr.axa.automation.webengine.api.ITestSuiteExecutorDriveByExcel;
+import fr.axa.automation.webengine.api.ITestSuiteDriveByExcelExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.Settings;
@@ -62,7 +62,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
 
         loggerService.info("Start run test ");
 
-        TestSuiteReport testSuiteReport = ((ITestSuiteExecutorDriveByExcel)testSuiteExecutor).run(globalApplicationContext, testSuiteData);
+        TestSuiteReport testSuiteReport = ((ITestSuiteDriveByExcelExecutor)testSuiteExecutor).run(globalApplicationContext, testSuiteData);
         loggerService.info("End run test ");
 
         loggerService.info("Start clean ");

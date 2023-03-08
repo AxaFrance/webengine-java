@@ -1,7 +1,14 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.ITestCaseDriveByExcelExecutor;
-import fr.axa.automation.webengine.api.ITestSuiteExecutorDriveByExcel;
+import fr.axa.automation.webengine.api.ITestSuiteDriveByExcelExecutor;
+import fr.axa.automation.webengine.checking.chain.IChecking;
+import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
+import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
+import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
+import fr.axa.automation.webengine.checking.chain.impl.DataTestReferenceChecking;
+import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
+import fr.axa.automation.webengine.checking.chain.impl.TestCaseEndingChecking;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.generated.TestCaseReport;
@@ -26,11 +33,14 @@ import java.util.List;
 
 @Component
 @Qualifier("testSuiteDriveByExcelExecutor")
-public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor implements ITestSuiteExecutorDriveByExcel {
+public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor implements ITestSuiteDriveByExcelExecutor {
+
+    ICheckingRunner checkingRunner;
 
     @Autowired
-    public TestSuiteDriveByExcelExecutor(@Qualifier("testCaseDriveByExcelExecutor")ITestCaseExecutor testCaseExecutor, ILocalTestingRunner localTestingRunner, ILoggerService loggerService) {
+    public TestSuiteDriveByExcelExecutor(@Qualifier("testCaseDriveByExcelExecutor")ITestCaseExecutor testCaseExecutor, ILocalTestingRunner localTestingRunner, ILoggerService loggerService,ICheckingRunner checkingRunner) {
         super(testCaseExecutor,localTestingRunner, loggerService);
+        this.checkingRunner = checkingRunner;
     }
 
     @Override
@@ -39,7 +49,7 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
         TestSuiteReport testSuiteReport;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
         String systemError = "";
-
+        isInputCheckSuccess(testSuiteData);
         try {
             if (testSuiteData != null) {
                 List<TestCaseData> testCaseDataList = ((TestSuiteData)testSuiteData).getTestCaseList();
@@ -66,5 +76,16 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
             testCaseReportList.add(testCaseReport);
         }
         return testCaseReportList;
+    }
+
+    public void isInputCheckSuccess(AbstractTestSuiteData testSuiteData){
+        IChecking checking = AbstractChecking.link(
+                new TestCaseEndingChecking(),
+                new IfChecking(),
+                new CallScenariiChecking(),
+                new DataTestReferenceChecking()
+        );
+        checkingRunner.setChecking(checking);
+        checkingRunner.runChecking(testSuiteData);
     }
 }

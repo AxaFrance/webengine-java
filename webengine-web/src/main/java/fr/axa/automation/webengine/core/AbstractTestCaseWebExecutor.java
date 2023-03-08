@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.api.ITestCaseWebContext;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
-import fr.axa.automation.webengine.global.TestCaseWebContext;
 import fr.axa.automation.webengine.helper.GlobalConfigPropertiesHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
@@ -33,9 +33,9 @@ public abstract class AbstractTestCaseWebExecutor extends AbstractTestCaseExecut
     }
 
     @Override
-    public void cleanUp(ITestCaseContext testCaseContext) {
+    public void cleanUp(Object testCaseContext) {
         try {
-            ((TestCaseWebContext)testCaseContext).getWebDriver().quit();
+            ((WebDriver)((ITestCaseWebContext)testCaseContext).getWebDriver()).quit();
             loggerService.info("Browser close properly");
         }catch (NoSuchSessionException e){
             loggerService.warn("Warning during quit browser",e);

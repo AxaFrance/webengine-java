@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.ITestCaseWebContext;
 import fr.axa.automation.webengine.api.ITestCaseWebExecutor;
+import fr.axa.automation.webengine.api.ITestStepWebExecutor;
 import fr.axa.automation.webengine.context.SharedContext;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
@@ -28,18 +29,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Qualifier("testCaseWebExecutor")
 public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements ITestCaseWebExecutor {
 
     @Autowired
-    public TestCaseWebExecutor(ITestStepExecutor testStepExecutor, GlobalConfigProperties globalConfigProperties, ILoggerService loggerService ) {
+    public TestCaseWebExecutor(@Qualifier("testStepWebExecutor")ITestStepExecutor testStepExecutor, GlobalConfigProperties globalConfigProperties, ILoggerService loggerService ) {
         super(testStepExecutor, globalConfigProperties, loggerService);
     }
 
     @Override
-    public ITestCaseContext getTestCaseContext() throws WebEngineException {
+    public ITestCaseContext getTestCaseContext() {
         return TestCaseWebContext.builder().build();
     }
 
@@ -74,7 +76,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
             testCaseReport.getActionReports().getActionReports().addAll(ActionReportHelper.getActionReportList(actionReportDetailList));
             testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
             testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
-            testCaseReport.setResult(getResultOfTestCase(actionReportDetailList));          }
+            testCaseReport.setResult(getResultOfTestCaseWeb(actionReportDetailList));          }
         return testCaseReport;
     }
 
@@ -103,7 +105,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
                     actionReportDetailList.add(ActionReportDetailHelper.getActionReportDetail(actionReport, true));
                     loggerService.info("All test step are ignored. Test case is : "+ testCaseName +" and test step name is : "+ testStep.getClass().getName());
                 }else{
-                    actionReportDetail = testStepExecutor.run(globalApplicationContext,testCaseContext,testStep);
+                    actionReportDetail = ((ITestStepWebExecutor)testStepExecutor).run(globalApplicationContext,testCaseContext,testStep);
                     ignoredAllNextTestStep = verifyCheckpoint(actionReportDetail);
                     actionReportDetailList.add(actionReportDetail);
                 }
@@ -115,6 +117,39 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
             actionReportDetailList.add(ActionReportDetailHelper.getActionReportDetail(actionReport, false));
         }
         return actionReportDetailList;
+    }
+
+    protected Result getResultOfTestCaseWeb(List<ActionReportDetail> actionReportDetailList) {
+        Result result = Result.PASSED;
+        if(getResultActionReport(actionReportDetailList) == Result.FAILED || getResultCheckPoint(actionReportDetailList) == Result.FAILED ){
+            return Result.FAILED;
+        }
+        return result;
+    }
+
+    protected Result getResultActionReport(List<ActionReportDetail> actionReportDetailList) {
+        Result result = Result.PASSED;
+        if (CollectionUtils.isNotEmpty(actionReportDetailList)) {
+            List<ActionReportDetail> actionReportDetailFilterList = actionReportDetailList.stream().filter(actionReportDetail ->
+                    actionReportDetail != null &&
+                    actionReportDetail.getActionReport() != null &&
+                    (actionReportDetail.getActionReport().getResult() == Result.FAILED || actionReportDetail.getActionReport().getResult() == Result.CRITICAL_ERROR)
+            ).collect(Collectors.toList());
+            return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
+        }
+        return result;
+    }
+
+    protected Result getResultCheckPoint(List<ActionReportDetail> actionReportDetailList) {
+        Result result = Result.PASSED;
+        if (CollectionUtils.isNotEmpty(actionReportDetailList)) {
+            List<ActionReportDetail> actionReportDetailFilterList = actionReportDetailList.stream().filter(actionReportDetail ->
+                    actionReportDetail != null &&
+                    !actionReportDetail.isResultCheckPoint()
+            ).collect(Collectors.toList());
+            return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
+        }
+        return result;
     }
 
     private boolean verifyCheckpoint(ActionReportDetail actionReportDetail){

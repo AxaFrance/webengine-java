@@ -1,11 +1,11 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
+import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
-import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -35,43 +35,38 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
           return testCaseContext;
      }
 
-     public abstract ITestCaseContext getTestCaseContext() throws WebEngineException;
+     public abstract ITestCaseContext getTestCaseContext() ;
 
      public abstract Object initializeWebDriver(GlobalApplicationContext globalApplicationContext) throws WebEngineException;
 
-     @Override
-     public abstract void cleanUp(ITestCaseContext testCaseContext) ;
-
-     protected Result getResultOfTestCase(List<ActionReportDetail> actionReportDetailList) {
+     protected Result getResultOfTestCase(List<ActionReport> actionReportList) {
           Result result = Result.PASSED;
-          if(getResultActionReport(actionReportDetailList) == Result.FAILED || getResultCheckPoint(actionReportDetailList) == Result.FAILED ){
+          if(getResultOfAllAction(actionReportList) == Result.FAILED ){
                return Result.FAILED;
           }
           return result;
      }
 
-     protected Result getResultActionReport(List<ActionReportDetail> actionReportDetailList) {
+     protected Result getResultOfAllAction(List<ActionReport> actionReportList) {
           Result result = Result.PASSED;
-          if (CollectionUtils.isNotEmpty(actionReportDetailList)) {
-               List<ActionReportDetail> actionReportDetailFilterList = actionReportDetailList.stream().filter(actionReportDetail ->
-                       actionReportDetail != null &&
-                       actionReportDetail.getActionReport() != null &&
-                       (actionReportDetail.getActionReport().getResult() == Result.FAILED || actionReportDetail.getActionReport().getResult() == Result.CRITICAL_ERROR)
+          if (CollectionUtils.isNotEmpty(actionReportList)) {
+               List<ActionReport> actionReportDetailFilterList = actionReportList.stream().filter(actionReport ->
+                       actionReport != null &&
+                       (actionReport.getResult() == Result.FAILED || actionReport.getResult() == Result.CRITICAL_ERROR)
                ).collect(Collectors.toList());
                return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
           }
           return result;
      }
 
-     protected Result getResultCheckPoint(List<ActionReportDetail> actionReportDetailList) {
-          Result result = Result.PASSED;
-          if(CollectionUtils.isNotEmpty(actionReportDetailList)){
-               List<ActionReportDetail> actionReportDetailFilterList = actionReportDetailList.stream().filter(actionReportDetail ->
-                       actionReportDetail!=null &&
-                       !actionReportDetail.isResultCheckPoint()
-               ).collect(Collectors.toList());
-               return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
+     protected boolean isIgnoredAllOtherAction(ActionReport actionReport){
+          boolean ignored = false;
+          if ( actionReport != null ) {
+               Result result = actionReport.getResult();
+               if (result == Result.CRITICAL_ERROR) {
+                    ignored = true;
+               }
           }
-          return result;
+          return ignored;
      }
 }

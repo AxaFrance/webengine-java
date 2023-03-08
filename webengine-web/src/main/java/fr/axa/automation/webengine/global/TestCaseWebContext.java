@@ -17,7 +17,7 @@ import org.openqa.selenium.WebDriver;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class TestCaseWebContext extends AbstractTestCaseWebContext implements ITestCaseWebContext {
+public class TestCaseWebContext extends AbstractTestCaseContext implements ITestCaseWebContext {
 
     ITestCase testCaseToExecute;
 
