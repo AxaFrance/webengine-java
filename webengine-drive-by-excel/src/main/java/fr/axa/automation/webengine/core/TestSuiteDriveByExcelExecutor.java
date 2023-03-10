@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.chain.impl.DataTestReferenceChecking;
 import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
 import fr.axa.automation.webengine.checking.chain.impl.TestCaseEndingChecking;
+import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.generated.TestCaseReport;
@@ -35,12 +36,9 @@ import java.util.List;
 @Qualifier("testSuiteDriveByExcelExecutor")
 public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor implements ITestSuiteDriveByExcelExecutor {
 
-    ICheckingRunner checkingRunner;
-
     @Autowired
-    public TestSuiteDriveByExcelExecutor(@Qualifier("testCaseDriveByExcelExecutor")ITestCaseExecutor testCaseExecutor, ILocalTestingRunner localTestingRunner, ILoggerService loggerService,ICheckingRunner checkingRunner) {
+    public TestSuiteDriveByExcelExecutor(@Qualifier("testCaseDriveByExcelExecutor")ITestCaseExecutor testCaseExecutor, ILocalTestingRunner localTestingRunner, ILoggerService loggerService) {
         super(testCaseExecutor,localTestingRunner, loggerService);
-        this.checkingRunner = checkingRunner;
     }
 
     @Override
@@ -85,6 +83,7 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
                 new CallScenariiChecking(),
                 new DataTestReferenceChecking()
         );
+        ICheckingRunner checkingRunner = new CheckingRunner();
         checkingRunner.setChecking(checking);
         checkingRunner.runChecking(testSuiteData);
     }

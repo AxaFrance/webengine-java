@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
-@Component
 public class CheckingRunner implements ICheckingRunner {
 
     IChecking checking;

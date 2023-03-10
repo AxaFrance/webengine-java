@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.object.AbstractTestSuiteData;
 public class DataTestReferenceChecking extends AbstractChecking{
     @Override
     public boolean check(AbstractTestSuiteData testSuiteData) {
+
         return checkNext(testSuiteData);
     }
 }

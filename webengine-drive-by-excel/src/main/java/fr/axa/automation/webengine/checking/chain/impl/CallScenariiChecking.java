@@ -6,6 +6,7 @@ import fr.axa.automation.webengine.object.CommandData;
 import fr.axa.automation.webengine.object.TestCaseData;
 import fr.axa.automation.webengine.object.TestSuiteData;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class CallScenariiChecking extends AbstractChecking{
     @Override
     public boolean check(AbstractTestSuiteData testSuiteData) {
         List<TestCaseData> testCaseDataList = ((TestSuiteData)testSuiteData).getTestCaseList();
+
 
         List<String> testCaseNameList = testCaseDataList.stream().map(testCaseData -> testCaseData.getName()).collect(Collectors.toList());
         Set<CommandData> callCommandDataSet = null;

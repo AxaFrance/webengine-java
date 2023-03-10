@@ -1,0 +1,15 @@
+package fr.axa.automation.webengine.constante;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@AllArgsConstructor
+public enum Constante {
+    TRIPLE_CHEVRON_PREFIX("<<<"),
+    TRIPLE_CHEVRON_SUFFIX(">>>");
+    final String value;
+}
