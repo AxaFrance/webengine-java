@@ -6,7 +6,6 @@ import fr.axa.automation.webengine.object.CommandData;
 import fr.axa.automation.webengine.object.TestCaseData;
 import fr.axa.automation.webengine.object.TestSuiteData;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import java.util.List;

@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public enum Constante {
     TRIPLE_CHEVRON_PREFIX("<<<"),
-    TRIPLE_CHEVRON_SUFFIX(">>>");
+    TRIPLE_CHEVRON_SUFFIX(">>>"),
+    SEMICOLON(";");
     final String value;
 }

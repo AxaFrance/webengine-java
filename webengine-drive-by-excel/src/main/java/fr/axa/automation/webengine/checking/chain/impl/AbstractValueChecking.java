@@ -1,9 +1,9 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.PredefinedValue;
-import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.object.CommandData;
 import fr.axa.automation.webengine.object.TestCaseData;
+import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
@@ -18,19 +18,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractValueChecking extends AbstractChecking{
 
-    private final static String VALUE_REFERENCE_REGEX = "^[<]{3}.*[>]{3}$";
-    private final static String PREDEFINED_VALUE_REGEX = "[<]{3}.*[>]{3}";
-
-    protected Map<String,List<String>> getAllValueReference(TestCaseData testCaseData){
-        Set<CommandData>  commandDataList = testCaseData.getCommandList();
-        Set<String> dataTestNameColumnList = getDataTestNameColumn(testCaseData);
-        Map<String,List<String>> allDataTestByColumnName = new HashMap<>();
-        dataTestNameColumnList.stream().forEach(dataTestNameColumn -> {
-            List<String> dataTestByColunm = getDataTestWithReference(testCaseData,dataTestNameColumn);
-            allDataTestByColumnName.put(dataTestNameColumn,dataTestByColunm);
-        });
-        return allDataTestByColumnName;
-    }
+    protected final static String VALUE_REFERENCE_REGEX = "(<<<.*?>>>)?";
 
     protected List<String> getAllId(TestCaseData testCaseData){
         return testCaseData.getCommandList().stream().map(commandData -> commandData.getId()).collect(Collectors.toList());
@@ -48,18 +36,32 @@ public abstract class AbstractValueChecking extends AbstractChecking{
         return dataTestColumn;
     }
 
-    protected List<String> getDataTestWithReference(TestCaseData testCaseData, String dataTestNameColumn){
+    protected Map<String,Set<String>> getAllReferencedValue(TestCaseData testCaseData){
+        Set<CommandData>  commandDataList = testCaseData.getCommandList();
+        Set<String> dataTestNameColumnList = getDataTestNameColumn(testCaseData);
+        Map<String,Set<String>> allDataTestByColumnName = new HashMap<>();
+        dataTestNameColumnList.stream().forEach(dataTestNameColumn -> {
+            Set<String> dataTestByColunm = getReferencedValueByDataTestColumn(testCaseData,dataTestNameColumn);
+            allDataTestByColumnName.put(dataTestNameColumn,dataTestByColunm);
+        });
+        return allDataTestByColumnName;
+    }
+
+    protected Set<String> getReferencedValueByDataTestColumn(TestCaseData testCaseData, String dataTestNameColumn){
+        Set<String> filterDataTestList = new HashSet<>();
         Set<CommandData>  commandDataList = testCaseData.getCommandList();
         List<String> dataTestByColumn = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(commandDataList)){
             dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestList().get(dataTestNameColumn)).collect(Collectors.toList());
         }
-        return dataTestByColumn.stream().filter(value -> value.matches(VALUE_REFERENCE_REGEX))
-                                        .filter(value -> !Arrays.asList(PredefinedValue.values()).contains(value))
-                                        .collect(Collectors.toList());
+
+        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(VALUE_REFERENCE_REGEX,value)));
+        return filterDataTestList.stream().filter(value -> !Arrays.asList(PredefinedValue.values()).contains(value))
+                                          .collect(Collectors.toSet());
+
     }
 
-    protected List<String> getPredefinedValue(List<String> dataTestByColumn){
+    protected List<String> getPredefinedDataTestValue(List<String> dataTestByColumn){
         return dataTestByColumn.stream().filter(value -> Arrays.asList(PredefinedValue.values()).contains(value)).collect(Collectors.toList());
     }
 }
