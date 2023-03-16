@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 public abstract class AbstractValueChecking extends AbstractChecking{
 
     protected final static String VALUE_REFERENCE_REGEX = "(<<<.*?>>>)?";
+    protected final static String DATA_TEST_REFERENCE_REGEX = "[\\w-]*";
 
-    protected List<String> getAllId(TestCaseData testCaseData){
+    protected List<String> getIdByTestCase(TestCaseData testCaseData){
         return testCaseData.getCommandList().stream().map(commandData -> commandData.getId()).collect(Collectors.toList());
     }
 
-    protected Set<String> getDataTestNameColumn(TestCaseData testCaseData){
+    protected Set<String> getDataTestColumnName(TestCaseData testCaseData){
         Set<CommandData>  commandDataList = testCaseData.getCommandList();
         Set<String> dataTestColumn = new HashSet<>();
         if(CollectionUtils.isNotEmpty(commandDataList)){
@@ -36,18 +37,16 @@ public abstract class AbstractValueChecking extends AbstractChecking{
         return dataTestColumn;
     }
 
-    protected Map<String,Set<String>> getAllReferencedValue(TestCaseData testCaseData){
-        Set<CommandData>  commandDataList = testCaseData.getCommandList();
-        Set<String> dataTestNameColumnList = getDataTestNameColumn(testCaseData);
-        Map<String,Set<String>> allDataTestByColumnName = new HashMap<>();
-        dataTestNameColumnList.stream().forEach(dataTestNameColumn -> {
-            Set<String> dataTestByColunm = getReferencedValueByDataTestColumn(testCaseData,dataTestNameColumn);
-            allDataTestByColumnName.put(dataTestNameColumn,dataTestByColunm);
-        });
-        return allDataTestByColumnName;
+    protected Map<String,Set<String>> getReferencedValueByColumName(TestCaseData testCaseData){
+        Map<String,Set<String>> dataTestByColunmName = new HashMap<>();
+        Set<String> dataTestColumnNameList = getDataTestColumnName(testCaseData);
+        for (String dataTestColumnName :dataTestColumnNameList) {
+            dataTestByColunmName.put(dataTestColumnName,getReferencedValueByColumName(testCaseData,dataTestColumnName));
+        }
+        return dataTestByColunmName;
     }
 
-    protected Set<String> getReferencedValueByDataTestColumn(TestCaseData testCaseData, String dataTestNameColumn){
+    protected Set<String> getReferencedValueByColumName(TestCaseData testCaseData, String dataTestNameColumn){
         Set<String> filterDataTestList = new HashSet<>();
         Set<CommandData>  commandDataList = testCaseData.getCommandList();
         List<String> dataTestByColumn = new ArrayList<>();
@@ -64,4 +63,6 @@ public abstract class AbstractValueChecking extends AbstractChecking{
     protected List<String> getPredefinedDataTestValue(List<String> dataTestByColumn){
         return dataTestByColumn.stream().filter(value -> Arrays.asList(PredefinedValue.values()).contains(value)).collect(Collectors.toList());
     }
+
+
 }

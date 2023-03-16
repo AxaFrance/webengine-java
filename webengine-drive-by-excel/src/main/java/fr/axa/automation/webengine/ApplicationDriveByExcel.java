@@ -34,8 +34,10 @@ public class ApplicationDriveByExcel implements CommandLineRunner {
     public void run(String... args) throws Exception {
         loggerService.info("Temporary directory : "+System.getProperty("java.io.tmpdir"));
         //    java -jar drive-by-excel.jar "-workbook:file.xls"
-        //    java -jar drive-by-excel.jar "-workbook:file.xls" "-tc:firsttestcase[-data:jdd-rec-auto,jdd-rec-moto], testcase2[-data:jdd-rec-moto]"
-        //    java -jar drive-by-excel.jar "-workbook:file.xls" "-tc:firsttestcase, testcase2[-data:jdd-rec-moto]"
+        //    java -jar drive-by-excel.jar "-workbook:file.xls" "-tc:firsttestcase[-dataNameColum:jdd-rec-auto,jdd-rec-moto], testcase2[-dataNameColum:jdd-rec-moto]"
+        //    java -jar drive-by-excel.jar "-workbook:file.xls" "-tc:firsttestcase, testcase2[-dataNameColum:jdd-rec-moto]"
+        //    java -jar drive-by-excel.jar "-workbook:file.xls" "-tc:firsttestcase, testcase2[-indexColumn:5]"
+        //    java -jar drive-by-excel.jar "-workbook:file.xls" "-tc:firsttestcase, testcase2[-letterColumn:F]"
 
         bootProject.runFromFramework(args);
     }

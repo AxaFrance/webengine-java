@@ -2,15 +2,18 @@ package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.object.AbstractTestSuiteData;
-import fr.axa.automation.webengine.object.CommandData;
 import fr.axa.automation.webengine.object.TestCaseData;
 import fr.axa.automation.webengine.object.TestSuiteData;
 import fr.axa.automation.webengine.util.RegexUtil;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,25 +25,49 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     public boolean check(AbstractTestSuiteData testSuiteData) {
         List<TestCaseData> testCaseDataList =((TestSuiteData)testSuiteData).getTestCaseList();
         List<String> dataTestReferenceList;
-        Set<String> dataTestNameColumnList;
+        Set<String> dataTestColumnNameList;
+        Map<String,List<String>> dataTestReferenceWhichDoesntExistMap = new HashMap<>();
         for (TestCaseData testCaseData : testCaseDataList) {
-            dataTestNameColumnList = getDataTestNameColumn(testCaseData);
-            dataTestReferenceList = getAllDataReference(testCaseData);
-            checkDataTestReference(testCaseData.getName(), dataTestNameColumnList, dataTestReferenceList);
+            dataTestColumnNameList = getDataTestColumnName(testCaseData);
+            dataTestReferenceList = getDataTestReference(testCaseData);
+            dataTestReferenceWhichDoesntExistMap.put(testCaseData.getName(),getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList));
         }
+        assertDataTestReference(dataTestReferenceWhichDoesntExistMap);
         return checkNext(testSuiteData);
     }
 
-    protected List<String> getAllDataReference(TestCaseData testCaseData){
-        return testCaseData.getCommandList().stream().filter(commandData -> !KEYWORD_DATA_REFERENCE.contains(StringUtils.trim(commandData.getDataTestReference())))
+    protected List<String> getDataTestReference(TestCaseData testCaseData){
+        return testCaseData.getCommandList()
+                .stream()
+                .filter(commandData -> StringUtils.isNotEmpty(StringUtils.trim(commandData.getDataTestReference())) && !KEYWORD_DATA_REFERENCE.contains(StringUtils.trim(commandData.getDataTestReference())))
                 .map(commandData -> commandData.getDataTestReference())
                 .collect(Collectors.toList());
     }
 
-    protected void checkDataTestReference(String testCaseName, Set<String> dataTestNameColumnList, List<String> dataTestReferenceList){
+    protected List<String> getDataTestReferenceWhichDoesntExist(List<String> dataTestReferenceList, Set<String> dataTestColumnNameList ){
+        List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
         for (String dataTestReference : dataTestReferenceList) {
-            List<String> dataTestRefOfOneCommandList = Arrays.asList(dataTestReference.split(Constante.SEMICOLON.getValue()));
+            List<String> dataTestReferenceInOneCommandList = Arrays.asList(dataTestReference.split(Constante.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
+            dataTestReferenceWhichDoesntExistList.addAll(getDataTestReferenceWhichDoesntInOneCmdExist(dataTestReferenceInOneCommandList,dataTestColumnNameList));
+        }
+        return dataTestReferenceWhichDoesntExistList;
+    }
 
+    private List<String> getDataTestReferenceWhichDoesntInOneCmdExist(List<String> dataTestReferenceInOneCommandList, Set<String> dataTestColumnNameList) {
+        List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
+        for (String dataTestReference : dataTestReferenceInOneCommandList) {
+            Optional<String> dataTestReferenceOptional = RegexUtil.findFirst(DATA_TEST_REFERENCE_REGEX,dataTestReference);// !data-test-auto-rec
+            if (dataTestReferenceOptional.isPresent() && !dataTestColumnNameList.contains(dataTestReferenceOptional.get())){
+                dataTestReferenceWhichDoesntExistList.add(dataTestReferenceOptional.get());
+            }
+        }
+        return dataTestReferenceWhichDoesntExistList;
+    }
+
+    private void assertDataTestReference(Map<String,List<String>> dataTestReferenceWhichDoesntExistList){
+        if(MapUtils.isNotEmpty(dataTestReferenceWhichDoesntExistList)){
+            dataTestReferenceWhichDoesntExistList.forEach((testCaseName,v)-> loggerService.warn("In this test case "+ testCaseName +" these data test reference doesn't exist"+v ));
+            throw new IllegalArgumentException("Some test case have data test reference which doesn't exist ");
         }
     }
 }

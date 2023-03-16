@@ -5,15 +5,16 @@ import fr.axa.automation.webengine.api.ITestSuiteDriveByExcelExecutor;
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
 import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
-import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.chain.impl.DataTestReferenceChecking;
 import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
+import fr.axa.automation.webengine.checking.chain.impl.ReferencedValueChecking;
 import fr.axa.automation.webengine.checking.chain.impl.TestCaseEndingChecking;
+import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
+import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.AbstractTestSuiteData;
@@ -47,7 +48,7 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
         TestSuiteReport testSuiteReport;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
         String systemError = "";
-        isInputCheckSuccess(testSuiteData);
+        checkInput(testSuiteData);
         try {
             if (testSuiteData != null) {
                 List<TestCaseData> testCaseDataList = ((TestSuiteData)testSuiteData).getTestCaseList();
@@ -76,12 +77,13 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
         return testCaseReportList;
     }
 
-    public void isInputCheckSuccess(AbstractTestSuiteData testSuiteData){
+    public void checkInput(AbstractTestSuiteData testSuiteData){
         IChecking checking = AbstractChecking.link(
                 new TestCaseEndingChecking(),
                 new IfChecking(),
                 new CallScenariiChecking(),
-                new DataTestReferenceChecking()
+                new DataTestReferenceChecking(),
+                new ReferencedValueChecking()
         );
         ICheckingRunner checkingRunner = new CheckingRunner();
         checkingRunner.setChecking(checking);

@@ -1,13 +1,11 @@
 package fr.axa.automation.webengine.util;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
-import java.util.Spliterators;
-import java.util.function.Consumer;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +30,14 @@ public final class RegexUtil {
         }
 
         return resultList;
+    }
+
+    public static Optional<String> findFirst(String patternExpression, String matchExpression){
+        Set<String> matchList = match(patternExpression,matchExpression);
+        if(CollectionUtils.isNotEmpty(matchList)){
+            return matchList.stream().findFirst();
+        }
+        return Optional.empty();
     }
 
 }

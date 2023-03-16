@@ -2,15 +2,21 @@ package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.cmd.CommandName;
+import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.AbstractTestSuiteData;
 import fr.axa.automation.webengine.object.CommandData;
+import fr.axa.automation.webengine.object.TestCaseData;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class AbstractChecking implements IChecking {
 
     private AbstractChecking next;
+
+    protected static final ILoggerService loggerService = LoggerServiceProvider.getInstance();
 
     public static IChecking link(IChecking first, IChecking... chain) {
         AbstractChecking head = (AbstractChecking) first;
@@ -21,7 +27,8 @@ public abstract class AbstractChecking implements IChecking {
         return first;
     }
 
-    protected Set<CommandData> getFilterCommandData(Set<CommandData> commandDataSet, CommandName commandName) {
+    protected Set<CommandData> getCommandDataByName(TestCaseData testCaseData, CommandName commandName) {
+        Set<CommandData> commandDataSet = testCaseData.getCommandList();
         return commandDataSet.stream().filter(commandData -> commandData.getCommand().equalsIgnoreCase(commandName.getName())).collect(Collectors.toSet());
     }
 
@@ -32,5 +39,9 @@ public abstract class AbstractChecking implements IChecking {
             return true;
         }
         return next.check(testSuiteData);
+    }
+
+    protected List<String> getTestCaseNameList(List<TestCaseData> testCaseDataList) {
+        return testCaseDataList.stream().map(testCaseData -> testCaseData.getName()).collect(Collectors.toList());
     }
 }

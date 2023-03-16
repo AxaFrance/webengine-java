@@ -6,7 +6,6 @@ import fr.axa.automation.webengine.object.AbstractTestSuiteData;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Component;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
