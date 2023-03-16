@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.ListUtil;
@@ -98,14 +99,14 @@ public class WebElementDescription extends AbstractElementDescription {
     public Collection<WebElement> internalFindElements() {
         final List<WebElement> elements = new ArrayList<>();
         Map<String, Collection<WebElement>> findElementsMap = new HashMap<>();
-        findElementsMap.put("id", getInternalFindElementsById(this.id));
-        findElementsMap.put("name", getInternalFindElementsByName(this.name));
-        findElementsMap.put("className", getInternalFindElementByClassName(this.className));
-        findElementsMap.put("linkText", getInternalFindElementByLinkText(this.linkText));
-        findElementsMap.put("tagName", getInternalFindElementByTagName(this.tagName));
-        findElementsMap.put("cssSelector", getInternalFindElementByCssSelector(this.cssSelector));
-        findElementsMap.put("xPath", getInternalFindElementByXpath(this.xPath));
-        findElementsMap.put("attributeList", getInternalFindElementByAttributeList(this.attributeList));
+        findElementsMap.put(LocatingBy.BY_ID.getValue(), getInternalFindElementsById(this.id));
+        findElementsMap.put(LocatingBy.BY_NAME.getValue(), getInternalFindElementsByName(this.name));
+        findElementsMap.put(LocatingBy.BY_CLASS_NAME.getValue(),  getInternalFindElementByClassName(this.className));
+        findElementsMap.put(LocatingBy.BY_LINK_TEXT.getValue(), getInternalFindElementByLinkText(this.linkText));
+        findElementsMap.put(LocatingBy.BY_TAG_NAME.getValue(), getInternalFindElementByTagName(this.tagName));
+        findElementsMap.put(LocatingBy.BY_CSS_SELECTOR.getValue(), getInternalFindElementByCssSelector(this.cssSelector));
+        findElementsMap.put(LocatingBy.BY_XPATH.getValue(), getInternalFindElementByXpath(this.xPath));
+        findElementsMap.put(LocatingBy.BY_ATTRIBUTE_LIST.getValue(), getInternalFindElementByAttributeList(this.attributeList));
 
         findElementsMap.forEach((k, v) -> elements.addAll(findElementsMap.get(k)));
 
