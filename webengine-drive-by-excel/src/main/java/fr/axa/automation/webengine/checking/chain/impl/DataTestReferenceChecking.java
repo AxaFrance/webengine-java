@@ -1,9 +1,9 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.constante.Constante;
-import fr.axa.automation.webengine.object.AbstractTestSuiteData;
-import fr.axa.automation.webengine.object.TestCaseData;
-import fr.axa.automation.webengine.object.TestSuiteData;
+import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,12 +22,12 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     private final static List<String> KEYWORD_DATA_REFERENCE = Arrays.asList("!");
 
     @Override
-    public boolean check(AbstractTestSuiteData testSuiteData) {
-        List<TestCaseData> testCaseDataList =((TestSuiteData)testSuiteData).getTestCaseList();
+    public boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData) {
+        List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         List<String> dataTestReferenceList;
         Set<String> dataTestColumnNameList;
         Map<String,List<String>> dataTestReferenceWhichDoesntExistMap = new HashMap<>();
-        for (TestCaseData testCaseData : testCaseDataList) {
+        for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
             dataTestColumnNameList = getDataTestColumnName(testCaseData);
             dataTestReferenceList = getDataTestReference(testCaseData);
             dataTestReferenceWhichDoesntExistMap.put(testCaseData.getName(),getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList));
@@ -36,7 +36,7 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
         return checkNext(testSuiteData);
     }
 
-    protected List<String> getDataTestReference(TestCaseData testCaseData){
+    protected List<String> getDataTestReference(TestCaseDataDriveByExcel testCaseData){
         return testCaseData.getCommandList()
                 .stream()
                 .filter(commandData -> StringUtils.isNotEmpty(StringUtils.trim(commandData.getDataTestReference())) && !KEYWORD_DATA_REFERENCE.contains(StringUtils.trim(commandData.getDataTestReference())))

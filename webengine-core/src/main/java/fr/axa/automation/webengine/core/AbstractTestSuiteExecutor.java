@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import lombok.AccessLevel;
@@ -22,12 +22,12 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
         this.loggerService = loggerService;
     }
 
-    public Object initialize(GlobalApplicationContext globalApplicationContext) {
+    public Object initialize(AbstractGlobalApplicationContext globalApplicationContext) {
         runLocalTesting(globalApplicationContext);
         return null;
     }
 
-    private void runLocalTesting(GlobalApplicationContext globalApplicationContext) {
+    private void runLocalTesting(AbstractGlobalApplicationContext globalApplicationContext) {
         localTestingRunner.startLocalTesting();
     }
 

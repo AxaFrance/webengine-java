@@ -20,7 +20,7 @@ import java.util.Map;
 })
 @Data
 @Builder
-public class CommandData {
+public class CommandDataDriveByExcel {
     @JsonProperty("uid")
     private String uid;
     @JsonProperty("id")

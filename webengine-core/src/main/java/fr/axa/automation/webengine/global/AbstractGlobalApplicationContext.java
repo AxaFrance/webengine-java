@@ -1,7 +1,5 @@
 package fr.axa.automation.webengine.global;
 
-
-import fr.axa.automation.webengine.core.ITestCaseContext;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class AbstractTestCaseContext implements ITestCaseContext {
-    String testCaseName;
-    Object webDriver;
+public abstract class AbstractGlobalApplicationContext {
+    Settings settings;
 }

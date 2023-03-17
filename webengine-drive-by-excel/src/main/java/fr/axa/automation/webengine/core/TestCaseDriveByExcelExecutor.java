@@ -7,11 +7,11 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.object.CommandData;
-import fr.axa.automation.webengine.object.TestCaseData;
+import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.util.DateUtil;
@@ -41,19 +41,19 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
     }
 
     @Override
-    public ITestCaseContext initialize(GlobalApplicationContext globalApplicationContext, TestCaseData testCaseData) throws WebEngineException {
+    public ITestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestCaseDataDriveByExcel testCaseData) throws WebEngineException {
         Object webDriver = initializeWebDriver(globalApplicationContext);
         return createTestCaseContext(testCaseData, webDriver);
     }
 
-    protected ITestCaseContext createTestCaseContext(TestCaseData testCaseData, Object webDriver) throws WebEngineException {
+    protected ITestCaseContext createTestCaseContext(TestCaseDataDriveByExcel testCaseData, Object webDriver) throws WebEngineException {
         ITestCaseContext testCaseContext = super.createTestCaseContext(testCaseData.getName(),webDriver);
         ((ITestCaseDriveByExcelContext)testCaseContext).setTestCaseData(testCaseData);
         return testCaseContext;
     }
 
     @Override
-    public TestCaseReport run(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
+    public TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
         String testCaseName = testCaseContext.getTestCaseName();
         TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
         List<ActionReport> actionReportList = new ArrayList<>();
@@ -72,12 +72,12 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
     }
 
 
-    protected List<ActionReport> runTestStep(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
+    protected List<ActionReport> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
         ITestCaseDriveByExcelContext testCaseDriveByExcelContext = (ITestCaseDriveByExcelContext) testCaseContext;
         String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
         ActionReport actionReport = new ActionReport();
         List<ActionReport> actionReportList = new ArrayList<>();
-        Set<CommandData> commandDataList = testCaseDriveByExcelContext.getTestCaseData().getCommandList();
+        Set<CommandDataDriveByExcel> commandDataList = testCaseDriveByExcelContext.getTestCaseData().getCommandList();
         String cmdName = "";
         boolean ignoredAllNextCmd = false;
 
@@ -86,7 +86,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         }
 
         try {
-            for (CommandData commandData : commandDataList){
+            for (CommandDataDriveByExcel commandData : commandDataList){
                 cmdName = commandData.getId();
                 actionReport = new ActionReport();
                 actionReport.setName(cmdName);

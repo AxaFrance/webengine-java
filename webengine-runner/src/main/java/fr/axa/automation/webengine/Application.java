@@ -1,9 +1,7 @@
 package fr.axa.automation.webengine;
 
-import fr.axa.automation.webengine.boot.BootProject;
 import fr.axa.automation.webengine.boot.IBootProject;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.logger.LoggerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;

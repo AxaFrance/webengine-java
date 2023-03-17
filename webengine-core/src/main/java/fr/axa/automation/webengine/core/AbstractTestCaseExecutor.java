@@ -3,7 +3,7 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import lombok.AccessLevel;
@@ -37,7 +37,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
      public abstract ITestCaseContext getTestCaseContext() ;
 
-     public abstract Object initializeWebDriver(GlobalApplicationContext globalApplicationContext) throws WebEngineException;
+     public abstract Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException;
 
      protected Result getResultOfTestCase(List<ActionReport> actionReportList) {
           Result result = Result.PASSED;

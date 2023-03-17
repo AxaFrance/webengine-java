@@ -1,37 +1,33 @@
 package fr.axa.automation.webengine.global;
 
 import fr.axa.automation.webengine.api.ITestCaseDriveByExcelContext;
-import fr.axa.automation.webengine.object.TestCaseData;
+import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.openqa.selenium.WebDriver;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
+@NoArgsConstructor
 public class TestCaseDriveByExcelContext extends AbstractTestCaseContext implements ITestCaseDriveByExcelContext {
-    TestCaseData testCaseData;
+    TestCaseDataDriveByExcel testCaseData;
 
     @Builder
-    public TestCaseDriveByExcelContext(String testCaseName, WebDriver webDriver, TestCaseData testCaseData) {
+    public TestCaseDriveByExcelContext(String testCaseName, WebDriver webDriver, TestCaseDataDriveByExcel testCaseData) {
         super(testCaseName,webDriver);
         this.testCaseData = testCaseData;
     }
 
     @Override
-    public void setTestCaseData(TestCaseData testCaseData) {
+    public void setTestCaseData(TestCaseDataDriveByExcel testCaseData) {
         this.testCaseData = testCaseData;
     }
 
     @Override
-    public TestCaseData getTestCaseData() {
+    public TestCaseDataDriveByExcel getTestCaseData() {
         return testCaseData;
     }
 }

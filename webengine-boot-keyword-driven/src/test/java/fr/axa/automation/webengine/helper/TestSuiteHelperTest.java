@@ -1,14 +1,14 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
-import fr.axa.automation.webengine.parser.ArgumentParser;
 import fr.axa.automation.webengine.core.ITestSuite;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.generated.EnvironmentVariables;
+import fr.axa.automation.webengine.generated.TestSuiteData;
 import fr.axa.automation.webengine.global.Browser;
 import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.global.Settings;
-import fr.axa.automation.webengine.generated.EnvironmentVariables;
-import fr.axa.automation.webengine.generated.TestSuiteData;
+import fr.axa.automation.webengine.parser.ArgumentParser;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.JarUtil;

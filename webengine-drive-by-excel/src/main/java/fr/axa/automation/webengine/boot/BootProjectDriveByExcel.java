@@ -5,12 +5,13 @@ import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
 import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.helper.TestSuiteHelperDriveByExcel;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.object.AbstractTestSuiteData;
-import fr.axa.automation.webengine.object.TestSuiteData;
+import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import lombok.AccessLevel;
@@ -53,8 +54,8 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     }
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
-        AbstractTestSuiteData testSuiteData = getTestSuiteData(commandLine);
-        GlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
+        AbstractTestSuiteDataDriveByExcel testSuiteData = getTestSuiteData(commandLine);
+        AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
 
         loggerService.info("Start Phase initialize test suite ");
         testSuiteExecutor.initialize(globalApplicationContext);
@@ -74,12 +75,12 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
         loggerService.info("End report ");
     }
 
-    public GlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException, IOException {
+    public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException, IOException {
         Settings settings = TestSuiteHelperDriveByExcel.getSettings(commandLine, globalConfigProperties);
-        return GlobalApplicationContext.builder().settings(settings).build();
+        return GlobalApplicationContextDriveByExcel.builder().settings(settings).build();
     }
 
-    protected AbstractTestSuiteData getTestSuiteData(CommandLine commandLine){
-        return new TestSuiteData();
+    protected AbstractTestSuiteDataDriveByExcel getTestSuiteData(CommandLine commandLine){
+        return new TestSuiteDataDriveByExcel();
     }
 }

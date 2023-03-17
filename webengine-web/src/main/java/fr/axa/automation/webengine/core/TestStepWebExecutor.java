@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.api.ITestStepWebExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestData;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.ActionContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.Platform;
@@ -31,18 +32,18 @@ public class TestStepWebExecutor extends AbstractTestStepExecutor implements ITe
         this.actionExecutor = actionExecutor;
     }
 
-    public ActionReportDetail run(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
+    public ActionReportDetail run(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
         IAction action = getAction(globalApplicationContext, testCaseContext, testStep);
         return actionExecutor.run(action);
     }
 
-    protected IAction getAction(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
+    protected IAction getAction(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
         Class<? extends IAction> clazz = getActionClass(globalApplicationContext,testStep);
         ActionContext actionContext = getActionContext(globalApplicationContext, testCaseContext);
         return CommonClassUtil.createAndCallMethod(clazz, "setActionDetailContext", actionContext);
     }
 
-    protected Class<? extends IAction> getActionClass(GlobalApplicationContext globalApplicationContext, ITestStep testStep) {
+    protected Class<? extends IAction> getActionClass(AbstractGlobalApplicationContext globalApplicationContext, ITestStep testStep) {
         Class<? extends IAction> clazz = testStep.getAction();
         if(globalApplicationContext.getSettings().getPlatform()!= Platform.WINDOWS && testStep.getMobileAction()!=null){
             clazz = testStep.getMobileAction();
@@ -50,7 +51,8 @@ public class TestStepWebExecutor extends AbstractTestStepExecutor implements ITe
         return clazz;
     }
 
-    protected ActionContext getActionContext(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext){
+    protected ActionContext getActionContext(AbstractGlobalApplicationContext globalAppContext, ITestCaseContext testCaseContext){
+        GlobalApplicationContext globalApplicationContext =  (GlobalApplicationContext)globalAppContext;
         List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestDatas();
         Optional<TestData> testDataByTestCase = TestDataHelper.getDataOfTestCase(testDataList,testCaseContext.getTestCaseName());
         TestCaseAdditionalInformation testCaseAdditionalInformation = globalApplicationContext.getTestCaseAdditionnalInformationList().get(testCaseContext.getTestCaseName());

@@ -6,11 +6,12 @@ import fr.axa.automation.webengine.core.AbstractTestSuite;
 import fr.axa.automation.webengine.core.ITestSuite;
 import fr.axa.automation.webengine.core.TestCaseAdditionalInformation;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
-import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.generated.EnvironmentVariables;
 import fr.axa.automation.webengine.generated.TestSuiteData;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
@@ -56,7 +57,7 @@ public class BootProject extends AbstractBootProject{
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
         ITestSuite testSuite = TestSuiteHelper.getTestSuite();
-        GlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine, testSuite);
+        AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine, testSuite);
 
         loggerService.info("Start Phase initialize test suite ");
         testSuiteExecutor.initialize(globalApplicationContext);
@@ -80,7 +81,7 @@ public class BootProject extends AbstractBootProject{
 
 
 
-    public GlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine, ITestSuite testSuite) throws WebEngineException, IOException {
+    public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine, ITestSuite testSuite) throws WebEngineException, IOException {
         TestSuiteData testSuiteData = TestSuiteHelper.getTestSuiteData(commandLine);
         Settings settings = TestSuiteHelper.getSettings(commandLine, globalConfigProperties);
         EnvironmentVariables environmentVariables = TestSuiteHelper.getEnvironmentVariables(commandLine);

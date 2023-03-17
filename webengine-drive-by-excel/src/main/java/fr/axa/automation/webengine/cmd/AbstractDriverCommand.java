@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.cmd;
 
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.core.WebElementDescription;
-import fr.axa.automation.webengine.object.CommandData;
+import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -10,39 +10,36 @@ import org.apache.commons.lang3.StringUtils;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
-public abstract class AbstractDriverCommand extends AbstractCommand{
+public abstract class AbstractDriverCommand extends AbstractCommand {
 
     WebElementDescription webElementDescription;
 
-    protected void populateWebElement(CommandData commandData){
-        commandData.getTargetList().forEach((by,value)-> {
-            webElementDescription = WebElementDescription.builder()
-                    .id(populateBySelector(by,value))
-                    .name(populateBySelector(by,value))
-                    .className(populateBySelector(by,value))
-                    .linkText(populateBySelector(by,value))
-                    .tagName(populateBySelector(by,value))
-                    .cssSelector(populateBySelector(by,value))
-                    .xPath(populateBySelector(by,value))
-                    .build();
-        });
+    protected WebElementDescription populateWebElement(CommandDataDriveByExcel commandData) {
+        return WebElementDescription.builder()
+                .id(populateBySelector(commandData, LocatingBy.BY_ID))
+                .name(populateBySelector(commandData, LocatingBy.BY_NAME))
+                .className(populateBySelector(commandData, LocatingBy.BY_CLASS_NAME))
+                .linkText(populateBySelector(commandData, LocatingBy.BY_LINK_TEXT))
+                .tagName(populateBySelector(commandData, LocatingBy.BY_TAG_NAME))
+                .cssSelector(populateBySelector(commandData, LocatingBy.BY_CSS_SELECTOR))
+                .xPath(populateBySelector(commandData, LocatingBy.BY_XPATH))
+                .build();
     }
 
-    protected String populateBySelector(String by, String value){
-        switch (LocatingBy.valueOf(by)){
+    protected String populateBySelector(CommandDataDriveByExcel commandData, LocatingBy locatingBy) {
+        switch (locatingBy) {
             case BY_ID:
             case BY_NAME:
             case BY_CLASS_NAME:
             case BY_LINK_TEXT:
             case BY_TAG_NAME:
-            case BY_CSS_SELECTOR :
+            case BY_CSS_SELECTOR:
             case BY_XPATH:
-                return StringUtils.trim(value);
+                String value = commandData.getTargetList().get(locatingBy.getValue());
+                return StringUtils.isNotEmpty(value) ? value : StringUtils.EMPTY;
 
             default:
                 return StringUtils.EMPTY;
         }
     }
-
-
 }

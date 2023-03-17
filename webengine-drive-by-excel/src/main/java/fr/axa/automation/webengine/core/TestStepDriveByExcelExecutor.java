@@ -3,8 +3,8 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.api.ITestStepDriveByExcelExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
-import fr.axa.automation.webengine.object.CommandData;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
     }
 
     @Override
-    public ActionReport run(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, CommandData commandData) throws WebEngineException {
+    public ActionReport run(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
         return null;
     }
 

@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
-import fr.axa.automation.webengine.object.AbstractTestSuiteData;
-import fr.axa.automation.webengine.object.TestCaseData;
-import fr.axa.automation.webengine.object.TestSuiteData;
+import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.util.RegexUtil;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 public class ReferencedValueChecking extends AbstractValueChecking{
     @Override
-    public boolean check(AbstractTestSuiteData testSuiteData) {
-        List<TestCaseData> testCaseDataList =((TestSuiteData)testSuiteData).getTestCaseList();
+    public boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData) {
+        List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         List<ReferencedValueAndIdByTestCase> referencedValueAndIdByTestCaseList = new ArrayList<>();
-        for (TestCaseData testCaseData : testCaseDataList) {
+        for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
             Map<String,Set<String>> referencedValueByColumnNameMap = getReferencedValueByColumName(testCaseData);
             List<String> idByTestCaseList = getIdByTestCase(testCaseData);
             referencedValueAndIdByTestCaseList.add(ReferencedValueAndIdByTestCase.builder().testCaseName(testCaseData.getName()).referencedValueByColumNameMap(referencedValueByColumnNameMap).idList(idByTestCaseList).build());
@@ -75,7 +75,7 @@ public class ReferencedValueChecking extends AbstractValueChecking{
     @FieldDefaults(level = AccessLevel.PRIVATE)
     @Builder
     @Data
-    private class ReferencedValueAndIdByTestCase{
+    private static class ReferencedValueAndIdByTestCase{
          String testCaseName;
          Map<String,Set<String>> referencedValueByColumNameMap;
          List<String> idList;
@@ -84,7 +84,7 @@ public class ReferencedValueChecking extends AbstractValueChecking{
     @FieldDefaults(level = AccessLevel.PRIVATE)
     @Builder
     @Data
-    private class ReferencedValueWhichDoesntExist{
+    private static  class ReferencedValueWhichDoesntExist{
         String testCaseName;
         String columnName;
         List<String> referencedValueList;

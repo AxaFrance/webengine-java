@@ -1,11 +1,11 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 
 public interface ITestExecutor {
 
-    default Object initialize(GlobalApplicationContext globalApplicationContext) throws WebEngineException{
+    default Object initialize(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException{
         return null;
     }
 

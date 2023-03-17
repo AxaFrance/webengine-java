@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestData;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.TestCaseWebContext;
 import fr.axa.automation.webengine.helper.ActionReportDetailHelper;
@@ -45,7 +46,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
         return TestCaseWebContext.builder().build();
     }
 
-    public ITestCaseContext initialize(GlobalApplicationContext globalApplicationContext, String testCaseName, ITestCase testCase) throws WebEngineException {
+    public ITestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, String testCaseName, ITestCase testCase) throws WebEngineException {
         Object webDriver = initializeWebDriver(globalApplicationContext);
         return createTestCaseContext(testCaseName, testCase, webDriver);
     }
@@ -56,7 +57,8 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
         return testCaseContext;
     }
 
-    public TestCaseReport run(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
+    public TestCaseReport run(AbstractGlobalApplicationContext globalAppContext, ITestCaseContext testCaseContext) throws WebEngineException {
+        GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext)globalAppContext;
         String testCaseName = testCaseContext.getTestCaseName();
         TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
         List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
@@ -80,7 +82,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
         return testCaseReport;
     }
 
-    protected List<ActionReportDetail> runTestStep(GlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
+    protected List<ActionReportDetail> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
         String testCaseName = testCaseContext.getTestCaseName();
         ActionReportDetail actionReportDetail;
         ActionReport actionReport = new ActionReport();

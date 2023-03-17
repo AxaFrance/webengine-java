@@ -4,9 +4,9 @@ import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
-import fr.axa.automation.webengine.object.AbstractTestSuiteData;
-import fr.axa.automation.webengine.object.CommandData;
-import fr.axa.automation.webengine.object.TestCaseData;
+import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 
 import java.util.List;
 import java.util.Set;
@@ -27,21 +27,21 @@ public abstract class AbstractChecking implements IChecking {
         return first;
     }
 
-    protected Set<CommandData> getCommandDataByName(TestCaseData testCaseData, CommandName commandName) {
-        Set<CommandData> commandDataSet = testCaseData.getCommandList();
+    protected Set<CommandDataDriveByExcel> getCommandDataByName(TestCaseDataDriveByExcel testCaseData, CommandName commandName) {
+        Set<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
         return commandDataSet.stream().filter(commandData -> commandData.getCommand().equalsIgnoreCase(commandName.getName())).collect(Collectors.toSet());
     }
 
-    public abstract boolean check(AbstractTestSuiteData testSuiteData);
+    public abstract boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData);
 
-    protected boolean checkNext(AbstractTestSuiteData testSuiteData) {
+    protected boolean checkNext(AbstractTestSuiteDataDriveByExcel testSuiteData) {
         if (next == null) {
             return true;
         }
         return next.check(testSuiteData);
     }
 
-    protected List<String> getTestCaseNameList(List<TestCaseData> testCaseDataList) {
+    protected List<String> getTestCaseNameList(List<TestCaseDataDriveByExcel> testCaseDataList) {
         return testCaseDataList.stream().map(testCaseData -> testCaseData.getName()).collect(Collectors.toList());
     }
 }

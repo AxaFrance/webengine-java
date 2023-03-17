@@ -3,11 +3,12 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.api.ITestCaseWebExecutor;
 import fr.axa.automation.webengine.api.ITestSuiteWebExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
@@ -35,7 +36,7 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
         super(testCaseExecutor,localTestingRunner, loggerService);
     }
 
-    public TestSuiteReport run(GlobalApplicationContext globalApplicationContext, ITestSuite testSuite) throws WebEngineException, UnknownHostException {
+    public TestSuiteReport run(AbstractGlobalApplicationContext globalApplicationContext, ITestSuite testSuite) throws WebEngineException, UnknownHostException {
         Calendar startTime = Calendar.getInstance();
         TestSuiteReport testSuiteReport;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
@@ -49,14 +50,15 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
         } catch (WebEngineException e) {
             systemError = ExceptionUtils.getStackTrace(e);
         } finally {
-            TestSuiteReportInformation testSuiteReportInformation = TestSuiteReportInformation.builder().environmentVariables(globalApplicationContext.getEnvironmentVariables()).testCaseReportList(testCaseReportList).startTime(startTime).systemError(systemError).build();
+            TestSuiteReportInformation testSuiteReportInformation = TestSuiteReportInformation.builder().environmentVariables(((GlobalApplicationContext)globalApplicationContext).getEnvironmentVariables()).testCaseReportList(testCaseReportList).startTime(startTime).systemError(systemError).build();
             testSuiteReport = TestSuiteReportHelper.getTestSuiteReport(testSuiteReportInformation);
         }
 
         return testSuiteReport;
     }
 
-    protected List<TestCaseReport> runTestCase(GlobalApplicationContext globalApplicationContext, List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList) throws WebEngineException {
+    protected List<TestCaseReport> runTestCase(AbstractGlobalApplicationContext globalAppContext, List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList) throws WebEngineException {
+        GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext) globalAppContext;
         if (CollectionUtils.isEmpty(testCaseList)) {
             throw new WebEngineException("No Test case found in the project");
         }
@@ -74,7 +76,8 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
         return testCaseReportList;
     }
 
-    protected boolean isCanRunTestCase(String testCaseName, GlobalApplicationContext globalApplicationContext) {
+    protected boolean isCanRunTestCase(String testCaseName, AbstractGlobalApplicationContext globalAppContext) {
+        GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext) globalAppContext;
         Map<String, TestCaseAdditionalInformation> testCaseAdditionalInformationMap = globalApplicationContext.getTestCaseAdditionnalInformationList();
         if (MapUtils.isNotEmpty(testCaseAdditionalInformationMap)) {
             TestCaseAdditionalInformation testCaseAdditionalInformation = testCaseAdditionalInformationMap.get(testCaseName);
@@ -87,7 +90,8 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
         return true;
     }
 
-    protected boolean isTestCaseExistInTestData(String testCaseName, GlobalApplicationContext globalApplicationContext){
+    protected boolean isTestCaseExistInTestData(String testCaseName, AbstractGlobalApplicationContext globalAppContext){
+        GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext) globalAppContext;
         List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestDatas();
         boolean findTestCaseInTestData = false;
         for (TestData testData : testDataList) {

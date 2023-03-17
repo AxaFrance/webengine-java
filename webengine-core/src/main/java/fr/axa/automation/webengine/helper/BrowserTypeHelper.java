@@ -2,13 +2,10 @@ package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.Browser;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 

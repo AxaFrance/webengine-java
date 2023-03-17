@@ -15,11 +15,11 @@ import java.util.Set;
 })
 @Data
 @Builder
-public class TestCaseData {
+public class TestCaseDataDriveByExcel {
     @JsonProperty("uid")
     private String uid;
     @JsonProperty("name")
     private String name;
     @JsonProperty("commandList")
-    private Set<CommandData> commandList;
+    private Set<CommandDataDriveByExcel> commandList;
 }

@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.PredefinedValue;
-import fr.axa.automation.webengine.object.CommandData;
-import fr.axa.automation.webengine.object.TestCaseData;
+import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -21,15 +21,15 @@ public abstract class AbstractValueChecking extends AbstractChecking{
     protected final static String VALUE_REFERENCE_REGEX = "(<<<.*?>>>)?";
     protected final static String DATA_TEST_REFERENCE_REGEX = "[\\w-]*";
 
-    protected List<String> getIdByTestCase(TestCaseData testCaseData){
+    protected List<String> getIdByTestCase(TestCaseDataDriveByExcel testCaseData){
         return testCaseData.getCommandList().stream().map(commandData -> commandData.getId()).collect(Collectors.toList());
     }
 
-    protected Set<String> getDataTestColumnName(TestCaseData testCaseData){
-        Set<CommandData>  commandDataList = testCaseData.getCommandList();
+    protected Set<String> getDataTestColumnName(TestCaseDataDriveByExcel testCaseData){
+        Set<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
         Set<String> dataTestColumn = new HashSet<>();
         if(CollectionUtils.isNotEmpty(commandDataList)){
-            Optional<CommandData> firstCommandData = commandDataList.stream().findFirst();
+            Optional<CommandDataDriveByExcel> firstCommandData = commandDataList.stream().findFirst();
             if(firstCommandData.isPresent()){
                 dataTestColumn = firstCommandData.get().getDataTestList().keySet();
             }
@@ -37,7 +37,7 @@ public abstract class AbstractValueChecking extends AbstractChecking{
         return dataTestColumn;
     }
 
-    protected Map<String,Set<String>> getReferencedValueByColumName(TestCaseData testCaseData){
+    protected Map<String,Set<String>> getReferencedValueByColumName(TestCaseDataDriveByExcel testCaseData){
         Map<String,Set<String>> dataTestByColunmName = new HashMap<>();
         Set<String> dataTestColumnNameList = getDataTestColumnName(testCaseData);
         for (String dataTestColumnName :dataTestColumnNameList) {
@@ -46,9 +46,9 @@ public abstract class AbstractValueChecking extends AbstractChecking{
         return dataTestByColunmName;
     }
 
-    protected Set<String> getReferencedValueByColumName(TestCaseData testCaseData, String dataTestNameColumn){
+    protected Set<String> getReferencedValueByColumName(TestCaseDataDriveByExcel testCaseData, String dataTestNameColumn){
         Set<String> filterDataTestList = new HashSet<>();
-        Set<CommandData>  commandDataList = testCaseData.getCommandList();
+        Set<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
         List<String> dataTestByColumn = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(commandDataList)){
             dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestList().get(dataTestNameColumn)).collect(Collectors.toList());

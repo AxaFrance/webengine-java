@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.checking.runner;
 
 import fr.axa.automation.webengine.checking.chain.IChecking;
-import fr.axa.automation.webengine.object.AbstractTestSuiteData;
+import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 
 public interface ICheckingRunner {
 
@@ -9,5 +9,5 @@ public interface ICheckingRunner {
 
     void setChecking(IChecking checking);
 
-    boolean runChecking(AbstractTestSuiteData testSuiteData);
+    boolean runChecking(AbstractTestSuiteDataDriveByExcel testSuiteData);
 }

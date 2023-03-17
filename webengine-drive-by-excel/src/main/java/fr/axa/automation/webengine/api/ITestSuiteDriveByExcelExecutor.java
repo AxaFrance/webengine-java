@@ -3,11 +3,11 @@ package fr.axa.automation.webengine.api;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
-import fr.axa.automation.webengine.global.GlobalApplicationContext;
-import fr.axa.automation.webengine.object.AbstractTestSuiteData;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 
 import java.net.UnknownHostException;
 
 public interface ITestSuiteDriveByExcelExecutor extends ITestSuiteExecutor {
-    TestSuiteReport run(GlobalApplicationContext globalApplicationContext, AbstractTestSuiteData testSuiteData) throws WebEngineException, UnknownHostException;
+    TestSuiteReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestSuiteDataDriveByExcel testSuiteData) throws WebEngineException, UnknownHostException;
 }

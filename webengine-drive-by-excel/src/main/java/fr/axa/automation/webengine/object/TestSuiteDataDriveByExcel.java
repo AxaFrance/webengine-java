@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestSuiteData extends AbstractTestSuiteData{
+public class TestSuiteDataDriveByExcel extends AbstractTestSuiteDataDriveByExcel {
     @JsonProperty("uid")
     private String uid;
     @JsonProperty("version")
@@ -28,5 +28,5 @@ public class TestSuiteData extends AbstractTestSuiteData{
     @JsonProperty("name")
     private String name;
     @JsonProperty("testCaseList")
-    private List<TestCaseData> testCaseList;
+    private List<TestCaseDataDriveByExcel> testCaseList;
 }

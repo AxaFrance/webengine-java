@@ -4,6 +4,7 @@ application:
     browserName: CHROME
     browserOptionList:
         - --incognito
+        - --remote-allow-origins=*
 appiumSettings:
     gridConnection: https://hub-cloud.browserstack.com/wd/hub
     userName: XXXXXXX
