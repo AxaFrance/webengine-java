@@ -82,9 +82,9 @@ public class BootProject extends AbstractBootProject{
 
 
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine, ITestSuite testSuite) throws WebEngineException, IOException {
+        EnvironmentVariables environmentVariables = TestSuiteHelper.getEnvironmentVariables(commandLine);
         TestSuiteData testSuiteData = TestSuiteHelper.getTestSuiteData(commandLine);
         Settings settings = TestSuiteHelper.getSettings(commandLine, globalConfigProperties);
-        EnvironmentVariables environmentVariables = TestSuiteHelper.getEnvironmentVariables(commandLine);
         Map<String, TestCaseAdditionalInformation> testCaseAdditionalInformationMap = TestSuiteHelper.getTestCaseAdditionalInformation(testSuite, testSuiteData);
 
         return GlobalApplicationContext.builder()

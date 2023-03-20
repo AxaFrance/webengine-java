@@ -71,14 +71,13 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return testCaseReport;
     }
 
-
     protected List<ActionReport> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
         ITestCaseDriveByExcelContext testCaseDriveByExcelContext = (ITestCaseDriveByExcelContext) testCaseContext;
         String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
         ActionReport actionReport = new ActionReport();
         List<ActionReport> actionReportList = new ArrayList<>();
         Set<CommandDataDriveByExcel> commandDataList = testCaseDriveByExcelContext.getTestCaseData().getCommandList();
-        String cmdName = "";
+        String commandName = "";
         boolean ignoredAllNextCmd = false;
 
         if(CollectionUtils.isEmpty(commandDataList)){
@@ -87,14 +86,14 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
 
         try {
             for (CommandDataDriveByExcel commandData : commandDataList){
-                cmdName = commandData.getId();
+                commandName = commandData.getId();
                 actionReport = new ActionReport();
-                actionReport.setName(cmdName);
+                actionReport.setName(commandName);
 
                 if(ignoredAllNextCmd){
                     actionReport.setResult(Result.IGNORED);
                     actionReportList.add(actionReport);
-                    loggerService.info("All command are ignored. Test case is : "+ testCaseName +" and command name is : "+ cmdName);
+                    loggerService.info("All command are ignored. Test case is : "+ testCaseName +" and command name is : "+ commandName);
                 }else{
                     actionReport = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext,testCaseContext,commandData);
                     actionReportList.add(actionReport);
@@ -102,12 +101,11 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                 }
             }
         }catch (Throwable e){
-            loggerService.info("Fatal exception during command : "+ cmdName +" and test case name is : "+ testCaseName +". All commands are cancelled.");
+            loggerService.info("Fatal exception during command : "+ commandName +" and test case name is : "+ testCaseName +". All commands are cancelled.");
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(ExceptionUtils.getStackTrace(e));
             actionReportList.add(actionReport);
         }
         return actionReportList;
     }
-
 }

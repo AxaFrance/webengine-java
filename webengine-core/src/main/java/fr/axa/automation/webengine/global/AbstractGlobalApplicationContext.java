@@ -11,5 +11,5 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class AbstractGlobalApplicationContext {
-    Settings settings;
+    AbstractSettings settings;
 }

@@ -7,7 +7,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
-import fr.axa.automation.webengine.global.Settings;
+import fr.axa.automation.webengine.global.SettingsDriveByExcel;
 import fr.axa.automation.webengine.helper.TestSuiteHelperDriveByExcel;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
@@ -49,8 +49,9 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
         return null;
     }
 
-    public void runAndLoadExternalProject(List<ArgumentOption> argumentOptionList, String... args) throws Exception {
-        super.run(argumentOptionList,args);
+    public void runFromFramework(String... args) throws Exception {
+        CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
+        runTestSuite(commandLine);
     }
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
@@ -76,7 +77,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     }
 
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException, IOException {
-        Settings settings = TestSuiteHelperDriveByExcel.getSettings(commandLine, globalConfigProperties);
+        SettingsDriveByExcel settings = TestSuiteHelperDriveByExcel.getSettings(commandLine, globalConfigProperties);
         return GlobalApplicationContextDriveByExcel.builder().settings(settings).build();
     }
 

@@ -65,7 +65,7 @@
         <cluecumber-report-plugin.version>2.9.4</cluecumber-report-plugin.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
 
-        <selenium-http-jdk-client.version>4.5.0</selenium-http-jdk-client.version>
+
     </properties>
 
     <modules>
@@ -311,12 +311,6 @@
                 <artifactId>selenium-support</artifactId>
                 <version>${selenium-java.version}</version>
             </dependency>
-
-<!--            <dependency>-->
-<!--                <groupId>org.seleniumhq.selenium</groupId>-->
-<!--                <artifactId>selenium-http-jdk-client</artifactId>-->
-<!--                <version>${selenium-http-jdk-client.version}</version>-->
-<!--            </dependency>-->
 
             <dependency>
                 <groupId>net.java.dev.jna</groupId>

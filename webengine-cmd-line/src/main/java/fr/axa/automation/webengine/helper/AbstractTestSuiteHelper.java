@@ -4,7 +4,6 @@ import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.Browser;
 import fr.axa.automation.webengine.global.Platform;
-import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
@@ -24,35 +23,17 @@ public abstract class AbstractTestSuiteHelper {
 
     protected static final LoggerService loggerService = LoggerServiceProvider.getInstance();
 
-    public static Settings getSettings(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        loggerService.info("Loading settings running ");
-        List<String> propertiesFileList = getPropertiesFiles(cmd);
-        Platform platform = getPlatform(cmd, globalConfigProperties);
-        Browser browser = getBrowser(cmd, globalConfigProperties);
-        List<String> browserOptionsList = getBrowserOptionList(globalConfigProperties);
-        String outputDir = getOutputDir(cmd, globalConfigProperties);
-        List<String> testCaseToRunList = getTestCaseToRunList(cmd);
-
-        Settings settings = Settings.builder().propertiesFileList(propertiesFileList).platform(platform).browser(browser).browserOptionsList(browserOptionsList).testCaseToRunList(testCaseToRunList).logDir(outputDir).build();
-        loggerService.info("Loading settings running is succeed : " + settings.toString());
-        return settings;
-    }
-
     protected static List<String> getArgumentList(CommandLine cmd, ArgumentOption argumentOption) {
-        List<String> propertiesFileList = new ArrayList<>();
-        String propertiesFiles = cmd.getOptionValue(argumentOption.getOption());
-        if (propertiesFiles != null) {
-            propertiesFileList = Arrays.asList(propertiesFiles.split(";"));
+        List<String> argumentList = new ArrayList<>();
+        String argument = cmd.getOptionValue(argumentOption.getOption());
+        if (argument != null) {
+            argumentList = Arrays.asList(argument.split(";"));
         }
-        return propertiesFileList;
+        return argumentList;
     }
 
     protected static List<String> getPropertiesFiles(CommandLine cmd) {
         return getArgumentList(cmd,ArgumentOption.PROPERTIES_FILE_LIST);
-    }
-
-    protected static List<String> getTestCaseToRunList(CommandLine cmd){
-        return getArgumentList(cmd,ArgumentOption.TEST_CASE_TO_RUN);
     }
 
     protected static Platform getPlatform(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {

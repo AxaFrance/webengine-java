@@ -35,4 +35,7 @@ public class CommandDataDriveByExcel {
     private String dataTestReference;
     @JsonProperty("dataTestList")
     private Map<String,String> dataTestList;
+
+    //---temp
+    private String nextUID;
 }

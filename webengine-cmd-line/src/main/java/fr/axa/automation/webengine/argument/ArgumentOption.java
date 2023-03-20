@@ -12,7 +12,7 @@ public enum ArgumentOption {
 
     PROJECT                 ("a",           true,true, "Project to run"),
     ENVIRONMENT_VARIABLE("env",         true,true, "Environnement variable"),
-    TEST_DATA               ("data",        true,true, "Data for project"),
+    TEST_DATA               ("data",        true,true, "Data for project"), //Used in keyword and drive by excel project
     PROPERTIES_FILE_LIST    ("pfl",  true,false, "properties file list for configuration (separated by ';')"),
     PLATFORM                ("platform",    true,false, "Platform"),
     BROWSER                 ("browser",     true,false, "Data for project"),
@@ -20,7 +20,9 @@ public enum ArgumentOption {
     OUTPUT_DIR              ("outputDir",   true,false, "Output directory"),
     MANUAL_DEBUG            ("m",           false,false, "Manual debug"),
     SHOW_REPORT             ("showreport",  false,false, "Launch report viewer after execution"),
-    TEST_CASE_TO_RUN        ("tc",  true,false, "Test case to run (separated by ';')"),
+    TEST_CASE_TO_RUN        ("tc",  true,false, "Test case to run (separated by ';'), example: \"-tc:firsttestcase;secondtestcase\" "), //For keyword project
+
+    TEST_CASE_AND_DATA_TEST_COLUMN_NAME  ("tc",  true,false, "Test case to run (separated by ';'), example: \"-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto] ; secondtestcase[-dataNameColum:jdd-rec-moto]\" "), //For drive by excel
     WORKBOOK                ("workbook",         true,true, "Excel file to run");
 
     final String option;

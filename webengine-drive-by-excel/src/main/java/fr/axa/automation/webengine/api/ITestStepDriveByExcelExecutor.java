@@ -8,6 +8,5 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 
 public interface ITestStepDriveByExcelExecutor extends ITestStepExecutor {
-
     ActionReport run(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException;
 }

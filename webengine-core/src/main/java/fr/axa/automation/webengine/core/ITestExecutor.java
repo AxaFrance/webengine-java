@@ -10,6 +10,5 @@ public interface ITestExecutor {
     }
 
     default void cleanUp(Object object) throws WebEngineException{
-
     }
 }
