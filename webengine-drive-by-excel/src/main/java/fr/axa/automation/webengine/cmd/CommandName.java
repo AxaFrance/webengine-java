@@ -9,6 +9,22 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum CommandName {
-    END_SCENARII("end scenarii"),IF("if"),END_IF("end if"),CALL("call");
+    CALL("call"),
+
+    SEND_KEY("sendkeys"), CLICK("click"),
+
+    STORE("store"),
+    IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
+    END_SCENARII("end scenarii");
+
     final String name;
+
+    public static CommandName fromValue(String v) {
+        for (CommandName commandName: CommandName.values()) {
+            if (commandName.name.equals(v)) {
+                return commandName;
+            }
+        }
+        throw new IllegalArgumentException(v);
+    }
 }

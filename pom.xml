@@ -34,7 +34,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <reflections.version>0.9.12</reflections.version>
         <commons-cli.version>1.5.0</commons-cli.version>
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.11.0</commons-io.version>
         <guava.version>31.1-jre</guava.version>
         <jaxb-api.version>2.2.7</jaxb-api.version>
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
@@ -65,7 +65,7 @@
         <cluecumber-report-plugin.version>2.9.4</cluecumber-report-plugin.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
 
-
+        <poi.version>5.2.3</poi.version>
     </properties>
 
     <modules>
@@ -244,6 +244,18 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
             </dependency>
 
             <dependency>

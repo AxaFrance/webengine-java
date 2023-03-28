@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
@@ -16,7 +15,7 @@ import java.util.Optional;
 public class TestCaseEndingChecking extends AbstractChecking{
 
     @Override
-    public boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData) {
+    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
         List<TestCaseDataDriveByExcel> testCaseDataList = ((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         Map<String,Boolean> testCaseEndingWithRightCommandMap = new HashMap<>();
         for(TestCaseDataDriveByExcel testCaseData : testCaseDataList){
@@ -27,7 +26,7 @@ public class TestCaseEndingChecking extends AbstractChecking{
     }
 
     private boolean isTestCaseEndingWithRightCommand(TestCaseDataDriveByExcel testCaseData) {
-        Optional<CommandDataDriveByExcel> commandDataOptional = (Optional<CommandDataDriveByExcel>)ListUtil.getLastElement(testCaseData.getCommandList());
+        Optional<CommandDataDriveByExcel> commandDataOptional = ListUtil.getLastElement(testCaseData.getCommandList());
         if(commandDataOptional.isPresent()){
             CommandDataDriveByExcel lastCommandData = commandDataOptional.get();
             return lastCommandData.getCommand().equalsIgnoreCase(CommandName.END_SCENARII.getName());

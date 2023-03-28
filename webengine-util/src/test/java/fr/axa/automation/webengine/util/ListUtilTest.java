@@ -23,7 +23,7 @@ class ListUtilTest {
     @Test
     void testGetLastElement() {
         List<String> list = Arrays.asList("One","Two","Three");
-        Optional<String> firstOptional = (Optional<String>)ListUtil.getLastElement(list);
+        Optional<String> firstOptional = ListUtil.getLastElement(list);
         if(firstOptional.isPresent()){
             Assertions.assertEquals("Three",firstOptional.get());
         }

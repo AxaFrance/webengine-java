@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.List;
 
 
 @JsonPropertyOrder({
@@ -21,5 +21,5 @@ public class TestCaseDataDriveByExcel {
     @JsonProperty("name")
     private String name;
     @JsonProperty("commandList")
-    private Set<CommandDataDriveByExcel> commandList;
+    private List<CommandDataDriveByExcel> commandList;
 }

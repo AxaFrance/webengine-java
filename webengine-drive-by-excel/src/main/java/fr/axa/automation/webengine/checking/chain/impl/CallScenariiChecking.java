@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class CallScenariiChecking extends AbstractChecking{
     @Override
-    public boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData) {
+    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
         Map<String,Set<CommandDataDriveByExcel>> callCommandMap = null;
         List<TestCaseDataDriveByExcel> testCaseDataList = ((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         List<String> testCaseNameList = getTestCaseNameList(testCaseDataList);

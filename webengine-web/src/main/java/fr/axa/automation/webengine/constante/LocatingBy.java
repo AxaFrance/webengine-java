@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 public enum LocatingBy {
     BY_ID("id"),BY_NAME("name"), BY_CLASS_NAME("className"),
     BY_LINK_TEXT("linkText"),BY_TAG_NAME("tagName"),BY_CSS_SELECTOR("cssSelector"),
-    BY_XPATH("xPath"),BY_ATTRIBUTE_LIST("attributeList");
+    BY_XPATH("xPath"),BY_ATTRIBUTE_LIST("attributeList"),
+    BY_COMBINAISON_OF_LOCATOR("combinaisonOfLocator");
     final String value;
 }

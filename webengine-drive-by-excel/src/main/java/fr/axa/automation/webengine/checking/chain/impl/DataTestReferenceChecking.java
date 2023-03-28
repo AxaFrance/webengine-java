@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.constante.Constante;
-import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.util.RegexUtil;
@@ -22,7 +21,7 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     private final static List<String> KEYWORD_DATA_REFERENCE = Arrays.asList("!");
 
     @Override
-    public boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData) {
+    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
         List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         List<String> dataTestReferenceList;
         Set<String> dataTestColumnNameList;

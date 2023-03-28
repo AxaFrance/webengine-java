@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.ActionContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.Platform;
+import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.helper.TestDataHelper;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.CommonClassUtil;
@@ -62,7 +63,7 @@ public class TestStepWebExecutor extends AbstractTestStepExecutor implements ITe
                 .webDriver(testCaseContext.getWebDriver())
                 .environmentVariables(globalApplicationContext.getEnvironmentVariables())
                 .testCaseData(testDataByTestCase.orElse(null))
-                .settings(globalApplicationContext.getSettings())
+                .settings((Settings) globalApplicationContext.getSettings())
                 .testCaseAdditionalInformation(testCaseAdditionalInformation).build();
     }
 }

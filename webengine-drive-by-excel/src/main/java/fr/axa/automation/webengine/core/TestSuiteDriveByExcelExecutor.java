@@ -18,7 +18,6 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
@@ -44,7 +43,7 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
     }
 
     @Override
-    public TestSuiteReport run(AbstractGlobalApplicationContext globalAppContext, AbstractTestSuiteDataDriveByExcel testSuiteData) throws WebEngineException, UnknownHostException {
+    public TestSuiteReport run(AbstractGlobalApplicationContext globalAppContext, TestSuiteDataDriveByExcel testSuiteData) throws WebEngineException, UnknownHostException {
         GlobalApplicationContextDriveByExcel globalApplicationContext = (GlobalApplicationContextDriveByExcel) globalAppContext;
         Calendar startTime = Calendar.getInstance();
         TestSuiteReport testSuiteReport;
@@ -79,7 +78,7 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
         return testCaseReportList;
     }
 
-    public void checkInput(AbstractTestSuiteDataDriveByExcel testSuiteData){
+    public void checkInput(TestSuiteDataDriveByExcel testSuiteData){
         IChecking checking = AbstractChecking.link(
                 new TestCaseEndingChecking(),
                 new IfChecking(),

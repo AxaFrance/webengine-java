@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
+import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
@@ -106,7 +107,7 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
     }
 
     protected boolean isTestCaseDefineInCommandLine(String testCaseName, GlobalApplicationContext globalApplicationContext){
-        List<String> testCaseToRunList = globalApplicationContext.getSettings().getTestCaseToRunList();
+        List<String> testCaseToRunList = ((Settings)globalApplicationContext.getSettings()).getTestCaseToRunList();
         if(CollectionUtils.isEmpty(testCaseToRunList)){
             return true;
         }

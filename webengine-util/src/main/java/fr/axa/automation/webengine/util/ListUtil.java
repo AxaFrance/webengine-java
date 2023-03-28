@@ -17,7 +17,7 @@ public final class ListUtil {
         return list.stream().filter(s->s.contains(search)).findFirst();
     }
 
-    public static Optional<? extends Object> getLastElement(Collection<? extends Object> list)  {
+    public static <T> Optional<T> getLastElement(Collection<T> list)  {
         return list.stream().reduce((first, second) -> second);
     }
 

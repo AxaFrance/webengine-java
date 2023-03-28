@@ -14,7 +14,7 @@ public class ExecutionDetail {
 
     public static void addInformation(String information){
         if(CollectionUtils.isNotEmpty(STEP_IN_PROGRESS)){
-            Optional<String> optionalKey = (Optional<String>) ListUtil.getLastElement(STEP_IN_PROGRESS);
+            Optional<String> optionalKey = ListUtil.getLastElement(STEP_IN_PROGRESS);
             if(optionalKey.isPresent()){
                 String key = optionalKey.get();
                 SharedInformation.addInformation(key,information);

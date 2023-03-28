@@ -10,7 +10,6 @@ import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
 import fr.axa.automation.webengine.global.SettingsDriveByExcel;
 import fr.axa.automation.webengine.helper.TestSuiteHelperDriveByExcel;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
@@ -55,7 +54,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     }
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
-        AbstractTestSuiteDataDriveByExcel testSuiteData = getTestSuiteData(commandLine);
+        TestSuiteDataDriveByExcel testSuiteData = getTestSuiteData(commandLine);
         AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
 
         loggerService.info("Start Phase initialize test suite ");
@@ -81,7 +80,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
         return GlobalApplicationContextDriveByExcel.builder().settings(settings).build();
     }
 
-    protected AbstractTestSuiteDataDriveByExcel getTestSuiteData(CommandLine commandLine){
+    protected TestSuiteDataDriveByExcel getTestSuiteData(CommandLine commandLine){
         return new TestSuiteDataDriveByExcel();
     }
 }

@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
-import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.util.RegexUtil;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class ReferencedValueChecking extends AbstractValueChecking{
     @Override
-    public boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData) {
+    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
         List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         List<ReferencedValueAndIdByTestCase> referencedValueAndIdByTestCaseList = new ArrayList<>();
         for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {

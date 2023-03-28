@@ -76,7 +76,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
         ActionReport actionReport = new ActionReport();
         List<ActionReport> actionReportList = new ArrayList<>();
-        Set<CommandDataDriveByExcel> commandDataList = testCaseDriveByExcelContext.getTestCaseData().getCommandList();
+        List<CommandDataDriveByExcel> commandDataList = testCaseDriveByExcelContext.getTestCaseData().getCommandList();
         String commandName = "";
         boolean ignoredAllNextCmd = false;
 

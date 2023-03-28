@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestSuiteDataDriveByExcel extends AbstractTestSuiteDataDriveByExcel {
+public class TestSuiteDataDriveByExcel {
     @JsonProperty("uid")
     private String uid;
     @JsonProperty("version")

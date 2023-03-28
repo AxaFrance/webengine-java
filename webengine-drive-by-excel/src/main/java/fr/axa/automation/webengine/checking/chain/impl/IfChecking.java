@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.object.AbstractTestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
@@ -14,7 +13,7 @@ import java.util.Set;
 
 public class IfChecking extends AbstractChecking{
     @Override
-    public boolean check(AbstractTestSuiteDataDriveByExcel testSuiteData) {
+    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
         List<TestCaseDataDriveByExcel> testCaseDataList = ((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         Map<String,Boolean> consistencyOfIfAndEndIfCommandMap = new HashMap<>();
         for(TestCaseDataDriveByExcel testCaseData : testCaseDataList){

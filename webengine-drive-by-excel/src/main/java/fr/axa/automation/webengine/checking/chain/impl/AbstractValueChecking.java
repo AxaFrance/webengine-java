@@ -26,7 +26,7 @@ public abstract class AbstractValueChecking extends AbstractChecking{
     }
 
     protected Set<String> getDataTestColumnName(TestCaseDataDriveByExcel testCaseData){
-        Set<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
+        List<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
         Set<String> dataTestColumn = new HashSet<>();
         if(CollectionUtils.isNotEmpty(commandDataList)){
             Optional<CommandDataDriveByExcel> firstCommandData = commandDataList.stream().findFirst();
@@ -48,7 +48,7 @@ public abstract class AbstractValueChecking extends AbstractChecking{
 
     protected Set<String> getReferencedValueByColumName(TestCaseDataDriveByExcel testCaseData, String dataTestNameColumn){
         Set<String> filterDataTestList = new HashSet<>();
-        Set<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
+        List<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
         List<String> dataTestByColumn = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(commandDataList)){
             dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestList().get(dataTestNameColumn)).collect(Collectors.toList());
