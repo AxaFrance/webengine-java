@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public enum CommandName {
     CALL("call"),
-
+    OPEN("open"),
     SEND_KEY("sendkeys"), CLICK("click"),
 
     STORE("store"),

@@ -60,13 +60,10 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
           return result;
      }
 
-     protected boolean isIgnoredAllOtherAction(ActionReport actionReport){
+     protected boolean isIgnoredAllOtherAction(ActionReport actionReport) {
           boolean ignored = false;
-          if ( actionReport != null ) {
-               Result result = actionReport.getResult();
-               if (result == Result.CRITICAL_ERROR) {
-                    ignored = true;
-               }
+          if (actionReport != null && actionReport.getResult() == Result.CRITICAL_ERROR) {
+               ignored = true;
           }
           return ignored;
      }

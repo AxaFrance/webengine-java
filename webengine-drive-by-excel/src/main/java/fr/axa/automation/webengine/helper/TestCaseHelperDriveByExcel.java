@@ -1,0 +1,84 @@
+package fr.axa.automation.webengine.helper;
+
+import fr.axa.automation.webengine.cmd.CommandFactory;
+import fr.axa.automation.webengine.cmd.PredefinedValue;
+import fr.axa.automation.webengine.constante.RegexContante;
+import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
+import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseNodeDriveByExcel;
+import fr.axa.automation.webengine.tree.TreeNode;
+import fr.axa.automation.webengine.util.RegexUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+public final class TestCaseHelperDriveByExcel {
+
+    public static AbstractTestCaseContext getTestCaseContext(AbstractTestCaseContext testCaseContext , String testCaseName){
+        TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
+        List<TestCaseNodeDriveByExcel> list = testCaseDriveByExcelContext.getTestSuiteData().getTestCaseNodeList().stream().filter(testCaseNodeDriveByExcel -> testCaseNodeDriveByExcel.getName().equalsIgnoreCase(testCaseName)).collect(Collectors.toList());
+        return TestCaseDriveByExcelContext.builder().testCaseName(testCaseName).webDriver(testCaseDriveByExcelContext.getWebDriver()).testSuiteData(testCaseDriveByExcelContext.getTestSuiteData()).testCaseToRun(list.get(0)).build();
+    }
+
+    public static List<String> getIdByTestCase(TestCaseDataDriveByExcel testCaseData){
+        return testCaseData.getCommandList().stream().map(commandData -> commandData.getId()).collect(Collectors.toList());
+    }
+
+    public static List<String> getDataTestColumnName(TestCaseNodeDriveByExcel testCaseNode){
+        CommandDataDriveByExcel commandDataDriveByExcel = (CommandDataDriveByExcel)testCaseNode.getTreeNode().getData();
+        Map<String,String> dataTestList = commandDataDriveByExcel.getDataTestList();
+        if(MapUtils.isNotEmpty(dataTestList)){
+            return new ArrayList<>(commandDataDriveByExcel.getDataTestList().keySet());
+        }else{
+            TreeNode treeNode = (TreeNode) testCaseNode.getTreeNode().getChildren().get(0);
+            if(treeNode!=null){
+                return new ArrayList<>(((CommandDataDriveByExcel)treeNode.getData()).getDataTestList().keySet());
+            }
+        }
+        throw new IllegalArgumentException("No data test column found");
+    }
+
+    public static List<String> getDataTestColumnName(TestCaseDataDriveByExcel testCaseData){
+        List<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
+        List<String> dataTestColumn = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(commandDataList)){
+            Optional<CommandDataDriveByExcel> firstCommandData = commandDataList.stream().findFirst();
+            if(firstCommandData.isPresent()){
+                dataTestColumn = new ArrayList<>(firstCommandData.get().getDataTestList().keySet());
+            }
+        }
+        return dataTestColumn;
+    }
+
+    public static Map<String,List<String>> getReferencedValueByColumName(TestCaseDataDriveByExcel testCaseData){
+        Map<String,List<String>> dataTestByColunmName = new HashMap<>();
+        List<String> dataTestColumnNameList = getDataTestColumnName(testCaseData);
+        for (String dataTestColumnName :dataTestColumnNameList) {
+            dataTestByColunmName.put(dataTestColumnName,getReferencedValueByColumName(testCaseData,dataTestColumnName));
+        }
+        return dataTestByColunmName;
+    }
+
+    public static List<String> getReferencedValueByColumName(TestCaseDataDriveByExcel testCaseData, String dataTestNameColumn){
+        List<String> filterDataTestList = new ArrayList<>();
+        List<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
+        List<String> dataTestByColumn = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(commandDataList)){
+            dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestList().get(dataTestNameColumn)).collect(Collectors.toList());
+        }
+
+        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.VALUE_REFERENCE_REGEX,value)));
+        return filterDataTestList.stream().filter(value -> !Arrays.asList(PredefinedValue.values()).contains(value))
+                .collect(Collectors.toList());
+
+    }
+}

@@ -9,7 +9,6 @@ import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class AbstractChecking implements IChecking {
@@ -27,9 +26,9 @@ public abstract class AbstractChecking implements IChecking {
         return first;
     }
 
-    protected Set<CommandDataDriveByExcel> getCommandDataByName(TestCaseDataDriveByExcel testCaseData, CommandName commandName) {
+    protected List<CommandDataDriveByExcel> getCommandDataByName(TestCaseDataDriveByExcel testCaseData, CommandName commandName) {
         List<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
-        return commandDataSet.stream().filter(commandData -> commandData.getCommand().equalsIgnoreCase(commandName.getName())).collect(Collectors.toSet());
+        return commandDataSet.stream().filter(commandData -> commandData.getCommand().equalsIgnoreCase(commandName.getName())).collect(Collectors.toList());
     }
 
     public abstract boolean check(TestSuiteDataDriveByExcel testSuiteData);

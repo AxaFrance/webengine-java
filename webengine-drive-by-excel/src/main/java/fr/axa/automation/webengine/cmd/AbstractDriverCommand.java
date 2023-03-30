@@ -2,11 +2,13 @@ package fr.axa.automation.webengine.cmd;
 
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.core.WebElementDescription;
+import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.WebDriver;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -14,8 +16,9 @@ public abstract class AbstractDriverCommand extends AbstractCommand {
 
     WebElementDescription webElementDescription;
 
-    protected WebElementDescription populateWebElement(CommandDataDriveByExcel commandData) {
+    protected WebElementDescription populateWebElement(CommandDataDriveByExcel commandData, AbstractTestCaseContext testCaseContext) {
         return WebElementDescription.builder()
+                .useDriver((WebDriver) testCaseContext.getWebDriver())
                 .id(populateBySelector(commandData, LocatingBy.BY_ID))
                 .name(populateBySelector(commandData, LocatingBy.BY_NAME))
                 .className(populateBySelector(commandData, LocatingBy.BY_CLASS_NAME))

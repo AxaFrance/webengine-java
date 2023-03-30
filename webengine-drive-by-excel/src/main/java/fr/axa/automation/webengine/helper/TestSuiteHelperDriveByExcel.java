@@ -20,6 +20,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
 
     public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([^;].*?\\[.*?])?"; // "-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]"
     public static final String TEST_CASE_PATTERN = "\\w*\\[";
+    public static final String DATA_TEST_COLUMN_NAME_PATTERN = "\\[([^\\)]+)\\]";
 
     public static SettingsDriveByExcel getSettings(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         loggerService.info("Loading settings running ");
@@ -45,10 +46,14 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
         Map<String, List<String>> testCaseAndDataTestColumName =new HashMap<>() ;
         for (String argument : argumentList) {
             Set<String> testCaseAndDataTestColumnSet = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,argument);
-            for (String testCaseAndDataTestColumn:testCaseAndDataTestColumnSet) { //firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto]
-                String testCase = getTestCase(testCaseAndDataTestColumn);
-                List<String> dataTestColumnNameList = getDataTestColumnName(testCaseAndDataTestColumn);
-                testCaseAndDataTestColumName.put(testCase,dataTestColumnNameList);
+            if(CollectionUtils.isNotEmpty(testCaseAndDataTestColumnSet)){
+                for (String testCaseAndDataTestColumn:testCaseAndDataTestColumnSet) { //firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto]
+                    String testCase = getTestCase(testCaseAndDataTestColumn);
+                    List<String> dataTestColumnNameList = getDataTestColumnName(testCaseAndDataTestColumn);
+                    testCaseAndDataTestColumName.put(testCase,dataTestColumnNameList);
+                }
+            }else{
+                testCaseAndDataTestColumName.put(argument,null);
             }
         }
         return testCaseAndDataTestColumName;
@@ -71,7 +76,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
 
     private static List<String> getDataTestColumnName(String testCaseAndDataTestColumn) {
         List<String> dataTestColumnList = new ArrayList<>();
-        Set<String> dataTestColumnMatchSet  = RegexUtil.match("\\[([^\\)]+)\\]", testCaseAndDataTestColumn);
+        Set<String> dataTestColumnMatchSet  = RegexUtil.match(DATA_TEST_COLUMN_NAME_PATTERN, testCaseAndDataTestColumn);
         if(CollectionUtils.isNotEmpty(dataTestColumnMatchSet)){
             Optional<String> dataTestColumnOptional = dataTestColumnMatchSet.stream().findFirst();
             if (dataTestColumnOptional.isPresent()){
@@ -80,5 +85,6 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
         }
        return dataTestColumnList;
     }
+
 
 }

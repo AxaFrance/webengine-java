@@ -9,12 +9,11 @@ import org.apache.commons.collections4.MapUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class IfChecking extends AbstractChecking{
     @Override
     public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        List<TestCaseDataDriveByExcel> testCaseDataList = ((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
+        List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
         Map<String,Boolean> consistencyOfIfAndEndIfCommandMap = new HashMap<>();
         for(TestCaseDataDriveByExcel testCaseData : testCaseDataList){
             consistencyOfIfAndEndIfCommandMap.put(testCaseData.getName(), checkConsistencyCommand(testCaseData));
@@ -24,8 +23,8 @@ public class IfChecking extends AbstractChecking{
     }
 
     private boolean checkConsistencyCommand(TestCaseDataDriveByExcel testCaseData) {
-        Set<CommandDataDriveByExcel> ifCommandDataSet = getCommandDataByName(testCaseData,CommandName.IF);
-        Set<CommandDataDriveByExcel> endIfCommandDataSet = getCommandDataByName(testCaseData,CommandName.END_IF);
+        List<CommandDataDriveByExcel> ifCommandDataSet = getCommandDataByName(testCaseData,CommandName.IF);
+        List<CommandDataDriveByExcel> endIfCommandDataSet = getCommandDataByName(testCaseData,CommandName.END_IF);
         return ifCommandDataSet.size() == endIfCommandDataSet.size();
     }
 

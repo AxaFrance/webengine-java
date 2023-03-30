@@ -31,8 +31,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProjectDriveByExcel extends AbstractBootProject{
-
-    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.EXCEL_FILE, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.TEST_DATA);
+    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER);
 
     @Autowired
     public BootProjectDriveByExcel(@Qualifier("testSuiteDriveByExcelExecutor")ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {

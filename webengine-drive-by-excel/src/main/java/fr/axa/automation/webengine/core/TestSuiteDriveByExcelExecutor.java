@@ -8,7 +8,6 @@ import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
 import fr.axa.automation.webengine.checking.chain.impl.DataTestReferenceChecking;
 import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
 import fr.axa.automation.webengine.checking.chain.impl.ReferencedValueChecking;
-import fr.axa.automation.webengine.checking.chain.impl.TestCaseEndingChecking;
 import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -18,6 +17,7 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
 import fr.axa.automation.webengine.global.SettingsDriveByExcel;
+import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
@@ -67,27 +67,41 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
 
     protected List<TestCaseReport> runTestCaseData(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataDriveByExcel testSuiteData) throws WebEngineException {
         List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
-        List<TestCaseNodeDriveByExcel> testCaseNodeList = testSuiteData.getTestCaseNodeList();
         if (CollectionUtils.isEmpty(testCaseDataList)) {
             throw new WebEngineException("No Test case found in the file");
         }
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
         SettingsDriveByExcel settingsDriveByExcel = (SettingsDriveByExcel) globalApplicationContext.getSettings();
-        List<String> nameOfTestCaseToRun = new ArrayList<>(settingsDriveByExcel.getTestCaseAndDataTestColumName().keySet());
-        List<TestCaseNodeDriveByExcel> testCaseToRunList = testCaseNodeList.stream().filter(testCaseDataDriveByExcel -> nameOfTestCaseToRun.contains(testCaseDataDriveByExcel.getName())).collect(Collectors.toList());
+        List<TestCaseNodeDriveByExcel> testCaseToRunList = getTestCaseToRun(testSuiteData, settingsDriveByExcel);
 
         for (TestCaseNodeDriveByExcel testCaseNodeToRun : testCaseToRunList) {
-            AbstractTestCaseContext testCaseContext = ((ITestCaseDriveByExcelExecutor) testCaseExecutor).initialize(globalApplicationContext, testCaseNodeToRun, testSuiteData);
-            TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
-            testCaseExecutor.cleanUp(testCaseContext);
-            testCaseReportList.add(testCaseReport);
+            List<String> dataTestColumNameList = getDataTestColumNameList(settingsDriveByExcel, testCaseNodeToRun);
+            for (String dataTestColumnName : dataTestColumNameList) {
+                AbstractTestCaseContext testCaseContext = ((ITestCaseDriveByExcelExecutor) testCaseExecutor).initialize(globalApplicationContext, testSuiteData, testCaseNodeToRun, dataTestColumnName );
+                TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
+                testCaseExecutor.cleanUp(testCaseContext);
+                testCaseReportList.add(testCaseReport);
+            }
         }
         return testCaseReportList;
     }
 
+    private List<String> getDataTestColumNameList(SettingsDriveByExcel settingsDriveByExcel, TestCaseNodeDriveByExcel testCaseNodeToRun) {
+        List<String> dataTestColumNameList = settingsDriveByExcel.getTestCaseAndDataTestColumName().get(testCaseNodeToRun.getName());
+        if(CollectionUtils.isEmpty(dataTestColumNameList)){
+            dataTestColumNameList = TestCaseHelperDriveByExcel.getDataTestColumnName(testCaseNodeToRun);
+        }
+        return dataTestColumNameList;
+    }
+
+    private List<TestCaseNodeDriveByExcel> getTestCaseToRun(TestSuiteDataDriveByExcel testSuiteData, SettingsDriveByExcel settingsDriveByExcel) {
+        List<TestCaseNodeDriveByExcel> testCaseNodeList = testSuiteData.getTestCaseNodeList();
+        List<String> nameOfTestCaseToRun = new ArrayList<>(settingsDriveByExcel.getTestCaseAndDataTestColumName().keySet());
+        return testCaseNodeList.stream().filter(testCaseDataDriveByExcel -> nameOfTestCaseToRun.contains(testCaseDataDriveByExcel.getName())).collect(Collectors.toList());
+    }
+
     public void checkInput(TestSuiteDataDriveByExcel testSuiteData) {
         IChecking checking = AbstractChecking.link(
-                new TestCaseEndingChecking(),
                 new IfChecking(),
                 new CallScenariiChecking(),
                 new DataTestReferenceChecking(),

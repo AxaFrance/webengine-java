@@ -17,30 +17,35 @@ import java.util.stream.Collectors;
 public class CallScenariiChecking extends AbstractChecking{
     @Override
     public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        Map<String,Set<CommandDataDriveByExcel>> callCommandMap = null;
-        List<TestCaseDataDriveByExcel> testCaseDataList = ((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
+        Map<String,List<CommandDataDriveByExcel>> callCommandMap = null;
+        List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
         List<String> testCaseNameList = getTestCaseNameList(testCaseDataList);
 
         for(TestCaseDataDriveByExcel testCaseData : testCaseDataList){
-            callCommandMap.put(testCaseData.getName(), getCommandDataByName(testCaseData,CommandName.CALL));
+            List<CommandDataDriveByExcel> commandCallList = getCommandDataByName(testCaseData,CommandName.CALL);
+            if(CollectionUtils.isNotEmpty(commandCallList)){
+                callCommandMap.put(testCaseData.getName(), getCommandDataByName(testCaseData,CommandName.CALL));
+            }
+        }
+        if(MapUtils.isNotEmpty(callCommandMap)){
+            Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist = getCallCommandWhichDoesntExist(callCommandMap, testCaseNameList);
+            assertCommand(callCommandWhichDoesntExist);
         }
 
-        Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist = getCallCommandWhichDoesntExist(callCommandMap, testCaseNameList);
-        assertCommand(callCommandWhichDoesntExist);
         return checkNext(testSuiteData);
     }
 
-    private Map<String,Set<CommandDataDriveByExcel>> getCallCommandWhichDoesntExist(Map<String,Set<CommandDataDriveByExcel>> callCommandDataMap, List<String> testCaseNameList) {
+    private Map<String,Set<CommandDataDriveByExcel>> getCallCommandWhichDoesntExist(Map<String,List<CommandDataDriveByExcel>> callCommandDataMap, List<String> testCaseNameList) {
         Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist = new HashMap<>();
-        for (Map.Entry<String,Set<CommandDataDriveByExcel>> entry : callCommandDataMap.entrySet()) {
+        for (Map.Entry<String,List<CommandDataDriveByExcel>> entry : callCommandDataMap.entrySet()) {
             String testCaseName = entry.getKey();
-            Set<CommandDataDriveByExcel> callCommandSet = entry.getValue();
+            List<CommandDataDriveByExcel> callCommandSet = entry.getValue();
             callCommandWhichDoesntExist.put(testCaseName, getCallCommandWhichDoesntExist(callCommandSet,testCaseNameList));
         }
         return callCommandWhichDoesntExist;
     }
 
-    private Set<CommandDataDriveByExcel> getCallCommandWhichDoesntExist(Set<CommandDataDriveByExcel> callCommandSet, List<String> testCaseNameList) {
+    private Set<CommandDataDriveByExcel> getCallCommandWhichDoesntExist(List<CommandDataDriveByExcel> callCommandSet, List<String> testCaseNameList) {
         Set<CommandDataDriveByExcel> callCommandList = new HashSet<>(callCommandSet);
         return callCommandList.stream().filter(commandData -> !testCaseNameList.contains(commandData.getTargetList().get(0))).collect(Collectors.toSet());
     }

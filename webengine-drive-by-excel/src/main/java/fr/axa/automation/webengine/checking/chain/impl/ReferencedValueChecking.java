@@ -1,5 +1,8 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
+import fr.axa.automation.webengine.constante.RegexContante;
+import fr.axa.automation.webengine.helper.TestCaseDataHelper;
+import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.util.RegexUtil;
@@ -21,8 +24,8 @@ public class ReferencedValueChecking extends AbstractValueChecking{
         List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
         List<ReferencedValueAndIdByTestCase> referencedValueAndIdByTestCaseList = new ArrayList<>();
         for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
-            Map<String,Set<String>> referencedValueByColumnNameMap = getReferencedValueByColumName(testCaseData);
-            List<String> idByTestCaseList = getIdByTestCase(testCaseData);
+            Map<String,List<String>> referencedValueByColumnNameMap = TestCaseHelperDriveByExcel.getReferencedValueByColumName(testCaseData);
+            List<String> idByTestCaseList = TestCaseHelperDriveByExcel.getIdByTestCase(testCaseData);
             referencedValueAndIdByTestCaseList.add(ReferencedValueAndIdByTestCase.builder().testCaseName(testCaseData.getName()).referencedValueByColumNameMap(referencedValueByColumnNameMap).idList(idByTestCaseList).build());
         }
         List<ReferencedValueWhichDoesntExist> referencedValueWhichDoesntExistList = getReferencedValueWhichDoesntExist(referencedValueAndIdByTestCaseList);
@@ -40,18 +43,18 @@ public class ReferencedValueChecking extends AbstractValueChecking{
 
     private List<ReferencedValueWhichDoesntExist> getReferencedValueWhichDoesntExist(ReferencedValueAndIdByTestCase referencedValueAndIdByTestCase) {
         List<ReferencedValueWhichDoesntExist> referencedValueWhichDoesntExistList = new ArrayList<>();
-        for (Map.Entry<String,Set<String>> entry:referencedValueAndIdByTestCase.getReferencedValueByColumNameMap().entrySet()) {
+        for (Map.Entry<String,List<String>> entry:referencedValueAndIdByTestCase.getReferencedValueByColumNameMap().entrySet()) {
             String columnName = entry.getKey();
-            Set<String> referencedValueSet = entry.getValue();
+            List<String> referencedValueSet = entry.getValue();
             referencedValueWhichDoesntExistList.addAll(getReferencedValueWhichDoesntExist(referencedValueAndIdByTestCase.getTestCaseName(),columnName,referencedValueAndIdByTestCase.getIdList(),referencedValueSet));
         }
         return referencedValueWhichDoesntExistList;
     }
 
-    private List<ReferencedValueWhichDoesntExist> getReferencedValueWhichDoesntExist(String testCaseName, String columnName, List<String> idList, Set<String> referencedValueSet) {
+    private List<ReferencedValueWhichDoesntExist> getReferencedValueWhichDoesntExist(String testCaseName, String columnName, List<String> idList, List<String> referencedValueSet) {
         List<ReferencedValueWhichDoesntExist> referencedValueWhichDoesntExistList = new ArrayList<>();
         for (String referencedValue  : referencedValueSet) {
-            Set<String> referencedValueOnlySet = RegexUtil.match(DATA_TEST_REFERENCE_REGEX,referencedValue); //<<<num_contrat>>>test<<<num_client>>> or <<<num_contrat>>>
+            Set<String> referencedValueOnlySet = RegexUtil.match(RegexContante.DATA_TEST_REFERENCE_REGEX,referencedValue); //<<<num_contrat>>>test<<<num_client>>> or <<<num_contrat>>>
             if(CollectionUtils.isNotEmpty(referencedValueOnlySet)){
                 List<String> list = referencedValueOnlySet.stream().filter(rv -> !idList.contains(rv)).collect(Collectors.toList());
                 referencedValueWhichDoesntExistList.add(ReferencedValueWhichDoesntExist.builder()
@@ -76,7 +79,7 @@ public class ReferencedValueChecking extends AbstractValueChecking{
     @Data
     private static class ReferencedValueAndIdByTestCase{
          String testCaseName;
-         Map<String,Set<String>> referencedValueByColumNameMap;
+         Map<String,List<String>> referencedValueByColumNameMap;
          List<String> idList;
     }
 

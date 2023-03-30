@@ -1,9 +1,12 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.RegexContante;
+import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.util.RegexUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,15 +26,17 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     @Override
     public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
         List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
-        List<String> dataTestReferenceList;
-        Set<String> dataTestColumnNameList;
         Map<String,List<String>> dataTestReferenceWhichDoesntExistMap = new HashMap<>();
         for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
-            dataTestColumnNameList = getDataTestColumnName(testCaseData);
-            dataTestReferenceList = getDataTestReference(testCaseData);
-            dataTestReferenceWhichDoesntExistMap.put(testCaseData.getName(),getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList));
+            List<String> dataTestReferenceList = getDataTestReference(testCaseData);
+            List<String> dataTestColumnNameList = TestCaseHelperDriveByExcel.getDataTestColumnName(testCaseData);
+            if(CollectionUtils.isNotEmpty(dataTestReferenceList)){
+                dataTestReferenceWhichDoesntExistMap.put(testCaseData.getName(),getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList));
+            }
         }
-        assertDataTestReference(dataTestReferenceWhichDoesntExistMap);
+        if(MapUtils.isNotEmpty(dataTestReferenceWhichDoesntExistMap)){
+            assertDataTestReference(dataTestReferenceWhichDoesntExistMap);
+        }
         return checkNext(testSuiteData);
     }
 
@@ -43,7 +48,7 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
                 .collect(Collectors.toList());
     }
 
-    protected List<String> getDataTestReferenceWhichDoesntExist(List<String> dataTestReferenceList, Set<String> dataTestColumnNameList ){
+    protected List<String> getDataTestReferenceWhichDoesntExist(List<String> dataTestReferenceList, List<String> dataTestColumnNameList ){
         List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
         for (String dataTestReference : dataTestReferenceList) {
             List<String> dataTestReferenceInOneCommandList = Arrays.asList(dataTestReference.split(Constante.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
@@ -52,10 +57,10 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
         return dataTestReferenceWhichDoesntExistList;
     }
 
-    private List<String> getDataTestReferenceWhichDoesntInOneCmdExist(List<String> dataTestReferenceInOneCommandList, Set<String> dataTestColumnNameList) {
+    private List<String> getDataTestReferenceWhichDoesntInOneCmdExist(List<String> dataTestReferenceInOneCommandList, List<String> dataTestColumnNameList) {
         List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
         for (String dataTestReference : dataTestReferenceInOneCommandList) {
-            Optional<String> dataTestReferenceOptional = RegexUtil.findFirst(DATA_TEST_REFERENCE_REGEX,dataTestReference);// !data-test-auto-rec
+            Optional<String> dataTestReferenceOptional = RegexUtil.findFirst(RegexContante.DATA_TEST_REFERENCE_REGEX,dataTestReference);// !data-test-auto-rec
             if (dataTestReferenceOptional.isPresent() && !dataTestColumnNameList.contains(dataTestReferenceOptional.get())){
                 dataTestReferenceWhichDoesntExistList.add(dataTestReferenceOptional.get());
             }

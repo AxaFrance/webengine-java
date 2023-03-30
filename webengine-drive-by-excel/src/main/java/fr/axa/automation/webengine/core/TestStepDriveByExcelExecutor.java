@@ -1,16 +1,27 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.ITestStepDriveByExcelExecutor;
+import fr.axa.automation.webengine.cmd.AbstractCommand;
+import fr.axa.automation.webengine.cmd.CommandFactory;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
+import fr.axa.automation.webengine.generated.Result;
+import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.util.Calendar;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Slf4j
@@ -24,17 +35,32 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
 
     @Override
     public ActionReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
-//        If optional and contains children , run here
-        return null;
+
+        ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getId());
+        try {
+            executeCmd(globalApplicationContext,testCaseContext,commandData);
+            actionReport.setResult(Result.PASSED);
+        } catch (Throwable throwable){
+            actionReport.setResult(Result.FAILED);
+            actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext,""));
+            if(commandData.isOptional()){
+                actionReport.setResult(Result.IGNORED);
+                actionReport.setLog("Failed but ignored because this command is optional");
+            }
+        }finally {
+            actionReport.setEndTime(Calendar.getInstance());
+        }
+        return actionReport;
     }
 
-
-
-    public void executeCmd(){
-//        Get cmd from factory
-//        Run cmd in another thread
-//
+    private ScreenshotReport screenShot(AbstractTestCaseContext testCaseContext, String name) {
+        byte[] screenshot = ((TakesScreenshot) testCaseContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+        return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 
-
+    @Async("threadPoolTaskExecutor")
+    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws Exception {
+        AbstractCommand command = CommandFactory.getCommand(commandData);
+        command.execute(globalApplicationContext,testCaseContext,commandData);
+    }
 }

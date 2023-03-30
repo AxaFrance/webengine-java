@@ -2,15 +2,14 @@ package fr.axa.automation.webengine.cmd;
 
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 
-public class SendKeysCommand extends AbstractDriverCommand{
+public class ClickCommand extends AbstractDriverCommand{
 
     @Override
     public Object execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws Exception {
         webElementDescription = populateWebElement(commandData,testCaseContext);
-        webElementDescription.sendKeys(commandData.getDataTestList().get(((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName()));
+        webElementDescription.click();
         return null;
     }
 }

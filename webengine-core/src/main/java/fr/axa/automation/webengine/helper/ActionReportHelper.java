@@ -25,12 +25,16 @@ public final class ActionReportHelper {
     }
 
     public static ActionReport getActionReport(String name) {
+        return getActionReport(name,Result.NONE);
+    }
+
+    public static ActionReport getActionReport(String name,Result result) {
         ActionReport actionReport = new ActionReport();
         actionReport.setName(name);
         actionReport.setStartTime(Calendar.getInstance());
         actionReport.setContextValues(new ArrayOfVariable());
         actionReport.setScreenshots(new ArrayOfScreenshotReport());
-        actionReport.setResult(Result.NONE);
+        actionReport.setResult(result);
         return actionReport;
     }
 }

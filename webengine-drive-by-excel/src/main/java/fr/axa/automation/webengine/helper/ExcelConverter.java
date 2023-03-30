@@ -29,8 +29,20 @@ import java.util.stream.Collectors;
 
 public class ExcelConverter {
 
-    public static final String XPATH_PATTERN = "^\\\\.*$";
+    public static final String XPATH_PATTERN = "^//.*$";
     public static final String MANY_LOCATED_PATTERN = "^[\\{].*[\\n|\\r]";
+
+    public static void main(String[] args) {
+        Map<String, List<String>> testCaseAndDataTestColumName = new HashMap<>();
+
+//        testCaseAndDataTestColumName.put("TestCase1", Arrays.asList("Jdd-auto-rec", "Jdd-moto-rec"));
+//        testCaseAndDataTestColumName.put("Logout", Arrays.asList("Jdd-moto-rec"));
+
+        testCaseAndDataTestColumName.put("test-case-2", null);
+
+        convert("C:\\work\\projet-git\\ExcelToJavaObjectConverter\\Test.xlsx", testCaseAndDataTestColumName);
+    }
+
 
     public static TestSuiteDataDriveByExcel convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumName) {
         List<TestCaseDataDriveByExcel> testCaseList = new LinkedList<>();
@@ -164,7 +176,9 @@ public class ExcelConverter {
         Map<String, String> targets = new HashMap<>();
         if (commandValue.equalsIgnoreCase(CommandName.CALL.getName())) {
             targets.put(CommandName.CALL.getName(), targetCellValue);
-        } else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
+        }else if (commandValue.equalsIgnoreCase(CommandName.OPEN.getName())) {
+            targets.put(CommandName.OPEN.getName(), targetCellValue);
+        }else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
             targets.put(LocatingBy.BY_XPATH.getValue(), targetCellValue);
         } else if (CollectionUtils.isNotEmpty(RegexUtil.match(MANY_LOCATED_PATTERN, targetCellValue))) {
             targets.put(LocatingBy.BY_COMBINAISON_OF_LOCATOR.getValue(), targetCellValue);

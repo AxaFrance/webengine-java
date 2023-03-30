@@ -13,6 +13,10 @@
     <packaging>jar</packaging>
     <name>webengine-drive-by-excel</name>
 
+    <properties>
+        <start-class>fr.axa.automation.webengine.ApplicationDriveByExcel</start-class>
+    </properties>
+
     <dependencies>
 
         <dependency>
@@ -73,6 +77,23 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${start-class}</mainClass>
+                    <classifier>exec</classifier>
+                    <excludeDevtools>true</excludeDevtools>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

@@ -107,11 +107,12 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
                     actionReport.setResult(Result.IGNORED);
                     actionReportDetailList.add(ActionReportDetailHelper.getActionReportDetail(actionReport, true));
                     loggerService.info("All test step are ignored. Test case is : "+ testCaseName +" and test step name is : "+ testStep.getClass().getName());
-                }else{
-                    actionReportDetail = ((ITestStepWebExecutor)testStepExecutor).run(globalApplicationContext,testCaseContext,testStep);
-                    ignoredAllNextTestStep = verifyCheckpoint(actionReportDetail);
-                    actionReportDetailList.add(actionReportDetail);
+                    continue;
                 }
+
+                actionReportDetail = ((ITestStepWebExecutor)testStepExecutor).run(globalApplicationContext,testCaseContext,testStep);
+                ignoredAllNextTestStep = verifyCheckpoint(actionReportDetail);
+                actionReportDetailList.add(actionReportDetail);
             }
         }catch (Throwable e){
             loggerService.info("Fatal exception during step : "+ testStepName +" and test case name is : "+ testCaseName +". All test step are cancelled.");
