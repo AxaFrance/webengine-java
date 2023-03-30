@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 public enum Constante {
     TRIPLE_CHEVRON_PREFIX("<<<"),
     TRIPLE_CHEVRON_SUFFIX(">>>"),
-    SEMICOLON(";");
+    SEMICOLON(";"),
+    OPTIONAL("optional"),
+    OPTIONAL_AND_DEPENDS_ON_PREVIOUS("optional and depends on previous");
     final String value;
 }

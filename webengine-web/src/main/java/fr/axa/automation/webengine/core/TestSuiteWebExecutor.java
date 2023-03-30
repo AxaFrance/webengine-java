@@ -8,6 +8,7 @@ import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
@@ -68,7 +69,7 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
             String testCaseName = entry.getKey();
             ITestCase testCase = entry.getValue();
             if (isCanRunTestCase(testCaseName, globalApplicationContext) && isTestCaseExistInTestData(testCaseName, globalApplicationContext) && isTestCaseDefineInCommandLine(testCaseName,globalApplicationContext)) {
-                ITestCaseContext testCaseContext = ((ITestCaseWebExecutor)testCaseExecutor).initialize(globalApplicationContext,testCaseName,testCase);
+                AbstractTestCaseContext testCaseContext = ((ITestCaseWebExecutor)testCaseExecutor).initialize(globalApplicationContext,testCaseName,testCase);
                 TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
                 testCaseExecutor.cleanUp(testCaseContext);
                 testCaseReportList.add(testCaseReport);

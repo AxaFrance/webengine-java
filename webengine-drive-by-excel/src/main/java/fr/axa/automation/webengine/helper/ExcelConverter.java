@@ -6,7 +6,6 @@ import fr.axa.automation.webengine.global.ExcelColumn;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
-import fr.axa.automation.webengine.tree.TreeNode;
 import fr.axa.automation.webengine.util.ExcelReader;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,17 +32,6 @@ public class ExcelConverter {
     public static final String XPATH_PATTERN = "^\\\\.*$";
     public static final String MANY_LOCATED_PATTERN = "^[\\{].*[\\n|\\r]";
 
-    public static void main(String[] args) {
-        Map<String, List<String>> testCaseAndDataTestColumName = new HashMap<>();
-
-//        testCaseAndDataTestColumName.put("TestCase1", Arrays.asList("Jdd-auto-rec", "Jdd-moto-rec"));
-//        testCaseAndDataTestColumName.put("Logout", Arrays.asList("Jdd-moto-rec"));
-
-        testCaseAndDataTestColumName.put("test-case-2", null);
-
-        convert("C:\\work\\projet-git\\ExcelToJavaObjectConverter\\Test.xlsx", testCaseAndDataTestColumName);
-    }
-
     public static TestSuiteDataDriveByExcel convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumName) {
         List<TestCaseDataDriveByExcel> testCaseList = new LinkedList<>();
         Workbook workbook = ExcelReader.getWorkbook(excelFileName);
@@ -55,14 +43,11 @@ public class ExcelConverter {
             testCaseList.addAll(getTestCaseDataList(workbook, testCaseAndDataTestColumName));
         }
 
-        TreeNode treeNode = TreeCreator.createTree(testCaseList.get(0));
-        treeNode.printTree("--",treeNode);
-
-
         TestSuiteDataDriveByExcel testSuite = TestSuiteDataDriveByExcel.builder()
                 .uid(UUID.randomUUID().toString())
                 .name(excelFileName)
                 .testCaseList(testCaseList)
+                .testCaseNodeList(TreeCreator.createTree(testCaseList))
                 .build();
         return testSuite;
     }

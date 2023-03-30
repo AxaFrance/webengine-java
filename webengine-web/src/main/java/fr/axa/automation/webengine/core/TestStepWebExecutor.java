@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.api.ITestStepWebExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.ActionContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.Platform;
@@ -33,12 +34,12 @@ public class TestStepWebExecutor extends AbstractTestStepExecutor implements ITe
         this.actionExecutor = actionExecutor;
     }
 
-    public ActionReportDetail run(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
+    public ActionReportDetail run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
         IAction action = getAction(globalApplicationContext, testCaseContext, testStep);
         return actionExecutor.run(action);
     }
 
-    protected IAction getAction(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
+    protected IAction getAction(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, ITestStep testStep) throws WebEngineException {
         Class<? extends IAction> clazz = getActionClass(globalApplicationContext,testStep);
         ActionContext actionContext = getActionContext(globalApplicationContext, testCaseContext);
         return CommonClassUtil.createAndCallMethod(clazz, "setActionDetailContext", actionContext);
@@ -52,7 +53,7 @@ public class TestStepWebExecutor extends AbstractTestStepExecutor implements ITe
         return clazz;
     }
 
-    protected ActionContext getActionContext(AbstractGlobalApplicationContext globalAppContext, ITestCaseContext testCaseContext){
+    protected ActionContext getActionContext(AbstractGlobalApplicationContext globalAppContext, AbstractTestCaseContext testCaseContext){
         GlobalApplicationContext globalApplicationContext =  (GlobalApplicationContext)globalAppContext;
         List<TestData> testDataList = globalApplicationContext.getTestSuiteData().getTestDatas();
         Optional<TestData> testDataByTestCase = TestDataHelper.getDataOfTestCase(testDataList,testCaseContext.getTestCaseName());

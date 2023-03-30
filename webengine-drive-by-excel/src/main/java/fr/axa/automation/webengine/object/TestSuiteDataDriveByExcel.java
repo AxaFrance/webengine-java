@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.object;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import fr.axa.automation.webengine.tree.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,4 +30,6 @@ public class TestSuiteDataDriveByExcel {
     private String name;
     @JsonProperty("testCaseList")
     private List<TestCaseDataDriveByExcel> testCaseList;
+
+    private List<TestCaseNodeDriveByExcel> testCaseNodeList;
 }

@@ -55,7 +55,8 @@ public class ExcelReader {
 
     public static String getCellValue(Row rowIndex, int colIndex) {
         try {
-            return rowIndex.getCell(colIndex).getStringCellValue();
+            String cellValue = rowIndex.getCell(colIndex).getStringCellValue();
+            return cellValue.replaceFirst("^-*", "");
         } catch (NullPointerException e) {
             return StringUtils.EMPTY;
         }

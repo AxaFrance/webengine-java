@@ -23,7 +23,7 @@ public enum ArgumentOption {
     TEST_CASE_TO_RUN        ("tc",  true,false, "Test case to run (separated by ';'), example: \"-tc:firsttestcase;secondtestcase\" "), //For keyword project
 
     TEST_CASE_AND_DATA_TEST_COLUMN_NAME  ("tc",  true,false, "Test case to run (separated by ';'), example: \"-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto] ; secondtestcase[-dataNameColum:jdd-rec-moto]\" "), //For drive by excel
-    WORKBOOK                ("workbook",         true,true, "Excel file to run");
+    EXCEL_FILE                ("excel-file",         true,true, "Excel file to run");
 
     final String option;
     final Boolean hasArg;

@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import lombok.AccessLevel;
@@ -28,14 +29,14 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
           this.loggerService = loggerService;
      }
 
-     protected ITestCaseContext createTestCaseContext(String testCaseName, Object webDriver) throws WebEngineException {
-          ITestCaseContext testCaseContext = getTestCaseContext();
+     protected AbstractTestCaseContext createTestCaseContext(Object webDriver, String testCaseName) throws WebEngineException {
+          AbstractTestCaseContext testCaseContext = getTestCaseContext();
           testCaseContext.setTestCaseName(testCaseName);
           testCaseContext.setWebDriver(webDriver);
           return testCaseContext;
      }
 
-     public abstract ITestCaseContext getTestCaseContext() ;
+     public abstract AbstractTestCaseContext getTestCaseContext() ;
 
      public abstract Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException;
 

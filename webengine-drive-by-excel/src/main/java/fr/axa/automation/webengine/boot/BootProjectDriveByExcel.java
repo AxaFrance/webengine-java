@@ -8,6 +8,7 @@ import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
 import fr.axa.automation.webengine.global.SettingsDriveByExcel;
+import fr.axa.automation.webengine.helper.ExcelConverter;
 import fr.axa.automation.webengine.helper.TestSuiteHelperDriveByExcel;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
@@ -31,7 +32,7 @@ import java.util.List;
 @Slf4j
 public class BootProjectDriveByExcel extends AbstractBootProject{
 
-    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.WORKBOOK, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.TEST_DATA);
+    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.EXCEL_FILE, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.TEST_DATA);
 
     @Autowired
     public BootProjectDriveByExcel(@Qualifier("testSuiteDriveByExcelExecutor")ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {
@@ -54,8 +55,8 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     }
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
-        TestSuiteDataDriveByExcel testSuiteData = getTestSuiteData(commandLine);
         AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
+        TestSuiteDataDriveByExcel testSuiteData = getTestSuiteData(globalApplicationContext);
 
         loggerService.info("Start Phase initialize test suite ");
         testSuiteExecutor.initialize(globalApplicationContext);
@@ -80,7 +81,8 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
         return GlobalApplicationContextDriveByExcel.builder().settings(settings).build();
     }
 
-    protected TestSuiteDataDriveByExcel getTestSuiteData(CommandLine commandLine){
-        return new TestSuiteDataDriveByExcel();
+    protected TestSuiteDataDriveByExcel getTestSuiteData(AbstractGlobalApplicationContext globalApplicationContext){
+        SettingsDriveByExcel settingsDriveByExcel = (SettingsDriveByExcel)globalApplicationContext.getSettings();
+        return ExcelConverter.convert(settingsDriveByExcel.getFileName(),settingsDriveByExcel.getTestCaseAndDataTestColumName());
     }
 }

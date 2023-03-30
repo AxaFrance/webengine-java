@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.api.ITestCaseWebContext;
+
 import fr.axa.automation.webengine.api.ITestCaseWebExecutor;
 import fr.axa.automation.webengine.api.ITestStepWebExecutor;
 import fr.axa.automation.webengine.context.SharedContext;
@@ -10,6 +10,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.TestCaseWebContext;
 import fr.axa.automation.webengine.helper.ActionReportDetailHelper;
@@ -42,22 +43,22 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
     }
 
     @Override
-    public ITestCaseContext getTestCaseContext() {
+    public AbstractTestCaseContext getTestCaseContext() {
         return TestCaseWebContext.builder().build();
     }
 
-    public ITestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, String testCaseName, ITestCase testCase) throws WebEngineException {
+    public AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, String testCaseName, ITestCase testCase) throws WebEngineException {
         Object webDriver = initializeWebDriver(globalApplicationContext);
-        return createTestCaseContext(testCaseName, testCase, webDriver);
+        return createTestCaseContext(webDriver, testCaseName, testCase );
     }
 
-    protected ITestCaseContext createTestCaseContext(String testCaseName, ITestCase testCase, Object webDriver) throws WebEngineException {
-        ITestCaseContext testCaseContext = super.createTestCaseContext(testCaseName,webDriver);
-        ((ITestCaseWebContext)testCaseContext).setTestCaseToExecute(testCase);
+    protected AbstractTestCaseContext createTestCaseContext(Object webDriver, String testCaseName, ITestCase testCase ) throws WebEngineException {
+        AbstractTestCaseContext testCaseContext = super.createTestCaseContext(webDriver,testCaseName);
+        ((TestCaseWebContext)testCaseContext).setTestCaseToExecute(testCase);
         return testCaseContext;
     }
 
-    public TestCaseReport run(AbstractGlobalApplicationContext globalAppContext, ITestCaseContext testCaseContext) throws WebEngineException {
+    public TestCaseReport run(AbstractGlobalApplicationContext globalAppContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
         GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext)globalAppContext;
         String testCaseName = testCaseContext.getTestCaseName();
         TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
@@ -82,12 +83,12 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
         return testCaseReport;
     }
 
-    protected List<ActionReportDetail> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, ITestCaseContext testCaseContext) throws WebEngineException {
+    protected List<ActionReportDetail> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
         String testCaseName = testCaseContext.getTestCaseName();
         ActionReportDetail actionReportDetail;
         ActionReport actionReport = new ActionReport();
         List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
-        List<? extends ITestStep> testStepList = ((ITestCaseWebContext)testCaseContext).getTestCaseToExecute().getTestStepList();
+        List<? extends ITestStep> testStepList = ((TestCaseWebContext)testCaseContext).getTestCaseToExecute().getTestStepList();
         boolean ignoredAllNextTestStep = false;
         String testStepName = "" ;
 
@@ -102,7 +103,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
                 actionReport = new ActionReport();
                 actionReport.setName(testStepName);
 
-                if(((ITestCaseWebContext)testCaseContext).getTestCaseToExecute().isIgnoredAllTestStep() || ignoredAllNextTestStep){
+                if(((TestCaseWebContext)testCaseContext).getTestCaseToExecute().isIgnoredAllTestStep() || ignoredAllNextTestStep){
                     actionReport.setResult(Result.IGNORED);
                     actionReportDetailList.add(ActionReportDetailHelper.getActionReportDetail(actionReport, true));
                     loggerService.info("All test step are ignored. Test case is : "+ testCaseName +" and test step name is : "+ testStep.getClass().getName());
