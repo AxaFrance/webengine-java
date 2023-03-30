@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.cmd.CommandFactory;
 import fr.axa.automation.webengine.cmd.PredefinedValue;
 import fr.axa.automation.webengine.constante.RegexContante;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;

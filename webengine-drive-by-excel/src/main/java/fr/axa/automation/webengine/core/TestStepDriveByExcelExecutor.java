@@ -35,7 +35,6 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
 
     @Override
     public ActionReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
-
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getId());
         try {
             executeCmd(globalApplicationContext,testCaseContext,commandData);
