@@ -2,15 +2,25 @@ package fr.axa.automation.webengine.cmd;
 
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.core.WebElementDescription;
+import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.generated.ActionReport;
+import fr.axa.automation.webengine.generated.Result;
+import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
+import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+
+import java.util.Calendar;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -48,13 +58,32 @@ public abstract class AbstractDriverCommand implements ICommand{
         }
     }
 
-    public Object execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws Exception {
-        String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
-        if(commandData.canExecuteDataTestColumn(dataTestColumName)){
-            return executeCmd(globalApplicationContext,  testCaseContext,  commandData);
+    public Object execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
+        ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getId());
+        try {
+            String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
+            if(commandData.canExecuteDataTestColumn(dataTestColumName)){
+                executeCmd(globalApplicationContext,  testCaseContext,  commandData);
+            }
+            actionReport.setResult(Result.PASSED);
+        } catch (Throwable throwable){
+            actionReport.setResult(Result.FAILED);
+            actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext,""));
+            if(commandData.isOptional()){
+                actionReport.setResult(Result.IGNORED);
+                actionReport.setLog("Failed but ignored because this command is optional");
+            }
+        }finally {
+            actionReport.setEndTime(Calendar.getInstance());
         }
-        return null;
+        return actionReport;
     }
+
+    protected ScreenshotReport screenShot(AbstractTestCaseContext testCaseContext, String name) {
+        byte[] screenshot = ((TakesScreenshot) testCaseContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+        return ScreenshotHelper.getScreenshotReport(name, screenshot);
+    }
+
 
     abstract Object executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData)throws Exception;
 }
