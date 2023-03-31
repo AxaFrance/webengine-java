@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class ReferencedValueChecking extends AbstractValueChecking{
     @Override
     public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
+        List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
         List<ReferencedValueAndIdByTestCase> referencedValueAndIdByTestCaseList = new ArrayList<>();
         for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
             Map<String,List<String>> referencedValueByColumnNameMap = TestCaseHelperDriveByExcel.getReferencedValueByColumName(testCaseData);

@@ -2,7 +2,9 @@ package fr.axa.automation.webengine.cmd;
 
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.core.WebElementDescription;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -12,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
-public abstract class AbstractDriverCommand extends AbstractCommand {
+public abstract class AbstractDriverCommand implements ICommand{
 
     WebElementDescription webElementDescription;
 
@@ -45,4 +47,14 @@ public abstract class AbstractDriverCommand extends AbstractCommand {
                 return StringUtils.EMPTY;
         }
     }
+
+    public Object execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws Exception {
+        String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
+        if(commandData.canExecuteDataTestColumn(dataTestColumName)){
+            return executeCmd(globalApplicationContext,  testCaseContext,  commandData);
+        }
+        return null;
+    }
+
+    abstract Object executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData)throws Exception;
 }

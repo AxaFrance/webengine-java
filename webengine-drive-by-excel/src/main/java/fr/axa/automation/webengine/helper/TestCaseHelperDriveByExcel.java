@@ -38,9 +38,11 @@ public final class TestCaseHelperDriveByExcel {
         if(MapUtils.isNotEmpty(dataTestList)){
             return new ArrayList<>(commandDataDriveByExcel.getDataTestList().keySet());
         }else{
-            TreeNode treeNode = (TreeNode) testCaseNode.getTreeNode().getChildren().get(0);
-            if(treeNode!=null){
-                return new ArrayList<>(((CommandDataDriveByExcel)treeNode.getData()).getDataTestList().keySet());
+            if(testCaseNode.getTreeNode()!=null && CollectionUtils.isNotEmpty(testCaseNode.getTreeNode().getChildren())){
+                TreeNode treeNode = (TreeNode) testCaseNode.getTreeNode().getChildren().get(0);
+                if(treeNode!=null){
+                    return new ArrayList<>(((CommandDataDriveByExcel)treeNode.getData()).getDataTestList().keySet());
+                }
             }
         }
         throw new IllegalArgumentException("No data test column found");

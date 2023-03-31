@@ -7,8 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -58,6 +62,22 @@ public class CommandDataDriveByExcel {
 
     public boolean isOptionalAndDependsOnPrevious(){
         if(this!=null && StringUtils.isNotEmpty(this.getOptional()) && this.getOptional().equalsIgnoreCase(Constante.OPTIONAL_AND_DEPENDS_ON_PREVIOUS.getValue())){
+            return true;
+        }
+        return false;
+    }
+
+    public List<String> getDataTestReferenceList(){
+        if(StringUtils.isNotEmpty(dataTestReference)){
+            return Arrays.asList(dataTestReference.split(";"));
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean canExecuteDataTestColumn(String dataTestColumnName){
+        if(StringUtils.isEmpty(getDataTestReference()) ||
+                (CollectionUtils.isNotEmpty(getDataTestReferenceList()) && getDataTestReferenceList().contains(dataTestColumnName)) ||
+                (CollectionUtils.isNotEmpty(getDataTestReferenceList()) && !getDataTestReferenceList().contains("!"+dataTestColumnName))){
             return true;
         }
         return false;

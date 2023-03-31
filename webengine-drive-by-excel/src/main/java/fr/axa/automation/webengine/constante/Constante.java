@@ -13,6 +13,8 @@ public enum Constante {
     TRIPLE_CHEVRON_SUFFIX(">>>"),
     SEMICOLON(";"),
     OPTIONAL("optional"),
+
+    EXCLAMATION_MARK("!"),
     OPTIONAL_AND_DEPENDS_ON_PREVIOUS("optional and depends on previous");
     final String value;
 }

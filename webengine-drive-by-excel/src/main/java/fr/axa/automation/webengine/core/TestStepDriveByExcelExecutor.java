@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.ITestStepDriveByExcelExecutor;
-import fr.axa.automation.webengine.cmd.AbstractCommand;
+import fr.axa.automation.webengine.cmd.AbstractDriverCommand;
 import fr.axa.automation.webengine.cmd.CommandFactory;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
@@ -59,7 +59,7 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
 
     @Async("threadPoolTaskExecutor")
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws Exception {
-        AbstractCommand command = CommandFactory.getCommand(commandData);
+        AbstractDriverCommand command = CommandFactory.getCommand(commandData);
         command.execute(globalApplicationContext,testCaseContext,commandData);
     }
 }

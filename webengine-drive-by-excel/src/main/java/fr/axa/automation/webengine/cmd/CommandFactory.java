@@ -4,7 +4,7 @@ import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 
 public class CommandFactory {
 
-    public static AbstractCommand getCommand(CommandDataDriveByExcel commandData) throws IllegalArgumentException {
+    public static AbstractDriverCommand getCommand(CommandDataDriveByExcel commandData) throws IllegalArgumentException {
         switch (CommandName.fromValue(commandData.getCommand())){
             case OPEN:
                 return new OpenCommand();
@@ -16,5 +16,4 @@ public class CommandFactory {
                 throw new IllegalArgumentException("Command not recognized");
         }
     }
-
 }
