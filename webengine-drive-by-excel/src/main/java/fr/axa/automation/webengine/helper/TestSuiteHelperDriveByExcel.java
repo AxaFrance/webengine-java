@@ -45,7 +45,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
         List<String> argumentList = getArgumentList(cmd, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME); // "-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]"
         Map<String, List<String>> testCaseAndDataTestColumName =new HashMap<>() ;
         for (String argument : argumentList) {
-            Set<String> testCaseAndDataTestColumnSet = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,argument);
+            List<String> testCaseAndDataTestColumnSet = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,argument);
             if(CollectionUtils.isNotEmpty(testCaseAndDataTestColumnSet)){
                 for (String testCaseAndDataTestColumn:testCaseAndDataTestColumnSet) { //firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto]
                     String testCase = getTestCase(testCaseAndDataTestColumn);
@@ -60,7 +60,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
     }
 
     private static String getTestCase(String testCaseAndDataTestColumn) {
-        Set<String> testCaseSet  = RegexUtil.match(TEST_CASE_PATTERN, testCaseAndDataTestColumn);
+        List<String> testCaseSet  = RegexUtil.match(TEST_CASE_PATTERN, testCaseAndDataTestColumn);
         String testCase = "";
         if(CollectionUtils.isEmpty(testCaseSet)){
             testCase = testCaseAndDataTestColumn;
@@ -76,7 +76,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
 
     private static List<String> getDataTestColumnName(String testCaseAndDataTestColumn) {
         List<String> dataTestColumnList = new ArrayList<>();
-        Set<String> dataTestColumnMatchSet  = RegexUtil.match(DATA_TEST_COLUMN_NAME_PATTERN, testCaseAndDataTestColumn);
+        List<String> dataTestColumnMatchSet  = RegexUtil.match(DATA_TEST_COLUMN_NAME_PATTERN, testCaseAndDataTestColumn);
         if(CollectionUtils.isNotEmpty(dataTestColumnMatchSet)){
             Optional<String> dataTestColumnOptional = dataTestColumnMatchSet.stream().findFirst();
             if (dataTestColumnOptional.isPresent()){

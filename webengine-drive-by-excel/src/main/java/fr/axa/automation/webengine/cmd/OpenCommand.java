@@ -8,8 +8,7 @@ import org.openqa.selenium.WebDriver;
 public class OpenCommand extends AbstractDriverCommand{
 
     @Override
-    public Object executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws Exception {
+    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws Exception {
         ((WebDriver)testCaseContext.getWebDriver()).navigate().to(commandData.getTargetList().get(CommandName.OPEN.getName()));
-        return null;
     }
 }

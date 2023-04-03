@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.cmd.PredefinedValue;
+import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
@@ -77,8 +77,8 @@ public final class TestCaseHelperDriveByExcel {
             dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestList().get(dataTestNameColumn)).collect(Collectors.toList());
         }
 
-        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.VALUE_REFERENCE_REGEX,value)));
-        return filterDataTestList.stream().filter(value -> !Arrays.asList(PredefinedValue.values()).contains(value))
+        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.REFERENCED_VALUE_REGEX,value)));
+        return filterDataTestList.stream().filter(value -> !Arrays.asList(PredefinedTagValue.values()).contains(value))
                 .collect(Collectors.toList());
 
     }

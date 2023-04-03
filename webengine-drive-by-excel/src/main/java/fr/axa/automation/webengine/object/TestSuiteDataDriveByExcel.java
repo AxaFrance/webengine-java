@@ -2,10 +2,12 @@ package fr.axa.automation.webengine.object;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -16,19 +18,20 @@ import java.util.List;
         "name",
         "testCaseList"
 })
+@FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestSuiteDataDriveByExcel {
     @JsonProperty("uid")
-    private String uid;
+    String uid;
     @JsonProperty("version")
-    private String version;
+    String version;
     @JsonProperty("name")
-    private String name;
+    String name;
     @JsonProperty("testCaseList")
-    private List<TestCaseDataDriveByExcel> testCaseList;
+    List<TestCaseDataDriveByExcel> testCaseList;
 
-    private List<TestCaseNodeDriveByExcel> testCaseNodeList;
+    List<TestCaseNodeDriveByExcel> testCaseNodeList;
 }

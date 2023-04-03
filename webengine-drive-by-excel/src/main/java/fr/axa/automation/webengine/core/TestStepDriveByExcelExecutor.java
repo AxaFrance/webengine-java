@@ -13,6 +13,7 @@ import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandResult;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,8 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
 
     private ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
         ScrenshotCommand screnshotCommand = new ScrenshotCommand();
-        return (ScreenshotReport) screnshotCommand.execute(globalApplicationContext,testCaseContext,commandData);
+        ActionReport actionReport = screnshotCommand.execute(globalApplicationContext,testCaseContext,commandData).getActionReport();
+        return actionReport.getScreenshots().getScreenshotReports().get(0);
     }
 
     @Async("threadPoolTaskExecutor")

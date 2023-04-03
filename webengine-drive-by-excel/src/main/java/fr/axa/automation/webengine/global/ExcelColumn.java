@@ -9,6 +9,6 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum ExcelColumn {
-    ID(0),COMMAND(1),TARGETS(2),OPTIONAL(3),DATA_TEST_REFERENCE(4);
+    NAME(0),COMMAND(1),TARGETS(2),OPTIONAL(3),DATA_TEST_REFERENCE(4);
     Integer value;
 }

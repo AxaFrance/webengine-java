@@ -133,7 +133,7 @@ public class ExcelConverter {
     }
 
     private static String getIdValue(Row currentRow) {
-        return ExcelReader.getCellValue(currentRow, ExcelColumn.ID.getValue()).trim();
+        return ExcelReader.getCellValue(currentRow, ExcelColumn.NAME.getValue()).trim();
     }
 
     private static String getCommandValue(Row currentRow) {

@@ -62,4 +62,26 @@ public final class DateUtil {
         LocalDateTime localDateTime2 = getLocalDateTime(endCalendar);
         return Duration.between(localDateTime1,localDateTime2).toMillis();
     }
+
+    public static String minusDay(FormatDate formatDate, Long day){
+        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
+        return sdf.format(LocalDateTime.now().minusDays(day));
+    }
+
+    public static String addDay(FormatDate formatDate, Long day){
+        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
+        return sdf.format(LocalDateTime.now().plusDays(day));
+    }
+
+    public static String addMonth(FormatDate formatDate, Long month){
+        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
+        return sdf.format(LocalDateTime.now().plusMonths(month));
+    }
+
+    public static String minusMonth(FormatDate formatDate, Long month){
+        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
+        return sdf.format(LocalDateTime.now().minusMonths(month));
+    }
+
+
 }

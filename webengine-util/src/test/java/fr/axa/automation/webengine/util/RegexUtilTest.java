@@ -5,6 +5,8 @@ import fr.axa.automation.webengine.logger.LoggerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class RegexUtilTest {
@@ -14,7 +16,7 @@ public class RegexUtilTest {
 
     @Test
     void testMatchWithOnlyDataReference() {
-        Set<String> list = RegexUtil.match(VALUE_REFERENCE_REGEX,"<<<num_contrat>>>TEST1<<<num_client>>>TEST2");
+        List<String> list = RegexUtil.match(VALUE_REFERENCE_REGEX," toto dont le num client est <<<num_client>>>  à fait quelque chose le <<<TODAY + 1>>>  ");
         Assertions.assertTrue(list.contains("<<<num_contrat>>>"));
         Assertions.assertTrue(list.contains("<<<num_client>>>"));
     }
