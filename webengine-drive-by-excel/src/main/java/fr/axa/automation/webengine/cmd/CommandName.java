@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Map;
-
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor
@@ -17,6 +15,8 @@ public enum CommandName {
 
     STORE("store"),
     IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
+
+    SAVE_DATA("saveData"),
     END_SCENARII("end scenarii");
 
     final String name;

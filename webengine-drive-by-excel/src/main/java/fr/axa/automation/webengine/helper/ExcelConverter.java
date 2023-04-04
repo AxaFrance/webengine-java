@@ -99,7 +99,7 @@ public class ExcelConverter {
             Row currentRow = testCaseSheet.getRow(rowIndex);
             CommandDataDriveByExcel commandData = CommandDataDriveByExcel.builder()
                     .uid(UUID.randomUUID().toString())
-                    .id(getIdValue(currentRow))
+                    .name(getIdValue(currentRow))
                     .command(getCommandValue(currentRow))
                     .targetList(getTargetValueList(currentRow))
                     .optional(getOptionalValue(currentRow))
@@ -174,6 +174,9 @@ public class ExcelConverter {
 
     private static Map<String, String> getTargetValueList(String commandValue, String targetCellValue) {
         Map<String, String> targets = new HashMap<>();
+        if(StringUtils.isEmpty(targetCellValue)){
+            return targets;
+        }
         if (commandValue.equalsIgnoreCase(CommandName.CALL.getName())) {
             targets.put(CommandName.CALL.getName(), targetCellValue);
         }else if (commandValue.equalsIgnoreCase(CommandName.OPEN.getName())) {

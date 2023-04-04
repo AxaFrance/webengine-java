@@ -12,6 +12,10 @@ public final class StringUtil {
     private StringUtil() {
     }
 
+    public static boolean contains(String container,String value){
+        return container.toUpperCase().contains(value.toUpperCase());
+    }
+
     public static String removeSpecialCharacters(String text){
         return StringUtils.stripAccents(text).replaceAll(CHARACTERS_TO_REPLACE, UNDERSCORE).toUpperCase();
     }

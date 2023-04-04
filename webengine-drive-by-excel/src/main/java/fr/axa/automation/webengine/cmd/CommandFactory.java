@@ -12,6 +12,8 @@ public class CommandFactory {
                 return new SendKeysCommand();
             case CLICK:
                 return new ClickCommand();
+            case SAVE_DATA:
+                return new SaveDataCommand();
             default:
                 throw new IllegalArgumentException("Command not recognized");
         }

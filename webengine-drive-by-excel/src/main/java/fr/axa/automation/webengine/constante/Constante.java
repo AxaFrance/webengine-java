@@ -15,6 +15,9 @@ public enum Constante {
     OPTIONAL("optional"),
 
     EXCLAMATION_MARK("!"),
+
+    MINUS("-"),
+    PLUS("+"),
     OPTIONAL_AND_DEPENDS_ON_PREVIOUS("optional and depends on previous");
     final String value;
 }

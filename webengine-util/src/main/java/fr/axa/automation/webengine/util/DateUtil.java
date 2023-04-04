@@ -15,9 +15,17 @@ public final class DateUtil {
     private DateUtil() {
     }
 
+    public static String getDateTime(FormatDate formatDate){
+        return getDateTime(formatDate.getFormat());
+    }
+
     public static String getDateTime(String format){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
         return dateTimeFormatter.format(LocalDateTime.now());
+    }
+
+    public static String getDateTime(FormatDate formatDate, Locale locale){
+        return getDateTime(formatDate.getFormat(),locale);
     }
 
     public static String getDateTime(String format, Locale locale){
@@ -63,24 +71,26 @@ public final class DateUtil {
         return Duration.between(localDateTime1,localDateTime2).toMillis();
     }
 
-    public static String minusDay(FormatDate formatDate, Long day){
-        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
-        return sdf.format(LocalDateTime.now().minusDays(day));
+    public static String minusDay(FormatDate formatDate, int day){
+        return addDay(formatDate,day*(-1));
     }
 
-    public static String addDay(FormatDate formatDate, Long day){
-        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
-        return sdf.format(LocalDateTime.now().plusDays(day));
+    public static String addDay(FormatDate formatDate, int day){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(formatDate.getFormat());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, day);
+        return dateFormat.format(cal.getTime());
     }
 
-    public static String addMonth(FormatDate formatDate, Long month){
-        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
-        return sdf.format(LocalDateTime.now().plusMonths(month));
+    public static String addMonth(FormatDate formatDate, int month){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(formatDate.getFormat());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, month);
+        return dateFormat.format(cal.getTime());
     }
 
-    public static String minusMonth(FormatDate formatDate, Long month){
-        SimpleDateFormat sdf = new SimpleDateFormat(formatDate.getFormat());
-        return sdf.format(LocalDateTime.now().minusMonths(month));
+    public static String minusMonth(FormatDate formatDate, int month){
+        return addMonth(formatDate,month*(-1));
     }
 
 

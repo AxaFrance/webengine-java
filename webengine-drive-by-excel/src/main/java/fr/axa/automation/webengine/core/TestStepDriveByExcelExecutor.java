@@ -11,19 +11,17 @@ import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
-import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
+import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Slf4j
@@ -36,29 +34,33 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
     }
 
     @Override
-    public ActionReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
-        ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getId());
+    public CommandResult run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) throws WebEngineException {
+        CommandResult commandResult = null;
+        ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
+
         try {
-            actionReport = (ActionReport)executeCmd(globalApplicationContext,testCaseContext,commandData);
+            commandResult = executeCmd(globalApplicationContext,testCaseContext,commandData,commandResultMap);
         } catch (Throwable throwable){
             actionReport.setResult(Result.FAILED);
-            actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,commandData));
-            actionReport.setLog("Command "+commandData.getId()+" Failed");
+            actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,commandData,commandResultMap));
+            actionReport.setLog("Command "+commandData.getName()+" Failed");
         }finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
-        return actionReport;
+        return CommandResult.builder().actionReport(commandResult !=null ? commandResult.getActionReport() : actionReport)
+                                        .savedData(commandResult !=null ? commandResult.getSavedData() : "")
+                                        .build();
     }
 
-    private ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
+    private ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) throws WebEngineException {
         ScrenshotCommand screnshotCommand = new ScrenshotCommand();
-        ActionReport actionReport = screnshotCommand.execute(globalApplicationContext,testCaseContext,commandData).getActionReport();
+        ActionReport actionReport = screnshotCommand.execute(globalApplicationContext,testCaseContext,commandData,commandResultMap).getActionReport();
         return actionReport.getScreenshots().getScreenshotReports().get(0);
     }
 
     @Async("threadPoolTaskExecutor")
-    public Object executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
+    public CommandResult executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData,  Map<String, CommandResult> commandResultMap) throws WebEngineException {
         AbstractDriverCommand command = CommandFactory.getCommand(commandData);
-        return command.execute(globalApplicationContext,testCaseContext,commandData);
+        return command.execute(globalApplicationContext,testCaseContext,commandData,commandResultMap);
     }
 }

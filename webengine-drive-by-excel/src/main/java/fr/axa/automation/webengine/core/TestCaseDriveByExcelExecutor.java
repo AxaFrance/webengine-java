@@ -11,22 +11,25 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.object.TestCaseNodeDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.tree.TreeNode;
 import fr.axa.automation.webengine.util.DateUtil;
+import fr.axa.automation.webengine.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -65,31 +68,33 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
     public TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
         String testCaseName = testCaseContext.getTestCaseName();
         TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
-        List<ActionReport> actionReportList = new ArrayList<>();
+        Map<String, CommandResult> commandResultMap = new HashMap<>();
 
         try {
-            actionReportList.addAll(runTestStep(globalApplicationContext, testCaseContext));
+            commandResultMap.putAll(runTestStep(globalApplicationContext, testCaseContext));
         } catch (Throwable e) {
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);
         } finally {
+            List<ActionReport> actionReportList = CommandResultHelper.getActionReportList(commandResultMap);
             testCaseReport.getActionReports().getActionReports().addAll(actionReportList);
-//            testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
             testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
             testCaseReport.setResult(getResultOfTestCase(actionReportList));
+            //testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
         }
         return testCaseReport;
     }
 
-    protected List<ActionReport> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
+    protected Map<String, CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
         TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
         TreeNode rootNode = testCaseDriveByExcelContext.getTestCaseToRun().getTreeNode();
         return runTestStep(globalApplicationContext, testCaseContext, rootNode);
     }
 
-    private List<ActionReport> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode) throws WebEngineException {
+    private Map<String, CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode) throws WebEngineException {
         ActionReport actionReport = new ActionReport();
-        List<ActionReport> actionReportList = new ArrayList<>();
+        Map<String, CommandResult> commandResultMap = new HashMap<>();
+        CommandResult commandResult ;
         Deque<Map<CommandName,Result>> nestedIfList = new LinkedList<>();
 
         String commandName = "";
@@ -102,25 +107,25 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         try {
             for (TreeNode treeNodeCommand : treeNodeCommandList){
                 CommandDataDriveByExcel commandData = ((CommandDataDriveByExcel)treeNodeCommand.getData());
-                commandName = commandData.getId();
+                commandName = getCommandName(commandData);
                 actionReport = new ActionReport();
                 actionReport.setName(commandName);
 
                 if(ignoredAllNextCmd){
                     actionReport.setResult(Result.IGNORED);
-                    actionReportList.add(actionReport);
+                    commandResultMap.put(commandName, CommandResultHelper.getCommandResult(actionReport,""));
                     loggerService.info("All command are ignored. Test case is : "+ testCaseName +" and command name is : "+ commandName);
                     continue;
                 }
 
                 switch (CommandName.fromValue(commandData.getCommand())){
                     case IF:
-                        actionReport = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData);
-                        actionReportList.add(actionReport);
+                        commandResult = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData,commandResultMap);
+                        commandResultMap.put(commandName,commandResult);
                         if(actionReport.getResult()==Result.PASSED){
-                            actionReportList.addAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
+                            commandResultMap.putAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
                         }else{
-                            actionReportList.addAll(ignoreCommand(treeNodeCommand));
+                            commandResultMap.putAll(ignoreCommand(treeNodeCommand));
                         }
                         nestedIfList.addLast(getResultOfCommand(CommandName.IF,actionReport.getResult()));
                         break;
@@ -128,30 +133,30 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                     case ELSE:
                         Map<CommandName,Result> map = nestedIfList.getLast();
                         if(canExecute(map)){
-                            actionReport = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData);
-                            actionReportList.add(actionReport);
+                            commandResult = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData,commandResultMap);
+                            commandResultMap.put(commandName,commandResult);
                             if(actionReport.getResult()==Result.PASSED){
-                                actionReportList.addAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
+                                commandResultMap.putAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
                             }
                             map.put(CommandName.valueOf(commandData.getCommand()),actionReport.getResult());
                         }else{
-                            actionReportList.add(ActionReportHelper.getActionReport(commandName,Result.IGNORED));
-                            actionReportList.addAll(ignoreCommand(treeNodeCommand));
+                            commandResult = CommandResultHelper.getCommandResult(ActionReportHelper.getActionReport(commandName,Result.IGNORED),"");
+                            commandResultMap.put(commandName,commandResult);
+                            commandResultMap.putAll(ignoreCommand(treeNodeCommand));
                         }
                         break;
-
                     case END_IF:
-                        actionReportList.add(ActionReportHelper.getActionReport(commandName));
+                        commandResultMap.put(commandName, CommandResultHelper.getCommandResult(ActionReportHelper.getActionReport(commandName),""));
                         nestedIfList.removeLast();
                         break;
                     case CALL:
-                            actionReportList.addAll(runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL))));
+                            commandResultMap.putAll(runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL))));
                         break;
                     default:
-                        actionReport = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData);
-                        actionReportList.add(actionReport);
-                        if(commandData.isOptional() && (actionReport.getResult()==Result.PASSED)){
-                            actionReportList.addAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
+                        commandResult = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData,commandResultMap);
+                        commandResultMap.put(commandName, commandResult);
+                        if(commandData.isOptional() && (commandResult.getActionReport().getResult()==Result.PASSED)){
+                            commandResultMap.putAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
                         }
                         break;
                 }
@@ -161,18 +166,24 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
             loggerService.info("Fatal exception during command : "+ commandName +" and test case name is : "+ testCaseName +". All commands are cancelled.");
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(ExceptionUtils.getStackTrace(e));
-            actionReportList.add(actionReport);
+            commandResultMap.put(commandName,CommandResultHelper.getCommandResult(actionReport,""));
         }
-        return actionReportList;
+        return commandResultMap;
     }
 
-    private static List<ActionReport> ignoreCommand(TreeNode treeNodeCommand) {
-        List<ActionReport> actionReportList = new ArrayList<>();
+    private String getCommandName(CommandDataDriveByExcel commandData) {
+        return StringUtils.isEmpty(commandData.getName()) ? commandData.getUid() : StringUtil.removeSpecialCharacters(commandData.getName());
+    }
+
+    private Map<String, CommandResult> ignoreCommand(TreeNode treeNodeCommand) {
+        Map<String, CommandResult> actionReportMap = new HashMap<>();
         List<TreeNode> treeNodeCommandChildrenList = treeNodeCommand.getChildren();
         for (TreeNode treeNodeChildren:treeNodeCommandChildrenList) {
-            actionReportList.add(ActionReportHelper.getActionReport(((CommandDataDriveByExcel)treeNodeChildren.getData()).getId(),Result.IGNORED));
+            String commandName = getCommandName(((CommandDataDriveByExcel)treeNodeChildren.getData()));
+            ActionReport actionReport = ActionReportHelper.getActionReport(commandName,Result.IGNORED);
+            actionReportMap.put(commandName,CommandResultHelper.getCommandResult(actionReport,""));
         }
-        return actionReportList;
+        return actionReportMap;
     }
 
     private Map<CommandName,Result> getResultOfCommand(CommandName commandName,Result result) {

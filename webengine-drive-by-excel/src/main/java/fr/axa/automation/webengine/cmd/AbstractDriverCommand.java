@@ -24,6 +24,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -63,12 +64,12 @@ public abstract class AbstractDriverCommand implements ICommand{
         }
     }
 
-    public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData) throws WebEngineException {
-        ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getId());
+    public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) throws WebEngineException {
+        ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
             if(commandData.canExecuteDataTestColumn(dataTestColumName)){
-                executeCmd(globalApplicationContext,  testCaseContext,  commandData);
+                executeCmd(globalApplicationContext,  testCaseContext,  commandData,commandResultMap);
             }
             actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
             actionReport.setResult(Result.PASSED);
@@ -91,5 +92,5 @@ public abstract class AbstractDriverCommand implements ICommand{
     }
 
 
-    protected abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData)throws Exception;
+    protected abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception;
 }

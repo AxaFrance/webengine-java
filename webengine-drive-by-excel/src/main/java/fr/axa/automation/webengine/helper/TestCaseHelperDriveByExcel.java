@@ -11,6 +11,7 @@ import fr.axa.automation.webengine.tree.TreeNode;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,8 +29,8 @@ public final class TestCaseHelperDriveByExcel {
         return TestCaseDriveByExcelContext.builder().testCaseName(testCaseName).webDriver(testCaseDriveByExcelContext.getWebDriver()).testSuiteData(testCaseDriveByExcelContext.getTestSuiteData()).testCaseToRun(list.get(0)).build();
     }
 
-    public static List<String> getIdByTestCase(TestCaseDataDriveByExcel testCaseData){
-        return testCaseData.getCommandList().stream().map(commandData -> commandData.getId()).collect(Collectors.toList());
+    public static List<String> getNameListByTestCase(TestCaseDataDriveByExcel testCaseData){
+        return testCaseData.getCommandList().stream().map(commandData -> commandData.getName()).filter(name->StringUtils.isNotEmpty(name)).collect(Collectors.toList());
     }
 
     public static List<String> getDataTestColumnName(TestCaseNodeDriveByExcel testCaseNode){
@@ -78,8 +79,6 @@ public final class TestCaseHelperDriveByExcel {
         }
 
         dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.REFERENCED_VALUE_REGEX,value)));
-        return filterDataTestList.stream().filter(value -> !Arrays.asList(PredefinedTagValue.values()).contains(value))
-                .collect(Collectors.toList());
-
+        return filterDataTestList.stream().filter(value -> !EvaluateValueHelper.isContainsTagDateValue(value)).collect(Collectors.toList());
     }
 }
