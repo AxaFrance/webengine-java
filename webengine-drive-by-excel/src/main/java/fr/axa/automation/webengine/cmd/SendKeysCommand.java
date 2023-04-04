@@ -6,6 +6,8 @@ import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -18,38 +20,6 @@ public class SendKeysCommand extends AbstractDriverCommand{
         executeActionForElement(value);
     }
 
-    protected String getValue(TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) {
-        String dataTestColumName = testCaseContext.getDataTestColumnName();
-        String originalValue = commandData.getDataTestList().get(dataTestColumName);
-       return EvaluateValueHelper.evaluateValue(originalValue, commandResultMap);
-    }
 
-    protected void executeActionForElement(String value)throws Exception {
-        if(webElementDescription.isSelect()){
-            selectByValue(value);
-        } else if (webElementDescription.isInputRadio()) {
-            selectByValueForInputRadio(value);
-        } else if (webElementDescription.isInputCheckbox()) {
-            webElementDescription.click();
-        }else{
-            webElementDescription.sendKeys(value);
-        }
-    }
-
-    protected void selectByValueForInputRadio(String value) throws Exception {
-        webElementDescription.checkByValue(value);
-    }
-
-    protected void selectByValue(String value) throws Exception {
-        try{
-            webElementDescription.selectByValue(value);
-        }catch (Exception ex){
-            selectByText(value);
-        }
-    }
-
-    protected void selectByText(String value) throws Exception {
-        webElementDescription.selectByText(value);
-    }
 
 }

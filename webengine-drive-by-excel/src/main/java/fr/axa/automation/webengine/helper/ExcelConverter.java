@@ -104,7 +104,7 @@ public class ExcelConverter {
                     .targetList(getTargetValueList(currentRow))
                     .optional(getOptionalValue(currentRow))
                     .dataTestReference(getDataTestReferenceValue(currentRow))
-                    .dataTestList(getDataTestList(testCaseSheet, currentRow, dataTestColumnNameList))
+                    .dataTestMap(getDataTestList(testCaseSheet, currentRow, dataTestColumnNameList))
                     .build();
 
             commandDataList.add(commandData);

@@ -16,7 +16,7 @@ public class IfCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception {
         webElementDescription = populateWebElement(commandData,testCaseContext);
         String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
-        String dataTest = commandData.getDataTestList().get(dataTestColumName);
+        String dataTest = commandData.getDataTestMap().get(dataTestColumName);
         if(!containsValue(webElementDescription,dataTest) || !isPresent(webElementDescription,dataTest)){
             throw new WebEngineException("If command failed");
         }

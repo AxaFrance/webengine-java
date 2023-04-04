@@ -299,6 +299,17 @@ public class WebElementDescription extends AbstractElementDescription {
         return retry(fun,null);
     }
 
+    public Boolean isInputText() throws Exception {
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement webElement = findElement();
+            if(webElement.getAttribute("type").equalsIgnoreCase(HtmlAttributeConstante.ATTRIBUTE_TYPE_RADIO.getValue())){
+                return true;
+            }
+            return false;
+        };
+        return retry(fun,null);
+    }
+
     public Boolean isInputCheckbox() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
             WebElement webElement = findElement();

@@ -44,7 +44,7 @@ public class CommandDataDriveByExcel {
     @JsonProperty("dataTestReference")
     private String dataTestReference;
     @JsonProperty("dataTestList")
-    private Map<String,String> dataTestList;
+    private Map<String,String> dataTestMap;
 
     public boolean isOptional(){
         if(this!=null && StringUtils.isNotEmpty(this.getOptional()) && this.getOptional().equalsIgnoreCase(Constante.OPTIONAL.getValue())){

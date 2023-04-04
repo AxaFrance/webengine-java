@@ -34,14 +34,14 @@ public final class TestCaseHelperDriveByExcel {
 
     public static List<String> getDataTestColumnName(TestCaseNodeDriveByExcel testCaseNode){
         CommandDataDriveByExcel commandDataDriveByExcel = (CommandDataDriveByExcel)testCaseNode.getTreeNode().getData();
-        Map<String,String> dataTestList = commandDataDriveByExcel.getDataTestList();
+        Map<String,String> dataTestList = commandDataDriveByExcel.getDataTestMap();
         if(MapUtils.isNotEmpty(dataTestList)){
-            return new ArrayList<>(commandDataDriveByExcel.getDataTestList().keySet());
+            return new ArrayList<>(commandDataDriveByExcel.getDataTestMap().keySet());
         }else{
             if(testCaseNode.getTreeNode()!=null && CollectionUtils.isNotEmpty(testCaseNode.getTreeNode().getChildren())){
                 TreeNode treeNode = (TreeNode) testCaseNode.getTreeNode().getChildren().get(0);
                 if(treeNode!=null){
-                    return new ArrayList<>(((CommandDataDriveByExcel)treeNode.getData()).getDataTestList().keySet());
+                    return new ArrayList<>(((CommandDataDriveByExcel)treeNode.getData()).getDataTestMap().keySet());
                 }
             }
         }
@@ -54,7 +54,7 @@ public final class TestCaseHelperDriveByExcel {
         if(CollectionUtils.isNotEmpty(commandDataList)){
             Optional<CommandDataDriveByExcel> firstCommandData = commandDataList.stream().findFirst();
             if(firstCommandData.isPresent()){
-                dataTestColumn = new ArrayList<>(firstCommandData.get().getDataTestList().keySet());
+                dataTestColumn = new ArrayList<>(firstCommandData.get().getDataTestMap().keySet());
             }
         }
         return dataTestColumn;
@@ -74,7 +74,7 @@ public final class TestCaseHelperDriveByExcel {
         List<CommandDataDriveByExcel>  commandDataList = testCaseData.getCommandList();
         List<String> dataTestByColumn = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(commandDataList)){
-            dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestList().get(dataTestNameColumn)).collect(Collectors.toList());
+            dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestMap().get(dataTestNameColumn)).collect(Collectors.toList());
         }
 
         dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.REFERENCED_VALUE_REGEX,value)));

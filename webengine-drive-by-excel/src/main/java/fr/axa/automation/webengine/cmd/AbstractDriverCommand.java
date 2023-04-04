@@ -10,12 +10,14 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -33,6 +35,8 @@ public abstract class AbstractDriverCommand implements ICommand{
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList =  new ArrayList<>();
     String savedData;
+
+    protected abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception;
 
     protected WebElementDescription populateWebElement(CommandDataDriveByExcel commandData, AbstractTestCaseContext testCaseContext) {
         return WebElementDescription.builder()
@@ -92,5 +96,46 @@ public abstract class AbstractDriverCommand implements ICommand{
     }
 
 
-    protected abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception;
+    protected String getValue(TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) {
+        String dataTestColumName = testCaseContext.getDataTestColumnName();
+        Map<String, String> dataTestMap = commandData.getDataTestMap();
+        if(MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))){
+            String originalValue = dataTestMap.get(dataTestColumName);
+            return EvaluateValueHelper.evaluateValue(originalValue, commandResultMap);
+        }
+        return null;
+    }
+
+    protected void executeActionForElement(String value)throws Exception {
+        if(StringUtils.isEmpty(value)){
+            return;
+        }
+        if(webElementDescription.isSelect()){
+            selectByValue(value);
+        } else if (webElementDescription.isInputRadio()) {
+            selectByValueForInputRadio(value);
+        } else if (webElementDescription.isInputCheckbox()) {
+            webElementDescription.click();
+        }else if(webElementDescription.isInputText()){
+            webElementDescription.sendKeys(value);
+        }else {
+            webElementDescription.click();
+        }
+    }
+
+    protected void selectByValueForInputRadio(String value) throws Exception {
+        webElementDescription.checkByValue(value);
+    }
+
+    protected void selectByValue(String value) throws Exception {
+        try{
+            webElementDescription.selectByValue(value);
+        }catch (Exception ex){
+            selectByText(value);
+        }
+    }
+
+    protected void selectByText(String value) throws Exception {
+        webElementDescription.selectByText(value);
+    }
 }
