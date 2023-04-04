@@ -1,12 +1,15 @@
 package fr.axa.automation.webengine.constante;
 
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -38,5 +41,10 @@ public enum PredefinedTagValue {
             tagValueList.add(predefinedTagValue.getTagValue());
         }
         return tagValueList;
+    }
+
+    public static boolean isContainsPredefinedTagValue(String value){
+        List<String> list = getTagValueList().stream().filter(predifinedTagValue -> StringUtil.contains(value,predifinedTagValue)).collect(Collectors.toList());
+        return CollectionUtils.isNotEmpty(list);
     }
 }

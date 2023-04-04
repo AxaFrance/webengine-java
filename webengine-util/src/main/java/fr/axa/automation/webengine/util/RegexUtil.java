@@ -41,4 +41,13 @@ public final class RegexUtil {
         return Optional.empty();
     }
 
+    public static Integer getNumber(String regex, String value){
+        Integer number = 0;
+        List<String> regexValueList = RegexUtil.match(regex, value);
+        if (CollectionUtils.isNotEmpty(regexValueList)) {
+            return Integer.parseInt(regexValueList.get(0));
+        }
+        return number;
+    }
+
 }

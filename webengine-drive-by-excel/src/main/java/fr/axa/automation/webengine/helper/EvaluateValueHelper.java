@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class EvaluateValueHelper {
 
@@ -37,7 +36,7 @@ public class EvaluateValueHelper {
         if(CollectionUtils.isNotEmpty(regexValueList)){
             for (String regexValue: regexValueList) {
                 String valueWithouRafter = getValueBetweenRafter(regexValue);;
-                if(isContainsTagDateValue(valueWithouRafter)){
+                if(PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)){
                     resultValue = resultValue.replace(regexValue,replaceTagDateValue(valueWithouRafter));
                 }
                 if (isContainsReferencedValue(valueWithouRafter, commandResultMap)) {
@@ -47,11 +46,6 @@ public class EvaluateValueHelper {
             }
         }
         return resultValue;
-    }
-
-    public static boolean isContainsTagDateValue(String value){
-        List<String> list = PredefinedTagValue.getTagValueList().stream().filter(predifinedTagValue -> StringUtil.contains(value,predifinedTagValue)).collect(Collectors.toList());
-        return CollectionUtils.isNotEmpty(list);
     }
 
     public static boolean isContainsReferencedValue(String value, Map<String, CommandResult> commandResultMap){
@@ -64,9 +58,9 @@ public class EvaluateValueHelper {
     private static String replaceTagDateValue(String value){
         String onlyTagValue = getOnlyTagValue(value);
         if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.MINUS.getValue())) {
-            return DateUtil.minusDay(FormatDate.DDMMYYYY,getNumber(value));
+            return DateUtil.minusDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.NUMBER_REGEX,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.PLUS.getValue())) {
-            return DateUtil.addDay(FormatDate.DDMMYYYY,getNumber(value));
+            return DateUtil.addDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.NUMBER_REGEX,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY.getTagValue())) {
             return DateUtil.getDateTime(FormatDate.DDMMYYYY);
         }else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY_HOUR.getTagValue())) {
@@ -89,12 +83,5 @@ public class EvaluateValueHelper {
         return "";
     }
 
-    private static Integer getNumber(String value){
-        Integer number = 0;
-        List<String> regexValueList = RegexUtil.match(RegexContante.NUMBER_REGEX, value);
-        if (CollectionUtils.isNotEmpty(regexValueList)) {
-           return Integer.parseInt(regexValueList.get(0));
-        }
-        return number;
-    }
+
 }

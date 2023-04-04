@@ -15,7 +15,7 @@ public class SaveDataCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception {
         webElementDescription = populateWebElement(commandData,testCaseContext);
         String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
-        String dataToSave = MapUtils.isEmpty(commandData.getTargetList()) ? commandData.getDataTestList().get(dataTestColumName) : webElementDescription.getInnerText();
+        String dataToSave = MapUtils.isEmpty(commandData.getTargetList()) ? commandData.getDataTestList().get(dataTestColumName) : webElementDescription.getInnerHtml();
         setSavedData(dataToSave);
     }
 }

@@ -11,6 +11,7 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.CommandNameHelper;
 import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
 import fr.axa.automation.webengine.logger.ILoggerService;
@@ -107,7 +108,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         try {
             for (TreeNode treeNodeCommand : treeNodeCommandList){
                 CommandDataDriveByExcel commandData = ((CommandDataDriveByExcel)treeNodeCommand.getData());
-                commandName = getCommandName(commandData);
+                commandName = CommandNameHelper.getCommandName(commandData);
                 actionReport = new ActionReport();
                 actionReport.setName(commandName);
 
@@ -171,15 +172,13 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return commandResultMap;
     }
 
-    private String getCommandName(CommandDataDriveByExcel commandData) {
-        return StringUtils.isEmpty(commandData.getName()) ? commandData.getUid() : StringUtil.removeSpecialCharacters(commandData.getName());
-    }
+
 
     private Map<String, CommandResult> ignoreCommand(TreeNode treeNodeCommand) {
         Map<String, CommandResult> actionReportMap = new HashMap<>();
         List<TreeNode> treeNodeCommandChildrenList = treeNodeCommand.getChildren();
         for (TreeNode treeNodeChildren:treeNodeCommandChildrenList) {
-            String commandName = getCommandName(((CommandDataDriveByExcel)treeNodeChildren.getData()));
+            String commandName = CommandNameHelper.getCommandName(((CommandDataDriveByExcel)treeNodeChildren.getData()));
             ActionReport actionReport = ActionReportHelper.getActionReport(commandName,Result.IGNORED);
             actionReportMap.put(commandName,CommandResultHelper.getCommandResult(actionReport,""));
         }
