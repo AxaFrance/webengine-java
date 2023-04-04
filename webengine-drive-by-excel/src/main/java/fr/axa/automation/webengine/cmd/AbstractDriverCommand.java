@@ -123,6 +123,18 @@ public abstract class AbstractDriverCommand implements ICommand{
         }
     }
 
+    protected String getTextByElement(String value)throws Exception {
+        if(StringUtils.isEmpty(value)){
+            return null;
+        }
+        if(webElementDescription.isInputText()){
+            return webElementDescription.getText();
+        }else{
+            return null;
+        }
+    }
+
+
     protected void selectByValueForInputRadio(String value) throws Exception {
         webElementDescription.checkByValue(value);
     }
