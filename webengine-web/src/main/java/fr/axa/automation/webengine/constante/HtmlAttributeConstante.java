@@ -1,0 +1,14 @@
+package fr.axa.automation.webengine.constante;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@AllArgsConstructor
+public enum HtmlAttributeConstante {
+    ATTRIBUTE_TYPE_RADIO("radio"), ATTRIBUTE_TYPE_CHECKBOX("checkbox");
+    final String value;
+}

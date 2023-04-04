@@ -1,6 +1,8 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.constante.HtmlAttributeConstante;
+import fr.axa.automation.webengine.constante.HtmlTag;
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -120,7 +122,6 @@ public class WebElementDescription extends AbstractElementDescription {
                 return ListUtil.findDuplicateElements(elements);
             }
         }
-
         throw new NoSuchElementException("No such WebElement found in the page");
     }
 
@@ -276,12 +277,45 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
+    public Boolean isSelect() throws Exception {
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement webElement = findElement();
+            if(webElement.getTagName().equalsIgnoreCase(HtmlTag.SELECT.getValue())){
+                return true;
+            }
+            return false;
+        };
+        return retry(fun,null);
+    }
+
+    public Boolean isInputRadio() throws Exception {
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement webElement = findElement();
+            if(webElement.getAttribute("type").equalsIgnoreCase(HtmlAttributeConstante.ATTRIBUTE_TYPE_RADIO.getValue())){
+                return true;
+            }
+            return false;
+        };
+        return retry(fun,null);
+    }
+
+    public Boolean isInputCheckbox() throws Exception {
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement webElement = findElement();
+            if(webElement.getAttribute("type").equalsIgnoreCase(HtmlAttributeConstante.ATTRIBUTE_TYPE_CHECKBOX.getValue())){
+                return true;
+            }
+            return false;
+        };
+        return retry(fun,null);
+    }
+
 
 
     public Select asSelect() throws Exception {
         IFunction<Void, Select> fun = (x) -> {
-            WebElement element = findElement();
-            return new Select(element);
+            WebElement webElement = findElement();
+            return new Select(webElement);
         };
         return retry(fun,null);
     }
