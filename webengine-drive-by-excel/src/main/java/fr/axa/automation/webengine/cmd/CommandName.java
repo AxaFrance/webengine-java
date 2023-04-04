@@ -17,6 +17,8 @@ public enum CommandName {
     IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
 
     SAVE_DATA("saveData"),
+
+    WAIT("wait"),
     END_SCENARII("end scenarii");
 
     final String name;

@@ -14,6 +14,8 @@ public class CommandFactory {
                 return new ClickCommand();
             case SAVE_DATA:
                 return new SaveDataCommand();
+            case WAIT:
+                return new WaitCommand();
             default:
                 throw new IllegalArgumentException("Command not recognized");
         }
