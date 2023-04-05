@@ -62,7 +62,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
      protected boolean isIgnoredAllOtherAction(ActionReport actionReport) {
           boolean ignored = false;
-          if (actionReport != null && actionReport.getResult() == Result.CRITICAL_ERROR) {
+          if (actionReport != null && (actionReport.getResult() == Result.CRITICAL_ERROR || actionReport.getResult() == Result.FAILED)) {
                ignored = true;
           }
           return ignored;

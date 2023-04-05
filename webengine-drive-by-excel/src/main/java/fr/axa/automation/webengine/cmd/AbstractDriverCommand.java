@@ -106,7 +106,7 @@ public abstract class AbstractDriverCommand implements ICommand{
         return null;
     }
 
-    protected void executeActionForElement(String value)throws Exception {
+    protected void executeActionInElement(String value)throws Exception {
         if(StringUtils.isEmpty(value)){
             return;
         }
@@ -139,12 +139,16 @@ public abstract class AbstractDriverCommand implements ICommand{
         webElementDescription.checkByValue(value);
     }
 
-    protected void selectByValue(String value) throws Exception {
-        try{
-            webElementDescription.selectByValue(value);
-        }catch (Exception ex){
+    protected void selectByValueOrText(String value) throws Exception {
+        try {
+            selectByValue(value);
+        }catch (Exception e){
             selectByText(value);
         }
+    }
+
+    protected void selectByValue(String value) throws Exception {
+        webElementDescription.selectByValue(value);
     }
 
     protected void selectByText(String value) throws Exception {

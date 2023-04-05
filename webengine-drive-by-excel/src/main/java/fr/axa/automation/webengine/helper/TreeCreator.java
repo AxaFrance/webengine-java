@@ -32,7 +32,7 @@ public class TreeCreator {
                 optionalCommandList.removeLast();
             }
 
-            switch (CommandName.fromValue(commandData.getCommand())) {
+            switch (commandData.getCommand()) {
                 case IF:
                     treeNode = ifGroupList.isEmpty() ? rootNode : getLastElement(ifGroupList);
                     TreeNode ifNode = treeNode.addChild(commandData);

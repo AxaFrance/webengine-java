@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-public class SendKeysCommand extends AbstractDriverCommand{
+public class SelectCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception {
@@ -22,8 +22,8 @@ public class SendKeysCommand extends AbstractDriverCommand{
         if(StringUtils.isEmpty(value)){
             return;
         }
-        if(webElementDescription.isInputText()){
-            webElementDescription.sendKeys(value);
+        if(webElementDescription.isSelect()){
+            selectByValueOrText(value);
         }
     }
 }

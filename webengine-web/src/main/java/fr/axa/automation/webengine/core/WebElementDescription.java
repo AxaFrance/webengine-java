@@ -289,39 +289,28 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     public Boolean isInputRadio() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
-            WebElement webElement = findElement();
-            if(webElement.getAttribute("type").equalsIgnoreCase(HtmlAttributeConstante.ATTRIBUTE_TYPE_RADIO.getValue())){
-                return true;
-            }
-            return false;
-        };
-        return retry(fun,null);
+        return isTypeElementByAttribute(HtmlAttributeConstante.ATTRIBUTE_TYPE_RADIO);
     }
 
     public Boolean isInputText() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
-            WebElement webElement = findElement();
-            if(webElement.getAttribute("type").equalsIgnoreCase(HtmlAttributeConstante.ATTRIBUTE_TYPE_RADIO.getValue())){
-                return true;
-            }
-            return false;
-        };
-        return retry(fun,null);
+        return isTypeElementByAttribute(HtmlAttributeConstante.ATTRIBUTE_TYPE_TEXT);
     }
 
     public Boolean isInputCheckbox() throws Exception {
+        return isTypeElementByAttribute(HtmlAttributeConstante.ATTRIBUTE_TYPE_CHECKBOX);
+    }
+
+    private Boolean isTypeElementByAttribute(HtmlAttributeConstante htmlAttributeConstante) throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
             WebElement webElement = findElement();
-            if(webElement.getAttribute("type").equalsIgnoreCase(HtmlAttributeConstante.ATTRIBUTE_TYPE_CHECKBOX.getValue())){
+            String typeWebElement = webElement.getAttribute("type");
+            if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(htmlAttributeConstante.getValue())){
                 return true;
             }
             return false;
         };
-        return retry(fun,null);
+        return retry(fun, null);
     }
-
-
 
     public Select asSelect() throws Exception {
         IFunction<Void, Select> fun = (x) -> {

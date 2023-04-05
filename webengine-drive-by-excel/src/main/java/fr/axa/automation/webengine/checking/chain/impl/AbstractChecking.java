@@ -28,7 +28,7 @@ public abstract class AbstractChecking implements IChecking {
 
     protected List<CommandDataDriveByExcel> getCommandDataByName(TestCaseDataDriveByExcel testCaseData, CommandName commandName) {
         List<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
-        return commandDataSet.stream().filter(commandData -> commandData.getCommand().equalsIgnoreCase(commandName.getName())).collect(Collectors.toList());
+        return commandDataSet.stream().filter(commandData -> commandData.getCommand() == commandName).collect(Collectors.toList());
     }
 
     public abstract boolean check(TestSuiteDataDriveByExcel testSuiteData);

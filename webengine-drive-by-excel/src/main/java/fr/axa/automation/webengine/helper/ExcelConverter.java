@@ -109,7 +109,7 @@ public class ExcelConverter {
 
             commandDataList.add(commandData);
 
-            if (commandData.getCommand().equalsIgnoreCase(CommandName.CALL.getName())) {
+            if (commandData.getCommand() == CommandName.CALL) {
                 String testCaseNameToCall = commandData.getTargetList().get(CommandName.CALL.getName());
                 Map<String, TestCaseDataDriveByExcel> testCaseDataCalledMap = getTestCaseDataList(workbook, testCaseNameToCall, dataTestColumnNameList);
                 if (!testCaseDataMap.containsKey(testCaseNameToCall)) {
@@ -136,8 +136,10 @@ public class ExcelConverter {
         return ExcelReader.getCellValue(currentRow, ExcelColumn.NAME.getValue()).trim();
     }
 
-    private static String getCommandValue(Row currentRow) {
-        return ExcelReader.getCellValue(currentRow, ExcelColumn.COMMAND.getValue()).trim();
+    private static CommandName getCommandValue(Row currentRow) {
+        String commandValue = ExcelReader.getCellValue(currentRow, ExcelColumn.COMMAND.getValue()).trim();
+        return CommandName.valueOf(commandValue);
+
     }
 
     private static String getOptionalValue(Row currentRow) {
@@ -149,7 +151,7 @@ public class ExcelConverter {
     }
 
     private static Map<String, String> getTargetValueList(Row currentRow) {
-        String commandValue = getCommandValue(currentRow);
+        CommandName commandValue = getCommandValue(currentRow);
         String targetCellValue = ExcelReader.getCellValue(currentRow, ExcelColumn.TARGETS.getValue()).trim();
         return getTargetValueList(commandValue, targetCellValue);
     }
@@ -172,14 +174,14 @@ public class ExcelConverter {
         return dataTestList;
     }
 
-    private static Map<String, String> getTargetValueList(String commandValue, String targetCellValue) {
+    private static Map<String, String> getTargetValueList(CommandName commandName, String targetCellValue) {
         Map<String, String> targets = new HashMap<>();
         if(StringUtils.isEmpty(targetCellValue)){
             return targets;
         }
-        if (commandValue.equalsIgnoreCase(CommandName.CALL.getName())) {
+        if (CommandName.CALL == commandName) {
             targets.put(CommandName.CALL.getName(), targetCellValue);
-        }else if (commandValue.equalsIgnoreCase(CommandName.OPEN.getName())) {
+        }else if (CommandName.OPEN == commandName) {
             targets.put(CommandName.OPEN.getName(), targetCellValue);
         }else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
             targets.put(LocatingBy.BY_XPATH.getValue(), targetCellValue);
