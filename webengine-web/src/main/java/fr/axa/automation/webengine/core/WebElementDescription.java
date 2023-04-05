@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.ListUtil;
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -319,6 +320,31 @@ public class WebElementDescription extends AbstractElementDescription {
         };
         return retry(fun,null);
     }
+
+    public void selectByValueOrText(String text) throws Exception {
+        IFunction<String, Void> fun = (value) -> {
+            WebElement webElement = this.findElement();
+            webElement.click();
+            Select select = new Select(webElement);
+            List<WebElement> webElementList = getOptionsListFromValue(select,text);
+            if(CollectionUtils.isNotEmpty(webElementList)){
+                select.selectByVisibleText(value);
+            }else{
+                select.selectByValue(value);
+            }
+            return null;
+        };
+        retry(fun,text);
+    }
+
+    private List<WebElement> getOptionsListFromValue(Select select, String valueToSelect) {
+        if (valueToSelect.contains("****")) {
+            return select.getOptions().stream().filter(webElement -> StringUtil.contains(webElement.getText(),valueToSelect.split("\\*{4}")[0].trim())).collect(Collectors.toList());
+        } else {
+            return select.getOptions().stream().filter(webElement ->  StringUtil.equalsIgnoreCase(webElement.getText(),valueToSelect)).collect(Collectors.toList());
+        }
+    }
+
 
     public void selectByText(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {

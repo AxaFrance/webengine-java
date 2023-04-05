@@ -23,10 +23,9 @@ import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.tree.TreeNode;
 import fr.axa.automation.webengine.util.DateUtil;
-import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -59,6 +58,12 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return createTestCaseContext(webDriver, testSuiteData, testCaseToRun,dataTestColmnName);
     }
 
+    public Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
+        Object webDriver = super.initializeWebDriver(globalApplicationContext);
+        ((WebDriver)webDriver).manage().window().maximize();
+        return webDriver;
+    }
+
     protected AbstractTestCaseContext createTestCaseContext(Object webDriver, TestSuiteDataDriveByExcel testSuiteData, TestCaseNodeDriveByExcel testCaseToRun, String dataTestColmnName ) throws WebEngineException {
         AbstractTestCaseContext testCaseContext = super.createTestCaseContext(webDriver,testCaseToRun.getName());
         ((TestCaseDriveByExcelContext)testCaseContext).setTestSuiteData(testSuiteData);
@@ -69,12 +74,13 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
 
     @Override
     public TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
-        String testCaseName = testCaseContext.getTestCaseName();
-        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
+        TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext)testCaseContext;
+        String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
+        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName+"-"+testCaseDriveByExcelContext.getDataTestColumnName());
         Map<String, CommandResult> commandResultMap = new LinkedHashMap<>();
 
         try {
-            commandResultMap.putAll(runTestStep(globalApplicationContext, testCaseContext));
+            commandResultMap.putAll(runTestStep(globalApplicationContext, testCaseDriveByExcelContext));
         } catch (Throwable e) {
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);

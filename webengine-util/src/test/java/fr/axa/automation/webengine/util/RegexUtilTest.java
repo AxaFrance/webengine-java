@@ -5,9 +5,7 @@ import fr.axa.automation.webengine.logger.LoggerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class RegexUtilTest {
 

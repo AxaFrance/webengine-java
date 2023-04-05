@@ -9,17 +9,17 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum CommandName {
-    CALL("call"),
-    OPEN("open"),
-    SEND_KEY("sendkeys"), CLICK("click"),
 
+    OPEN("open"),
+    SEND_KEY("sendKeys"), CLICK("click"),SELECT("select"),
+    CALL("call"),
     STORE("store"),
     IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
 
     SAVE_DATA("saveData"),
 
     WAIT("wait"),
-    END_SCENARII("end scenarii");
+    END_SCENARII("endScenarii");
 
     final String name;
 

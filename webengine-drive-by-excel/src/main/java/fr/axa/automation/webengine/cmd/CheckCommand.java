@@ -14,6 +14,5 @@ public class CheckCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception {
         webElementDescription = populateWebElement(commandData,testCaseContext);
         String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultMap);
-
     }
 }

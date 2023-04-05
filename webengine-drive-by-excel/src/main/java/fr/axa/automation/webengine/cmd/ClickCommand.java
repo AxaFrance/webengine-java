@@ -5,7 +5,6 @@ import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -22,6 +21,7 @@ public class ClickCommand extends AbstractDriverCommand{
         if (webElementDescription.isInputRadio()) {
             selectByValueForInputRadio(value);
         } else {
+            webElementDescription.scrollIntoView();
             webElementDescription.click();
         }
     }

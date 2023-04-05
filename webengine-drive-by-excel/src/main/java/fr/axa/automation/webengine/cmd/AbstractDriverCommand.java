@@ -105,28 +105,7 @@ public abstract class AbstractDriverCommand implements ICommand{
         }
         return null;
     }
-
-    protected void executeActionInElement(String value)throws Exception {
-        if(StringUtils.isEmpty(value)){
-            return;
-        }
-        if(webElementDescription.isSelect()){
-            selectByValue(value);
-        } else if (webElementDescription.isInputRadio()) {
-            selectByValueForInputRadio(value);
-        } else if (webElementDescription.isInputCheckbox()) {
-            webElementDescription.click();
-        }else if(webElementDescription.isInputText()){
-            webElementDescription.sendKeys(value);
-        }else {
-            webElementDescription.click();
-        }
-    }
-
     protected String getTextByElement(String value)throws Exception {
-        if(StringUtils.isEmpty(value)){
-            return null;
-        }
         if(webElementDescription.isInputText()){
             return webElementDescription.getText();
         }else{
@@ -136,15 +115,13 @@ public abstract class AbstractDriverCommand implements ICommand{
 
 
     protected void selectByValueForInputRadio(String value) throws Exception {
+        webElementDescription.focus();
         webElementDescription.checkByValue(value);
     }
 
     protected void selectByValueOrText(String value) throws Exception {
-        try {
-            selectByValue(value);
-        }catch (Exception e){
-            selectByText(value);
-        }
+        webElementDescription.scrollIntoView();
+        webElementDescription.selectByValueOrText(value);
     }
 
     protected void selectByValue(String value) throws Exception {

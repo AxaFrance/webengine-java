@@ -132,6 +132,10 @@ public abstract class AbstractElementDescription {
         }
     }
 
+//    protected void mouseClick(org.openqa.selenium.Point p) throws InterruptedException {
+//        (new Actions(driver)).moveByOffset(p.x,p.y).click();
+//    }
+
     public void click() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
                 WebElement webElement = findElement();

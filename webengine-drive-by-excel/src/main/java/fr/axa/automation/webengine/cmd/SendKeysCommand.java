@@ -19,11 +19,7 @@ public class SendKeysCommand extends AbstractDriverCommand{
     }
 
     protected void executeActionInElement(String value)throws Exception {
-        if(StringUtils.isEmpty(value)){
-            return;
-        }
-        if(webElementDescription.isInputText()){
-            webElementDescription.sendKeys(value);
-        }
+        webElementDescription.scrollIntoView();
+        webElementDescription.sendKeys(value);
     }
 }

@@ -14,6 +14,6 @@ public class WaitCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception{
         webElementDescription = populateWebElement(commandData,testCaseContext);
         String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultMap);
-        webElementDescription.wait(Long.parseLong(value));
+        webElementDescription.waitInMillisecondes(Long.parseLong(value));
     }
 }

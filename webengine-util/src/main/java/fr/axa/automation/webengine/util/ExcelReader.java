@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.util;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,8 +56,16 @@ public class ExcelReader {
 
     public static String getCellValue(Row rowIndex, int colIndex) {
         try {
-            String cellValue = rowIndex.getCell(colIndex).getStringCellValue();
-            return cellValue.replaceFirst("^-*", "");
+            CellType cellType = rowIndex.getCell(colIndex).getCellType();
+            switch (cellType){
+                case NUMERIC:
+                    int numericCellValue = (int)rowIndex.getCell(colIndex).getNumericCellValue();
+                    return String.valueOf(numericCellValue);
+                default:
+                    String cellValue = rowIndex.getCell(colIndex).getStringCellValue();
+                    return cellValue.replaceFirst("^-*", "");
+            }
+            //For if/elseif/else/call/optional
         } catch (NullPointerException e) {
             return StringUtils.EMPTY;
         }

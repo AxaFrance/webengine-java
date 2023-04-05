@@ -138,7 +138,7 @@ public class ExcelConverter {
 
     private static CommandName getCommandValue(Row currentRow) {
         String commandValue = ExcelReader.getCellValue(currentRow, ExcelColumn.COMMAND.getValue()).trim();
-        return CommandName.valueOf(commandValue);
+        return CommandName.fromValue(commandValue);
 
     }
 
