@@ -9,6 +9,8 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum HtmlTag {
-    SELECT("select");
+    SELECT("select"),
+    INPUT("input"),
+    TEXTAREA("textarea");
     final String value;
 }
