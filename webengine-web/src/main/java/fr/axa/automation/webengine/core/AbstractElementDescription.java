@@ -118,6 +118,10 @@ public abstract class AbstractElementDescription {
         return (Collection<WebElement>) findElement(SettingsWeb.TIMEOUT_SECONDS);
     }
 
+    public Boolean notExists() throws Exception {
+        return !exists();
+    }
+
     public Boolean exists() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> exists(SettingsWeb.TIMEOUT_SECONDS);
         return retry(fun,null);
