@@ -13,11 +13,13 @@ public enum CommandName {
     OPEN("open"),
     SEND_KEY("sendKeys"), CLICK("click"),SELECT("select"),
     CALL("call"),
+
     STORE("store"),
     IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
 
     SAVE_DATA("saveData"),
 
+    IS_EXIST("isExist"),
     WAIT("wait"),
     END_SCENARII("endScenarii");
 
