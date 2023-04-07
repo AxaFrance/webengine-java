@@ -156,7 +156,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                         }
                         break;
                     case END_IF:
-                        commandResultMap.put(commandName, CommandResultHelper.getCommandResult(ActionReportHelper.getActionReport(commandData.getName()),""));
+                        commandResultMap.put(commandName, CommandResultHelper.getCommandResult(ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),""));
                         nestedIfList.removeLast();
                         break;
                     case CALL:
