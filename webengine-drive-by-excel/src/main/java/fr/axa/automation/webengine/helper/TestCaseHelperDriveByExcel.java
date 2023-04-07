@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.constante.PredefinedTagValue;
+import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
@@ -78,6 +78,6 @@ public final class TestCaseHelperDriveByExcel {
         }
 
         dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.REFERENCED_VALUE_REGEX,value)));
-        return filterDataTestList.stream().filter(value -> !PredefinedTagValue.isContainsPredefinedTagValue(value)).collect(Collectors.toList());
+        return filterDataTestList.stream().filter(value -> !PredefinedDateTagValue.isContainsPredefinedDateTagValue(value)).collect(Collectors.toList());
     }
 }

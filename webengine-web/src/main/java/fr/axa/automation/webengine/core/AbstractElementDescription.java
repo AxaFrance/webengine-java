@@ -118,7 +118,7 @@ public abstract class AbstractElementDescription {
         return (Collection<WebElement>) findElement(SettingsWeb.TIMEOUT_SECONDS);
     }
 
-    public Boolean notExists() throws Exception {
+    public Boolean isNotExists() throws Exception {
         return !exists();
     }
 

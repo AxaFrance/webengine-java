@@ -20,6 +20,13 @@ public enum CommandName {
     SAVE_DATA("saveData"),
 
     IS_EXIST("isExist"),
+
+    IS_SELECTED("isSelected"),
+
+    ASSERT_CONTENT("asserContent"),
+
+    SCREENSHOT("screenshot"),
+
     WAIT("wait"),
     END_SCENARII("endScenarii");
 

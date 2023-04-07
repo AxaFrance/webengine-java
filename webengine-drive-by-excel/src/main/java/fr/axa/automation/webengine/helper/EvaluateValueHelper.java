@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
 import fr.axa.automation.webengine.object.CommandResult;
@@ -36,10 +37,11 @@ public class EvaluateValueHelper {
         if(CollectionUtils.isNotEmpty(regexValueList)){
             for (String regexValue: regexValueList) {
                 String valueWithouRafter = getValueBetweenRafter(regexValue);;
-                if(PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)){
+                if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)){
                     resultValue = resultValue.replace(regexValue,replaceTagDateValue(valueWithouRafter));
-                }
-                if (isContainsReferencedValue(valueWithouRafter, commandResultMap)) {
+                } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
+                    resultValue = resultValue.replace(regexValue,PredefinedTagValue.valueOf(regexValue).getTagValue());
+                } else if (isContainsReferencedValue(valueWithouRafter, commandResultMap)) {
                     String referencedValue = commandResultMap.get(StringUtil.removeSpecialCharacters(valueWithouRafter)).getSavedData();
                     resultValue = resultValue.replace(regexValue,referencedValue);
                 }
@@ -57,19 +59,19 @@ public class EvaluateValueHelper {
 
     private static String replaceTagDateValue(String value){
         String onlyTagValue = getOnlyTagValue(value);
-        if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.MINUS.getValue())) {
+        if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.MINUS.getValue())) {
             return DateUtil.minusDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.NUMBER_REGEX,value));
-        } else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.PLUS.getValue())) {
+        } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.PLUS.getValue())) {
             return DateUtil.addDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.NUMBER_REGEX,value));
-        } else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY.getTagValue())) {
+        } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue())) {
             return DateUtil.getDateTime(FormatDate.DDMMYYYY);
-        }else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_TODAY_HOUR.getTagValue())) {
+        }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY_HOUR.getTagValue())) {
             return DateUtil.getDateTime(FormatDate.DDMMYYYYHHMM);
-        } else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_ANTERIOR_DAY.getTagValue()) && StringUtil.contains(value,PredefinedTagValue.TAG_YESTERDAY.getTagValue())) {
+        } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_ANTERIOR_DAY.getTagValue()) && StringUtil.contains(value, PredefinedDateTagValue.TAG_YESTERDAY.getTagValue())) {
             return DateUtil.minusDay(FormatDate.DDMMYYYY,1);
-        }else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_NEXT_DAY.getTagValue()) && StringUtil.contains(value,PredefinedTagValue.TAG_PAST_DAY.getTagValue())) {
+        }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_NEXT_DAY.getTagValue()) && StringUtil.contains(value, PredefinedDateTagValue.TAG_PAST_DAY.getTagValue())) {
             return DateUtil.addDay(FormatDate.DDMMYYYY,1);
-        } else if (StringUtils.equalsIgnoreCase(onlyTagValue,PredefinedTagValue.TAG_NEXT_MONTH.getTagValue())) {
+        } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_NEXT_MONTH.getTagValue())) {
             return DateUtil.addMonth(FormatDate.DDMMYYYY,1);
         }else {
             return value;

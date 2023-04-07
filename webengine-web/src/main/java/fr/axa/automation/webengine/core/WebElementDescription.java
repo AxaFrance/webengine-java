@@ -278,15 +278,31 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-    public Boolean isSelect() throws Exception {
+    public Boolean isInputSelect(WebElement webElement) throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
-            WebElement webElement = findElement();
             if(webElement.getTagName().equalsIgnoreCase(HtmlTag.SELECT.getValue())){
                 return true;
             }
             return false;
         };
         return retry(fun,null);
+    }
+
+    public Boolean isInputSelect() throws Exception {
+        WebElement webElement = findElement();
+        return isInputSelect(webElement);
+    }
+
+    public Boolean isInputRadio(WebElement webElement) throws Exception {
+        return isTypeElementByAttribute(webElement,HtmlAttributeConstante.ATTRIBUTE_TYPE_RADIO);
+    }
+
+    public Boolean isInputText(WebElement webElement) throws Exception {
+        return isTypeElementByAttribute(webElement,HtmlAttributeConstante.ATTRIBUTE_TYPE_TEXT);
+    }
+
+    public Boolean isInputCheckbox(WebElement webElement) throws Exception {
+        return isTypeElementByAttribute(webElement,HtmlAttributeConstante.ATTRIBUTE_TYPE_CHECKBOX);
     }
 
     public Boolean isInputRadio() throws Exception {
@@ -302,8 +318,12 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private Boolean isTypeElementByAttribute(HtmlAttributeConstante htmlAttributeConstante) throws Exception {
+        WebElement webElement = findElement();
+        return isTypeElementByAttribute(webElement,htmlAttributeConstante);
+    }
+
+    private Boolean isTypeElementByAttribute(WebElement webElement,HtmlAttributeConstante htmlAttributeConstante) throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
-            WebElement webElement = findElement();
             String typeWebElement = webElement.getAttribute("type");
             if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(htmlAttributeConstante.getValue())){
                 return true;
@@ -326,25 +346,66 @@ public class WebElementDescription extends AbstractElementDescription {
             WebElement webElement = this.findElement();
             webElement.click();
             Select select = new Select(webElement);
-            List<WebElement> webElementList = getOptionsListFromValue(select,text);
-            if(CollectionUtils.isNotEmpty(webElementList)){
+            if(isTextExistInSelect(select,text)){
                 select.selectByVisibleText(value);
-            }else{
+            }else if(isValueExistInSelect(select,text)){
                 select.selectByValue(value);
+            }else{
+                throw new WebEngineException("The option value doesn't exist");
             }
             return null;
         };
         retry(fun,text);
     }
 
-    private List<WebElement> getOptionsListFromValue(Select select, String valueToSelect) {
-        if (valueToSelect.contains("****")) {
-            return select.getOptions().stream().filter(webElement -> StringUtil.contains(webElement.getText(),valueToSelect.split("\\*{4}")[0].trim())).collect(Collectors.toList());
-        } else {
-            return select.getOptions().stream().filter(webElement ->  StringUtil.equalsIgnoreCase(webElement.getText(),valueToSelect)).collect(Collectors.toList());
-        }
+    public boolean isTextExistInSelect(Select select, String valueToSelect) {
+        List<String> optionTextList = getOptionTextListInSelect(select);
+        return optionTextList.stream().anyMatch(optionText -> StringUtil.equalsIgnoreCase(optionText,valueToSelect) || StringUtil.contains(optionText,valueToSelect.split("\\*{4}")[0].trim()));
     }
 
+    public boolean isValueExistInSelect(Select select, String valueToSelect) {
+        List<String> optionValueList = getOptionValueListInSelect(select);
+        return optionValueList.stream().anyMatch(optionValue -> StringUtil.equalsIgnoreCase(optionValue,valueToSelect));
+    }
+
+    public List<String> getOptionTextListInSelect(Select select) {
+        return select.getOptions().stream().map(webElement ->  webElement.getText()).collect(Collectors.toList());
+    }
+
+    public List<String> getOptionValueListInSelect(Select select) {
+        return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean isSelected() throws Exception {
+        return super.isSelected();
+    }
+
+    public boolean assertContentByElementType(WebElement webElement, String text) throws Exception {
+        IFunction<String, Boolean> fun = (value) -> {
+            Boolean resultAssert;
+            if(isInputSelect(webElement)){
+                resultAssert = assertContentInSelect(webElement,text);
+            }else{
+                resultAssert = StringUtil.equalsIgnoreCase(webElement.getText(),text);
+            }
+            if(!resultAssert){
+                throw new WebEngineException("The value doesn't exist");
+            }
+            return resultAssert;
+        };
+        return retry(fun,text);
+    }
+
+    public boolean assertContentInSelect(WebElement webElement,String text){
+        if(webElement!=null){
+            Select select = new Select(webElement);
+            if(isTextExistInSelect(select,text) || isValueExistInSelect(select,text)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void selectByText(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {

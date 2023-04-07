@@ -28,7 +28,6 @@
 
             <body>
                 <div id="root">
-
                     <div class="site-header common-font">
                         <xsl:call-template name="header-template"/>
                     </div>

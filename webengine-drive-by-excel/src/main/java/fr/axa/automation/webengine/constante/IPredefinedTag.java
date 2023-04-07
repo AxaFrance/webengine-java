@@ -1,25 +1,13 @@
 package fr.axa.automation.webengine.constante;
 
 import fr.axa.automation.webengine.util.StringUtil;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FieldDefaults(level = AccessLevel.PROTECTED)
-@Getter
-@AllArgsConstructor
-public enum PredefinedTagValue {
-    EMPTY ("empty"),
-    NOT_EMPTY ("notEmpty");
-
-
-    final String tagValue;
+public interface IPredefinedTag {
 
     public static PredefinedTagValue fromTagValue(String v) {
         for (PredefinedTagValue predefinedTagDateValue : PredefinedTagValue.values()) {

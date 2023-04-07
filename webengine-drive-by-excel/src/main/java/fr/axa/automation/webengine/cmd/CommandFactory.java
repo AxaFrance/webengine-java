@@ -16,6 +16,12 @@ public class CommandFactory {
                 return new SaveDataCommand();
             case SELECT:
                 return new SelectCommand();
+            case IS_EXIST:
+                return new IsExistCommand();
+            case IS_SELECTED:
+                return new IsSelectedCommand();
+            case SCREENSHOT:
+                return new ScrenshotCommand();
             case WAIT:
                 return new WaitCommand();
             default:

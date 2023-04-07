@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum HtmlAttributeConstante {
+    ATTRIBUTE_VALUE("value"),
     ATTRIBUTE_TYPE_TEXT("text"),ATTRIBUTE_TYPE_RADIO("radio"), ATTRIBUTE_TYPE_CHECKBOX("checkbox");
     final String value;
 }
