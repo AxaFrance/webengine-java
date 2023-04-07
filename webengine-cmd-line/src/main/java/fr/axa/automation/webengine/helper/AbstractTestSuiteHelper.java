@@ -26,7 +26,9 @@ public abstract class AbstractTestSuiteHelper {
     protected static List<String> getArgumentList(CommandLine cmd, ArgumentOption argumentOption) {
         List<String> argumentList = new ArrayList<>();
         String argument = cmd.getOptionValue(argumentOption.getOption());
-        if (argument != null) {
+        if (argument != null && argument.contains("[") && argument.contains("]")) {
+            argumentList = Arrays.asList(argument);
+        }else if(argument != null){
             argumentList = Arrays.asList(argument.split(";"));
         }
         return argumentList;
