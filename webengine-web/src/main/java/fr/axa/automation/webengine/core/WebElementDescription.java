@@ -376,11 +376,6 @@ public class WebElementDescription extends AbstractElementDescription {
         return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
     }
 
-    @Override
-    public Boolean isSelected() throws Exception {
-        return super.isSelected();
-    }
-
     public boolean assertContentByElementType(WebElement webElement, String text) throws Exception {
         IFunction<String, Boolean> fun = (value) -> {
             Boolean resultAssert;

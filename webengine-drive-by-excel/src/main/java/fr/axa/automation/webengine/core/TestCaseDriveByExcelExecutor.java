@@ -103,6 +103,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
     private Map<String, CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode) throws WebEngineException {
         ActionReport actionReport = new ActionReport();
         Map<String, CommandResult> commandResultMap = new LinkedHashMap<>();
+        Map<String, CommandResult> commandResultTempMap = new LinkedHashMap<>();
         CommandResult commandResult = null;
         Deque<Map<CommandName,Result>> nestedIfList = new LinkedList<>();
 
@@ -131,12 +132,12 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                     case IF:
                         commandResult = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData,commandResultMap);
                         commandResultMap.put(commandName,commandResult);
-                        if(actionReport.getResult()==Result.PASSED){
+                        nestedIfList.addLast(getResultOfCommand(CommandName.IF,commandResult.getActionReport().getResult()));
+                        if(commandResult.getActionReport().getResult()==Result.PASSED){
                             commandResultMap.putAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
                         }else{
                             commandResultMap.putAll(ignoreCommand(treeNodeCommand));
                         }
-                        nestedIfList.addLast(getResultOfCommand(CommandName.IF,actionReport.getResult()));
                         break;
                     case ELSE_IF:
                     case ELSE:
@@ -144,7 +145,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                         if(canExecute(map)){
                             commandResult = ((ITestStepDriveByExcelExecutor)testStepExecutor).run(globalApplicationContext, testCaseContext,commandData,commandResultMap);
                             commandResultMap.put(commandName,commandResult);
-                            if(actionReport.getResult()==Result.PASSED){
+                            if(commandResult.getActionReport().getResult()==Result.PASSED){
                                 commandResultMap.putAll(runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand));
                             }
                             map.put(commandData.getCommand(),actionReport.getResult());
@@ -155,7 +156,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                         }
                         break;
                     case END_IF:
-                        commandResultMap.put(commandName, CommandResultHelper.getCommandResult(ActionReportHelper.getActionReport(commandName),""));
+                        commandResultMap.put(commandName, CommandResultHelper.getCommandResult(ActionReportHelper.getActionReport(commandData.getName()),""));
                         nestedIfList.removeLast();
                         break;
                     case CALL:

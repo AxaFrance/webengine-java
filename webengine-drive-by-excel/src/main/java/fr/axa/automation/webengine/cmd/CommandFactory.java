@@ -22,6 +22,10 @@ public class CommandFactory {
                 return new IsSelectedCommand();
             case SCREENSHOT:
                 return new ScrenshotCommand();
+            case IF:
+                return new IfCommand();
+            case ELSE_IF:
+                return new ElseIfCommand();
             case WAIT:
                 return new WaitCommand();
             default:

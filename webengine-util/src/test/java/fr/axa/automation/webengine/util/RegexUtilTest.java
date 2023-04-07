@@ -8,6 +8,15 @@ import java.util.List;
 public class RegexUtilTest {
 
     private final static String VALUE_REFERENCE_REGEX = "([<]{3}.*?[>]{3})*";
+    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([^\\[\\];]+\\[[^\\[\\]]+\\])";
+
+    public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
+
+    @Test
+    void testMatchTestCaseAndDataTestColumn() {
+        List<String> list = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,"firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]");
+        Assertions.assertTrue(list.size()==2);
+    }
 
 
     @Test

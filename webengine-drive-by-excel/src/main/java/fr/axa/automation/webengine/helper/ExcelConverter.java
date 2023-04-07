@@ -32,18 +32,6 @@ public class ExcelConverter {
     public static final String XPATH_PATTERN = "^//.*$";
     public static final String MANY_LOCATED_PATTERN = "^[\\{].*[\\n|\\r]";
 
-    public static void main(String[] args) {
-        Map<String, List<String>> testCaseAndDataTestColumName = new HashMap<>();
-
-//        testCaseAndDataTestColumName.put("TestCase1", Arrays.asList("Jdd-auto-rec", "Jdd-moto-rec"));
-//        testCaseAndDataTestColumName.put("Logout", Arrays.asList("Jdd-moto-rec"));
-
-        testCaseAndDataTestColumName.put("test-case-2", null);
-
-        convert("C:\\work\\projet-git\\ExcelToJavaObjectConverter\\Test.xlsx", testCaseAndDataTestColumName);
-    }
-
-
     public static TestSuiteDataDriveByExcel convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumName) {
         List<TestCaseDataDriveByExcel> testCaseList = new LinkedList<>();
         Workbook workbook = ExcelReader.getWorkbook(excelFileName);

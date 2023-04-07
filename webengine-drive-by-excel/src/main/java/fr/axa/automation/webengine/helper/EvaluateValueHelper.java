@@ -36,7 +36,7 @@ public class EvaluateValueHelper {
         String resultValue = completeValue;
         if(CollectionUtils.isNotEmpty(regexValueList)){
             for (String regexValue: regexValueList) {
-                String valueWithouRafter = getValueBetweenRafter(regexValue);;
+                String valueWithouRafter = getValueBetweenRafter(regexValue);
                 if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)){
                     resultValue = resultValue.replace(regexValue,replaceTagDateValue(valueWithouRafter));
                 } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {

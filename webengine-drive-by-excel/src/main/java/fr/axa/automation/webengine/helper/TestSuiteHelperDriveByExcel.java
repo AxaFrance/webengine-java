@@ -17,9 +17,9 @@ import java.util.Optional;
 
 public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
 
-    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([^;].*?\\[.*?])?"; // "-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]"
-    public static final String TEST_CASE_PATTERN = "\\w*\\[";
-    public static final String DATA_TEST_COLUMN_NAME_PATTERN = "\\[([^\\)]+)\\]";
+    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([^\\[\\];]+\\[[^\\[\\]]+\\])"; // "-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]"
+    public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
+    public static final String DATA_TEST_COLUMN_NAME_PATTERN = "(?<=:)([^\\]]+)";
 
     public static SettingsDriveByExcel getSettings(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
         loggerService.info("Loading settings running ");
@@ -36,11 +36,11 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
         return settings;
     }
 
-    public static String getFileName(CommandLine cmd) throws WebEngineException {
+    public static String getFileName(CommandLine cmd) {
         return cmd.getOptionValue(ArgumentOption.TEST_DATA.getOption());
     }
 
-    protected static Map<String, List<String>> getTestCaseAndDataTestColumnName(CommandLine cmd){
+    public static Map<String, List<String>> getTestCaseAndDataTestColumnName(CommandLine cmd){
         List<String> argumentList = getArgumentList(cmd, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME); // "-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]"
         Map<String, List<String>> testCaseAndDataTestColumName =new HashMap<>() ;
         for (String argument : argumentList) {
@@ -67,7 +67,6 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
             Optional<String> testCaseOptionale = testCaseSet.stream().findFirst();
             if(testCaseOptionale.isPresent()){
                 testCase = testCaseOptionale.get();
-                testCase = testCase.substring(0,testCase.length()-1);
             }
         }
         return testCase;
@@ -79,7 +78,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
         if(CollectionUtils.isNotEmpty(dataTestColumnMatchSet)){
             Optional<String> dataTestColumnOptional = dataTestColumnMatchSet.stream().findFirst();
             if (dataTestColumnOptional.isPresent()){
-                Arrays.asList(dataTestColumnOptional.get().split(":")[0].split(";"));
+                dataTestColumnList.addAll(Arrays.asList(dataTestColumnOptional.get().split(";")));
             }
         }
        return dataTestColumnList;

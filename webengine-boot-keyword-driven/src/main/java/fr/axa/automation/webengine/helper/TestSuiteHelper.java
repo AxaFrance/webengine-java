@@ -48,7 +48,7 @@ public final class TestSuiteHelper extends AbstractTestSuiteHelper {
         return settings;
     }
 
-    protected static List<String> getTestCaseToRunList(CommandLine cmd){
+    public static List<String> getTestCaseToRunList(CommandLine cmd){
         return getArgumentList(cmd,ArgumentOption.TEST_CASE_TO_RUN);
     }
 

@@ -6,7 +6,7 @@ class BeforeAndAfterUnitTest {
 
     
     @BeforeAll
-    void init() {
+    public static void init() {
         System.out.println("Before");
 //        System.setProperty("webdriver.http.factory", "jdk-http-client");
     }
