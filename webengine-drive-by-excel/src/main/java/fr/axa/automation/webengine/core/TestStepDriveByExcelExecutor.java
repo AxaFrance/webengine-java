@@ -21,7 +21,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
-import java.util.Map;
+import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Slf4j
@@ -34,33 +34,34 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
     }
 
     @Override
-    public CommandResult run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) throws WebEngineException {
+    public CommandResult run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         CommandResult commandResult = null;
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
 
         try {
-            commandResult = executeCmd(globalApplicationContext,testCaseContext,commandData,commandResultMap);
+            commandResult = executeCmd(globalApplicationContext,testCaseContext,commandData,commandResultList);
         } catch (Throwable throwable){
             actionReport.setResult(Result.FAILED);
-            actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,commandData,commandResultMap));
-            actionReport.setLog("Command "+commandData.getName()+" Failed");
+            actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,commandData,commandResultList));
+            actionReport.setLog("Command "+commandData.toString()+" Failed");
         }finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
-        return CommandResult.builder().actionReport(commandResult !=null ? commandResult.getActionReport() : actionReport)
+        return CommandResult.builder().commandData(commandData)
+                                        .actionReport(commandResult !=null ? commandResult.getActionReport() : actionReport)
                                         .savedData(commandResult !=null ? commandResult.getSavedData() : "")
                                         .build();
     }
 
-    private ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) throws WebEngineException {
+    private ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ScrenshotCommand screnshotCommand = new ScrenshotCommand();
-        ActionReport actionReport = screnshotCommand.execute(globalApplicationContext,testCaseContext,commandData,commandResultMap).getActionReport();
+        ActionReport actionReport = screnshotCommand.execute(globalApplicationContext,testCaseContext,commandData,commandResultList).getActionReport();
         return actionReport.getScreenshots().getScreenshotReports().get(0);
     }
 
     @Async("threadPoolTaskExecutor")
-    public CommandResult executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData,  Map<String, CommandResult> commandResultMap) throws WebEngineException {
+    public CommandResult executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData,  List<CommandResult> commandResultList) throws WebEngineException {
         AbstractDriverCommand command = CommandFactory.getCommand(commandData);
-        return command.execute(globalApplicationContext,testCaseContext,commandData,commandResultMap);
+        return command.execute(globalApplicationContext,testCaseContext,commandData,commandResultList);
     }
 }

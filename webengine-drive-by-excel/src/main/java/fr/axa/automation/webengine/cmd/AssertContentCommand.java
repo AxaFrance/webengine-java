@@ -7,15 +7,15 @@ import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
 import org.openqa.selenium.WebElement;
 
-import java.util.Map;
+import java.util.List;
 
 public class AssertContentCommand extends AbstractDriverCommand{
 
     @Override
-    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception {
+    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(commandData,testCaseContext);
         WebElement webElement = webElementDescription.findElement();
-        String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultMap);
+        String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
         webElementDescription.assertContentByElementType(webElement,value);
     }
 }

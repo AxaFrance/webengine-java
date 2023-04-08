@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 public class CommandResult {
+    CommandDataDriveByExcel commandData;
     ActionReport actionReport;
     String savedData;
 }

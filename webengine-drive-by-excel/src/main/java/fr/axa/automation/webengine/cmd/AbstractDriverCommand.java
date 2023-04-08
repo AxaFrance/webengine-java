@@ -36,7 +36,7 @@ public abstract class AbstractDriverCommand implements ICommand{
     List<ScreenshotReport> screenshotReportList =  new ArrayList<>();
     String savedData;
 
-    protected abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap)throws Exception;
+    public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception;
 
     protected WebElementDescription populateWebElement(CommandDataDriveByExcel commandData, AbstractTestCaseContext testCaseContext) {
         return WebElementDescription.builder()
@@ -68,15 +68,16 @@ public abstract class AbstractDriverCommand implements ICommand{
         }
     }
 
-    public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) throws WebEngineException {
+    public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
             if(commandData.canExecuteDataTestColumn(dataTestColumName)){
-                executeCmd(globalApplicationContext,  testCaseContext,  commandData,commandResultMap);
+                executeCmd(globalApplicationContext,  testCaseContext,  commandData,commandResultList);
             }
             actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
             actionReport.setResult(Result.PASSED);
+            actionReport.setLog(commandData.toString());
         } catch (Throwable throwable){
             actionReport.setResult(Result.FAILED);
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext,""));
@@ -87,7 +88,7 @@ public abstract class AbstractDriverCommand implements ICommand{
         }finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
-        return CommandResult.builder().actionReport(actionReport).savedData(savedData).build();
+        return CommandResult.builder().commandData(commandData).actionReport(actionReport).savedData(savedData).build();
     }
 
     protected ScreenshotReport screenShot(AbstractTestCaseContext testCaseContext, String name) {
@@ -96,12 +97,12 @@ public abstract class AbstractDriverCommand implements ICommand{
     }
 
 
-    protected String getValue(TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, Map<String, CommandResult> commandResultMap) {
+    protected String getValue(TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) {
         String dataTestColumName = testCaseContext.getDataTestColumnName();
         Map<String, String> dataTestMap = commandData.getDataTestMap();
         if(MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))){
             String originalValue = dataTestMap.get(dataTestColumName);
-            return EvaluateValueHelper.evaluateValue(originalValue, commandResultMap);
+            return EvaluateValueHelper.evaluateValue(originalValue, commandResultList);
         }
         return null;
     }

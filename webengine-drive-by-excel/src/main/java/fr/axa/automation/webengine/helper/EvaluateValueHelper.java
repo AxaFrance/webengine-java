@@ -10,12 +10,11 @@ import fr.axa.automation.webengine.util.FormatDate;
 import fr.axa.automation.webengine.util.RegexUtil;
 import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EvaluateValueHelper {
 
@@ -23,16 +22,16 @@ public class EvaluateValueHelper {
         return StringUtils.substringBetween(value,Constante.TRIPLE_CHEVRON_PREFIX.getValue(),Constante.TRIPLE_CHEVRON_SUFFIX.getValue());
     }
 
-    public static String evaluateValue(String completeValue, Map<String, CommandResult> commandResultMap){
+    public static String evaluateValue(String completeValue, List<CommandResult> commandResultList){
         List<String> regexValueList = RegexUtil.match(RegexContante.REFERENCED_VALUE_REGEX, completeValue);
         if(CollectionUtils.isEmpty(regexValueList)){
             return completeValue;
         } else{
-            return evaluateValue(completeValue, regexValueList, commandResultMap );
+            return evaluateValue(completeValue, regexValueList, commandResultList );
         }
     }
 
-    private static String evaluateValue(String completeValue, List<String> regexValueList, Map<String, CommandResult> commandResultMap ) {
+    private static String evaluateValue(String completeValue, List<String> regexValueList, List<CommandResult> commandResultList ) {
         String resultValue = completeValue;
         if(CollectionUtils.isNotEmpty(regexValueList)){
             for (String regexValue: regexValueList) {
@@ -41,8 +40,8 @@ public class EvaluateValueHelper {
                     resultValue = resultValue.replace(regexValue,replaceTagDateValue(valueWithouRafter));
                 } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
                     resultValue = resultValue.replace(regexValue,PredefinedTagValue.valueOf(regexValue).getTagValue());
-                } else if (isContainsReferencedValue(valueWithouRafter, commandResultMap)) {
-                    String referencedValue = commandResultMap.get(StringUtil.removeSpecialCharacters(valueWithouRafter)).getSavedData();
+                } else if (isContainsReferencedValue(valueWithouRafter, commandResultList)) {
+                    String referencedValue = getReferencedSaveData(valueWithouRafter,commandResultList);
                     resultValue = resultValue.replace(regexValue,referencedValue);
                 }
             }
@@ -50,11 +49,24 @@ public class EvaluateValueHelper {
         return resultValue;
     }
 
-    public static boolean isContainsReferencedValue(String value, Map<String, CommandResult> commandResultMap){
-        if(MapUtils.isNotEmpty(commandResultMap)){
-            return commandResultMap.keySet().contains(StringUtil.removeSpecialCharacters(value));
+    public static boolean isContainsReferencedValue(String value, List<CommandResult> commandResultList){
+        if(CollectionUtils.isNotEmpty(commandResultList)){
+            return commandResultList.stream().anyMatch(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value));
         }
         return false;
+    }
+
+    public static String getReferencedSaveData(String value, List<CommandResult> commandResultList){
+        if(CollectionUtils.isNotEmpty(commandResultList)){
+            List<String> saveDataList = commandResultList.stream()
+                                                        .filter(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value))
+                                                        .map(commandResult -> commandResult.getSavedData())
+                                                        .collect(Collectors.toList());
+            if(CollectionUtils.isNotEmpty(commandResultList)){
+                return saveDataList.get(0);
+            }
+        }
+        return StringUtils.EMPTY;
     }
 
     private static String replaceTagDateValue(String value){
