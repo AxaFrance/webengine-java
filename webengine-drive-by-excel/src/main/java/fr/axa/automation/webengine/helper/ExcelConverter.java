@@ -145,7 +145,7 @@ public class ExcelConverter {
     }
 
     private static Map<String, String> getDataTestList(Sheet testCaseSheet, Row currentRow, List<String> dataTestColumnNameList) {
-        int numberOfColumn = currentRow.getLastCellNum();
+        int numberOfColumn = testCaseSheet.getRow(0).getLastCellNum();
         Map<String, String> dataTestList = new HashMap<>();
 
         for (int currentJddColumn = ExcelColumn.DATA_TEST_REFERENCE.getValue() + 1; currentJddColumn < numberOfColumn; currentJddColumn++) {
