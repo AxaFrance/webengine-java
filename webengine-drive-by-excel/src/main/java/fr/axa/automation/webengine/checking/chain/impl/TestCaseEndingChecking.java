@@ -29,7 +29,7 @@ public class TestCaseEndingChecking extends AbstractChecking{
         Optional<CommandDataDriveByExcel> commandDataOptional = ListUtil.getLastElement(testCaseData.getCommandList());
         if(commandDataOptional.isPresent()){
             CommandDataDriveByExcel lastCommandData = commandDataOptional.get();
-            return lastCommandData.getCommand() == CommandName.END_SCENARII;
+            return lastCommandData.getCommand() == CommandName.END_SCENARIO;
         }
         return true;
     }

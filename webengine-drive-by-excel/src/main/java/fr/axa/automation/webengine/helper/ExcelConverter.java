@@ -58,7 +58,7 @@ public class ExcelConverter {
 
     private static boolean isEndOfFile(Sheet currentSheet, Integer rowIndex) {
         String cellValue = ExcelReader.getCellValue(currentSheet, rowIndex, ExcelColumn.COMMAND.getValue());
-        if (StringUtils.trim(cellValue).equalsIgnoreCase(CommandName.END_SCENARII.getName())) {
+        if (StringUtils.trim(cellValue).equalsIgnoreCase(CommandName.END_SCENARIO.getName())) {
             return true;
         }
         return false;

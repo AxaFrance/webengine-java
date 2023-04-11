@@ -28,7 +28,7 @@ public enum CommandName {
     SCREENSHOT("screenshot"),
 
     WAIT("wait"),
-    END_SCENARII("endScenarii");
+    END_SCENARIO("endScenario");
 
     final String name;
 
