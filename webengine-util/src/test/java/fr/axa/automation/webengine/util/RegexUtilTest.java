@@ -14,7 +14,7 @@ public class RegexUtilTest {
 
     @Test
     void testMatchTestCaseAndDataTestColumn() {
-        List<String> list = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,"firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]");
+        List<String> list = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,"firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]");
         Assertions.assertTrue(list.size()==2);
     }
 

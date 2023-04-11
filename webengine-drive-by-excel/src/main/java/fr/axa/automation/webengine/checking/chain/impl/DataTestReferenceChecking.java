@@ -24,13 +24,16 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
 
     @Override
     public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        List<TestCaseDataDriveByExcel> testCaseDataList =((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
+        List<TestCaseDataDriveByExcel> testCaseDataList =testSuiteData.getTestCaseList();
         Map<String,List<String>> dataTestReferenceWhichDoesntExistMap = new HashMap<>();
         for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
             List<String> dataTestReferenceList = getDataTestReferenceList(testCaseData);
             List<String> dataTestColumnNameList = TestCaseHelperDriveByExcel.getDataTestColumnName(testCaseData);
             if(CollectionUtils.isNotEmpty(dataTestReferenceList)){
-                dataTestReferenceWhichDoesntExistMap.put(testCaseData.getName(),getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList));
+                List<String> dataTestReferenceWhichDoesnt = getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList);
+                if(CollectionUtils.isNotEmpty(dataTestReferenceWhichDoesnt)){
+                    dataTestReferenceWhichDoesntExistMap.put(testCaseData.getName(),getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList));
+                }
             }
         }
         if(MapUtils.isNotEmpty(dataTestReferenceWhichDoesntExistMap)){
@@ -44,14 +47,15 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
                 .stream()
                 .filter(commandData -> StringUtils.isNotEmpty(StringUtils.trim(commandData.getDataTestReference())) && !KEYWORD_DATA_REFERENCE.contains(StringUtils.trim(commandData.getDataTestReference())))
                 .map(commandData -> commandData.getDataTestReference())
+                .distinct()
                 .collect(Collectors.toList());
     }
 
     protected List<String> getDataTestReferenceWhichDoesntExist(List<String> dataTestReferenceList, List<String> dataTestColumnNameList ){
         List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
         for (String dataTestReference : dataTestReferenceList) {
-            List<String> dataTestReferenceInOneCommandList = Arrays.asList(dataTestReference.split(Constante.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
-            dataTestReferenceWhichDoesntExistList.addAll(getDataTestReferenceWhichDoesntExistInOneCmd(dataTestReferenceInOneCommandList,dataTestColumnNameList));
+            List<String> dataTestReferenceSplitList = Arrays.asList(dataTestReference.split(Constante.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
+            dataTestReferenceWhichDoesntExistList.addAll(getDataTestReferenceWhichDoesntExistInOneCmd(dataTestReferenceSplitList,dataTestColumnNameList));
         }
         return dataTestReferenceWhichDoesntExistList;
     }

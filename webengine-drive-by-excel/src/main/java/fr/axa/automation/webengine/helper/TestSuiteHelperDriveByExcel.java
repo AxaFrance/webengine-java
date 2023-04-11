@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
 
-    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([^\\[\\];]+\\[[^\\[\\]]+\\])"; // "-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]"
+    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([^\\[\\];]+\\[[^\\[\\]]+\\])"; // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
     public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
     public static final String DATA_TEST_COLUMN_NAME_PATTERN = "(?<=:)([^\\]]+)";
 
@@ -41,12 +41,12 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
     }
 
     public static Map<String, List<String>> getTestCaseAndDataTestColumnName(CommandLine cmd){
-        List<String> argumentList = getArgumentList(cmd, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME); // "-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto];testcase2[-dataNameColum:jdd-rec-moto]"
+        List<String> argumentList = getArgumentList(cmd, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME); // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
         Map<String, List<String>> testCaseAndDataTestColumName =new HashMap<>() ;
         for (String argument : argumentList) {
             List<String> testCaseAndDataTestColumnSet = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,argument);
             if(CollectionUtils.isNotEmpty(testCaseAndDataTestColumnSet)){
-                for (String testCaseAndDataTestColumn:testCaseAndDataTestColumnSet) { //firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto]
+                for (String testCaseAndDataTestColumn:testCaseAndDataTestColumnSet) { //firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto]
                     String testCase = getTestCase(testCaseAndDataTestColumn);
                     List<String> dataTestColumnNameList = getDataTestColumnName(testCaseAndDataTestColumn);
                     testCaseAndDataTestColumName.put(testCase,dataTestColumnNameList);

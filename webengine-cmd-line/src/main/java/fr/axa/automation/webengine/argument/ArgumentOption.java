@@ -22,7 +22,7 @@ public enum ArgumentOption {
     SHOW_REPORT             ("showreport",  false,false, "Launch report viewer after execution"),
     TEST_CASE_TO_RUN        ("tc",  true,false, "Test case to run (separated by ';'), example: \"-tc:firsttestcase;secondtestcase\" "), //For keyword project
 
-    TEST_CASE_AND_DATA_TEST_COLUMN_NAME  ("tc",  true,false, "Test case to run (separated by ';'), example: \"-tc:firsttestcase[-dataNameColum:jdd-rec-auto;jdd-rec-moto] ; secondtestcase[-dataNameColum:jdd-rec-moto]\" "); //For drive by excel
+    TEST_CASE_AND_DATA_TEST_COLUMN_NAME  ("tc",  true,false, "Test case to run (separated by ';'), example: \"-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto] ; secondtestcase[-dataColumName:jdd-rec-moto]\" "); //For drive by excel
 
 
     final String option;
