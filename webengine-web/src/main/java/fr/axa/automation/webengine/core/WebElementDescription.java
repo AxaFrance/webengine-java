@@ -323,14 +323,14 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private Boolean isTypeElementByAttribute(WebElement webElement,HtmlAttributeConstante htmlAttributeConstante) throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
+        IFunction<HtmlAttributeConstante, Boolean> fun = (x) -> {
             String typeWebElement = webElement.getAttribute("type");
-            if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(htmlAttributeConstante.getValue())){
+            if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(x.getValue())){
                 return true;
             }
             return false;
         };
-        return retry(fun, null);
+        return retry(fun, htmlAttributeConstante);
     }
 
     public Select asSelect() throws Exception {
@@ -376,13 +376,16 @@ public class WebElementDescription extends AbstractElementDescription {
         return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
     }
 
-    public boolean assertContentByElementType(WebElement webElement, String text) throws Exception {
-        IFunction<String, Boolean> fun = (value) -> {
+    public boolean assertContentByElementType(String text) throws Exception {
+        IFunction<String, Boolean> fun = (value) ->{
+            WebElement webElement = this.findElement();
             Boolean resultAssert;
             if(isInputSelect(webElement)){
-                resultAssert = assertContentInSelect(webElement,text);
+                resultAssert = assertContentInSelect(webElement,value);
+            }else if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) || webElement.getTagName().equalsIgnoreCase(HtmlTag.TEXTAREA.getValue())){
+                resultAssert = StringUtil.equalsIgnoreCase(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()),value);
             }else{
-                resultAssert = StringUtil.equalsIgnoreCase(webElement.getText(),text);
+                resultAssert = StringUtil.equalsIgnoreCase(webElement.getText(),value);
             }
             if(!resultAssert){
                 throw new WebEngineException("The value doesn't exist");

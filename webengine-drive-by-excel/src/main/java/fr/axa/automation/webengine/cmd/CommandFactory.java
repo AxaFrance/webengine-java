@@ -22,6 +22,8 @@ public class CommandFactory {
                 return new IsSelectedCommand();
             case SCREENSHOT:
                 return new ScrenshotCommand();
+            case ASSERT_CONTENT:
+                return new AssertContentCommand();
             case IF:
                 return new IfCommand();
             case ELSE_IF:

@@ -1,11 +1,13 @@
 package fr.axa.automation.webengine.cmd;
 
+import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
+import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 
@@ -20,11 +22,11 @@ public class IfCommand extends AbstractDriverCommand{
         String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
         if(StringUtils.isEmpty(value) && webElementDescription.isNotExists()){
             throw  new WebEngineException("The element doesn't exist");
-        }else if (StringUtils.isNotEmpty(value)){
-            webElementDescription.assertContentByElementType(webElement,value);
+        } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.CHECKED.getTagValue(), value) || StringUtil.equalsIgnoreCase(PredefinedTagValue.UNCHECKED.getTagValue(), value)) {
+            webElementDescription.isSelected();
+        } else if (StringUtils.isNotEmpty(value)){
+            webElementDescription.assertContentByElementType(value);
         }
     }
-
-
 
 }

@@ -16,7 +16,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public enum PredefinedTagValue {
     EMPTY ("empty"),
-    NOT_EMPTY ("notEmpty");
+    NOT_EMPTY ("notEmpty"),
+    CHECKED ("checked"),
+    UNCHECKED ("unchecked");
 
 
     final String tagValue;

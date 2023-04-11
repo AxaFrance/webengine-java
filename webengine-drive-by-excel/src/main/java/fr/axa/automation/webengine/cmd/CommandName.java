@@ -23,7 +23,7 @@ public enum CommandName {
 
     IS_SELECTED("isSelected"),
 
-    ASSERT_CONTENT("asserContent"),
+    ASSERT_CONTENT("assertContent"),
 
     SCREENSHOT("screenshot"),
 

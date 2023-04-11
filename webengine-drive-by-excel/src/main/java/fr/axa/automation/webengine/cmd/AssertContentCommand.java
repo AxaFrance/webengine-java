@@ -14,8 +14,7 @@ public class AssertContentCommand extends AbstractDriverCommand{
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(commandData,testCaseContext);
-        WebElement webElement = webElementDescription.findElement();
         String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
-        webElementDescription.assertContentByElementType(webElement,value);
+        webElementDescription.assertContentByElementType(value);
     }
 }
