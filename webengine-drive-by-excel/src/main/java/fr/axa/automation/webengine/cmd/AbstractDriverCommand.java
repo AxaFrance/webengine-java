@@ -15,7 +15,6 @@ import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
@@ -77,7 +76,7 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
-        String message = Constante.CR_LF.getValue() + "Executed command : " + commandData.toString() ;
+        String message = Constante.CR_LF.getValue() + "Executed command : " + commandData ;
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
@@ -136,13 +135,5 @@ public abstract class AbstractDriverCommand implements ICommand {
     protected void selectByValueOrText(String value) throws Exception {
         webElementDescription.scrollIntoView();
         webElementDescription.selectByValueOrText(value);
-    }
-
-    protected void selectByValue(String value) throws Exception {
-        webElementDescription.selectByValue(value);
-    }
-
-    protected void selectByText(String value) throws Exception {
-        webElementDescription.selectByText(value);
     }
 }

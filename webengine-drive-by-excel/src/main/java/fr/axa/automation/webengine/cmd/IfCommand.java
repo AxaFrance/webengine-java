@@ -20,16 +20,26 @@ public class IfCommand extends AbstractDriverCommand{
         webElementDescription = populateWebElement(commandData,testCaseContext);
         WebElement webElement = webElementDescription.findElement();
         String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
-        if(StringUtils.isEmpty(value) && webElementDescription.isNotExists()){
-            throw new WebEngineException("The element doesn't exist");
-        } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.CHECKED.getTagValue(), value) && webElementDescription.isNotSelected()) {
-            throw new WebEngineException("The element isn't checked");
-        } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.UNCHECKED.getTagValue(), value) && webElementDescription.isSelected()) {
-            throw new WebEngineException("The element is checked");
-        } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.DISPLAYED.getTagValue(), value) && webElementDescription.isNotDisplayed()) {
-            throw new WebEngineException("The element is not displayed");
-        }else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_DISPLAYED.getTagValue(), value) && webElementDescription.isDisplayed()) {
-            throw new WebEngineException("The element is displayed");
+        if(StringUtils.isEmpty(value)){
+            if(webElementDescription.isNotExists()){
+                throw new WebEngineException("The element doesn't exist");
+            }
+        } else if (StringUtils.isNotEmpty(value) && StringUtil.equalsIgnoreCase(PredefinedTagValue.CHECKED.getTagValue(), value)) {
+            if(webElementDescription.isNotSelected()){
+                throw new WebEngineException("The element isn't checked");
+            }
+        } else if (StringUtils.isNotEmpty(value) && StringUtil.equalsIgnoreCase(PredefinedTagValue.UNCHECKED.getTagValue(), value)) {
+            if(webElementDescription.isSelected()){
+                throw new WebEngineException("The element is checked");
+            }
+        } else if (StringUtils.isNotEmpty(value) && StringUtil.equalsIgnoreCase(PredefinedTagValue.DISPLAYED.getTagValue(), value)) {
+            if(webElementDescription.isNotDisplayed()){
+                throw new WebEngineException("The element is not displayed");
+            }
+        }else if (StringUtils.isNotEmpty(value) && StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_DISPLAYED.getTagValue(), value)) {
+            if(webElementDescription.isDisplayed()){
+                throw new WebEngineException("The element is displayed");
+            }
         } else if (StringUtils.isNotEmpty(value)){
             webElementDescription.assertContentByElementType(value);
         }
