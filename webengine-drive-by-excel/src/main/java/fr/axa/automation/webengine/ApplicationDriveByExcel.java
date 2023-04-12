@@ -38,7 +38,6 @@ public class ApplicationDriveByExcel implements CommandLineRunner {
         //    java -jar drive-by-excel.jar "-data:file.xls" "-tc:firsttestcase, testcase2[-dataColumName:jdd-rec-moto]"
         //    java -jar drive-by-excel.jar "-data:file.xls" "-tc:firsttestcase, testcase2[-indexColumn:5]"
         //    java -jar drive-by-excel.jar "-data:file.xls" "-tc:firsttestcase, testcase2[-letterColumn:F]"
-
         //    "-data:C:\\work\\projet-git\\ExcelToJavaObjectConverter\\Test-1.xlsx" "-tc:devis-auto" "-platform:Windows" "-browser:ChromiumEdge"
 
         bootProject.runFromFramework(args);

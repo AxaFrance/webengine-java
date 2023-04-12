@@ -188,6 +188,10 @@ public abstract class AbstractElementDescription {
         return retry(fun,null);
     }
 
+    public Boolean isNotSelected() throws Exception {
+        return !isSelected();
+    }
+
     public Boolean isSelected() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
             WebElement webElement = findElement();
@@ -202,6 +206,10 @@ public abstract class AbstractElementDescription {
             return webElement.isEnabled();
         };
         return retry(fun,null);
+    }
+
+    public Boolean isNotDisplayed() throws Exception {
+        return !isDisplayed();
     }
 
     public Boolean isDisplayed() throws Exception {

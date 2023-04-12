@@ -18,6 +18,7 @@ public enum Constante {
 
     MINUS("-"),
     PLUS("+"),
-    OPTIONAL_AND_DEPENDS_ON_PREVIOUS("optional and depends on previous");
+    OPTIONAL_AND_DEPENDS_ON_PREVIOUS("optional and depends on previous"),
+    CR_LF ("\n\r");
     final String value;
 }

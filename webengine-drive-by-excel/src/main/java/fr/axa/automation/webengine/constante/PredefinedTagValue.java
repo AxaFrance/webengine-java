@@ -18,7 +18,9 @@ public enum PredefinedTagValue {
     EMPTY ("empty"),
     NOT_EMPTY ("notEmpty"),
     CHECKED ("checked"),
-    UNCHECKED ("unchecked");
+    UNCHECKED ("unchecked"),
+    DISPLAYED("displayed"),
+    NOT_DISPLAYED("notDisplayed");
 
 
     final String tagValue;

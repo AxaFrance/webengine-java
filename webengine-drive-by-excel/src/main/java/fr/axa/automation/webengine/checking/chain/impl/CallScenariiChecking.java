@@ -58,12 +58,12 @@ public class CallScenariiChecking extends AbstractChecking{
                 String testCaseName = entry.getKey();
                 Set<CommandDataDriveByExcel> callCommandSet = entry.getValue();
                 if(CollectionUtils.isNotEmpty(callCommandSet)){
-                    loggerService.warn("In this test case "+testCaseName+" Call commands contains values which doesn't exist" + callCommandSet);
+                    loggerService.warn("In this test case '"+testCaseName+"', Call command contains a target which doesn't exist." + callCommandSet);
                     throwException = true;
                 }
             }
             if(throwException){
-                throw new IllegalArgumentException("In some cases, 'Call' command values doesn't exist");
+                throw new IllegalArgumentException("In some test cases, Call command contains a target which doesn't exist. See warning above.");
             }
         }
     }

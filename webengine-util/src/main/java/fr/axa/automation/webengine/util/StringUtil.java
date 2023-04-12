@@ -13,7 +13,7 @@ public final class StringUtil {
     }
 
     public static boolean equalsIgnoreCase(String value1,String value2){
-        return StringUtils.equalsIgnoreCase(value1.trim(),value2.trim());
+        return StringUtils.equalsIgnoreCase(value1.trim().toUpperCase(),value1.trim().toUpperCase());
     }
 
     public static boolean contains(String value1,String value2){

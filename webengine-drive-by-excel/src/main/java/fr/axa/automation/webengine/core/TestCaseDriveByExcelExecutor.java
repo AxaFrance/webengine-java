@@ -193,8 +193,6 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return commandResultList;
     }
 
-
-
     private List<CommandResult> ignoreCommand(TreeNode treeNodeCommand) {
         List<CommandResult> actionReportList = new ArrayList<>();
         List<TreeNode> treeNodeCommandChildrenList = treeNodeCommand.getChildren();

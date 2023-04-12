@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.cmd;
 
+import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.core.WebElementDescription;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -72,7 +73,7 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
-        String message = commandData.toString();
+        String message = "Executed command : " + Constante.CR_LF.getValue() + commandData.toString() + Constante.CR_LF.getValue();
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
@@ -81,7 +82,7 @@ public abstract class AbstractDriverCommand implements ICommand {
                 actionReport.setResult(Result.PASSED);
             } else {
                 actionReport.setResult(Result.IGNORED);
-                message = message +"\n\r"+ "Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'";
+                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + "Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'" + Constante.CR_LF.getValue();
             }
             actionReport.setLog(message);
         } catch (Throwable e) {
@@ -89,9 +90,9 @@ public abstract class AbstractDriverCommand implements ICommand {
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
-                message = message + "\n\r"+" Failed but ignored because this command is optional";
+                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + " Command failed but ignored because this command is optional" + Constante.CR_LF.getValue();
             }
-            actionReport.setLog(message + "\n\r" + ExceptionUtils.getStackTrace(e));
+            actionReport.setLog(message + Constante.CR_LF.getValue() + "Exception : " + Constante.CR_LF.getValue() + ExceptionUtils.getStackTrace(e));
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
