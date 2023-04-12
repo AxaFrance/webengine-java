@@ -17,18 +17,18 @@ import java.util.stream.Collectors;
 public class CallScenariiChecking extends AbstractChecking{
     @Override
     public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        Map<String,List<CommandDataDriveByExcel>> callCommandMap = null;
+        Map<String,List<CommandDataDriveByExcel>> callCommandByTestCaseMap = new HashMap<>();
         List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
         List<String> testCaseNameList = getTestCaseNameList(testCaseDataList);
 
         for(TestCaseDataDriveByExcel testCaseData : testCaseDataList){
             List<CommandDataDriveByExcel> commandCallList = getCommandDataByName(testCaseData,CommandName.CALL);
             if(CollectionUtils.isNotEmpty(commandCallList)){
-                callCommandMap.put(testCaseData.getName(), getCommandDataByName(testCaseData,CommandName.CALL));
+                callCommandByTestCaseMap.put(testCaseData.getName(), getCommandDataByName(testCaseData,CommandName.CALL));
             }
         }
-        if(MapUtils.isNotEmpty(callCommandMap)){
-            Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist = getCallCommandWhichDoesntExist(callCommandMap, testCaseNameList);
+        if(MapUtils.isNotEmpty(callCommandByTestCaseMap)){
+            Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist = getCallCommandWhichDoesntExist(callCommandByTestCaseMap, testCaseNameList);
             assertCommand(callCommandWhichDoesntExist);
         }
 
@@ -40,14 +40,15 @@ public class CallScenariiChecking extends AbstractChecking{
         for (Map.Entry<String,List<CommandDataDriveByExcel>> entry : callCommandDataMap.entrySet()) {
             String testCaseName = entry.getKey();
             List<CommandDataDriveByExcel> callCommandSet = entry.getValue();
-            callCommandWhichDoesntExist.put(testCaseName, getCallCommandWhichDoesntExist(callCommandSet,testCaseNameList));
+            List<String> filterTestCaseNameList = testCaseNameList.stream().filter(tcName -> !tcName.equalsIgnoreCase(testCaseName)).collect(Collectors.toList());
+            callCommandWhichDoesntExist.put(testCaseName, getCallCommandWhichDoesntExist(callCommandSet,filterTestCaseNameList));
         }
         return callCommandWhichDoesntExist;
     }
 
     private Set<CommandDataDriveByExcel> getCallCommandWhichDoesntExist(List<CommandDataDriveByExcel> callCommandSet, List<String> testCaseNameList) {
         Set<CommandDataDriveByExcel> callCommandList = new HashSet<>(callCommandSet);
-        return callCommandList.stream().filter(commandData -> !testCaseNameList.contains(commandData.getTargetList().get(0))).collect(Collectors.toSet());
+        return callCommandList.stream().filter(commandData -> !testCaseNameList.contains(commandData.getTargetList().get(CommandName.CALL.getName()))).collect(Collectors.toSet());
     }
 
     private void assertCommand(Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist){
@@ -62,7 +63,7 @@ public class CallScenariiChecking extends AbstractChecking{
                 }
             }
             if(throwException){
-                throw new IllegalArgumentException("In come cases, 'Call' command values doesn't exist");
+                throw new IllegalArgumentException("In some cases, 'Call' command values doesn't exist");
             }
         }
     }

@@ -169,7 +169,8 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                         break;
                     case CALL:
                         commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
-                        commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL)));
+                        commandResultList.add(commandResult);
+                        commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL.getName())));
                         isSubReport = true;
                         break;
                     default:
