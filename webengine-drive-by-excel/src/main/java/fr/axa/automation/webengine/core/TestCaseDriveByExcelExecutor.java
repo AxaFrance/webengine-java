@@ -136,7 +136,6 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                 switch (commandData.getCommand()){
                     case IF:
                         commandResult = stepExecutor.run(globalApplicationContext, testCaseContext,commandData,commandResultList);
-                        commandResultList.add(commandResult);
                         nestedIfList.addLast(getResultOfCommand(CommandName.IF,commandResult.getActionReport().getResult()));
                         if(CommandResultHelper.isResultExpected(commandResult,Result.PASSED)){
                             commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand);
@@ -150,7 +149,6 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                         Map<CommandName,Result> map = nestedIfList.getLast();
                         if(canExecute(map)){
                             commandResult = stepExecutor.run(globalApplicationContext, testCaseContext,commandData,commandResultList);
-                            commandResultList.add(commandResult);
                             if(CommandResultHelper.isResultExpected(commandResult,Result.PASSED)){
                                 commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand);
                                 isSubReport = true;
@@ -158,30 +156,28 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                             map.put(commandData.getCommand(),actionReport.getResult());
                         }else{
                             commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandName,Result.IGNORED),"");
-                            commandResultList.add(commandResult);
                             commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
                             isSubReport = true;
                         }
                         break;
                     case END_IF:
-                        commandResultList.add(CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),""));
+                        commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
                         nestedIfList.removeLast();
                         break;
                     case CALL:
                         commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
-                        commandResultList.add(commandResult);
                         commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL.getName())));
                         isSubReport = true;
                         break;
                     default:
                         commandResult = stepExecutor.run(globalApplicationContext, testCaseContext,commandData,commandResultList);
-                        commandResultList.add(commandResult);
                         if(commandData.isOptional() && CommandResultHelper.isResultExpected(commandResult,Result.PASSED) && CollectionUtils.isNotEmpty(treeNodeCommand.getChildren())){
                             commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand);
                             isSubReport = true;
                         }
                         break;
                 }
+                commandResultList.add(commandResult);
                 if(isSubReport){
                     commandResult.getActionReport().setSubActionReports(new ArrayOfActionReport());
                     commandResult.getActionReport().getSubActionReports().getActionReports().addAll(CommandResultHelper.getActionReportList(commandResultOfSubCommandList));

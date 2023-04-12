@@ -72,26 +72,26 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
+        String message = commandData.toString();
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
                 actionReport.setResult(Result.PASSED);
-                actionReport.setLog(commandData.toString());
             } else {
                 actionReport.setResult(Result.IGNORED);
-                actionReport.setLog("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
+                message = message +"\n\r"+ "Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'";
             }
+            actionReport.setLog(message);
         } catch (Throwable e) {
             actionReport.setResult(Result.FAILED);
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
-            String errorMessage = "";
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
-                errorMessage = "Failed but ignored because this command is optional";
+                message = message + "\n\r"+" Failed but ignored because this command is optional";
             }
-            actionReport.setLog(errorMessage + "\n\r" + ExceptionUtils.getStackTrace(e));
+            actionReport.setLog(message + "\n\r" + ExceptionUtils.getStackTrace(e));
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
