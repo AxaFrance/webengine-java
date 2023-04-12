@@ -25,7 +25,7 @@ public final class TestCaseHelperDriveByExcel {
     public static AbstractTestCaseContext getTestCaseContext(AbstractTestCaseContext testCaseContext , String testCaseName){
         TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
         List<TestCaseNodeDriveByExcel> list = testCaseDriveByExcelContext.getTestSuiteData().getTestCaseNodeList().stream().filter(testCaseNodeDriveByExcel -> testCaseNodeDriveByExcel.getName().equalsIgnoreCase(testCaseName)).collect(Collectors.toList());
-        return TestCaseDriveByExcelContext.builder().testCaseName(testCaseName).webDriver(testCaseDriveByExcelContext.getWebDriver()).testSuiteData(testCaseDriveByExcelContext.getTestSuiteData()).testCaseToRun(list.get(0)).build();
+        return TestCaseDriveByExcelContext.builder().testCaseName(testCaseName).webDriver(testCaseDriveByExcelContext.getWebDriver()).testSuiteData(testCaseDriveByExcelContext.getTestSuiteData()).testCaseToRun(list.get(0)).dataTestColumnName(testCaseDriveByExcelContext.getDataTestColumnName()).build();
     }
 
     public static List<String> getNameListByTestCase(TestCaseDataDriveByExcel testCaseData){
