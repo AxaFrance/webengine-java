@@ -10,6 +10,7 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
@@ -19,6 +20,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -30,13 +32,13 @@ import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
-public abstract class AbstractDriverCommand implements ICommand{
+public abstract class AbstractDriverCommand implements ICommand {
 
     WebElementDescription webElementDescription;
-    List<ScreenshotReport> screenshotReportList =  new ArrayList<>();
+    List<ScreenshotReport> screenshotReportList = new ArrayList<>();
     String savedData;
 
-    public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception;
+    public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws Exception;
 
     protected WebElementDescription populateWebElement(CommandDataDriveByExcel commandData, AbstractTestCaseContext testCaseContext) {
         return WebElementDescription.builder()
@@ -71,21 +73,26 @@ public abstract class AbstractDriverCommand implements ICommand{
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
         try {
-            String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
-            if(commandData.canExecuteDataTestColumn(dataTestColumName)){
-                executeCmd(globalApplicationContext,  testCaseContext,  commandData,commandResultList);
-            }
-            actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
-            actionReport.setResult(Result.PASSED);
-            actionReport.setLog(commandData.toString());
-        } catch (Throwable throwable){
-            actionReport.setResult(Result.FAILED);
-            actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext,""));
-            if(commandData.isOptional()){
+            String dataTestColumName = ((TestCaseDriveByExcelContext) testCaseContext).getDataTestColumnName();
+            if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
+                executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
+                actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
+                actionReport.setResult(Result.PASSED);
+                actionReport.setLog(commandData.toString());
+            } else {
                 actionReport.setResult(Result.IGNORED);
-                actionReport.setLog("Failed but ignored because this command is optional");
+                actionReport.setLog("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
             }
-        }finally {
+        } catch (Throwable e) {
+            actionReport.setResult(Result.FAILED);
+            actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
+            String errorMessage = "";
+            if (commandData.isOptional()) {
+                actionReport.setResult(Result.IGNORED);
+                errorMessage = "Failed but ignored because this command is optional";
+            }
+            actionReport.setLog(errorMessage + "\n\r" + ExceptionUtils.getStackTrace(e));
+        } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
         return CommandResult.builder().commandData(commandData).actionReport(actionReport).savedData(savedData).build();
@@ -100,16 +107,17 @@ public abstract class AbstractDriverCommand implements ICommand{
     protected String getValue(TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) {
         String dataTestColumName = testCaseContext.getDataTestColumnName();
         Map<String, String> dataTestMap = commandData.getDataTestMap();
-        if(MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))){
+        if (MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))) {
             String originalValue = dataTestMap.get(dataTestColumName);
             return EvaluateValueHelper.evaluateValue(originalValue, commandResultList);
         }
         return null;
     }
-    protected String getTextByElement(String value)throws Exception {
-        if(webElementDescription.isInputText()){
+
+    protected String getTextByElement(String value) throws Exception {
+        if (webElementDescription.isInputText()) {
             return webElementDescription.getText();
-        }else{
+        } else {
             return null;
         }
     }

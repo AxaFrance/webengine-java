@@ -75,12 +75,5 @@ public class CommandDataDriveByExcel {
         return new ArrayList<>();
     }
 
-    public boolean canExecuteDataTestColumn(String dataTestColumnName){
-        if(StringUtils.isEmpty(getDataTestReference()) ||
-                (CollectionUtils.isNotEmpty(getDataTestReferenceList()) && getDataTestReferenceList().contains(dataTestColumnName)) ||
-                (CollectionUtils.isNotEmpty(getDataTestReferenceList()) && !getDataTestReferenceList().contains("!"+dataTestColumnName))){
-            return true;
-        }
-        return false;
-    }
+
 }
