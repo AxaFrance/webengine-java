@@ -14,6 +14,9 @@ import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
+import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.logger.LoggerService;
+import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
 import lombok.AccessLevel;
@@ -38,6 +41,7 @@ public abstract class AbstractDriverCommand implements ICommand {
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
     String savedData;
+    ILoggerService loggerService = LoggerServiceProvider.getInstance();
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws Exception;
 
@@ -73,16 +77,17 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
-        String message = "Executed command : " + Constante.CR_LF.getValue() + commandData.toString() + Constante.CR_LF.getValue();
+        String message = Constante.CR_LF.getValue() + "Executed command : " + commandData.toString() ;
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
                 actionReport.setResult(Result.PASSED);
+                message = message + Constante.CR_LF.getValue() + "Status :" + Result.PASSED.value();
             } else {
                 actionReport.setResult(Result.IGNORED);
-                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + "Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'" + Constante.CR_LF.getValue();
+                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + "Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'" ;
             }
             actionReport.setLog(message);
         } catch (Throwable e) {
@@ -90,12 +95,13 @@ public abstract class AbstractDriverCommand implements ICommand {
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
-                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + " Command failed but ignored because this command is optional" + Constante.CR_LF.getValue();
+                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + " Command failed but ignored because this command is optional" ;
             }
             actionReport.setLog(message + Constante.CR_LF.getValue() + "Exception : " + Constante.CR_LF.getValue() + ExceptionUtils.getStackTrace(e));
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
+        loggerService.info(message);
         return CommandResult.builder().commandData(commandData).actionReport(actionReport).savedData(savedData).build();
     }
 
@@ -103,7 +109,6 @@ public abstract class AbstractDriverCommand implements ICommand {
         byte[] screenshot = ((TakesScreenshot) testCaseContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
-
 
     protected String getValue(TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) {
         String dataTestColumName = testCaseContext.getDataTestColumnName();
@@ -122,7 +127,6 @@ public abstract class AbstractDriverCommand implements ICommand {
             return null;
         }
     }
-
 
     protected void selectByValueForInputRadio(String value) throws Exception {
         webElementDescription.focus();

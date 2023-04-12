@@ -19,6 +19,6 @@ public enum Constante {
     MINUS("-"),
     PLUS("+"),
     OPTIONAL_AND_DEPENDS_ON_PREVIOUS("optional and depends on previous"),
-    CR_LF ("\n\r");
+    CR_LF ("\r\n");
     final String value;
 }

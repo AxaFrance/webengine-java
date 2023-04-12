@@ -1,7 +1,7 @@
 application:
     name: solaris-automation-gherkin
     platformName: WINDOWS
-    browserName: CHROME
+    browserName: CHROMIUM_EDGE
     browserOptionList:
         - --incognito
         - --remote-allow-origins=*
