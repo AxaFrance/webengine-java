@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class ExcelConverter {
 
-    public static final String XPATH_PATTERN = "^//.*$";
+    public static final String XPATH_PATTERN = "^([/]{1,2}.*)$";
     public static final String MANY_LOCATED_PATTERN = "^[\\{].*[\\n|\\r]";
 
     public static TestSuiteDataDriveByExcel convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumName) {
@@ -145,7 +145,7 @@ public class ExcelConverter {
     }
 
     private static Map<String, String> getDataTestList(Sheet testCaseSheet, Row currentRow, List<String> dataTestColumnNameList) {
-        int numberOfColumn = testCaseSheet.getRow(0).getLastCellNum();
+        int numberOfColumn = testCaseSheet.getRow(ExcelColumn.FIELD_NAME.getValue()).getLastCellNum();
         Map<String, String> dataTestList = new HashMap<>();
 
         for (int currentJddColumn = ExcelColumn.DATA_TEST_REFERENCE.getValue() + 1; currentJddColumn < numberOfColumn; currentJddColumn++) {
