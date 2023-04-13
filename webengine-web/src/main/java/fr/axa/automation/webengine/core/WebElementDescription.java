@@ -263,6 +263,15 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
+    public void focusAndClick() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focusAndClick(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
     public void scrollIntoElementAndsendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
@@ -505,5 +514,9 @@ public class WebElementDescription extends AbstractElementDescription {
 
     private void focus(WebElement webElement) throws Exception {
         new Actions(getUseDriver()).moveToElement(webElement).perform();
+    }
+
+    private void focusAndClick(WebElement webElement) throws Exception {
+        new Actions(getUseDriver()).moveToElement(webElement).click().perform();
     }
 }
