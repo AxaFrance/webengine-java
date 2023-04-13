@@ -355,8 +355,7 @@ public class WebElementDescription extends AbstractElementDescription {
         IFunction<String, Void> fun = (value) -> {
             WebElement webElement = this.findElement();
             scrollToElement("arguments[0].scrollIntoView(true);", webElement);
-            focus(webElement);
-            webElement.click();
+            focusAndClick(webElement);
             Select select = new Select(webElement);
             List<WebElement> elementListInSelect = getElementExistInSelect(select,value);
             if(CollectionUtils.isNotEmpty(elementListInSelect) && elementListInSelect.size()==1){
@@ -512,11 +511,15 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-    private void focus(WebElement webElement) throws Exception {
-        new Actions(getUseDriver()).moveToElement(webElement).perform();
+    private void focus(WebElement webElement) {
+        if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue())){
+            webElement.sendKeys("");
+        } else{
+            new Actions(getUseDriver()).moveToElement(webElement).perform();
+        }
     }
 
-    private void focusAndClick(WebElement webElement) throws Exception {
+    private void focusAndClick(WebElement webElement) {
         new Actions(getUseDriver()).moveToElement(webElement).click().perform();
     }
 }
