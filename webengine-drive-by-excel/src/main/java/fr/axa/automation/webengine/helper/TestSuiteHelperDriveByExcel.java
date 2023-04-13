@@ -44,7 +44,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
         List<String> argumentList = getArgumentList(cmd, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME); // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
         Map<String, List<String>> testCaseAndDataTestColumName =new HashMap<>() ;
         for (String argument : argumentList) {
-            List<String> testCaseAndDataTestColumnSet = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,argument);
+            List<String> testCaseAndDataTestColumnSet = getTestCaseAndDataTestColumnName(Arrays.asList(argument));
             if(CollectionUtils.isNotEmpty(testCaseAndDataTestColumnSet)){
                 for (String testCaseAndDataTestColumn:testCaseAndDataTestColumnSet) { //firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto]
                     String testCase = getTestCase(testCaseAndDataTestColumn);
@@ -56,6 +56,26 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
             }
         }
         return testCaseAndDataTestColumName;
+    }
+
+    private static List<String> getTestCaseAndDataTestColumnName(List<String> list) {
+        List<String> results = new ArrayList<>();
+        for (String arg:list) {
+            String[] parts = arg.split("(?<=\\]);");
+            String[] testCases = parts[0].split(";");
+
+            for (String testCase : testCases) {
+                if (testCase.matches(".*\\[.*\\].*")) {
+                    results.add(testCase);
+                } else {
+                    results.add(testCase.replaceAll("\\s", ""));
+                }
+            }
+            if (parts.length > 1) {
+                results.add(parts[1].replaceAll("\\s", ""));
+            }
+        }
+        return results;
     }
 
     private static String getTestCase(String testCaseAndDataTestColumn) {
@@ -83,6 +103,4 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
         }
        return dataTestColumnList;
     }
-
-
 }
