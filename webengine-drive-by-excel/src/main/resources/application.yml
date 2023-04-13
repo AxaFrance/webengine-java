@@ -3,7 +3,7 @@ application:
     platformName: WINDOWS
     browserName: CHROMIUM_EDGE
     browserOptionList:
-        - --incognito
+        - --inprivate
         - --remote-allow-origins=*
 appiumSettings:
     gridConnection: https://hub-cloud.browserstack.com/wd/hub

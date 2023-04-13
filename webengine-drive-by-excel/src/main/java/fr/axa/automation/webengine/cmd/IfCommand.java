@@ -36,5 +36,4 @@ public class IfCommand extends AbstractDriverCommand{
             }
         }
     }
-
 }

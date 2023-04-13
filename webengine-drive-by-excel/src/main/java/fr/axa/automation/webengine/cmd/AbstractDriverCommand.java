@@ -41,6 +41,7 @@ public abstract class AbstractDriverCommand implements ICommand {
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
     String savedData;
     ILoggerService loggerService = LoggerServiceProvider.getInstance();
+    StringBuffer stringBuffer = new StringBuffer();
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws Exception;
 
@@ -76,31 +77,32 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
-        String message = Constante.CR_LF.getValue() + "Executed command : " + commandData ;
+        getStringBuffer().append(Constante.CR_LF.getValue()).append("Executed command : ").append(commandData);
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
                 actionReport.setResult(Result.PASSED);
-                message = message + Constante.CR_LF.getValue() + "Status :" + Result.PASSED.value();
+                getStringBuffer().append(Constante.CR_LF.getValue()).append("Status :").append(Result.PASSED.value());
             } else {
                 actionReport.setResult(Result.IGNORED);
-                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + "Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'" ;
+                getStringBuffer().append(Constante.CR_LF.getValue()).append("Warning : ").append(Constante.CR_LF.getValue()).append("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
             }
-            actionReport.setLog(message);
+            actionReport.setLog(getStringBuffer().toString());
         } catch (Throwable e) {
             actionReport.setResult(Result.FAILED);
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
-                message = message + Constante.CR_LF.getValue() + "Warning : " + Constante.CR_LF.getValue() + " Command failed but ignored because this command is optional" ;
+                getStringBuffer().append(Constante.CR_LF.getValue()).append("Warning : ").append(Constante.CR_LF.getValue()).append(" Command failed but ignored because this command is optional");
             }
-            actionReport.setLog(message + Constante.CR_LF.getValue() + "Exception : " + Constante.CR_LF.getValue() + ExceptionUtils.getStackTrace(e));
+            getStringBuffer().append(Constante.CR_LF.getValue()).append("Exception : ").append(Constante.CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
+            actionReport.setLog(getStringBuffer().toString());
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
-        loggerService.info(message);
+        loggerService.info(getStringBuffer().toString());
         return CommandResult.builder().commandData(commandData).actionReport(actionReport).savedData(savedData).build();
     }
 
