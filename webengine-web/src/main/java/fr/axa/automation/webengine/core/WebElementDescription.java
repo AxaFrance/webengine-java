@@ -237,32 +237,48 @@ public class WebElementDescription extends AbstractElementDescription {
         actions.dragAndDrop(findWebElement, element).build().perform();
     }
 
+    private void scrollToElement(String script, WebElement webElement) {
+        JavascriptExecutor js = (JavascriptExecutor) useDriver;
+        js.executeScript(script, webElement);
+    }
+
     public void scrollIntoView() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement findWebElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].scrollIntoView(true);", findWebElement);
+            WebElement webElement = findElement();
+            scrollToElement("arguments[0].scrollIntoView(true);", webElement);
             return null;
         };
         retry(fun,null);
     }
 
+
     public void scrollIntoViewAndclick() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].scrollIntoView(true);", webElement);
+            scrollToElement("arguments[0].scrollIntoView(true);", webElement);
+            focus(webElement);
             webElement.click();
             return null;
         };
         retry(fun,null);
     }
 
+    public void scrollIntoElementAndsendKeys(String text) throws Exception {
+        IFunction<String, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            scrollToElement("arguments[0].scrollIntoView(true);", webElement);
+            focus(webElement);
+            webElement.sendKeys(x);
+            return null;
+        };
+        retry(fun,text);
+    }
+
+
     public void scrollIntoCenterView() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement findWebElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", findWebElement);
+            WebElement webElement = findElement();
+            scrollToElement("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", webElement);
             return null;
         };
         retry(fun,null);
@@ -270,9 +286,8 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public void highLight() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement findWebElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].style.border='3px solid red'", findWebElement);
+            WebElement webElement = findElement();
+            scrollToElement("arguments[0].style.border='3px solid red'", webElement);
             return null;
         };
         retry(fun,null);
@@ -330,14 +345,17 @@ public class WebElementDescription extends AbstractElementDescription {
     public void selectByValueOrText(String text) throws Exception {
         IFunction<String, Void> fun = (value) -> {
             WebElement webElement = this.findElement();
+            scrollToElement("arguments[0].scrollIntoView(true);", webElement);
+            focus(webElement);
             webElement.click();
             Select select = new Select(webElement);
-            if(isTextExistInSelect(select,text)){
-                select.selectByVisibleText(value);
-            }else if(isValueExistInSelect(select,text)){
+            List<WebElement> elementListInSelect = getElementExistInSelect(select,value);
+            if(CollectionUtils.isNotEmpty(elementListInSelect) && elementListInSelect.size()==1){
+                select.selectByVisibleText(elementListInSelect.get(0).getText());
+            }else if(isValueExistInSelect(select,value)){
                 select.selectByValue(value);
             }else{
-                throw new WebEngineException("The option value doesn't exist");
+                throw new WebEngineException("The option value or the text : "+value+" doesn't exist");
             }
             return null;
         };
@@ -349,13 +367,22 @@ public class WebElementDescription extends AbstractElementDescription {
         return optionTextList.stream().anyMatch(optionText -> StringUtil.equalsIgnoreCase(optionText,valueToSelect) || StringUtil.contains(optionText,valueToSelect.split("\\*{4}")[0].trim()));
     }
 
+    private List<String> getOptionTextListInSelect(Select select) {
+        return select.getOptions().stream().map(webElement ->  webElement.getText()).collect(Collectors.toList());
+    }
+
+    private List<WebElement> getElementExistInSelect(Select select, String valueToSelect) {
+        List<WebElement> elementListInSelect = getElementListInSelect(select);
+        return elementListInSelect.stream().filter(webElement -> StringUtil.equalsIgnoreCase(webElement.getText(),valueToSelect) || StringUtil.contains(webElement.getText(),valueToSelect.split("\\*{4}")[0].trim())).collect(Collectors.toList());
+    }
+
+    private List<WebElement> getElementListInSelect(Select select) {
+        return select.getOptions().stream().map(webElement ->  webElement).collect(Collectors.toList());
+    }
+
     private boolean isValueExistInSelect(Select select, String valueToSelect) {
         List<String> optionValueList = getOptionValueListInSelect(select);
         return optionValueList.stream().anyMatch(optionValue -> StringUtil.equalsIgnoreCase(optionValue,valueToSelect));
-    }
-
-    private List<String> getOptionTextListInSelect(Select select) {
-        return select.getOptions().stream().map(webElement ->  webElement.getText()).collect(Collectors.toList());
     }
 
     private List<String> getOptionValueListInSelect(Select select) {
@@ -424,6 +451,24 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,value);
     }
 
+    public void scrollToElementAndcheckByValue(String value) throws Exception {
+        IFunction<String, Void> fun = (x) -> {
+            Collection<WebElement> elementCollection = this.internalFindElements();
+            if (CollectionUtils.isNotEmpty(elementCollection)) {
+                WebElement webElement = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(x)).findFirst().orElse(null);
+                scrollToElement("arguments[0].scrollIntoView(true);", webElement);
+                focus(webElement);
+                if(webElement!=null) {
+                    webElement.click();
+                }else{
+                    throw new WebEngineException("Element is null");
+                }
+            }
+            return null;
+        };
+        retry(fun,value);
+    }
+
     public void checkByValue(String value) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             Collection<WebElement> elementCollection = this.internalFindElements();
@@ -451,10 +496,14 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public void focus() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement element = this.findElement();
-            new Actions(getUseDriver()).moveToElement(element).perform();
+            WebElement webElement = this.findElement();
+            focus(webElement);
             return null;
         };
         retry(fun,null);
+    }
+
+    private void focus(WebElement webElement) throws Exception {
+        new Actions(getUseDriver()).moveToElement(webElement).perform();
     }
 }

@@ -18,12 +18,10 @@ public class ClickCommand extends AbstractDriverCommand{
     }
 
     protected void executeActionInElement(String value)throws Exception {
-        webElementDescription.scrollIntoView();
-        webElementDescription.focus();
         if (webElementDescription.isInputRadio()) {
             selectByValueForInputRadio(value);
         } else {
-            webElementDescription.click();
+            webElementDescription.scrollIntoViewAndclick();
         }
     }
 }

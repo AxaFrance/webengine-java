@@ -155,6 +155,7 @@ public abstract class AbstractElementDescription {
         sendKeys(s);
     }
 
+
     public void sendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();

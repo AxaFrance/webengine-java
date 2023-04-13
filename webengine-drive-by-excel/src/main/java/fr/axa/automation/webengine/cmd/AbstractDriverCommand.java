@@ -128,14 +128,10 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     protected void selectByValueForInputRadio(String value) throws Exception {
-        webElementDescription.scrollIntoView();
-        webElementDescription.focus();
-        webElementDescription.checkByValue(value);
+        webElementDescription.scrollToElementAndcheckByValue(value);
     }
 
     protected void selectByValueOrText(String value) throws Exception {
-        webElementDescription.scrollIntoView();
-        webElementDescription.focus();
         webElementDescription.selectByValueOrText(value);
     }
 }
