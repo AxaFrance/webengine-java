@@ -28,6 +28,8 @@ public class CommandFactory {
                 return new IfCommand();
             case ELSE_IF:
                 return new ElseIfCommand();
+            case ELSE:
+                return new ElseCommand();
             case WAIT:
                 return new WaitCommand();
             default:
