@@ -18,6 +18,6 @@ public class SendKeysCommand extends AbstractDriverCommand{
     }
 
     protected void executeActionInElement(String value)throws Exception {
-        webElementDescription.scrollIntoElementAndsendKeys(value);
+        webElementDescription.scrollToElementAndsendKeys(value);
     }
 }

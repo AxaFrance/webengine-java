@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
 import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
 import fr.axa.automation.webengine.checking.chain.impl.DataTestReferenceChecking;
 import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
+import fr.axa.automation.webengine.checking.chain.impl.OptionalChecking;
 import fr.axa.automation.webengine.checking.chain.impl.ReferencedValueChecking;
 import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
@@ -103,6 +104,7 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
     public void checkInput(TestSuiteDataDriveByExcel testSuiteData) {
         IChecking checking = AbstractChecking.link(
                 new IfChecking(),
+                new OptionalChecking(),
                 new CallScenariiChecking(),
                 new DataTestReferenceChecking(),
                 new ReferencedValueChecking()

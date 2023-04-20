@@ -54,8 +54,8 @@ public abstract class AbstractElementDescription {
         return function.apply(param);
     }
 
-    protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDS);
+    protected <T, R> R retry(IFunction<T, R> function, T param, Integer timeOutInSeconds) throws Exception {
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeOutInSeconds);
         Exception exception = new Exception();
         UUID uuid = UUID.randomUUID();
 
@@ -72,6 +72,9 @@ public abstract class AbstractElementDescription {
             log.debug(uuid+"-retry timeout "+function.toString()+" at "+LocalDateTime.now());
         }
         throw exception;
+    }
+    protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
+        return retry(function,param,SettingsWeb.TIMEOUT_SECONDS);
     }
 
     public WebElement findElement() throws Exception {

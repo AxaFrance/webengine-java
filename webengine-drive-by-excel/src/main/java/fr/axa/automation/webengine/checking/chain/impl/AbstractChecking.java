@@ -2,11 +2,14 @@ package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.cmd.CommandName;
+import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.OptionalConstante;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.util.StringUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,19 @@ public abstract class AbstractChecking implements IChecking {
     protected List<CommandDataDriveByExcel> getCommandDataByName(TestCaseDataDriveByExcel testCaseData, CommandName commandName) {
         List<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
         return commandDataSet.stream().filter(commandData -> commandData.getCommand() == commandName).collect(Collectors.toList());
+    }
+
+    protected List<CommandDataDriveByExcel> getOptionalCommand(TestCaseDataDriveByExcel testCaseData) {
+        return getCommandByOptional(testCaseData,OptionalConstante.OPTIONAL);
+    }
+
+    protected List<CommandDataDriveByExcel> getOptionalAndDependsOnPreviousCommand(TestCaseDataDriveByExcel testCaseData) {
+        return getCommandByOptional(testCaseData,OptionalConstante.OPTIONAL_AND_DEPENDS_ON_PREVIOUS);
+    }
+
+    private List<CommandDataDriveByExcel> getCommandByOptional(TestCaseDataDriveByExcel testCaseData, OptionalConstante optionalConstante) {
+        List<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
+        return commandDataSet.stream().filter(commandData -> StringUtil.equalsIgnoreCase(optionalConstante.getValue(),commandData.getOptional())).collect(Collectors.toList());
     }
 
     public abstract boolean check(TestSuiteDataDriveByExcel testSuiteData);

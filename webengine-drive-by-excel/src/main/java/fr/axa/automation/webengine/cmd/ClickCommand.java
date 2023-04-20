@@ -22,7 +22,7 @@ public class ClickCommand extends AbstractDriverCommand{
             selectByValueForInputRadio(value);
         } else {
             try {
-                webElementDescription.scrollIntoViewAndclick();
+                webElementDescription.scrollToElementAndclick();
             }catch (Exception e){
                 webElementDescription.focusAndClick();
             }

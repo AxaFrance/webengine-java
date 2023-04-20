@@ -8,13 +8,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor
-public enum Constante {
-    TRIPLE_CHEVRON_PREFIX("<<<"),
-    TRIPLE_CHEVRON_SUFFIX(">>>"),
-    SEMICOLON(";"),
-    EXCLAMATION_MARK("!"),
-    MINUS("-"),
-    PLUS("+"),
-    CR_LF ("\r\n");
+public enum OptionalConstante {
+    OPTIONAL("optional"),
+    OPTIONAL_AND_DEPENDS_ON_PREVIOUS("optional and depends on previous");
     final String value;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.OptionalConstante;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,7 +48,7 @@ public class CommandDataDriveByExcel {
     private Map<String,String> dataTestMap;
 
     public boolean isOptional(){
-        if(this!=null && StringUtils.isNotEmpty(this.getOptional()) && this.getOptional().equalsIgnoreCase(Constante.OPTIONAL.getValue())){
+        if(this!=null && StringUtils.isNotEmpty(this.getOptional()) && this.getOptional().equalsIgnoreCase(OptionalConstante.OPTIONAL.getValue())){
             return true;
         }
         return false;
@@ -61,7 +62,7 @@ public class CommandDataDriveByExcel {
     }
 
     public boolean isOptionalAndDependsOnPrevious(){
-        if(this!=null && StringUtils.isNotEmpty(this.getOptional()) && this.getOptional().equalsIgnoreCase(Constante.OPTIONAL_AND_DEPENDS_ON_PREVIOUS.getValue())){
+        if(this!=null && StringUtils.isNotEmpty(this.getOptional()) && this.getOptional().equalsIgnoreCase(OptionalConstante.OPTIONAL_AND_DEPENDS_ON_PREVIOUS.getValue())){
             return true;
         }
         return false;
