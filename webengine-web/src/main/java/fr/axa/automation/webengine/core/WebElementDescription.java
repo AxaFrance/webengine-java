@@ -299,8 +299,6 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-
-
     public void scrollToElementAndsendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
@@ -321,14 +319,19 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-    public Boolean isInputSelect(WebElement webElement) throws Exception {
+    public Boolean isInputSelect() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
-            if(webElement.getTagName().equalsIgnoreCase(HtmlTag.SELECT.getValue())){
-                return true;
-            }
-            return false;
+            WebElement webElement = findElement();
+            return isInputSelect(webElement);
         };
         return retry(fun,null);
+    }
+
+    private Boolean isInputSelect(WebElement webElement) throws Exception {
+        if(webElement.getTagName().equalsIgnoreCase(HtmlTag.SELECT.getValue())){
+            return true;
+        }
+        return false;
     }
 
     public void focus() throws Exception {
@@ -340,10 +343,7 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-    public Boolean isInputSelect() throws Exception {
-        WebElement webElement = findElement();
-        return isInputSelect(webElement);
-    }
+
 
     public Boolean isInputRadio() throws Exception {
         return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO);

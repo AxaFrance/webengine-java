@@ -180,7 +180,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                     commandResult.getActionReport().setSubActionReports(new ArrayOfActionReport());
                     commandResult.getActionReport().getSubActionReports().getActionReports().addAll(CommandResultHelper.getActionReportList(commandResultOfSubCommandList));
                 }
-                ignoredAllNextCmd = isIgnoredAllOtherAction(commandResult.getActionReport());
+                ignoredAllNextCmd = isIgnoredAllOtherAction(commandResult);
             }
         }catch (Throwable e){
             loggerService.info("Fatal exception during command : "+ commandName +" and test case name is : "+ testCaseName +". All commands are cancelled.");
@@ -214,5 +214,13 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
             return false;
         }
         return true;
+    }
+
+    protected boolean isIgnoredAllOtherAction(CommandResult commandResult) {
+        boolean ignored = false;
+        if(commandResult.getCommandData().getCommand() != CommandName.IF && commandResult.getCommandData().getCommand() != CommandName.ELSE_IF) {
+            return isIgnoredAllOtherAction(commandResult.getActionReport());
+        }
+        return ignored;
     }
 }
