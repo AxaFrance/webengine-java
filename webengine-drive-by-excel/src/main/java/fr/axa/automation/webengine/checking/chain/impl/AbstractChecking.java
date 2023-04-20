@@ -2,7 +2,6 @@ package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.constante.OptionalConstante;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;

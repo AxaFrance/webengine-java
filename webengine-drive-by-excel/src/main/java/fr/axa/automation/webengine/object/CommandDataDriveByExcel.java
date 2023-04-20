@@ -3,7 +3,6 @@ package fr.axa.automation.webengine.object;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.constante.OptionalConstante;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
