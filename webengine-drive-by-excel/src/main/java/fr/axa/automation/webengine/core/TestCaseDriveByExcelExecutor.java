@@ -88,8 +88,8 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         } finally {
             List<ActionReport> actionReportList = CommandResultHelper.getActionReportList(commandResultList);
             testCaseReport.getActionReports().getActionReports().addAll(actionReportList);
-            testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
             testCaseReport.setResult(getResultOfTestCase(actionReportList));
+            testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
             //testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
         }
         return testCaseReport;
@@ -137,11 +137,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                     case IF:
                         commandResult = stepExecutor.run(globalApplicationContext, testCaseContext,commandData,commandResultList);
                         nestedIfList.addLast(getResultOfCommand(CommandName.IF,commandResult.getActionReport().getResult()));
-                        if(CommandResultHelper.isResultExpected(commandResult,Result.PASSED)){
-                            commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand);
-                        }else{
-                            commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
-                        }
+                        commandResultOfSubCommandList = CommandResultHelper.isResultExpected(commandResult,Result.PASSED) ? runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand) : ignoreCommand(treeNodeCommand);
                         isSubReport = true;
                         break;
                     case ELSE_IF:
@@ -167,6 +163,8 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                     case CALL:
                         commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
                         commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL.getName())));
+                        List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
+                        commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                         isSubReport = true;
                         break;
                     default:

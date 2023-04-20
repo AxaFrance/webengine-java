@@ -51,10 +51,7 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
      protected Result getResultOfAllAction(List<ActionReport> actionReportList) {
           Result result = Result.PASSED;
           if (CollectionUtils.isNotEmpty(actionReportList)) {
-               List<ActionReport> actionReportDetailFilterList = actionReportList.stream().filter(actionReport ->
-                       actionReport != null &&
-                       (actionReport.getResult() == Result.FAILED || actionReport.getResult() == Result.CRITICAL_ERROR)
-               ).collect(Collectors.toList());
+               List<ActionReport> actionReportDetailFilterList = actionReportList.stream().filter(actionReport -> actionReport != null && (actionReport.getResult() == Result.FAILED || actionReport.getResult() == Result.CRITICAL_ERROR)).collect(Collectors.toList());
                return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
           }
           return result;
