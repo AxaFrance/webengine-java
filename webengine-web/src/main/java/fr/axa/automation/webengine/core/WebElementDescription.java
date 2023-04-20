@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -343,20 +344,15 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-
+    private Boolean isInputRadio(WebElement webElement) {
+        if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) &&  isTypeElementByAttribute(webElement, HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO)){
+            return true;
+        }
+        return false;
+    }
 
     public Boolean isInputRadio() throws Exception {
         return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO);
-    }
-
-    public Boolean isInputRadio(WebElement webElement) throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
-            if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) && isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO)){
-                return true;
-            }
-            return false;
-        };
-        return retry(fun,null);
     }
 
     public Boolean isInputText() throws Exception {
@@ -368,17 +364,20 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private Boolean isTypeElementByAttribute(HtmlAttributeValueConstante htmlAttributeValueConstante) throws Exception {
-        IFunction<HtmlAttributeValueConstante, Boolean> fun = (x) -> {
+        IFunction<HtmlAttributeValueConstante, Boolean> fun = (attributeValueConstante) -> {
             WebElement webElement = findElement();
-            String typeWebElement = webElement.getAttribute("type");
-            if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(x.getValue())){
-                return true;
-            }
-            return false;
+            return isTypeElementByAttribute(webElement, attributeValueConstante);
         };
         return retry(fun, htmlAttributeValueConstante);
     }
 
+    private Boolean isTypeElementByAttribute( WebElement webElement, HtmlAttributeValueConstante htmlAttributeValueConstante) {
+        String typeWebElement = webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_TYPE.getValue());
+        if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(htmlAttributeValueConstante.getValue())){
+            return true;
+        }
+        return false;
+    }
 
     public Select asSelect() throws Exception {
         IFunction<Void, Select> fun = (x) -> {
@@ -434,6 +433,20 @@ public class WebElementDescription extends AbstractElementDescription {
         return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
     }
 
+    public String getTextByElement() throws Exception {
+        IFunction<Void, String> fun = (value) ->{
+            WebElement webElement = this.findElement();
+            if(isInputSelect(webElement)){
+                return getSelectedOption(webElement);
+            }else if(isTypeElementByAttribute(webElement,HtmlAttributeValueConstante.ATTRIBUTE_TYPE_TEXT) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
+                return webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue());
+            }else{
+                return webElement.getText();
+            }
+        };
+        return retry(fun,null);
+    }
+
     public boolean assertContentByElementType(String text) throws Exception {
         IFunction<String, Boolean> fun = (value) ->{
             WebElement webElement = this.findElement();
@@ -453,6 +466,23 @@ public class WebElementDescription extends AbstractElementDescription {
             return resultAssert;
         };
         return retry(fun,text);
+    }
+
+    private String getSelectedOption(WebElement webElement) throws Exception{
+        if(webElement!=null){
+            Select select = new Select(webElement);
+            List<WebElement> webElementList = select.getOptions().stream().filter(we -> we.isSelected()).collect(Collectors.toList());
+            if(CollectionUtils.isNotEmpty(webElementList)){
+                if(webElementList.size()>1){
+                    throw new Exception("Impossible case, many options are selected");
+                }
+                Optional<WebElement> webElementSelected = webElementList.stream().findFirst();
+                if(webElementSelected.isPresent()){
+                    return webElementSelected.get().getText();
+                }
+            }
+        }
+        return StringUtils.EMPTY;
     }
 
     private boolean assertContentInSelect(WebElement webElement,String text){
@@ -502,11 +532,10 @@ public class WebElementDescription extends AbstractElementDescription {
         IFunction<String, Void> fun = (x) -> {
             Collection<WebElement> elementCollection = this.internalFindElements();
             if (CollectionUtils.isNotEmpty(elementCollection)) {
-                WebElement webElement = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(x)).findFirst().orElse(null);
-                executeJavascript("arguments[0].scrollIntoView(true);", webElement);
-                focus(webElement);
-                if(webElement!=null) {
-                    webElement.click();
+                WebElement webElementFilter = elementCollection.stream().filter(webElt-> StringUtil.equalsIgnoreCase(x,webElt.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()))).findFirst().orElse(null);
+                if(webElementFilter!=null) {
+                    executeJavascript("arguments[0].scrollIntoView(true);", webElementFilter);
+                    focusAndClick(webElementFilter);
                 }else{
                     throw new WebEngineException("Element is null");
                 }
