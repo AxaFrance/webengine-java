@@ -33,12 +33,13 @@ public class OptionalChecking extends AbstractChecking{
         boolean throwException=false;
         for (NumberOfOptionalByTestCase numberOfOptionalByTestCase :numberOfOptionalList){
             if(numberOfOptionalByTestCase.getNumberOfCommandWithOptionalAndDependsOnPrevious()>0 && numberOfOptionalByTestCase.getNumberOfCommandWithOptional()==0){
-                loggerService.warn("If you use 'optional and depends on previsou, you should have at least one 'optional'. Check this test case :"+ numberOfOptionalByTestCase.getTestCaseName());
+                loggerService.warn("If you use the option 'optional and depends on previous', you should have at least one 'optional'. Check this test case :"+ numberOfOptionalByTestCase.getTestCaseName());
+                throwException=true;
             }
         }
 
         if(throwException){
-            throw new IllegalArgumentException("If you use 'optional and depends on previsou, you should have at least one 'optional'.");
+            throw new IllegalArgumentException("If you use the option 'optional and depends on previous', you should have at least one 'optional'.");
         }
     }
 
