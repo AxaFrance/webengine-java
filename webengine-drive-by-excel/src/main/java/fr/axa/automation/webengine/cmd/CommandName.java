@@ -25,6 +25,8 @@ public enum CommandName {
 
     ASSERT_CONTENT("assertContent"),
 
+    ASSERT_CHECKED("assertChecked"),
+
     SCREENSHOT("screenshot"),
 
     WAIT("wait"),

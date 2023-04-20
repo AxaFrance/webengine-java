@@ -20,6 +20,8 @@ public class CommandFactory {
                 return new IsExistCommand();
             case IS_SELECTED:
                 return new IsSelectedCommand();
+            case ASSERT_CHECKED:
+                return new AssertCheckedCommand();
             case SCREENSHOT:
                 return new ScrenshotCommand();
             case ASSERT_CONTENT:

@@ -349,6 +349,16 @@ public class WebElementDescription extends AbstractElementDescription {
         return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO);
     }
 
+    public Boolean isInputRadio(WebElement webElement) throws Exception {
+        IFunction<Void, Boolean> fun = (x) -> {
+            if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) && isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO)){
+                return true;
+            }
+            return false;
+        };
+        return retry(fun,null);
+    }
+
     public Boolean isInputText() throws Exception {
         return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_TEXT);
     }
@@ -430,6 +440,8 @@ public class WebElementDescription extends AbstractElementDescription {
             Boolean resultAssert;
             if(isInputSelect(webElement)){
                 resultAssert = assertContentInSelect(webElement,value);
+            }else if(isInputRadio(webElement)){
+                resultAssert = webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue()).equalsIgnoreCase("true");
             }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
                 resultAssert = StringUtil.contains(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()),value);
             }else{
