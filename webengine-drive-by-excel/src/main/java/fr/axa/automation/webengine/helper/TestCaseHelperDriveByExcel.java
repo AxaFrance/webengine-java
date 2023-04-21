@@ -28,7 +28,7 @@ public final class TestCaseHelperDriveByExcel {
         return TestCaseDriveByExcelContext.builder().testCaseName(testCaseName).webDriver(testCaseDriveByExcelContext.getWebDriver()).testSuiteData(testCaseDriveByExcelContext.getTestSuiteData()).testCaseToRun(list.get(0)).dataTestColumnName(testCaseDriveByExcelContext.getDataTestColumnName()).build();
     }
 
-    public static String getTestCaseName(AbstractTestCaseContext testCaseContext){
+    public static String getReportTestCaseName(AbstractTestCaseContext testCaseContext){
         StringBuffer stringBuffer = new StringBuffer();
         TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
         return stringBuffer.append(testCaseDriveByExcelContext.getTestCaseName()).append("[ ").append("Data test column executed : ").append(testCaseDriveByExcelContext.getDataTestColumnName()).append(" ]").toString();

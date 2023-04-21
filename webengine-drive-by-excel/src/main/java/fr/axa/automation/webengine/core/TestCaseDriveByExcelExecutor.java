@@ -78,7 +78,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
     public TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
         TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext)testCaseContext;
         String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
-        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName+"-"+testCaseDriveByExcelContext.getDataTestColumnName());
+        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(TestCaseHelperDriveByExcel.getReportTestCaseName(testCaseContext));
         List<CommandResult> commandResultList = new ArrayList<>();
 
         try {
