@@ -12,6 +12,7 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.CommandNameHelper;
 import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
@@ -101,7 +102,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return runTestStep(globalApplicationContext, testCaseContext, rootNode);
     }
 
-    private List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode) throws WebEngineException {
+    protected List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode) throws WebEngineException {
         ITestStepDriveByExcelExecutor stepExecutor = ((ITestStepDriveByExcelExecutor)testStepExecutor);
         CommandDataDriveByExcel commandData = null;
         ActionReport actionReport = new ActionReport();
@@ -116,6 +117,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
 
         TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
         String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
+        String dataTestColumName = testCaseDriveByExcelContext.getDataTestColumnName();
 
         List<TreeNode> treeNodeCommandList = treeNode.getChildren();
         try {
@@ -161,11 +163,13 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                         nestedIfList.removeLast();
                         break;
                     case CALL:
-                        commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
-                        commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL.getName())));
-                        List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
-                        commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
-                        isSubReport = true;
+                        if(CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)){
+                            commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
+                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL.getName())));
+                            List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
+                            commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
+                            isSubReport = true;
+                        }
                         break;
                     default:
                         commandResult = stepExecutor.run(globalApplicationContext, testCaseContext,commandData,commandResultList);
@@ -191,7 +195,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return commandResultList;
     }
 
-    private List<CommandResult> ignoreCommand(TreeNode treeNodeCommand) {
+    protected List<CommandResult> ignoreCommand(TreeNode treeNodeCommand) {
         List<CommandResult> actionReportList = new ArrayList<>();
         List<TreeNode> treeNodeCommandChildrenList = treeNodeCommand.getChildren();
         for (TreeNode treeNodeChildren:treeNodeCommandChildrenList) {
@@ -203,13 +207,13 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return actionReportList;
     }
 
-    private Map<CommandName,Result> getResultOfCommand(CommandName commandName,Result result) {
+    protected Map<CommandName,Result> getResultOfCommand(CommandName commandName,Result result) {
         Map<CommandName,Result> map = new HashMap<>();
         map.put(commandName,result);
         return map;
     }
 
-    private boolean canExecute(Map<CommandName,Result> map) {
+    protected boolean canExecute(Map<CommandName,Result> map) {
         if(map.containsValue(Result.PASSED)){
             return false;
         }

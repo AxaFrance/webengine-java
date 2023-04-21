@@ -28,6 +28,11 @@ public final class TestCaseHelperDriveByExcel {
         return TestCaseDriveByExcelContext.builder().testCaseName(testCaseName).webDriver(testCaseDriveByExcelContext.getWebDriver()).testSuiteData(testCaseDriveByExcelContext.getTestSuiteData()).testCaseToRun(list.get(0)).dataTestColumnName(testCaseDriveByExcelContext.getDataTestColumnName()).build();
     }
 
+    public static String getTestCaseName(AbstractTestCaseContext testCaseContext){
+        TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
+
+    }
+
     public static List<String> getNameListByTestCase(TestCaseDataDriveByExcel testCaseData){
         return testCaseData.getCommandList().stream().map(commandData -> commandData.getName()).filter(name->StringUtils.isNotEmpty(name)).collect(Collectors.toList());
     }
