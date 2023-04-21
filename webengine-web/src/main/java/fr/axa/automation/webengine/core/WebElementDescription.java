@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.constante.HtmlAttributeConstante;
 import fr.axa.automation.webengine.constante.HtmlAttributeValueConstante;
 import fr.axa.automation.webengine.constante.HtmlTag;
@@ -455,7 +456,7 @@ public class WebElementDescription extends AbstractElementDescription {
             if(isInputSelect(webElement)){
                 resultAssert = assertContentInSelect(webElement,value);
             }else if(isInputRadio(webElement)){
-                resultAssert = webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue()).equalsIgnoreCase("true");
+                resultAssert = StringUtil.equalsIgnoreCase(Constante.TRUE.getValue(),webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue()));
             }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
                 resultAssert = StringUtil.contains(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()),value);
             }else{
@@ -478,7 +479,7 @@ public class WebElementDescription extends AbstractElementDescription {
             List<WebElement> webElementList = select.getOptions().stream().filter(we -> we.isSelected()).collect(Collectors.toList());
             if(CollectionUtils.isNotEmpty(webElementList)){
                 if(webElementList.size()>1){
-                    throw new Exception("Impossible case, many options are selected");
+                    throw new Exception("Impossible case, many options are selected, not only one");
                 }
                 Optional<WebElement> webElementSelected = webElementList.stream().findFirst();
                 if(webElementSelected.isPresent()){
@@ -541,7 +542,7 @@ public class WebElementDescription extends AbstractElementDescription {
                     executeJavascript("arguments[0].scrollIntoView(true);", webElementFilter);
                     focusAndClick(webElementFilter);
                 }else{
-                    throw new WebEngineException("Element is null");
+                    throw new WebEngineException("The element is null");
                 }
             }
             return null;

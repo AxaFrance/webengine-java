@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
@@ -35,6 +36,9 @@ public class CommandDataHelper {
     }
 
     public static boolean canExecuteDataTestColumn(List<String> dataTestRefList,String dataTestColumnName){
+        if(CollectionUtils.isNotEmpty(dataTestRefList) && dataTestRefList.size()==1 && StringUtil.equalsIgnoreCase(Constante.EXCLAMATION_MARK.getValue(),dataTestRefList.get(0))){
+            return false;
+        }
         List<String> result = mergeLists(dataTestRefList, Arrays.asList(dataTestColumnName));
         if(result.contains(dataTestColumnName)){
             return true;
