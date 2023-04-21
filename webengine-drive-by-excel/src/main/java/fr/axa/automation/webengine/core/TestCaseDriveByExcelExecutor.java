@@ -88,9 +88,9 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);
         } finally {
-            List<ActionReport> actionReportList = CommandResultHelper.getActionReportList(filterCommandResult(commandResultList));
+            List<ActionReport> actionReportList = CommandResultHelper.getActionReportList(commandResultList);
             testCaseReport.getActionReports().getActionReports().addAll(actionReportList);
-            testCaseReport.setResult(getResultOfTestCase(actionReportList));
+            testCaseReport.setResult(getResultOfTestCase(CommandResultHelper.getActionReportList(filterCommandResult(commandResultList))));
             testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
             //testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
         }
@@ -231,6 +231,6 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
 
     protected List<CommandResult> filterCommandResult(List<CommandResult> commandResultList) {
         Result result = Result.PASSED;
-        return commandResultList.stream().filter(commandResult -> CommandName.IF==commandResult.getCommandData().getCommand() && CommandName.ELSE_IF==commandResult.getCommandData().getCommand()).collect(Collectors.toList());
+        return commandResultList.stream().filter(commandResult -> CommandName.IF!=commandResult.getCommandData().getCommand() && CommandName.ELSE_IF!=commandResult.getCommandData().getCommand()).collect(Collectors.toList());
     }
 }
