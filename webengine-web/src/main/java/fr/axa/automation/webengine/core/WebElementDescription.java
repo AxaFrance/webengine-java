@@ -10,7 +10,6 @@ import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.StringUtil;
-import javafx.scene.paint.Color;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
