@@ -12,8 +12,8 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -40,6 +40,8 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
      public abstract Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException;
 
+
+
      protected Result getResultOfTestCase(List<ActionReport> actionReportList) {
           Result result = Result.PASSED;
           if(getResultOfAllAction(actionReportList) == Result.FAILED ){
@@ -49,10 +51,19 @@ public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
      }
 
      protected Result getResultOfAllAction(List<ActionReport> actionReportList) {
+          List<Result> subReportResultList = new ArrayList<>();
+          List<ActionReport> actionReportFailedList = new ArrayList<>();
           Result result = Result.PASSED;
           if (CollectionUtils.isNotEmpty(actionReportList)) {
-               List<ActionReport> actionReportDetailFilterList = actionReportList.stream().filter(actionReport -> actionReport != null && (actionReport.getResult() == Result.FAILED || actionReport.getResult() == Result.CRITICAL_ERROR)).collect(Collectors.toList());
-               return CollectionUtils.isNotEmpty(actionReportDetailFilterList) ? Result.FAILED : result;
+               for (ActionReport actionReport : actionReportList) {
+                    if(actionReport != null && (actionReport.getResult() == Result.FAILED || actionReport.getResult() == Result.CRITICAL_ERROR)){
+                         actionReportFailedList.add(actionReport);
+                    }
+                    if(actionReport != null && actionReport.getSubActionReports()!=null && CollectionUtils.isNotEmpty(actionReport.getSubActionReports().getActionReports())){
+                         subReportResultList.add(getResultOfAllAction(actionReport.getSubActionReports().getActionReports()));
+                    }
+               }
+               return CollectionUtils.isNotEmpty(actionReportFailedList) || subReportResultList.contains(Result.FAILED) ? Result.FAILED : result;
           }
           return result;
      }

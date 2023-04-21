@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Qualifier("testCaseDriveByExcelExecutor")
@@ -87,7 +88,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);
         } finally {
-            List<ActionReport> actionReportList = CommandResultHelper.getActionReportList(commandResultList);
+            List<ActionReport> actionReportList = CommandResultHelper.getActionReportList(filterCommandResult(commandResultList));
             testCaseReport.getActionReports().getActionReports().addAll(actionReportList);
             testCaseReport.setResult(getResultOfTestCase(actionReportList));
             testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
@@ -226,5 +227,10 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
             return isIgnoredAllOtherAction(commandResult.getActionReport());
         }
         return ignored;
+    }
+
+    protected List<CommandResult> filterCommandResult(List<CommandResult> commandResultList) {
+        Result result = Result.PASSED;
+        return commandResultList.stream().filter(commandResult -> CommandName.IF==commandResult.getCommandData().getCommand() && CommandName.ELSE_IF==commandResult.getCommandData().getCommand()).collect(Collectors.toList());
     }
 }
