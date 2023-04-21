@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.StringUtil;
+import javafx.scene.paint.Color;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -471,6 +472,9 @@ public class WebElementDescription extends AbstractElementDescription {
     private String getSelectedOption(WebElement webElement) throws Exception{
         if(webElement!=null){
             Select select = new Select(webElement);
+            if (!webElement.isEnabled()){
+                throw new Exception("Select WebElement is not enabled for the while...");
+            }
             List<WebElement> webElementList = select.getOptions().stream().filter(we -> we.isSelected()).collect(Collectors.toList());
             if(CollectionUtils.isNotEmpty(webElementList)){
                 if(webElementList.size()>1){
