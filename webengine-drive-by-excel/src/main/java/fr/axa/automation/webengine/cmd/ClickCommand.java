@@ -23,7 +23,7 @@ public class ClickCommand extends AbstractDriverCommand{
         } else {
             try {
                 webElementDescription.scrollToElementAndclick();
-            }catch (Exception e){
+            }catch (Throwable e){
                 webElementDescription.focusAndClick();
             }
         }
