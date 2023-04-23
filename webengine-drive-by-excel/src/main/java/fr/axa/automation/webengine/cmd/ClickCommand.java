@@ -21,11 +21,8 @@ public class ClickCommand extends AbstractDriverCommand{
         if (webElementDescription.isInputRadio()) {
             selectByValueForInputRadio(value);
         } else {
-            try {
-                webElementDescription.scrollToElementAndclick();
-            }catch (Throwable e){
-                webElementDescription.focusAndClick();
-            }
+//            webElementDescription.focus();
+            webElementDescription.focusAndClick();
         }
     }
 }

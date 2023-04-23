@@ -245,42 +245,14 @@ public class WebElementDescription extends AbstractElementDescription {
         js.executeScript(script, webElement);
     }
 
-    public void scrollToElement() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
-            WebElement webElement = findElement();
-            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
-            return null;
-        };
-        retry(fun,null);
-    }
-
     /**
      *
      * @deprecated
-     * Use method scrollToElement
+     * Use method scrollToElement or focus()
      */
     @Deprecated
     public void scrollIntoView() throws Exception {
         scrollToElement();
-    }
-
-    public void scrollToElementAndclick() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
-            WebElement webElement = findElement();
-            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
-            webElement.click();
-            return null;
-        };
-        retry(fun,null);
-    }
-
-    public void focusAndClick() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
-            WebElement webElement = findElement();
-            focusAndClick(webElement);
-            return null;
-        };
-        retry(fun,null);
     }
 
     /**
@@ -292,6 +264,25 @@ public class WebElementDescription extends AbstractElementDescription {
         scrollToElementAndclick();
     }
 
+    public void scrollToElement() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+    public void scrollToElementAndclick() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
+            click(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
     public void scrollIntoCenterView() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
@@ -301,12 +292,23 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
-    public void scrollToElementAndsendKeys(String text) throws Exception {
+    public void focusAndClick() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            click(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+    public void focusAndsendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
             focus(webElement);
-            webElement.sendKeys(x);
+            highLight(webElement);
+            sendKeys(x,webElement);
             return null;
         };
         retry(fun,text);
@@ -315,10 +317,14 @@ public class WebElementDescription extends AbstractElementDescription {
     public void highLight() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            executeJavascript("arguments[0].style.border='3px solid red'", webElement);
+            highLight(webElement);
             return null;
         };
         retry(fun,null);
+    }
+
+    private void highLight(WebElement webElement) {
+        executeJavascript("arguments[0].style.border='3px solid red'", webElement);
     }
 
     public Boolean isInputSelect() throws Exception {
@@ -391,8 +397,8 @@ public class WebElementDescription extends AbstractElementDescription {
     public void selectByValueOrText(String text) throws Exception {
         IFunction<String, Void> fun = (value) -> {
             WebElement webElement = this.findElement();
-            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
-            focusAndClick(webElement);
+            focus(webElement);
+            click(webElement);
             Select select = new Select(webElement);
             List<WebElement> elementListInSelect = getElementExistInSelect(select,value);
             if(CollectionUtils.isNotEmpty(elementListInSelect) && elementListInSelect.size()==1){
@@ -451,6 +457,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public boolean assertContentByElementType(String text) throws Exception {
         IFunction<String, Boolean> fun = (value) ->{
             WebElement webElement = this.findElement();
+            focus(webElement);
             Boolean resultAssert;
             if(isInputSelect(webElement)){
                 resultAssert = assertContentInSelect(webElement,value);
@@ -502,7 +509,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public void selectByText(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = this.findElement();
-            webElement.click();
+            click(webElement);
             Select se = new Select(webElement);
             se.selectByVisibleText(x);
             return null;
@@ -513,7 +520,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public void selectByIndex(Integer index) throws Exception {
         IFunction<Integer, Void> fun = (x) -> {
             WebElement element = this.findElement();
-            element.click();
+            click(element);
             Select se = new Select(element);
             se.selectByIndex(x);
             return null;
@@ -524,7 +531,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public void selectByValue(String value) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement element = this.findElement();
-            element.click();
+            click(element);
             Select se = new Select(element);
             se.selectByValue(x);
             return null;
@@ -539,7 +546,8 @@ public class WebElementDescription extends AbstractElementDescription {
                 WebElement webElementFilter = elementCollection.stream().filter(webElt-> StringUtil.equalsIgnoreCase(x,webElt.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()))).findFirst().orElse(null);
                 if(webElementFilter!=null) {
                     executeJavascript("arguments[0].scrollIntoView(true);", webElementFilter);
-                    focusAndClick(webElementFilter);
+                    focus(webElementFilter);
+                    click(webElementFilter);
                 }else{
                     throw new WebEngineException("The element is null");
                 }
@@ -555,7 +563,7 @@ public class WebElementDescription extends AbstractElementDescription {
             if (CollectionUtils.isNotEmpty(elementCollection)) {
                 WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(x)).findFirst().orElse(null);
                 if(webElementFilter!=null) {
-                    webElementFilter.click();
+                    click(webElementFilter);
                 }else{
                     throw new WebEngineException("Element is null");
                 }
@@ -579,9 +587,5 @@ public class WebElementDescription extends AbstractElementDescription {
         } else{
             new Actions(getUseDriver()).moveToElement(webElement).perform();
         }
-    }
-
-    private void focusAndClick(WebElement webElement) {
-        new Actions(getUseDriver()).moveToElement(webElement).click().perform();
     }
 }

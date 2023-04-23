@@ -141,11 +141,15 @@ public abstract class AbstractElementDescription {
 
     public void click() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-                WebElement webElement = findElement();
-                webElement.click();
-                return null;
+            WebElement webElement = findElement();
+            click(webElement);
+            return null;
         };
-        retry(fun,null);
+        retry(fun, null);
+    }
+
+    protected void click(WebElement webElement) {
+        webElement.click();
     }
 
     public void autocompletion(String text) throws Exception {
@@ -162,10 +166,14 @@ public abstract class AbstractElementDescription {
     public void sendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            webElement.sendKeys(x);
+            sendKeys(x, webElement);
             return null;
         };
         retry(fun,text);
+    }
+
+    protected void sendKeys(String x, WebElement webElement) {
+        webElement.sendKeys(x);
     }
 
     public byte[] getScreenshot() throws Exception {
@@ -178,7 +186,7 @@ public abstract class AbstractElementDescription {
         IFunction<String, Void> fun = (x) -> {
             WebElement element = findElement();
             element.clear();
-            element.sendKeys(x);
+            sendKeys(x, element);
             return null;
         };
         retry(fun,text);

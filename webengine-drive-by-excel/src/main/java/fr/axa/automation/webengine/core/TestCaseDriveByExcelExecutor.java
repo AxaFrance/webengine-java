@@ -177,7 +177,11 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                         if(commandData.isOptional() && CommandResultHelper.isResultExpected(commandResult,Result.PASSED) && CollectionUtils.isNotEmpty(treeNodeCommand.getChildren())){
                             commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand);
                             isSubReport = true;
+                        } else if (commandData.isOptional() && (CommandResultHelper.isResultExpected(commandResult,Result.IGNORED) || CommandResultHelper.isResultExpected(commandResult,Result.FAILED) || CommandResultHelper.isResultExpected(commandResult,Result.CRITICAL_ERROR))) {
+                            commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
+                            isSubReport = true;
                         }
+
                         break;
                 }
                 commandResultList.add(commandResult);
