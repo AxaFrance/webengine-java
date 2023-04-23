@@ -208,6 +208,9 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
             String commandName = CommandNameHelper.getCommandName(commandData);
             ActionReport actionReport = ActionReportHelper.getActionReport(commandName,Result.IGNORED);
             actionReportList.add(CommandResultHelper.getCommandResult(commandData,actionReport,""));
+            if(commandData.isOptional() && CollectionUtils.isNotEmpty(treeNodeChildren.getChildren())){
+                actionReportList.addAll(ignoreCommand(treeNodeChildren));
+            }
         }
         return actionReportList;
     }
