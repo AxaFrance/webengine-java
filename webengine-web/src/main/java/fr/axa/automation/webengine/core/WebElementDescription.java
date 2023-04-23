@@ -443,6 +443,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public String getTextByElement() throws Exception {
         IFunction<Void, String> fun = (value) ->{
             WebElement webElement = this.findElement();
+            focus(webElement);
             if(isInputSelect(webElement)){
                 return getSelectedOption(webElement);
             }else if(isTypeElementByAttribute(webElement,HtmlAttributeValueConstante.ATTRIBUTE_TYPE_TEXT) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
