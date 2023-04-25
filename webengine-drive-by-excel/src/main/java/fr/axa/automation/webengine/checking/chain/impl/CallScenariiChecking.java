@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
+import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
@@ -48,7 +49,7 @@ public class CallScenariiChecking extends AbstractChecking{
 
     private Set<CommandDataDriveByExcel> getCallCommandWhichDoesntExist(List<CommandDataDriveByExcel> callCommandSet, List<String> testCaseNameList) {
         Set<CommandDataDriveByExcel> callCommandList = new HashSet<>(callCommandSet);
-        return callCommandList.stream().filter(commandData -> !testCaseNameList.contains(commandData.getTargetList().get(CommandName.CALL.getCommandLibelle()))).collect(Collectors.toSet());
+        return callCommandList.stream().filter(commandData -> !testCaseNameList.contains(commandData.getTargetList().get(TargetKey.CALL))).collect(Collectors.toSet());
     }
 
     private void assertCommand(Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist){

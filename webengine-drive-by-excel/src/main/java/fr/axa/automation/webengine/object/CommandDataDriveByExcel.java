@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.OptionalConstante;
+import fr.axa.automation.webengine.constante.TargetKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +39,7 @@ public class CommandDataDriveByExcel {
     @JsonProperty("command")
     private CommandName command;
     @JsonProperty("targetList")
-    private Map<String,String> targetList;
+    private Map<TargetKey,String> targetList;
     @JsonProperty("optional")
     private String optional;
     @JsonProperty("dataTestReference")

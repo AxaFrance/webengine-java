@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.LocatingBy;
+import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.global.ExcelColumn;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
@@ -98,7 +99,7 @@ public class ExcelConverter {
             commandDataList.add(commandData);
 
             if (commandData.getCommand() == CommandName.CALL) {
-                String testCaseNameToCall = commandData.getTargetList().get(CommandName.CALL.getCommandLibelle());
+                String testCaseNameToCall = commandData.getTargetList().get(TargetKey.CALL);
                 Map<String, TestCaseDataDriveByExcel> testCaseDataCalledMap = getTestCaseDataList(workbook, testCaseNameToCall, dataTestColumnNameList);
                 if (!testCaseDataMap.containsKey(testCaseNameToCall)) {
                     testCaseDataMap.putAll(testCaseDataCalledMap);
@@ -138,12 +139,6 @@ public class ExcelConverter {
         return ExcelReader.getCellValue(currentRow, ExcelColumn.DATA_TEST_REFERENCE.getValue()).trim();
     }
 
-    private static Map<String, String> getTargetValueList(Row currentRow) {
-        CommandName commandValue = getCommandValue(currentRow);
-        String targetCellValue = ExcelReader.getCellValue(currentRow, ExcelColumn.TARGETS.getValue()).trim();
-        return getTargetValueList(commandValue, targetCellValue);
-    }
-
     private static Map<String, String> getDataTestList(Sheet testCaseSheet, Row currentRow, List<String> dataTestColumnNameList) {
         int numberOfColumn = testCaseSheet.getRow(ExcelColumn.FIELD_NAME.getValue()).getLastCellNum();
         Map<String, String> dataTestList = new HashMap<>();
@@ -162,21 +157,27 @@ public class ExcelConverter {
         return dataTestList;
     }
 
-    private static Map<String, String> getTargetValueList(CommandName commandName, String targetCellValue) {
-        Map<String, String> targets = new HashMap<>();
+    private static Map<TargetKey, String> getTargetValueList(Row currentRow) {
+        CommandName commandValue = getCommandValue(currentRow);
+        String targetCellValue = ExcelReader.getCellValue(currentRow, ExcelColumn.TARGETS.getValue()).trim();
+        return getTargetValueList(commandValue, targetCellValue);
+    }
+
+    private static Map<TargetKey, String> getTargetValueList(CommandName commandName, String targetCellValue) {
+        Map<TargetKey, String> targets = new HashMap<>();
         if(StringUtils.isEmpty(targetCellValue)){
             return targets;
         }
         if (CommandName.CALL == commandName) {
-            targets.put(CommandName.CALL.getCommandLibelle(), targetCellValue);
+            targets.put(TargetKey.CALL, targetCellValue);
         }else if (CommandName.OPEN == commandName) {
-            targets.put(CommandName.OPEN.getCommandLibelle(), targetCellValue);
+            targets.put(TargetKey.OPEN, targetCellValue);
         }else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
-            targets.put(LocatingBy.BY_XPATH.getValue(), targetCellValue);
+            targets.put(TargetKey.XPATH, targetCellValue);
         } else if (CollectionUtils.isNotEmpty(RegexUtil.match(MANY_LOCATED_PATTERN, targetCellValue))) {
-            targets.put(LocatingBy.BY_COMBINAISON_OF_LOCATOR.getValue(), targetCellValue);
+            targets.put(TargetKey.COMBINAISON_OF_LOCATOR, targetCellValue);
         } else {
-            targets.put(LocatingBy.BY_ID.getValue(), targetCellValue);
+            targets.put(TargetKey.ID, targetCellValue);
         }
         return targets;
     }
