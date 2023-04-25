@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.api.ITestCaseDriveByExcelExecutor;
 import fr.axa.automation.webengine.api.ITestStepDriveByExcelExecutor;
 import fr.axa.automation.webengine.cmd.CommandName;
+import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.ArrayOfActionReport;
@@ -152,7 +153,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                                 commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContext,treeNodeCommand);
                                 isSubReport = true;
                             }
-                            map.put(commandData.getCommand(),actionReport.getResult());
+                            map.put(commandData.getCommand(),commandResult.getActionReport().getResult());
                         }else{
                             commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandName,Result.IGNORED),"");
                             commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
@@ -170,6 +171,10 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;
+                        }else{
+                            actionReport = ActionReportHelper.getActionReport(commandData.getName(),Result.IGNORED);
+                            actionReport.setLog("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
+                            commandResult = CommandResultHelper.getCommandResult(commandData,actionReport,"");
                         }
                         break;
                     default:
@@ -181,7 +186,6 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                             commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
                             isSubReport = true;
                         }
-
                         break;
                 }
                 commandResultList.add(commandResult);
