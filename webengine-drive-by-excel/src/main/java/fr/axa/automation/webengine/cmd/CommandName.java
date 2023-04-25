@@ -14,14 +14,13 @@ public enum CommandName {
     SEND_KEY("send keys"), CLICK("click"),SELECT("select"),
     CALL("call"),
 
-    STORE("store"),
     IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
 
     SAVE_DATA("save data"),
 
-    IS_EXIST("assert exist"),
+    ASSERT_EXIST("assert exist"),
 
-    IS_SELECTED("assert selected"),
+    ASSERT_SELECTED("assert selected"),
 
     ASSERT_CONTENT("assert content"),
 

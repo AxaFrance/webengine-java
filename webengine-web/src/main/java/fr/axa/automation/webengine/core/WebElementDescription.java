@@ -457,9 +457,9 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public boolean assertContentByElementType(String text) throws Exception {
         IFunction<String, Boolean> fun = (value) ->{
+            Boolean resultAssert;
             WebElement webElement = this.findElement();
             focus(webElement);
-            Boolean resultAssert;
             if(isInputSelect(webElement)){
                 resultAssert = assertContentInSelect(webElement,value);
             }else if(isInputRadio(webElement)){
