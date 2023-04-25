@@ -31,7 +31,7 @@ public final class TestCaseHelperDriveByExcel {
     public static String getReportTestCaseName(AbstractTestCaseContext testCaseContext){
         StringBuffer stringBuffer = new StringBuffer();
         TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
-        return stringBuffer.append(testCaseDriveByExcelContext.getTestCaseName()).append("[ ").append("Data test column executed : ").append(testCaseDriveByExcelContext.getDataTestColumnName()).append(" ]").toString();
+        return stringBuffer.append(testCaseDriveByExcelContext.getTestCaseName()).append(" [ ").append("Data test column executed : ").append(testCaseDriveByExcelContext.getDataTestColumnName()).append(" ] ").toString();
     }
 
     public static List<String> getNameListByTestCase(TestCaseDataDriveByExcel testCaseData){

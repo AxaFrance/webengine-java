@@ -11,26 +11,26 @@ import lombok.experimental.FieldDefaults;
 public enum CommandName {
 
     OPEN("open"),
-    SEND_KEY("sendKeys"), CLICK("click"),SELECT("select"),
+    SEND_KEY("send keys"), CLICK("click"),SELECT("select"),
     CALL("call"),
 
     STORE("store"),
     IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
 
-    SAVE_DATA("saveData"),
+    SAVE_DATA("save data"),
 
-    IS_EXIST("isExist"),
+    IS_EXIST("assert exist"),
 
-    IS_SELECTED("isSelected"),
+    IS_SELECTED("assert selected"),
 
-    ASSERT_CONTENT("assertContent"),
+    ASSERT_CONTENT("assert content"),
 
-    ASSERT_CHECKED("assertChecked"),
+    ASSERT_CHECKED("assert checked"),
 
     SCREENSHOT("screenshot"),
 
     WAIT("wait"),
-    END_SCENARIO("endScenario");
+    END_SCENARIO("end scenario");
 
     final String name;
 
