@@ -48,7 +48,7 @@ public class CallScenariiChecking extends AbstractChecking{
 
     private Set<CommandDataDriveByExcel> getCallCommandWhichDoesntExist(List<CommandDataDriveByExcel> callCommandSet, List<String> testCaseNameList) {
         Set<CommandDataDriveByExcel> callCommandList = new HashSet<>(callCommandSet);
-        return callCommandList.stream().filter(commandData -> !testCaseNameList.contains(commandData.getTargetList().get(CommandName.CALL.getName()))).collect(Collectors.toSet());
+        return callCommandList.stream().filter(commandData -> !testCaseNameList.contains(commandData.getTargetList().get(CommandName.CALL.getCommandLibelle()))).collect(Collectors.toSet());
     }
 
     private void assertCommand(Map<String,Set<CommandDataDriveByExcel>> callCommandWhichDoesntExist){

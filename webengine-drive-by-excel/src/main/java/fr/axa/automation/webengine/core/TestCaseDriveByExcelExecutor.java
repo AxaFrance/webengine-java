@@ -3,7 +3,6 @@ package fr.axa.automation.webengine.core;
 import fr.axa.automation.webengine.api.ITestCaseDriveByExcelExecutor;
 import fr.axa.automation.webengine.api.ITestStepDriveByExcelExecutor;
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.ArrayOfActionReport;
@@ -167,7 +166,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                     case CALL:
                         if(CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)){
                             commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
-                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL.getName())));
+                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(CommandName.CALL.getCommandLibelle())));
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;

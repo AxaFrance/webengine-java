@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.cmd;
 
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,15 +32,15 @@ public enum CommandName {
     WAIT("wait"),
     END_SCENARIO("end scenario");
 
-    final String name;
+    final String commandLibelle;
 
 
-    public static CommandName fromValue(String v) {
+    public static CommandName fromValue(String value) {
         for (CommandName commandName: CommandName.values()) {
-            if (commandName.name.equals(v)) {
+            if (StringUtil.equalsIgnoreCase(value,commandName.getCommandLibelle())) {
                 return commandName;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
 }

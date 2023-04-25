@@ -58,7 +58,7 @@ public class ExcelConverter {
 
     private static boolean isEndOfFile(Sheet currentSheet, Integer rowIndex) {
         String cellValue = ExcelReader.getCellValue(currentSheet, rowIndex, ExcelColumn.COMMAND.getValue());
-        if (StringUtils.trim(cellValue).equalsIgnoreCase(CommandName.END_SCENARIO.getName())) {
+        if (StringUtils.trim(cellValue).equalsIgnoreCase(CommandName.END_SCENARIO.getCommandLibelle())) {
             return true;
         }
         return false;
@@ -98,7 +98,7 @@ public class ExcelConverter {
             commandDataList.add(commandData);
 
             if (commandData.getCommand() == CommandName.CALL) {
-                String testCaseNameToCall = commandData.getTargetList().get(CommandName.CALL.getName());
+                String testCaseNameToCall = commandData.getTargetList().get(CommandName.CALL.getCommandLibelle());
                 Map<String, TestCaseDataDriveByExcel> testCaseDataCalledMap = getTestCaseDataList(workbook, testCaseNameToCall, dataTestColumnNameList);
                 if (!testCaseDataMap.containsKey(testCaseNameToCall)) {
                     testCaseDataMap.putAll(testCaseDataCalledMap);
@@ -168,9 +168,9 @@ public class ExcelConverter {
             return targets;
         }
         if (CommandName.CALL == commandName) {
-            targets.put(CommandName.CALL.getName(), targetCellValue);
+            targets.put(CommandName.CALL.getCommandLibelle(), targetCellValue);
         }else if (CommandName.OPEN == commandName) {
-            targets.put(CommandName.OPEN.getName(), targetCellValue);
+            targets.put(CommandName.OPEN.getCommandLibelle(), targetCellValue);
         }else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
             targets.put(LocatingBy.BY_XPATH.getValue(), targetCellValue);
         } else if (CollectionUtils.isNotEmpty(RegexUtil.match(MANY_LOCATED_PATTERN, targetCellValue))) {
