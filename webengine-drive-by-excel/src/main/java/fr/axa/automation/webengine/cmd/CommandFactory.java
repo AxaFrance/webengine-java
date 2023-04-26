@@ -18,14 +18,22 @@ public class CommandFactory {
                 return new SelectCommand();
             case ASSERT_EXIST:
                 return new AssertExistCommand();
+            case ASSERT_NOT_EXIST:
+                return new AssertNotExistCommand();
             case ASSERT_SELECTED:
                 return new AssertSelectedCommand();
+            case ASSERT_NOT_SELECTED:
+                return new AssertNotSelectedCommand();
             case ASSERT_CHECKED:
                 return new AssertCheckedCommand();
+            case ASSERT_NOT_CHECKED:
+                return new AssertNotCheckedCommand();
             case SCREENSHOT:
                 return new ScrenshotCommand();
             case ASSERT_CONTENT:
                 return new AssertContentCommand();
+            case ASSERT_NOT_CONTENT:
+                return new AssertNotContentCommand();
             case IF:
                 return new IfCommand();
             case ELSE_IF:

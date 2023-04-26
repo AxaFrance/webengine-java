@@ -1,23 +1,22 @@
 package fr.axa.automation.webengine.cmd;
 
+import fr.axa.automation.webengine.constante.HtmlAttributeConstante;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
 
 import java.util.List;
 
-public class AssertContentCommand extends AbstractDriverCommand{
+public class AssertNotCheckedCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(testCaseContext,commandData,commandResultList);
-        String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
-        boolean isContentValue = webElementDescription.assertContentByElementType(value);
-        if(!isContentValue){
-            throw  new WebEngineException("The element doesn't content the value : "+value);
+        boolean isChecked = webElementDescription.assertContentByElementType(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue());
+        if(isChecked){
+            throw  new WebEngineException("The element is checked");
         }
     }
 }

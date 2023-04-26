@@ -469,9 +469,6 @@ public class WebElementDescription extends AbstractElementDescription {
             }else{
                 resultAssert = StringUtil.contains(webElement.getText(),value);
             }
-            if(!resultAssert){
-                throw new WebEngineException("The value doesn't exist");
-            }
             return resultAssert;
         };
         return retry(fun,text);

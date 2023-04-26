@@ -18,7 +18,7 @@ public enum PredefinedTagValue {
     EMPTY ("empty"),
     NOT_EMPTY ("notEmpty"),
     CHECKED ("checked"),
-    UNCHECKED ("unchecked"),
+    UNCHECKED ("notChecked"),
     DISPLAYED("displayed"),
     NOT_DISPLAYED("notDisplayed");
 

@@ -17,7 +17,7 @@ public class AssertSelectedCommand extends AbstractDriverCommand{
         String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
         boolean isSelected = webElementDescription.assertContentByElementType(value);
         if(!isSelected){
-            throw  new WebEngineException("The element is not selected");
+            throw  new WebEngineException("The element is not selected with this value : "+value);
         }
     }
 }

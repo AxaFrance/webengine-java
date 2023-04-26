@@ -27,9 +27,17 @@ public enum CommandName {
     END_IF(ImmutableMap.of( Locale.ENGLISH, "end if" , Locale.FRENCH, "fin si" )),
     SAVE_DATA(ImmutableMap.of( Locale.ENGLISH, "save data" ,Locale.FRENCH, "enregistrer" )),
     ASSERT_EXIST(ImmutableMap.of( Locale.ENGLISH, "assert exist" ,Locale.FRENCH, "existe ?" )),
+
+    ASSERT_NOT_EXIST(ImmutableMap.of( Locale.ENGLISH, "assert not exist" ,Locale.FRENCH, "n'existe pas ?" )),
     ASSERT_CONTENT(ImmutableMap.of( Locale.ENGLISH, "assert content" ,Locale.FRENCH, "contient ?" )),
+
+    ASSERT_NOT_CONTENT(ImmutableMap.of( Locale.ENGLISH, "assert not content" ,Locale.FRENCH, "ne contient pas ?" )),
     ASSERT_SELECTED(ImmutableMap.of( Locale.ENGLISH, "assert selected" , Locale.FRENCH, "séléctionné ?")),
+
+    ASSERT_NOT_SELECTED(ImmutableMap.of( Locale.ENGLISH, "assert not selected" , Locale.FRENCH, "non séléctionné ?")),
     ASSERT_CHECKED(ImmutableMap.of( Locale.ENGLISH, "assert checked",Locale.FRENCH, "coché ?" )),
+
+    ASSERT_NOT_CHECKED(ImmutableMap.of( Locale.ENGLISH, "assert not checked",Locale.FRENCH, "non coché ?" )),
     SCREENSHOT(ImmutableMap.of( Locale.ENGLISH, "screenshot" , Locale.FRENCH, "capture")),
     WAIT(ImmutableMap.of( Locale.ENGLISH, "wait" , Locale.FRENCH, "pause")),
     END_SCENARIO(ImmutableMap.of(Locale.ENGLISH, "end scenario" , Locale.FRENCH, "fin scenario"));
