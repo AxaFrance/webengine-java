@@ -71,7 +71,7 @@ public class ReferencedValueChecking extends AbstractValueChecking{
     private void assertValue(List<ReferencedValueWhichDoesntExist> referencedValueWhichDoesntExistList){
         if(CollectionUtils.isNotEmpty(referencedValueWhichDoesntExistList)){
             referencedValueWhichDoesntExistList.forEach(r-> loggerService.warn("This referenced value doesn't exist : "+r));
-            throw new IllegalArgumentException("You should have the same number of 'if' command and 'end if' command ");
+            throw new IllegalArgumentException("Some referenced value don't exist ");
         }
     }
 

@@ -12,7 +12,7 @@ public class SelectCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(commandData,testCaseContext);
+        webElementDescription = populateWebElement(testCaseContext,commandData,commandResultList);
         String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
         executeActionInElement(value);
     }

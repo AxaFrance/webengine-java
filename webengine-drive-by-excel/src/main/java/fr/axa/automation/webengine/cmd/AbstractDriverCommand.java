@@ -46,25 +46,25 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws Exception;
 
-    protected WebElementDescription populateWebElement(CommandDataDriveByExcel commandData, AbstractTestCaseContext testCaseContext) {
+    protected WebElementDescription populateWebElement(AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData ,List<CommandResult> commandResultList) {
         return WebElementDescription.builder()
                 .useDriver((WebDriver) testCaseContext.getWebDriver())
-                .id(populateBySelector(commandData, LocatingBy.BY_ID))
-                .name(populateBySelector(commandData, LocatingBy.BY_NAME))
-                .className(populateBySelector(commandData, LocatingBy.BY_CLASS_NAME))
-                .linkText(populateBySelector(commandData, LocatingBy.BY_LINK_TEXT))
-                .tagName(populateBySelector(commandData, LocatingBy.BY_TAG_NAME))
-                .cssSelector(populateBySelector(commandData, LocatingBy.BY_CSS_SELECTOR))
-                .xPath(populateBySelector(commandData, LocatingBy.BY_XPATH))
+                .id(populateBySelector(LocatingBy.BY_ID, commandData, commandResultList))
+                .name(populateBySelector(LocatingBy.BY_NAME, commandData, commandResultList))
+                .className(populateBySelector(LocatingBy.BY_CLASS_NAME, commandData, commandResultList))
+                .linkText(populateBySelector(LocatingBy.BY_LINK_TEXT, commandData, commandResultList))
+                .tagName(populateBySelector(LocatingBy.BY_TAG_NAME, commandData, commandResultList))
+                .cssSelector(populateBySelector(LocatingBy.BY_CSS_SELECTOR, commandData, commandResultList))
+                .xPath(populateBySelector(LocatingBy.BY_XPATH, commandData, commandResultList))
                 .build();
     }
 
-    protected String populateBySelector(CommandDataDriveByExcel commandData, LocatingBy locatingBy) {
+    protected String populateBySelector(LocatingBy locatingBy,CommandDataDriveByExcel commandData,List<CommandResult> commandResultList) {
         String value = "";
         switch (locatingBy) {
             case BY_ID:
                 value = commandData.getTargetList().get(TargetKey.ID);
-                return StringUtils.isNotEmpty(value) ? value : StringUtils.EMPTY;
+                break;
 //            case BY_NAME:
 //            case BY_CLASS_NAME:
 //            case BY_LINK_TEXT:
@@ -72,10 +72,11 @@ public abstract class AbstractDriverCommand implements ICommand {
 //            case BY_CSS_SELECTOR:
             case BY_XPATH:
                 value = commandData.getTargetList().get(TargetKey.XPATH);
-                return StringUtils.isNotEmpty(value) ? value : StringUtils.EMPTY;
+                break;
             default:
                 return StringUtils.EMPTY;
         }
+        return StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(value,commandResultList) : StringUtils.EMPTY;
     }
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {

@@ -12,7 +12,7 @@ public class AssertExistCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(commandData,testCaseContext);
+        webElementDescription = populateWebElement(testCaseContext,commandData,commandResultList);
         if(webElementDescription.isNotExists()){
             throw  new WebEngineException("The element doesn't exist");
         }
