@@ -83,7 +83,7 @@ public final class TestCaseHelperDriveByExcel {
             dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestMap().get(dataTestNameColumn)).collect(Collectors.toList());
         }
 
-        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.REFERENCED_VALUE_REGEX,value)));
+        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.REFERENCED_REGEX_VALUE,value)));
         return filterDataTestList.stream().filter(value -> !PredefinedDateTagValue.isContainsPredefinedDateTagValue(value)).collect(Collectors.toList());
     }
 }

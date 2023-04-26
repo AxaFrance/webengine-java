@@ -23,23 +23,23 @@ public class EvaluateValueHelper {
     }
 
     public static String evaluateValue(String completeValue, List<CommandResult> commandResultList){
-        List<String> regexValueList = RegexUtil.match(RegexContante.REFERENCED_VALUE_REGEX, completeValue);
-        if(CollectionUtils.isEmpty(regexValueList)){
+        List<String> referencedRegexValueList = RegexUtil.match(RegexContante.REFERENCED_REGEX_VALUE, completeValue);
+        if(CollectionUtils.isEmpty(referencedRegexValueList)){
             return completeValue;
         } else{
-            return evaluateValue(completeValue, regexValueList, commandResultList );
+            return evaluateRegexValue(completeValue, referencedRegexValueList, commandResultList );
         }
     }
 
-    private static String evaluateValue(String completeValue, List<String> regexValueList, List<CommandResult> commandResultList ) {
+    private static String evaluateRegexValue(String completeValue, List<String> referencedRegexValueList, List<CommandResult> commandResultList ) {
         String resultValue = completeValue;
-        if(CollectionUtils.isNotEmpty(regexValueList)){
-            for (String regexValue: regexValueList) {
+        if(CollectionUtils.isNotEmpty(referencedRegexValueList)){
+            for (String regexValue: referencedRegexValueList) {
                 String valueWithouRafter = getValueBetweenRafter(regexValue);
-                if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)){
+                if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)) {
                     resultValue = resultValue.replace(regexValue,replaceTagDateValue(valueWithouRafter));
                 } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
-                    resultValue = resultValue.replace(regexValue,PredefinedTagValue.valueOf(regexValue).getTagValue());
+                    resultValue = resultValue.replace(regexValue,PredefinedTagValue.valueOf(valueWithouRafter).getTagValue());
                 } else if (isContainsReferencedValue(valueWithouRafter, commandResultList)) {
                     String referencedValue = getReferencedSaveData(valueWithouRafter,commandResultList);
                     resultValue = resultValue.replace(regexValue,referencedValue);
@@ -72,9 +72,9 @@ public class EvaluateValueHelper {
     private static String replaceTagDateValue(String value){
         String onlyTagValue = getOnlyTagValue(value);
         if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.MINUS.getValue())) {
-            return DateUtil.minusDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.NUMBER_REGEX,value));
+            return DateUtil.minusDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(Constante.PLUS.getValue())) {
-            return DateUtil.addDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.NUMBER_REGEX,value));
+            return DateUtil.addDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue())) {
             return DateUtil.getDateTime(FormatDate.DDMMYYYY);
         }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY_HOUR.getTagValue())) {

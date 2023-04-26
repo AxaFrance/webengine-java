@@ -2,8 +2,8 @@ package fr.axa.automation.webengine.constante;
 
 public class RegexContante {
 
-    public final static String REFERENCED_VALUE_REGEX = "(<<<.*?>>>)?";
-    public final static String DATA_TEST_REFERENCE_REGEX = "[\\w-]*";
-    public final static String NUMBER_REGEX = "\\d+";
+    public final static String REFERENCED_REGEX_VALUE = "(<<<.*?>>>)?";
+    public final static String DATA_TEST_REGEX_REFERENCE = "[\\w-]*";
+    public final static String REGEX_NUMBER = "\\d+";
 
 }

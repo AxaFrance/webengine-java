@@ -474,6 +474,24 @@ public class WebElementDescription extends AbstractElementDescription {
         return retry(fun,text);
     }
 
+    public boolean assertContentWithOnlyTextElement(String text) throws Exception {
+        IFunction<String, Boolean> fun = (value) ->{
+            Boolean resultAssert;
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
+                resultAssert = StringUtil.contains(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()),value);
+            }else{
+                resultAssert = StringUtil.contains(webElement.getText(),value);
+            }
+            return resultAssert;
+        };
+        return retry(fun,text);
+    }
+
+
+
+
     private String getSelectedOption(WebElement webElement) throws Exception{
         if(webElement!=null){
             Select select = new Select(webElement);

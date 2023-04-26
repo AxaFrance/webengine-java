@@ -52,7 +52,7 @@ public class ReferencedValueChecking extends AbstractValueChecking{
     private List<ReferencedValueWhichDoesntExist> getReferencedValueWhichDoesntExist(String testCaseName, String columnName, List<String> nameList, List<String> referencedValueList) {
         List<ReferencedValueWhichDoesntExist> referencedValueWhichDoesntExistList = new ArrayList<>();
         for (String referencedValue  : referencedValueList) {
-            List<String> referencedValueOnlySet = RegexUtil.match(RegexContante.DATA_TEST_REFERENCE_REGEX,referencedValue); //<<<num_contrat>>>test<<<num_client>>> or <<<num_contrat>>>
+            List<String> referencedValueOnlySet = RegexUtil.match(RegexContante.DATA_TEST_REGEX_REFERENCE,referencedValue); //<<<num_contrat>>>test<<<num_client>>> or <<<num_contrat>>>
             if(CollectionUtils.isNotEmpty(referencedValueOnlySet)){
                 List<String> list = referencedValueOnlySet.stream().filter(rv -> !nameList.contains(rv)).collect(Collectors.toList());
                 if(CollectionUtils.isNotEmpty(list)){

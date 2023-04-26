@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,35 +15,26 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public enum PredefinedTagValue {
+    EXISTS ("exist"),
+
+    NOT_EXISTS ("notExist"),
+
     EMPTY ("empty"),
+
     NOT_EMPTY ("notEmpty"),
     CHECKED ("checked"),
-    UNCHECKED ("notChecked"),
+    NOT_CHECKED("notChecked"),
     DISPLAYED("displayed"),
     NOT_DISPLAYED("notDisplayed");
 
-
     final String tagValue;
 
-    public static PredefinedTagValue fromTagValue(String v) {
-        for (PredefinedTagValue predefinedTagDateValue : PredefinedTagValue.values()) {
-            if (predefinedTagDateValue.getTagValue().equalsIgnoreCase(v)) {
-                return predefinedTagDateValue;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
-
     public static List<String> getTagValueList() {
-        List<String> tagValueList = new ArrayList<>();
-        for (PredefinedTagValue predefinedTagDateValue : PredefinedTagValue.values()) {
-            tagValueList.add(predefinedTagDateValue.getTagValue());
-        }
-        return tagValueList;
+        return Arrays.asList(PredefinedTagValue.values()).stream().map(predefinedTagValue -> predefinedTagValue.getTagValue()).collect(Collectors.toList());
     }
 
     public static boolean isContainsPredefinedTagValue(String value){
-        List<String> list = getTagValueList().stream().filter(predifinedTagValue -> StringUtil.contains(value,predifinedTagValue)).collect(Collectors.toList());
+        List<String> list = getTagValueList().stream().filter(predifinedTagValue -> StringUtil.equalsIgnoreCase(value,predifinedTagValue)).collect(Collectors.toList());
         return CollectionUtils.isNotEmpty(list);
     }
 }

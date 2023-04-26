@@ -63,7 +63,7 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     private List<String> getDataTestReferenceWhichDoesntExistInOneCmd(List<String> dataTestReferenceInOneCommandList, List<String> dataTestColumnNameList) {
         List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
         for (String dataTestReference : dataTestReferenceInOneCommandList) {
-            Optional<String> dataTestReferenceOptional = RegexUtil.findFirst(RegexContante.DATA_TEST_REFERENCE_REGEX,dataTestReference);// !data-test-auto-rec
+            Optional<String> dataTestReferenceOptional = RegexUtil.findFirst(RegexContante.DATA_TEST_REGEX_REFERENCE,dataTestReference);// !data-test-auto-rec
             if (dataTestReferenceOptional.isPresent() && !dataTestColumnNameList.contains(dataTestReferenceOptional.get())){
                 dataTestReferenceWhichDoesntExistList.add(dataTestReferenceOptional.get());
             }
