@@ -12,7 +12,7 @@ import java.util.Optional;
 public class SampleTest {
     @Test
     public void linearApproachTest() throws WebEngineException {
-        String baseUrl = "http://webengine-test.azurewebsites.net/";
+        String baseUrl = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";
         Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();
@@ -26,7 +26,7 @@ public class SampleTest {
 
     @Test
     public void linearApproachWithIncognitoModeTest() throws WebEngineException {
-        String baseUrl = "http://webengine-test.azurewebsites.net/";
+        String baseUrl = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";
         Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();

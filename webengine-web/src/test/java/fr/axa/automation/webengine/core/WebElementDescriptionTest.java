@@ -13,7 +13,7 @@ import java.util.Optional;
 
 class WebElementDescriptionTest {
 
-    public static final String HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET = "http://webengine-test.azurewebsites.net/";
+    public static final String HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";
 
     @Test
     public void sendKeysTest() throws Exception {

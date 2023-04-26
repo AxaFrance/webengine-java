@@ -86,7 +86,7 @@ pom.xml :
 ```
 linearExample.java :
 ```
-String baseUrl = "http://webengine-test.azurewebsites.net/";  
+String baseUrl = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";  
 Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver(Platform.WINDOWS, Browser.CHROME);  
 if(optionalWebdriver.isPresent()){  
   WebDriver driver = optionalWebdriver.get();  
@@ -172,7 +172,7 @@ sample.feature :
 Feature: Test du formulaire dans la page d'accueil  
   
   Scenario: Test du bouton OK  
-    Given I visit the test page "http://webengine-test.azurewebsites.net/"  
+    Given I visit the test page "https://axafrance.github.io/webengine-dotnet/demo/Test.html"  
     When I press on the OK button  
     And I see a pop up  
     And I click on the OK button in the pop up
@@ -310,11 +310,11 @@ env.xml
   </Variable>
   <Variable>
     <Name>URL</Name>
-    <Value>http://webengine-test.azurewebsites.net/</Value>
+    <Value>https://axafrance.github.io/webengine-dotnet/demo/Test.html</Value>
   </Variable>
   <Variable>
     <Name>URL_PROD</Name>
-    <Value>http://webengine-test.azurewebsites.net/</Value>
+    <Value>https://axafrance.github.io/webengine-dotnet/demo/Test.html</Value>
   </Variable>
 </EnvironmentVariables>
 ```
