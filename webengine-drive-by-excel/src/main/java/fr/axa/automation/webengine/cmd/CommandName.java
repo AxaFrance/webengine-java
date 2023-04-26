@@ -1,43 +1,45 @@
 package fr.axa.automation.webengine.cmd;
 
+import com.google.common.collect.ImmutableMap;
 import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor
 public enum CommandName {
 
-    OPEN("open"),
-    SEND_KEY("send keys"), CLICK("click"),SELECT("select"),
-    CALL("call"),
+    OPEN(ImmutableMap.of( Locale.ENGLISH, "open" , Locale.FRENCH, "ouvrir" )),
+    SEND_KEYS(ImmutableMap.of( Locale.ENGLISH, "send keys" ,Locale.FRENCH, "écrire" )),
+    CLICK(ImmutableMap.of( Locale.ENGLISH, "click" , Locale.FRENCH, "cliquer" )),
+    SELECT(ImmutableMap.of( Locale.ENGLISH, "select" , Locale.FRENCH, "séléctionner" )),
+    CALL(ImmutableMap.of( Locale.ENGLISH, "call" , Locale.FRENCH, "appeler" )),
+    IF(ImmutableMap.of( Locale.ENGLISH, "if" , Locale.FRENCH, "si" )),
+    ELSE_IF(ImmutableMap.of( Locale.ENGLISH, "else if" , Locale.FRENCH, "sinon si" )),
+    ELSE(ImmutableMap.of( Locale.ENGLISH, "else" , Locale.FRENCH, "sinon" )),
+    END_IF(ImmutableMap.of( Locale.ENGLISH, "end if" , Locale.FRENCH, "fin si" )),
+    SAVE_DATA(ImmutableMap.of( Locale.ENGLISH, "save data" ,Locale.FRENCH, "enregistrer" )),
+    ASSERT_EXIST(ImmutableMap.of( Locale.ENGLISH, "assert exist" ,Locale.FRENCH, "existe ?" )),
+    ASSERT_CONTENT(ImmutableMap.of( Locale.ENGLISH, "assert content" ,Locale.FRENCH, "contient ?" )),
+    ASSERT_SELECTED(ImmutableMap.of( Locale.ENGLISH, "assert selected" , Locale.FRENCH, "séléctionné ?")),
+    ASSERT_CHECKED(ImmutableMap.of( Locale.ENGLISH, "assert checked",Locale.FRENCH, "coché ?" )),
+    SCREENSHOT(ImmutableMap.of( Locale.ENGLISH, "screenshot" , Locale.FRENCH, "capture")),
+    WAIT(ImmutableMap.of( Locale.ENGLISH, "wait" , Locale.FRENCH, "pause")),
+    END_SCENARIO(ImmutableMap.of(Locale.ENGLISH, "end scenario" , Locale.FRENCH, "fin scenario"));
 
-    IF("if"), ELSE_IF("else if"),ELSE("else"),END_IF("end if"),
-
-    SAVE_DATA("save data"),
-
-    ASSERT_EXIST("assert exist"),
-
-    ASSERT_SELECTED("assert selected"),
-
-    ASSERT_CONTENT("assert content"),
-
-    ASSERT_CHECKED("assert checked"),
-
-    SCREENSHOT("screenshot"),
-
-    WAIT("wait"),
-    END_SCENARIO("end scenario");
-
-    final String commandLibelle;
-
+    final Map<Locale, String> commandLibelleMap;
 
     public static CommandName fromValue(String value) {
         for (CommandName commandName: CommandName.values()) {
-            if (StringUtil.equalsIgnoreCase(value,commandName.getCommandLibelle())) {
+            Optional<String> findValue = commandName.getCommandLibelleMap().values().stream().filter(s -> StringUtil.equalsIgnoreCase(value,s)).findFirst();
+            if(findValue.isPresent()){
                 return commandName;
             }
         }

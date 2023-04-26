@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.cmd;
 
 import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.constante.LocatingBy;
+import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.core.WebElementDescription;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
@@ -59,17 +60,19 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     protected String populateBySelector(CommandDataDriveByExcel commandData, LocatingBy locatingBy) {
+        String value = "";
         switch (locatingBy) {
             case BY_ID:
-            case BY_NAME:
-            case BY_CLASS_NAME:
-            case BY_LINK_TEXT:
-            case BY_TAG_NAME:
-            case BY_CSS_SELECTOR:
-            case BY_XPATH:
-                String value = commandData.getTargetList().get(locatingBy.getValue());
+                value = commandData.getTargetList().get(TargetKey.ID);
                 return StringUtils.isNotEmpty(value) ? value : StringUtils.EMPTY;
-
+//            case BY_NAME:
+//            case BY_CLASS_NAME:
+//            case BY_LINK_TEXT:
+//            case BY_TAG_NAME:
+//            case BY_CSS_SELECTOR:
+            case BY_XPATH:
+                value = commandData.getTargetList().get(TargetKey.XPATH);
+                return StringUtils.isNotEmpty(value) ? value : StringUtils.EMPTY;
             default:
                 return StringUtils.EMPTY;
         }

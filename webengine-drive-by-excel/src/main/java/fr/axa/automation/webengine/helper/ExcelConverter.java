@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.global.ExcelColumn;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
@@ -16,6 +15,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,15 +33,15 @@ public class ExcelConverter {
     public static final String XPATH_PATTERN = "^([/]{1,2}.*)$";
     public static final String MANY_LOCATED_PATTERN = "^[\\{].*[\\n|\\r]";
 
-    public static TestSuiteDataDriveByExcel convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumName) {
+    public static TestSuiteDataDriveByExcel convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumNameMap) {
         List<TestCaseDataDriveByExcel> testCaseList = new LinkedList<>();
         Workbook workbook = ExcelReader.getWorkbook(excelFileName);
         List<String> sheetNameList = ExcelReader.getAllSheetName(workbook);
-
-        if (MapUtils.isEmpty(testCaseAndDataTestColumName)) {
+        assertSheetName(sheetNameList,testCaseAndDataTestColumNameMap);
+        if (MapUtils.isEmpty(testCaseAndDataTestColumNameMap)) {
             testCaseList.addAll(getTestCaseDataList(workbook, getTestCaseNameAndDataTestColumnName(sheetNameList)));
         } else {
-            testCaseList.addAll(getTestCaseDataList(workbook, testCaseAndDataTestColumName));
+            testCaseList.addAll(getTestCaseDataList(workbook, testCaseAndDataTestColumNameMap));
         }
 
         TestSuiteDataDriveByExcel testSuite = TestSuiteDataDriveByExcel.builder()
@@ -53,13 +53,27 @@ public class ExcelConverter {
         return testSuite;
     }
 
+    private static void assertSheetName(List<String> sheetNameList,Map<String, List<String>> testCaseAndDataTestColumNameMap){
+        List<String> sheetNameDoesntExist = new ArrayList<>();
+        if (MapUtils.isNotEmpty(testCaseAndDataTestColumNameMap)) {
+            for (String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
+                if(!sheetNameList.contains(testCaseToRun)){
+                    sheetNameDoesntExist.add(testCaseToRun);
+                }
+            }
+        }
+        if(CollectionUtils.isNotEmpty(sheetNameDoesntExist)){
+            throw new IllegalArgumentException("These sheets doesn't exist :"+ sheetNameDoesntExist);
+        }
+    }
+
     private static Map<String, List<String>> getTestCaseNameAndDataTestColumnName(List<String> sheetNameList){
         return sheetNameList.stream().distinct().collect(Collectors.toMap(Function.identity(), Arrays::asList));
     }
 
     private static boolean isEndOfFile(Sheet currentSheet, Integer rowIndex) {
         String cellValue = ExcelReader.getCellValue(currentSheet, rowIndex, ExcelColumn.COMMAND.getValue());
-        if (StringUtils.trim(cellValue).equalsIgnoreCase(CommandName.END_SCENARIO.getCommandLibelle())) {
+        if(CommandName.fromValue(cellValue) == CommandName.END_SCENARIO){
             return true;
         }
         return false;

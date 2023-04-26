@@ -8,7 +8,7 @@ public class CommandFactory {
         switch (commandData.getCommand()){
             case OPEN:
                 return new OpenCommand();
-            case SEND_KEY:
+            case SEND_KEYS:
                 return new SendKeysCommand();
             case CLICK:
                 return new ClickCommand();
