@@ -15,6 +15,9 @@ public enum Constante {
     EXCLAMATION_MARK("!"),
     MINUS("-"),
     PLUS("+"),
+    DASH("-"),
+
+    COMMAND_FILE_NAME("command.yml"),
     CR_LF ("\r\n");
     final String value;
 }

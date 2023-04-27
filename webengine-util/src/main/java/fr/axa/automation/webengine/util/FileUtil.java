@@ -40,6 +40,14 @@ public final class FileUtil {
         }
     }
 
+    public static void copyFile(String source, String target) throws URISyntaxException, IOException {
+        Path pathTarget = Paths.get(target);
+        if(Files.exists(pathTarget)){
+            Files.delete(pathTarget);
+        }
+        Files.copy(FileUtil.getFileFromResource(source).toPath(), pathTarget);
+    }
+
     public static String saveAsXml(InputMarshallDTO inputMarshallDTO) throws WebEngineException {
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
     }

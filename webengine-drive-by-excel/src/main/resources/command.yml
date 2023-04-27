@@ -1,104 +1,104 @@
-OPEN:
+-OPEN:
   DESCRIPTION :
   VALUE:
     ENGLISH: open
     FRENCH: ouvrir
-SEND_KEYS:
+-SEND_KEYS:
   DESCRIPTION:
   VALUE:
     ENGLISH: send keys
     FRENCH: écrire
-CLICK:
+-CLICK:
   DESCRIPTION:
   VALUE:
     ENGLISH: click
     FRENCH: cliquer
-SELECT:
+-SELECT:
   DESCRIPTION:
   VALUE:
     ENGLISH: select
     FRENCH: séléctionner
-CALL:
+-CALL:
   DESCRIPTION:
   VALUE:
     ENGLISH: call
     FRENCH: appeler
-IF:
+-IF:
   DESCRIPTION:
   VALUE:
     ENGLISH: if
     FRENCH: si
-ELSE_IF:
+-ELSE_IF:
   DESCRIPTION:
   VALUE:
     ENGLISH: else if
     FRENCH: sinon si
-ELSE:
+-ELSE:
   DESCRIPTION:
   VALUE:
     ENGLISH: else
     FRENCH: sinon
-END_IF:
+-END_IF:
   DESCRIPTION:
   VALUE:
     ENGLISH: end if
     FRENCH: fin si
-SAVE_DATA:
+-SAVE_DATA:
   DESCRIPTION:
   VALUE:
     ENGLISH: save data
     FRENCH: enregistrer
-ASSERT_EXIST:
+-ASSERT_EXIST:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert exist
     FRENCH: existe ?
-ASSERT_NOT_EXIST:
+-ASSERT_NOT_EXIST:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert not exist
     FRENCH: n'existe pas ?
-ASSERT_CONTENT:
+-ASSERT_CONTENT:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert content
     FRENCH: contient ?
-ASSERT_NOT_CONTENT:
+-ASSERT_NOT_CONTENT:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert not content
     FRENCH: ne contient pas ?
-ASSERT_SELECTED:
+-ASSERT_SELECTED:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert selected
     FRENCH: séléctionné ?
-ASSERT_NOT_SELECTED:
+-ASSERT_NOT_SELECTED:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert not selected
     FRENCH: non séléctionné
-ASSERT_CHECKED:
+-ASSERT_CHECKED:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert checked
     FRENCH: coché ?
-ASSERT_NOT_CHECKED:
+-ASSERT_NOT_CHECKED:
   DESCRIPTION:
   VALUE:
     ENGLISH: assert not checked
     FRENCH: non coché
-SCREENSHOT:
+-SCREENSHOT:
   DESCRIPTION:
   VALUE:
     ENGLISH: screenshot
     FRENCH: capture
-WAIT:
+-WAIT:
   DESCRIPTION:
   VALUE:
     ENGLISH: wait
     FRENCH: pause
-END_SCENARIO:
+-END_SCENARIO:
   DESCRIPTION:
   VALUE:
     ENGLISH: end scenario

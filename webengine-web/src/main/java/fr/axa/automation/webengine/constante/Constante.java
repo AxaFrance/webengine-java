@@ -9,6 +9,6 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum Constante {
-    TRUE("<<<");
+    TRUE("true");
     final String value;
 }
