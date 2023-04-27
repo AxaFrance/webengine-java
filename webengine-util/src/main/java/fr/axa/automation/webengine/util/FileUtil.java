@@ -45,7 +45,7 @@ public final class FileUtil {
         if(Files.exists(pathTarget)){
             Files.delete(pathTarget);
         }
-        Files.copy(FileUtil.getFileFromResource(source).toPath(), pathTarget);
+        Files.copy(FileUtil.getFileInputSreamFromResource(source), pathTarget);
     }
 
     public static String saveAsXml(InputMarshallDTO inputMarshallDTO) throws WebEngineException {
@@ -87,6 +87,16 @@ public final class FileUtil {
             throw new IllegalArgumentException("The file "+fileName+" not found in resource directory ");
         } else {
             return new File(resource.toURI());
+        }
+    }
+
+    public static InputStream getFileInputSreamFromResource(String fileName) throws URISyntaxException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream resource = classLoader.getResourceAsStream(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("The file "+fileName+" not found in resource directory ");
+        } else {
+            return resource;
         }
     }
 
