@@ -27,7 +27,6 @@ public enum CommandName {
     END_IF(ImmutableMap.of( Locale.ENGLISH, "end if" , Locale.FRENCH, "fin si" )),
     SAVE_DATA(ImmutableMap.of( Locale.ENGLISH, "save data" ,Locale.FRENCH, "enregistrer" )),
     ASSERT_EXIST(ImmutableMap.of( Locale.ENGLISH, "assert exist" ,Locale.FRENCH, "existe ?" )),
-
     ASSERT_NOT_EXIST(ImmutableMap.of( Locale.ENGLISH, "assert not exist" ,Locale.FRENCH, "n'existe pas ?" )),
     ASSERT_CONTENT(ImmutableMap.of( Locale.ENGLISH, "assert content" ,Locale.FRENCH, "contient ?" )),
 
