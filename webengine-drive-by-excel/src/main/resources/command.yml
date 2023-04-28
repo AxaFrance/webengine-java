@@ -1,105 +1,105 @@
 -OPEN:
-  DESCRIPTION :
+  DESCRIPTION : Ouverture du navigateur avec l'url indiqué
   VALUE:
     ENGLISH: open
     FRENCH: ouvrir
 -SEND_KEYS:
-  DESCRIPTION:
+  DESCRIPTION: Ecriture dans le champ texte défini dans la colonne identification
   VALUE:
     ENGLISH: send keys
     FRENCH: écrire
 -CLICK:
-  DESCRIPTION:
+  DESCRIPTION: Clic sur l'élément indiqué
   VALUE:
     ENGLISH: click
     FRENCH: cliquer
 -SELECT:
-  DESCRIPTION:
+  DESCRIPTION: Selectionne la valeur indiquée dans la liste déroulante définie dans la colonne identification
   VALUE:
     ENGLISH: select
     FRENCH: séléctionner
 -CALL:
-  DESCRIPTION:
+  DESCRIPTION: Execute le sous-scénario définie dans la colonne Identification
   VALUE:
     ENGLISH: call
     FRENCH: appeler
 -IF:
-  DESCRIPTION:
+  DESCRIPTION: Si la condition définie dans la colonne des valeurs <<<exists>>>,<<<empty>>>,etc; les lignes en dessous sont exécutées
   VALUE:
     ENGLISH: if
     FRENCH: si
 -ELSE_IF:
-  DESCRIPTION:
+  DESCRIPTION: Si la condition définie dans la colonne des valeurs <<<exists>>>,<<<empty>>>,etc; les lignes en dessous sont exécutées
   VALUE:
     ENGLISH: else if
     FRENCH: sinon si
 -ELSE:
-  DESCRIPTION:
+  DESCRIPTION: Si la condition définie dans le IF au dessus n'est pas respecté, les lignes en dessous sont exécutées
   VALUE:
     ENGLISH: else
     FRENCH: sinon
 -END_IF:
-  DESCRIPTION:
+  DESCRIPTION: Fin d'un bloc IF
   VALUE:
     ENGLISH: end if
     FRENCH: fin si
 -SAVE_DATA:
-  DESCRIPTION:
+  DESCRIPTION: Enregistre la valeur définie ou le contenu de l'élément indiqu" si la colonne valeur est vide
   VALUE:
     ENGLISH: save data
     FRENCH: enregistrer
 -ASSERT_EXIST:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie que l'élement défini existe dans la page web
   VALUE:
     ENGLISH: assert exist
     FRENCH: existe ?
 -ASSERT_NOT_EXIST:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie que l'élement défini n'existe pas dans la page web
   VALUE:
     ENGLISH: assert not exist
     FRENCH: n'existe pas ?
 -ASSERT_CONTENT:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie la valeur indiqué est contenu dans l'élement défini
   VALUE:
     ENGLISH: assert content
     FRENCH: contient ?
 -ASSERT_NOT_CONTENT:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie la valeur indiqué est contenu dans l'élement défini
   VALUE:
     ENGLISH: assert not content
     FRENCH: ne contient pas ?
 -ASSERT_SELECTED:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie la valeur indiqué est sélectionnée dans l'élement défini
   VALUE:
     ENGLISH: assert selected
     FRENCH: séléctionné ?
 -ASSERT_NOT_SELECTED:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie que la valeur indiqué n'est pas sélectionnée dans l'élement défini
   VALUE:
     ENGLISH: assert not selected
     FRENCH: non séléctionné
 -ASSERT_CHECKED:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie que l'élement défini est bien coché
   VALUE:
     ENGLISH: assert checked
     FRENCH: coché ?
 -ASSERT_NOT_CHECKED:
-  DESCRIPTION:
+  DESCRIPTION: Vérifie que l'élement défini n'est pas coché
   VALUE:
     ENGLISH: assert not checked
     FRENCH: non coché
 -SCREENSHOT:
-  DESCRIPTION:
+  DESCRIPTION: Effectue une capture d'ecran
   VALUE:
     ENGLISH: screenshot
     FRENCH: capture
 -WAIT:
-  DESCRIPTION:
+  DESCRIPTION: Effectue une pause du temps indiqué en seconde dans la colonne des valeurs
   VALUE:
     ENGLISH: wait
     FRENCH: pause
 -END_SCENARIO:
-  DESCRIPTION:
+  DESCRIPTION: Indique la fin du scénario courant
   VALUE:
     ENGLISH: end scenario
     FRENCH: fin scenario
