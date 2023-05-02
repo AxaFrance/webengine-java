@@ -19,10 +19,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan
 public class GlobalConfigProperties {
     ApplicationProperties application;
-    AppiumSettingsProperties appiumSettings;
 
     public boolean isLocalTestingConfExist() {
-        return this.getAppiumSettings() != null && this.getAppiumSettings().getLocalTesting() != null;
+        return this.getApplication()!=null && this.getApplication().getAppiumSettings() != null && this.getApplication().getAppiumSettings().getLocalTesting() != null;
     }
 
     public String getPlateform(){

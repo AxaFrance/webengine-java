@@ -20,4 +20,5 @@ public class ApplicationProperties {
     String browserName;
     List<String> browserOptionList;
     String outputDir;
+    AppiumSettingsProperties appiumSettings;
 }
