@@ -1,5 +1,6 @@
 package fr.axa.automation.feature.model;
 
+import com.google.common.collect.ImmutableMap;
 import fr.axa.automation.webengine.core.AbstractPageModel;
 import fr.axa.automation.webengine.core.WebElementDescription;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ public class WebEngineSecondStepPage extends AbstractPageModel {
 
     @Getter
     @Setter
-    WebElementDescription resultTextarea = WebElementDescription.builder().tagName("textarea").id("customid-1").build();
+    WebElementDescription resultTextarea = WebElementDescription.builder().tagName("textarea").attributeList(ImmutableMap.of("customid", "customid-1")).build();
 
     @Getter
     WebElementDescription scalesCheckbox = WebElementDescription.builder().tagName("input").id("scales").build();

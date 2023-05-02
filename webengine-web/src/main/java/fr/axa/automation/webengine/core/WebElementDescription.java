@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -54,7 +55,8 @@ public class WebElementDescription extends AbstractElementDescription {
 
     String name;
     String innerText;
-    Collection<HtmlAttribute> attributeList;
+    Map<String,String> attributeList;
+
     String xPath;
     String cssSelector;
     String className;
@@ -129,12 +131,12 @@ public class WebElementDescription extends AbstractElementDescription {
         throw new NoSuchElementException("No such WebElement found in the page");
     }
 
-    private Collection<WebElement> getInternalFindElementByAttributeList(Collection<HtmlAttribute> attributeList) {
-        if (CollectionUtils.isNotEmpty(attributeList)) {
+    private Collection<WebElement> getInternalFindElementByAttributeList(Map<String,String> attributeList) {
+        if (MapUtils.isNotEmpty(attributeList)) {
             List<String> attributes = new ArrayList<>();
-            attributeList.stream().forEach(htmlAttribute -> attributes.add("[{" + htmlAttribute.getName() + "}=\"{" + htmlAttribute.getValue() + "}\"]"));
+            attributeList.entrySet().stream().forEach(entry -> attributes.add("[" + entry.getKey() + "=" + entry.getValue() + "]"));
             String cssSelector = String.join("", attributes);
-            return getInternalFindElementByCssSelector(cssSelector);
+            return getInternalFindElementByCssSelector(getTagName() + cssSelector);
         }
         return new ArrayList<>();
     }
