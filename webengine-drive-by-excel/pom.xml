@@ -112,7 +112,7 @@
                                 <artifact>
                                     <file>src/main/resources/command.yml</file>
                                     <type>yml</type>
-<!--                                    <classifier>optional</classifier>-->
+                                    <classifier>command</classifier>
                                 </artifact>
                             </artifacts>
                         </configuration>
