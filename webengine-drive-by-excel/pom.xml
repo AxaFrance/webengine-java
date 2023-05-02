@@ -96,6 +96,25 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>deploy-file</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>src/main/resources/command.yaml</file>
+                            <groupId>fr.axa.automation.webengine</groupId>
+                            <artifactId>webengine-drive-by-excel</artifactId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>
