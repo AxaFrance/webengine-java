@@ -40,12 +40,12 @@ public final class FileUtil {
         }
     }
 
-    public static void copyFile(String source, String target) throws URISyntaxException, IOException {
+    public static void copyFile(String source, String target) throws IOException {
         Path pathTarget = Paths.get(target);
         if(Files.exists(pathTarget)){
             Files.delete(pathTarget);
         }
-        Files.copy(FileUtil.getFileInputSreamFromResource(source), pathTarget);
+        Files.copy(getInputStreamFromResource(source), pathTarget);
     }
 
     public static String saveAsXml(InputMarshallDTO inputMarshallDTO) throws WebEngineException {
@@ -90,14 +90,13 @@ public final class FileUtil {
         }
     }
 
-    public static InputStream getFileInputSreamFromResource(String fileName) throws URISyntaxException {
+    public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream resource = classLoader.getResourceAsStream(fileName);
-        if (resource == null) {
-            throw new IllegalArgumentException("The file "+fileName+" not found in resource directory ");
-        } else {
-            return resource;
+        InputStream inputStream = classLoader.getResourceAsStream(resourceName);
+        if(inputStream==null){
+            throw new FileNotFoundException("The resource file "+resourceName+" not found in resource directory ");
         }
+        return inputStream;
     }
 
     public static boolean assertContent(File fileContentExpected, File fileContentResult) throws IOException {
@@ -124,14 +123,7 @@ public final class FileUtil {
         }
     }
 
-    public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(resourceName);
-        if(inputStream==null){
-            throw new FileNotFoundException("The resource file "+resourceName+" not found in resource directory ");
-        }
-        return inputStream;
-    }
+
 
     public static String getCurrentPath() throws IOException {
         File currentDirFile = new File(".");
