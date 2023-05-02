@@ -6,6 +6,10 @@ What's new :
 1-Drive by excel
 Add module Drive by exel
 
+2-AppiumSettings
+Move AppiumSettings class to ApplicationProperties class
+Don't forget to change the application.yml file.
+
 
 ================================================
 webengine 2.2.0
