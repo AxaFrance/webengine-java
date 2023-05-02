@@ -110,7 +110,7 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>src/main/resources.command.yaml</file>
+                                    <file>src/main/resources/command.yaml</file>
                                     <type>yaml</type>
 <!--                                    <classifier>optional</classifier>-->
                                 </artifact>
