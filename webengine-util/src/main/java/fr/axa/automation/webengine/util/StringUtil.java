@@ -13,11 +13,23 @@ public final class StringUtil {
     }
 
     public static boolean equalsIgnoreCase(String value1,String value2){
-        return StringUtils.equalsIgnoreCase(value1.trim(),value2.trim());
+        if(value1==null && value2==null){
+            return true;
+        } else if ((value1!=null && value2==null) || (value1==null && value2!=null)) {
+            return false;
+        } else  {
+            return StringUtils.equalsIgnoreCase(value1.trim(),value2.trim());
+        }
     }
 
     public static boolean contains(String value1,String value2){
-        return StringUtils.contains(value1.trim().toUpperCase(),value2.trim().toUpperCase());
+        if(value1==null && value2==null){
+            return true;
+        } else if ((value1!=null && value2==null) || (value1==null && value2!=null)) {
+            return false;
+        } else  {
+            return StringUtils.contains(value1.trim().toUpperCase(),value2.trim().toUpperCase());
+        }
     }
 
     public static String removeSpecialCharacters(String text){
