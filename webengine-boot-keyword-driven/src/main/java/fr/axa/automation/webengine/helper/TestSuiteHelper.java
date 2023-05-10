@@ -42,7 +42,7 @@ public final class TestSuiteHelper extends AbstractTestSuiteHelper {
                 .browser(getBrowser(cmd, globalConfigProperties))
                 .browserOptionsList(getBrowserOptionList(globalConfigProperties))
                 .testCaseToRunList(getTestCaseToRunList(cmd))
-                .logDir(getOutputDir(cmd, globalConfigProperties))
+                .outputDir(getOutputDir(cmd, globalConfigProperties))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;

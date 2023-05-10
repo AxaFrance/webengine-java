@@ -92,7 +92,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
         loggerService.info("End clean ");
 
         loggerService.info("Start report ");
-        reportHelper.generateAllReport(testSuiteReport, "", globalApplicationContext.getSettings().getLogDir());
+        reportHelper.generateAllReport(testSuiteReport, "", globalApplicationContext.getSettings().getOutputDir());
         loggerService.info("End report ");
     }
 

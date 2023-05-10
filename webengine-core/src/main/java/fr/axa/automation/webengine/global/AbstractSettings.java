@@ -3,7 +3,6 @@ package fr.axa.automation.webengine.global;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,10 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 public abstract class AbstractSettings {
-    List<String> propertiesFileList;
     Platform platform;
     Browser browser;
     List<String> browserOptionsList;
-    @Builder.Default Integer synchronizationTimeout = 20;
-    String logDir;
+    List<String> propertiesFileList;
+    String outputDir;
 }

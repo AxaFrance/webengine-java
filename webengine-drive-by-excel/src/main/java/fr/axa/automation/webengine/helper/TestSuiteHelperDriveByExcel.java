@@ -30,7 +30,7 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
                 .browser(getBrowser(cmd, globalConfigProperties))
                 .browserOptionsList(getBrowserOptionList(globalConfigProperties))
                 .testCaseAndDataTestColumName(getTestCaseAndDataTestColumnName(cmd))
-                .logDir(getOutputDir(cmd, globalConfigProperties))
+                .outputDir(getOutputDir(cmd, globalConfigProperties))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;

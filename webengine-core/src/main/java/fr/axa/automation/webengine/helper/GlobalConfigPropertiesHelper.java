@@ -20,7 +20,7 @@ public final class GlobalConfigPropertiesHelper {
         return ApplicationProperties.builder().platformName(settings.getPlatform().name())
                                                 .browserName(settings.getBrowser().name())
                                                 .browserOptionList(settings.getBrowserOptionsList())
-                                                .outputDir(settings.getLogDir())
+                                                .outputDir(settings.getOutputDir())
                                                 .build();
     }
 }

@@ -75,7 +75,7 @@ public class BootProject extends AbstractBootProject{
         loggerService.info("End clean ");
 
         loggerService.info("Start report ");
-        reportHelper.generateAllReport(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getLogDir());
+        reportHelper.generateAllReport(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getOutputDir());
         loggerService.info("End report ");
     }
 

@@ -17,7 +17,7 @@ class GlobalConfigPropertiesHelperTest {
         Assertions.assertNotNull(applicationProperties);
         Assertions.assertEquals(SettingsForTest.getSettings().getPlatform(),PlatformTypeHelper.getPlatform(applicationProperties.getPlatformName()));
         Assertions.assertEquals(SettingsForTest.getSettings().getBrowser(),BrowserTypeHelper.getBrowser(applicationProperties.getBrowserName()));
-        Assertions.assertEquals(SettingsForTest.getSettings().getLogDir(),applicationProperties.getOutputDir());
+        Assertions.assertEquals(SettingsForTest.getSettings().getOutputDir(),applicationProperties.getOutputDir());
     }
 
     @Test
@@ -25,6 +25,6 @@ class GlobalConfigPropertiesHelperTest {
         ApplicationProperties applicationProperties = GlobalConfigPropertiesHelper.getApplicationProperties(SettingsForTest.getSettings());
         Assertions.assertEquals(SettingsForTest.getSettings().getPlatform(),PlatformTypeHelper.getPlatform(applicationProperties.getPlatformName()));
         Assertions.assertEquals(SettingsForTest.getSettings().getBrowser(),BrowserTypeHelper.getBrowser(applicationProperties.getBrowserName()));
-        Assertions.assertEquals(SettingsForTest.getSettings().getLogDir(),applicationProperties.getOutputDir());
+        Assertions.assertEquals(SettingsForTest.getSettings().getOutputDir(),applicationProperties.getOutputDir());
     }
 }
