@@ -3,7 +3,7 @@ package fr.axa.automation.webengine.helper;
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.SettingsDriveByExcel;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,16 +21,16 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
     public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
     public static final String DATA_TEST_COLUMN_NAME_PATTERN = "(?<=:)([^\\]]+)";
 
-    public static SettingsDriveByExcel getSettings(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
+    public static SettingsDriveByExcel getSettings(CommandLine cmd, GlobalConfiguration globalConfiguration) throws WebEngineException {
         loggerService.info("Loading settings running ");
         SettingsDriveByExcel settings = SettingsDriveByExcel.builder()
                 .fileName(getFileName(cmd))
                 .propertiesFileList(getPropertiesFiles(cmd))
-                .platform(getPlatform(cmd, globalConfigProperties))
-                .browser(getBrowser(cmd, globalConfigProperties))
-                .browserOptionsList(getBrowserOptionList(globalConfigProperties))
+                .platform(getPlatform(cmd, globalConfiguration))
+                .browser(getBrowser(cmd, globalConfiguration))
+                .browserOptionsList(getBrowserOptionList(globalConfiguration))
                 .testCaseAndDataTestColumName(getTestCaseAndDataTestColumnName(cmd))
-                .outputDir(getOutputDir(cmd, globalConfigProperties))
+                .outputDir(getOutputDir(cmd, globalConfiguration))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;

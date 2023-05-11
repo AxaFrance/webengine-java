@@ -17,8 +17,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @AllArgsConstructor
 @ConfigurationProperties
 @ConfigurationPropertiesScan
-public class GlobalConfigProperties {
+public class GlobalConfiguration {
     WebengineConfiguration webengineConfiguration;
+    ApplicationConfiguration applicationConfiguration;
 
     public boolean isLocalTestingConfExist() {
         return this.getWebengineConfiguration()!=null && this.getWebengineConfiguration().getAppiumSettings() != null && this.getWebengineConfiguration().getAppiumSettings().getLocalTesting() != null;

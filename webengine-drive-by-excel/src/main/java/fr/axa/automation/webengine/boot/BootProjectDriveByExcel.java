@@ -13,7 +13,7 @@ import fr.axa.automation.webengine.helper.ExcelConverter;
 import fr.axa.automation.webengine.helper.TestSuiteHelperDriveByExcel;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.StringUtil;
@@ -40,8 +40,8 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR);
 
     @Autowired
-    public BootProjectDriveByExcel(@Qualifier("testSuiteDriveByExcelExecutor")ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {
-        super(testSuiteExecutor,reportHelper,loggerService,globalConfigProperties);
+    public BootProjectDriveByExcel(@Qualifier("testSuiteDriveByExcelExecutor")ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
+        super(testSuiteExecutor,reportHelper,loggerService, globalConfiguration);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     }
 
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException, IOException {
-        SettingsDriveByExcel settings = TestSuiteHelperDriveByExcel.getSettings(commandLine, globalConfigProperties);
+        SettingsDriveByExcel settings = TestSuiteHelperDriveByExcel.getSettings(commandLine, globalConfiguration);
         return GlobalApplicationContextDriveByExcel.builder().settings(settings).build();
     }
 

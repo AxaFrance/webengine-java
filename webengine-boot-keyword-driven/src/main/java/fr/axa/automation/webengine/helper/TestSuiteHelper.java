@@ -13,7 +13,7 @@ import fr.axa.automation.webengine.generated.TestData;
 import fr.axa.automation.webengine.generated.TestSuiteData;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.global.Settings;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.CommonClassUtil;
 import fr.axa.automation.webengine.util.XmlUtil;
 import org.apache.commons.cli.CommandLine;
@@ -33,16 +33,16 @@ public final class TestSuiteHelper extends AbstractTestSuiteHelper {
     private TestSuiteHelper() {
     }
 
-    public static Settings getSettings(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
+    public static Settings getSettings(CommandLine cmd, GlobalConfiguration globalConfiguration) throws WebEngineException {
         loggerService.info("Loading settings running ");
 
         Settings settings = Settings.builder()
                 .propertiesFileList(getPropertiesFiles(cmd))
-                .platform(getPlatform(cmd, globalConfigProperties))
-                .browser(getBrowser(cmd, globalConfigProperties))
-                .browserOptionsList(getBrowserOptionList(globalConfigProperties))
+                .platform(getPlatform(cmd, globalConfiguration))
+                .browser(getBrowser(cmd, globalConfiguration))
+                .browserOptionsList(getBrowserOptionList(globalConfiguration))
                 .testCaseToRunList(getTestCaseToRunList(cmd))
-                .outputDir(getOutputDir(cmd, globalConfigProperties))
+                .outputDir(getOutputDir(cmd, globalConfiguration))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;

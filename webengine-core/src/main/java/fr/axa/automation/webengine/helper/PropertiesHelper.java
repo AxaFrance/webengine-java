@@ -3,7 +3,7 @@ package fr.axa.automation.webengine.helper;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.PropertiesUtil;
 import lombok.AccessLevel;
@@ -50,12 +50,12 @@ public class PropertiesHelper {
     }
 
 
-    public Optional<GlobalConfigProperties> getDefaultGlobalConfiguration() throws WebEngineException{
+    public Optional<GlobalConfiguration> getDefaultGlobalConfiguration() throws WebEngineException{
         return getGlobalConfigurationByName(APPLICATION_FILE_NAME);
     }
 
     //--!!!!!Use by project like e-declaration, axa.fr..., be careful
-    public Optional<GlobalConfigProperties> getGlobalConfiguration(List<String> propertiesFileList, String resourceNameOrPathAndFileName) throws WebEngineException{
+    public Optional<GlobalConfiguration> getGlobalConfiguration(List<String> propertiesFileList, String resourceNameOrPathAndFileName) throws WebEngineException{
         Optional<String> applicationPropertiesFile = ListUtil.findFirst(propertiesFileList,resourceNameOrPathAndFileName);
         if(applicationPropertiesFile.isPresent()){
             return getGlobalConfigurationByName(applicationPropertiesFile.get());
@@ -63,10 +63,10 @@ public class PropertiesHelper {
         return Optional.empty();
     }
 
-    public Optional<GlobalConfigProperties> getGlobalConfigurationByName(String resourceNameOrPathAndFileName) throws WebEngineException {
-        GlobalConfigProperties globalConfigProperties = loadPropertiesFile(resourceNameOrPathAndFileName,GlobalConfigProperties.class);
-        if(globalConfigProperties!=null){
-            return Optional.of(globalConfigProperties);
+    public Optional<GlobalConfiguration> getGlobalConfigurationByName(String resourceNameOrPathAndFileName) throws WebEngineException {
+        GlobalConfiguration globalConfiguration = loadPropertiesFile(resourceNameOrPathAndFileName, GlobalConfiguration.class);
+        if(globalConfiguration !=null){
+            return Optional.of(globalConfiguration);
         }
         return Optional.empty();
     }

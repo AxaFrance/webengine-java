@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.parser.ArgumentParser;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import fr.axa.automation.webengine.util.JarUtil;
 import lombok.AccessLevel;
@@ -26,13 +26,13 @@ public abstract class AbstractBootProject implements IBootProject{
     final ILoggerService loggerService;
     final ITestSuiteExecutor testSuiteExecutor;
     final IReportHelper reportHelper;
-    final GlobalConfigProperties globalConfigProperties;
+    final GlobalConfiguration globalConfiguration;
 
-    public AbstractBootProject(ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {
+    public AbstractBootProject(ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
         this.loggerService = loggerService;
         this.testSuiteExecutor = testSuiteExecutor;
         this.reportHelper = reportHelper;
-        this.globalConfigProperties = globalConfigProperties;
+        this.globalConfiguration = globalConfiguration;
     }
 
     public void runFromFramework(String... args) throws Exception {

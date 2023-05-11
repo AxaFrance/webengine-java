@@ -14,7 +14,7 @@ import fr.axa.automation.webengine.global.GlobalApplicationContext;
 import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -41,8 +41,8 @@ public class BootProject extends AbstractBootProject{
     static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT, ArgumentOption.TEST_CASE_TO_RUN);
 
     @Autowired
-    public BootProject(@Qualifier("testSuiteWebExecutor") ITestSuiteWebExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {
-        super(testSuiteExecutor,reportHelper,loggerService,globalConfigProperties);
+    public BootProject(@Qualifier("testSuiteWebExecutor") ITestSuiteWebExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
+        super(testSuiteExecutor,reportHelper,loggerService, globalConfiguration);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class BootProject extends AbstractBootProject{
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine, ITestSuite testSuite) throws WebEngineException, IOException {
         EnvironmentVariables environmentVariables = TestSuiteHelper.getEnvironmentVariables(commandLine);
         TestSuiteData testSuiteData = TestSuiteHelper.getTestSuiteData(commandLine);
-        Settings settings = TestSuiteHelper.getSettings(commandLine, globalConfigProperties);
+        Settings settings = TestSuiteHelper.getSettings(commandLine, globalConfiguration);
         Map<String, TestCaseAdditionalInformation> testCaseAdditionalInformationMap = TestSuiteHelper.getTestCaseAdditionalInformation(testSuite, testSuiteData);
 
         return GlobalApplicationContext.builder()

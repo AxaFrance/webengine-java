@@ -9,7 +9,7 @@ import fr.axa.automation.webengine.global.Browser;
 import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.parser.ArgumentParser;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.JarUtil;
 import org.apache.commons.cli.CommandLine;
@@ -51,20 +51,20 @@ class TestSuiteHelperTest {
 
     @Test
     void getSettingsFromCmdLIne() throws WebEngineException {
-        GlobalConfigProperties globalConfigProperties = null;
+        GlobalConfiguration globalConfiguration = null;
         String []  argumentsListSeparatedByOptionAndValue = new String[]{"-platform","WINDOWS","-browser","CHROME","-data","input/data.xml","-env","input/env.xml"};
         CommandLine commandLine = ArgumentParser.getOption(argumentsListSeparatedByOptionAndValue, ArgumentParser.getOptionList(ARGUMENT_OPTION_PROJECT_FROM_CONFIG_COMMAND_LINE));
-        Settings settings = TestSuiteHelper.getSettings(commandLine,globalConfigProperties);
+        Settings settings = TestSuiteHelper.getSettings(commandLine, globalConfiguration);
         Assertions.assertEquals(Browser.CHROME,settings.getBrowser());
         Assertions.assertEquals(Platform.WINDOWS,settings.getPlatform());
     }
 
     @Test
     void getSettingsFromConfigFile() throws WebEngineException {
-        GlobalConfigProperties globalConfigProperties = null;
+        GlobalConfiguration globalConfiguration = null;
         String []  argumentsListSeparatedByOptionAndValue = new String[]{"CHROME","-data","input/data.xml","-env","input/env.xml"};
         CommandLine commandLine = ArgumentParser.getOption(argumentsListSeparatedByOptionAndValue, ArgumentParser.getOptionList(ARGUMENT_OPTION_PROJECT_FROM_CONFIG_FILE));
-        Settings settings = TestSuiteHelper.getSettings(commandLine,globalConfigProperties);
+        Settings settings = TestSuiteHelper.getSettings(commandLine, globalConfiguration);
         Assertions.assertEquals(Browser.CHROMIUM_EDGE,settings.getBrowser());
         Assertions.assertEquals(Platform.WINDOWS,settings.getPlatform());
     }

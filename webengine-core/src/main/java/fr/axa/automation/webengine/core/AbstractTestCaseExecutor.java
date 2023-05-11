@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -20,12 +20,12 @@ import java.util.List;
 public abstract class AbstractTestCaseExecutor implements ITestCaseExecutor {
 
      ITestStepExecutor testStepExecutor;
-     GlobalConfigProperties globalConfigProperties;
+     GlobalConfiguration globalConfiguration;
      ILoggerService loggerService;
 
-     protected AbstractTestCaseExecutor(ITestStepExecutor testStepExecutor, GlobalConfigProperties globalConfigProperties, ILoggerService loggerService) {
+     protected AbstractTestCaseExecutor(ITestStepExecutor testStepExecutor, GlobalConfiguration globalConfiguration, ILoggerService loggerService) {
           this.testStepExecutor = testStepExecutor;
-          this.globalConfigProperties = globalConfigProperties;
+          this.globalConfiguration = globalConfiguration;
           this.loggerService = loggerService;
      }
 

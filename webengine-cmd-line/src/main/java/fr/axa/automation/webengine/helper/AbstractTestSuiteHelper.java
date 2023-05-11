@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.global.Browser;
 import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.FileUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,11 +38,11 @@ public abstract class AbstractTestSuiteHelper {
         return getArgumentList(cmd,ArgumentOption.PROPERTIES_FILE_LIST);
     }
 
-    protected static Platform getPlatform(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
+    protected static Platform getPlatform(CommandLine cmd, GlobalConfiguration globalConfiguration) throws WebEngineException {
         String platform = cmd.getOptionValue(ArgumentOption.PLATFORM.getOption());
         if (platform == null) {
-            if (globalConfigProperties != null && StringUtils.isNotEmpty(globalConfigProperties.getPlateform())) {
-                return PlatformTypeHelper.getPlatform(globalConfigProperties.getPlateform());
+            if (globalConfiguration != null && StringUtils.isNotEmpty(globalConfiguration.getPlateform())) {
+                return PlatformTypeHelper.getPlatform(globalConfiguration.getPlateform());
             } else {
                 return Platform.getDefaultPlatform();
             }
@@ -51,11 +51,11 @@ public abstract class AbstractTestSuiteHelper {
         }
     }
 
-    protected static Browser getBrowser(CommandLine cmd, GlobalConfigProperties globalConfigProperties) throws WebEngineException {
+    protected static Browser getBrowser(CommandLine cmd, GlobalConfiguration globalConfiguration) throws WebEngineException {
         String browser = cmd.getOptionValue(ArgumentOption.BROWSER.getOption());
         if (browser == null) {
-            if (globalConfigProperties != null && StringUtils.isNotEmpty(globalConfigProperties.getBrowser())) {
-                return BrowserTypeHelper.getBrowser(globalConfigProperties.getBrowser());
+            if (globalConfiguration != null && StringUtils.isNotEmpty(globalConfiguration.getBrowser())) {
+                return BrowserTypeHelper.getBrowser(globalConfiguration.getBrowser());
             } else {
                 return Browser.getDefaultBrowser();
             }
@@ -64,20 +64,20 @@ public abstract class AbstractTestSuiteHelper {
         }
     }
 
-    protected static List<String> getBrowserOptionList(GlobalConfigProperties globalConfigProperties) {
-        if (globalConfigProperties != null && globalConfigProperties.getWebengineConfiguration()!=null && CollectionUtils.isNotEmpty(globalConfigProperties.getWebengineConfiguration().getBrowserOptionList())) {
-            return globalConfigProperties.getWebengineConfiguration().getBrowserOptionList();
+    protected static List<String> getBrowserOptionList(GlobalConfiguration globalConfiguration) {
+        if (globalConfiguration != null && globalConfiguration.getWebengineConfiguration()!=null && CollectionUtils.isNotEmpty(globalConfiguration.getWebengineConfiguration().getBrowserOptionList())) {
+            return globalConfiguration.getWebengineConfiguration().getBrowserOptionList();
         }
         return Collections.emptyList();
     }
 
-    protected static String getOutputDir(CommandLine cmd, GlobalConfigProperties globalConfigProperties) {
+    protected static String getOutputDir(CommandLine cmd, GlobalConfiguration globalConfiguration) {
         String outputDir = cmd.getOptionValue(ArgumentOption.OUTPUT_DIR.getOption());
         if (outputDir != null) {
             outputDir += File.separator;
         } else {
-            if (globalConfigProperties!=null) {
-                outputDir = globalConfigProperties.getOutputDir();
+            if (globalConfiguration !=null) {
+                outputDir = globalConfiguration.getOutputDir();
             }
             if (StringUtils.isEmpty(outputDir)) {
                 outputDir = FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY);

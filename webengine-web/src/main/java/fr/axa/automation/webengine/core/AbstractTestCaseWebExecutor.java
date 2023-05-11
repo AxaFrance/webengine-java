@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.helper.GlobalConfigPropertiesHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.BrowserFactory;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
@@ -15,15 +15,15 @@ import java.util.Optional;
 
 public abstract class AbstractTestCaseWebExecutor extends AbstractTestCaseExecutor {
 
-    public AbstractTestCaseWebExecutor(ITestStepExecutor testStepExecutor, GlobalConfigProperties globalConfigProperties, ILoggerService loggerService ) {
-        super(testStepExecutor, globalConfigProperties, loggerService);
+    public AbstractTestCaseWebExecutor(ITestStepExecutor testStepExecutor, GlobalConfiguration globalConfiguration, ILoggerService loggerService ) {
+        super(testStepExecutor, globalConfiguration, loggerService);
     }
 
     @Override
     public Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
         try {
-            GlobalConfigProperties globalConfigProperties = GlobalConfigPropertiesHelper.getGlobalConfigProperties(globalApplicationContext.getSettings());
-            Optional<WebDriver> optional = BrowserFactory.getDriver(globalConfigProperties);
+            GlobalConfiguration globalConfiguration = GlobalConfigPropertiesHelper.getGlobalConfigProperties(globalApplicationContext.getSettings());
+            Optional<WebDriver> optional = BrowserFactory.getDriver(globalConfiguration);
             if(optional.isPresent()){
                 return optional.get();
             }

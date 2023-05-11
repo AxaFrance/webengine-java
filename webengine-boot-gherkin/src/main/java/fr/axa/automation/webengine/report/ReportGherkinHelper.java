@@ -10,7 +10,7 @@ import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.TestCaseMetricHelper;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
@@ -109,7 +109,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
 
     public void closeReport() throws  WebEngineException {
         String applicationName = "application";
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesHelperProvider.getInstance().getDefaultGlobalConfiguration();
+        Optional<GlobalConfiguration> globalConfigProperties = PropertiesHelperProvider.getInstance().getDefaultGlobalConfiguration();
         if(globalConfigProperties.isPresent()){
             applicationName = globalConfigProperties.get().getWebengineConfiguration().getName();
         }

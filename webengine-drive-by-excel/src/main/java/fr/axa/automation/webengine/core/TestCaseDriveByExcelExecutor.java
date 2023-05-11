@@ -22,7 +22,7 @@ import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.object.TestCaseNodeDriveByExcel;
 import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.tree.TreeNode;
 import fr.axa.automation.webengine.util.DateUtil;
@@ -47,8 +47,8 @@ import java.util.stream.Collectors;
 public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor implements ITestCaseDriveByExcelExecutor {
 
     @Autowired
-    public TestCaseDriveByExcelExecutor(@Qualifier("testStepDriveByExcelExecutor") ITestStepExecutor testStepExecutor, GlobalConfigProperties globalConfigProperties, ILoggerService loggerService ) {
-        super(testStepExecutor, globalConfigProperties, loggerService);
+    public TestCaseDriveByExcelExecutor(@Qualifier("testStepDriveByExcelExecutor") ITestStepExecutor testStepExecutor, GlobalConfiguration globalConfiguration, ILoggerService loggerService ) {
+        super(testStepExecutor, globalConfiguration, loggerService);
     }
 
     @Override

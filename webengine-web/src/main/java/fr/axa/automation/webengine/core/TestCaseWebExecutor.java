@@ -17,7 +17,7 @@ import fr.axa.automation.webengine.helper.ActionReportDetailHelper;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.TestDataHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.object.ActionReportDetail;
 import fr.axa.automation.webengine.util.DateUtil;
@@ -38,8 +38,8 @@ import java.util.stream.Collectors;
 public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements ITestCaseWebExecutor {
 
     @Autowired
-    public TestCaseWebExecutor(@Qualifier("testStepWebExecutor")ITestStepExecutor testStepExecutor, GlobalConfigProperties globalConfigProperties, ILoggerService loggerService ) {
-        super(testStepExecutor, globalConfigProperties, loggerService);
+    public TestCaseWebExecutor(@Qualifier("testStepWebExecutor")ITestStepExecutor testStepExecutor, GlobalConfiguration globalConfiguration, ILoggerService loggerService ) {
+        super(testStepExecutor, globalConfiguration, loggerService);
     }
 
     @Override
