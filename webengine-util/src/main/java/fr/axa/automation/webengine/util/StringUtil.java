@@ -15,7 +15,7 @@ public final class StringUtil {
     public static boolean equalsIgnoreCase(String value1,String value2){
         if(value1==null && value2==null){
             return true;
-        } else if ((value1!=null && value2==null) || (value1==null && value2!=null)) {
+        } else if ((value1==null || value2==null)) {
             return false;
         } else  {
             return StringUtils.equalsIgnoreCase(value1.trim(),value2.trim());
@@ -25,7 +25,7 @@ public final class StringUtil {
     public static boolean contains(String value1,String value2){
         if(value1==null && value2==null){
             return true;
-        } else if ((value1!=null && value2==null) || (value1==null && value2!=null)) {
+        } else if ((value1==null || value2==null)) {
             return false;
         } else  {
             return StringUtils.contains(value1.trim().toUpperCase(),value2.trim().toUpperCase());
