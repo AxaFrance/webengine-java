@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.properties.ApplicationProperties;
+import fr.axa.automation.webengine.properties.WebengineConfiguration;
 import fr.axa.automation.webengine.properties.GlobalConfigProperties;
 import fr.axa.automation.webengine.util.SettingsForTest;
 import org.junit.jupiter.api.Assertions;
@@ -13,18 +13,18 @@ class GlobalConfigPropertiesHelperTest {
     void getGlobalConfigProperties() throws WebEngineException {
         GlobalConfigProperties globalConfigProperties = GlobalConfigPropertiesHelper.getGlobalConfigProperties(SettingsForTest.getSettings());
         Assertions.assertNotNull(globalConfigProperties);
-        ApplicationProperties applicationProperties = globalConfigProperties.getApplication();
-        Assertions.assertNotNull(applicationProperties);
-        Assertions.assertEquals(SettingsForTest.getSettings().getPlatform(),PlatformTypeHelper.getPlatform(applicationProperties.getPlatformName()));
-        Assertions.assertEquals(SettingsForTest.getSettings().getBrowser(),BrowserTypeHelper.getBrowser(applicationProperties.getBrowserName()));
-        Assertions.assertEquals(SettingsForTest.getSettings().getOutputDir(),applicationProperties.getOutputDir());
+        WebengineConfiguration webengineConfiguration = globalConfigProperties.getWebengineConfiguration();
+        Assertions.assertNotNull(webengineConfiguration);
+        Assertions.assertEquals(SettingsForTest.getSettings().getPlatform(),PlatformTypeHelper.getPlatform(webengineConfiguration.getPlatformName()));
+        Assertions.assertEquals(SettingsForTest.getSettings().getBrowser(),BrowserTypeHelper.getBrowser(webengineConfiguration.getBrowserName()));
+        Assertions.assertEquals(SettingsForTest.getSettings().getOutputDir(), webengineConfiguration.getOutputDir());
     }
 
     @Test
     void getApplicationProperties()  throws WebEngineException {
-        ApplicationProperties applicationProperties = GlobalConfigPropertiesHelper.getApplicationProperties(SettingsForTest.getSettings());
-        Assertions.assertEquals(SettingsForTest.getSettings().getPlatform(),PlatformTypeHelper.getPlatform(applicationProperties.getPlatformName()));
-        Assertions.assertEquals(SettingsForTest.getSettings().getBrowser(),BrowserTypeHelper.getBrowser(applicationProperties.getBrowserName()));
-        Assertions.assertEquals(SettingsForTest.getSettings().getOutputDir(),applicationProperties.getOutputDir());
+        WebengineConfiguration webengineConfiguration = GlobalConfigPropertiesHelper.getApplicationProperties(SettingsForTest.getSettings());
+        Assertions.assertEquals(SettingsForTest.getSettings().getPlatform(),PlatformTypeHelper.getPlatform(webengineConfiguration.getPlatformName()));
+        Assertions.assertEquals(SettingsForTest.getSettings().getBrowser(),BrowserTypeHelper.getBrowser(webengineConfiguration.getBrowserName()));
+        Assertions.assertEquals(SettingsForTest.getSettings().getOutputDir(), webengineConfiguration.getOutputDir());
     }
 }

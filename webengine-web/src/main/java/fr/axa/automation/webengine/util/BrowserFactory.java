@@ -30,7 +30,7 @@ public final class BrowserFactory {
     }
 
     public static Optional<WebDriver> getDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getWebengineConfiguration().getPlatformName());
         if (platform == Platform.WINDOWS) {
             return getDesktopDriver(globalConfigProperties);
         } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
@@ -41,12 +41,12 @@ public final class BrowserFactory {
     }
 
     public static Optional<WebDriver> getDesktopDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
-        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getApplication().getBrowserName());
-        if(CollectionUtils.isEmpty(globalConfigProperties.getApplication().getBrowserOptionList())){
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getWebengineConfiguration().getPlatformName());
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getWebengineConfiguration().getBrowserName());
+        if(CollectionUtils.isEmpty(globalConfigProperties.getWebengineConfiguration().getBrowserOptionList())){
             return getWebDriver(platform, browser);
         }else{
-            return getWebDriver(platform, browser,globalConfigProperties.getApplication().getBrowserOptionList());
+            return getWebDriver(platform, browser,globalConfigProperties.getWebengineConfiguration().getBrowserOptionList());
         }
     }
 
@@ -81,9 +81,9 @@ public final class BrowserFactory {
 
 
     public static <T extends WebDriver> Optional<T> getAppiumDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getWebengineConfiguration().getPlatformName());
         try {
-            AppiumSettingsProperties appiumSettings = globalConfigProperties.getApplication().getAppiumSettings();
+            AppiumSettingsProperties appiumSettings = globalConfigProperties.getWebengineConfiguration().getAppiumSettings();
             if (appiumSettings != null) {
                 if (platform == Platform.ANDROID) {
                     return (Optional<T>) Optional.of(new AndroidDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfigProperties)));
@@ -101,12 +101,12 @@ public final class BrowserFactory {
     }
 
     private static DesiredCapabilities getAppiumOption(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getApplication().getBrowserName());
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getWebengineConfiguration().getBrowserName());
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME, browser.getValue());
 
         Map<String, Object> browserStackOptions = new HashMap<>();
-        AppiumSettingsProperties appiumSettings = globalConfigProperties.getApplication().getAppiumSettings();
+        AppiumSettingsProperties appiumSettings = globalConfigProperties.getWebengineConfiguration().getAppiumSettings();
         if (appiumSettings != null) {
             CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
             if (MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())) {

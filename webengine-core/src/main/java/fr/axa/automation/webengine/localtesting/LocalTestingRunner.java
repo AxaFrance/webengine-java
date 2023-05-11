@@ -67,8 +67,8 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private HashMap<String,String> getLocalTestingArguments(GlobalConfigProperties globalConfigProperties ){
         HashMap<String,String> localTestingArguments = new HashMap<>();
-        localTestingArguments.put(KEY, globalConfigProperties.getApplication().getAppiumSettings().getPassword());
-        localTestingArguments.putAll(globalConfigProperties.getApplication().getAppiumSettings().getLocalTesting().getArguments());
+        localTestingArguments.put(KEY, globalConfigProperties.getWebengineConfiguration().getAppiumSettings().getPassword());
+        localTestingArguments.putAll(globalConfigProperties.getWebengineConfiguration().getAppiumSettings().getLocalTesting().getArguments());
         loggerService.info("Local testing arguments : "+localTestingArguments);
         return localTestingArguments;
     }
@@ -86,7 +86,7 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private boolean isLocalTestingActivate(Optional<GlobalConfigProperties> globalConfigProperties) {
         if(globalConfigProperties.isPresent() && globalConfigProperties.get().isLocalTestingConfExist()) {
-            LocalTesting localTesting = globalConfigProperties.get().getApplication().getAppiumSettings().getLocalTesting();
+            LocalTesting localTesting = globalConfigProperties.get().getWebengineConfiguration().getAppiumSettings().getLocalTesting();
             if (localTesting.isActivate()) {
                 return true;
             }else{

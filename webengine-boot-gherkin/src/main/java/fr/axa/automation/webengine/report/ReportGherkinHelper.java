@@ -111,7 +111,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         String applicationName = "application";
         Optional<GlobalConfigProperties> globalConfigProperties = PropertiesHelperProvider.getInstance().getDefaultGlobalConfiguration();
         if(globalConfigProperties.isPresent()){
-            applicationName = globalConfigProperties.get().getApplication().getName();
+            applicationName = globalConfigProperties.get().getWebengineConfiguration().getName();
         }
 
 

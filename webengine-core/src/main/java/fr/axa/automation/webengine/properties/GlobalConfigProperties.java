@@ -18,21 +18,21 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationProperties
 @ConfigurationPropertiesScan
 public class GlobalConfigProperties {
-    ApplicationProperties application;
+    WebengineConfiguration webengineConfiguration;
 
     public boolean isLocalTestingConfExist() {
-        return this.getApplication()!=null && this.getApplication().getAppiumSettings() != null && this.getApplication().getAppiumSettings().getLocalTesting() != null;
+        return this.getWebengineConfiguration()!=null && this.getWebengineConfiguration().getAppiumSettings() != null && this.getWebengineConfiguration().getAppiumSettings().getLocalTesting() != null;
     }
 
     public String getPlateform(){
-        return this != null && this.getApplication() != null ? this.getApplication().getPlatformName() : null;
+        return this != null && this.getWebengineConfiguration() != null ? this.getWebengineConfiguration().getPlatformName() : null;
     }
 
     public String getBrowser(){
-        return this != null && this.getApplication() != null ? this.getApplication().getBrowserName() : null;
+        return this != null && this.getWebengineConfiguration() != null ? this.getWebengineConfiguration().getBrowserName() : null;
     }
 
     public String getOutputDir(){
-        return this != null && this.getApplication() != null ? this.getApplication().getOutputDir() : null;
+        return this != null && this.getWebengineConfiguration() != null ? this.getWebengineConfiguration().getOutputDir() : null;
     }
 }

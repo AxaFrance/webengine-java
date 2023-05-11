@@ -65,8 +65,8 @@ public abstract class AbstractTestSuiteHelper {
     }
 
     protected static List<String> getBrowserOptionList(GlobalConfigProperties globalConfigProperties) {
-        if (globalConfigProperties != null && globalConfigProperties.getApplication()!=null && CollectionUtils.isNotEmpty(globalConfigProperties.getApplication().getBrowserOptionList())) {
-            return globalConfigProperties.getApplication().getBrowserOptionList();
+        if (globalConfigProperties != null && globalConfigProperties.getWebengineConfiguration()!=null && CollectionUtils.isNotEmpty(globalConfigProperties.getWebengineConfiguration().getBrowserOptionList())) {
+            return globalConfigProperties.getWebengineConfiguration().getBrowserOptionList();
         }
         return Collections.emptyList();
     }

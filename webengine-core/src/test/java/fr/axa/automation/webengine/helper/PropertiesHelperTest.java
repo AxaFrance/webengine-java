@@ -18,7 +18,7 @@ class PropertiesHelperTest {
         String fileName = "application-windows-chromiumedge.yml";
         Optional<GlobalConfigProperties> globalConfigProperties = propertiesHelper.getPropertiesByClass(Arrays.asList("properties/" + fileName),fileName, GlobalConfigProperties.class);
         Assertions.assertTrue(globalConfigProperties.isPresent());
-        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getApplication().getPlatformName()));
+        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getWebengineConfiguration().getPlatformName()));
     }
 
     @Test
@@ -27,7 +27,7 @@ class PropertiesHelperTest {
         String fileName = "application-windows-chromiumedge.yml";
         GlobalConfigProperties globalConfigProperties = propertiesHelper.loadPropertiesFile("properties/" + fileName, GlobalConfigProperties.class);
         Assertions.assertNotNull(globalConfigProperties);
-        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName()));
+        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.getWebengineConfiguration().getPlatformName()));
     }
 
     @Test
@@ -35,7 +35,7 @@ class PropertiesHelperTest {
         PropertiesHelper propertiesHelper = PropertiesHelperProvider.getInstance();
         Optional<GlobalConfigProperties> globalConfigProperties = propertiesHelper.getDefaultGlobalConfiguration();
         Assertions.assertNotNull(globalConfigProperties.get());
-        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getApplication().getPlatformName()));
+        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getWebengineConfiguration().getPlatformName()));
     }
 
     @Test
@@ -44,7 +44,7 @@ class PropertiesHelperTest {
         PropertiesHelper propertiesHelper = PropertiesHelperProvider.getInstance();
         Optional<GlobalConfigProperties> globalConfigProperties = propertiesHelper.getGlobalConfiguration(Collections.singletonList(fileName),fileName);
         Assertions.assertNotNull(globalConfigProperties.get());
-        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getApplication().getPlatformName()));
+        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getWebengineConfiguration().getPlatformName()));
     }
 
     @Test
@@ -53,6 +53,6 @@ class PropertiesHelperTest {
         PropertiesHelper propertiesHelper = PropertiesHelperProvider.getInstance();
         Optional<GlobalConfigProperties> globalConfigProperties = propertiesHelper.getGlobalConfigurationByName(fileName);
         Assertions.assertNotNull(globalConfigProperties.get());
-        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getApplication().getPlatformName()));
+        Assertions.assertEquals(Platform.WINDOWS,PlatformTypeHelper.getPlatform(globalConfigProperties.get().getWebengineConfiguration().getPlatformName()));
     }
 }
