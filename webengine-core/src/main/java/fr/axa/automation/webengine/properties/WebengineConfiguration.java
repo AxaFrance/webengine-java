@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder
@@ -21,5 +20,5 @@ public class WebengineConfiguration {
     String browserName;
     List<String> browserOptionList;
     String outputDir;
-    AppiumSettingsProperties appiumSettings;
+    AppiumConfiguration appiumConfiguration;
 }

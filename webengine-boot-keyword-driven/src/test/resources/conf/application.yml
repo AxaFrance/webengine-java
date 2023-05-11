@@ -2,7 +2,7 @@ webengineConfiguration:
     name: robot
     platformName: WINDOWS
     browserName: CHROME
-    appiumSettings:
+    appiumConfiguration:
         gridConnection: https://hub-cloud.browserstack.com/wd/hub
         userName: XXXXXXX
         password: XXXXXXX

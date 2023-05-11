@@ -6,7 +6,7 @@ import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
-import fr.axa.automation.webengine.properties.LocalTesting;
+import fr.axa.automation.webengine.properties.LocalTestingConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -67,8 +67,8 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private HashMap<String,String> getLocalTestingArguments(GlobalConfiguration globalConfiguration){
         HashMap<String,String> localTestingArguments = new HashMap<>();
-        localTestingArguments.put(KEY, globalConfiguration.getWebengineConfiguration().getAppiumSettings().getPassword());
-        localTestingArguments.putAll(globalConfiguration.getWebengineConfiguration().getAppiumSettings().getLocalTesting().getArguments());
+        localTestingArguments.put(KEY, globalConfiguration.getWebengineConfiguration().getAppiumConfiguration().getPassword());
+        localTestingArguments.putAll(globalConfiguration.getWebengineConfiguration().getAppiumConfiguration().getLocalTesting().getArguments());
         loggerService.info("Local testing arguments : "+localTestingArguments);
         return localTestingArguments;
     }
@@ -86,8 +86,8 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private boolean isLocalTestingActivate(Optional<GlobalConfiguration> globalConfigProperties) {
         if(globalConfigProperties.isPresent() && globalConfigProperties.get().isLocalTestingConfExist()) {
-            LocalTesting localTesting = globalConfigProperties.get().getWebengineConfiguration().getAppiumSettings().getLocalTesting();
-            if (localTesting.isActivate()) {
+            LocalTestingConfiguration localTestingConfiguration = globalConfigProperties.get().getWebengineConfiguration().getAppiumConfiguration().getLocalTesting();
+            if (localTestingConfiguration.isActivate()) {
                 return true;
             }else{
                 loggerService.info("Local testing flag is not activate if you run your testing app in mobile");

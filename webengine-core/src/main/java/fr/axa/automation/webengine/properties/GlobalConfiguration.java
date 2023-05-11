@@ -22,7 +22,7 @@ public class GlobalConfiguration {
     ApplicationConfiguration applicationConfiguration;
 
     public boolean isLocalTestingConfExist() {
-        return this.getWebengineConfiguration()!=null && this.getWebengineConfiguration().getAppiumSettings() != null && this.getWebengineConfiguration().getAppiumSettings().getLocalTesting() != null;
+        return this.getWebengineConfiguration()!=null && this.getWebengineConfiguration().getAppiumConfiguration() != null && this.getWebengineConfiguration().getAppiumConfiguration().getLocalTesting() != null;
     }
 
     public String getPlateform(){

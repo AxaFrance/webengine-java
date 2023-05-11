@@ -372,7 +372,7 @@ appiumSettings:
     gridConnection: https://hub-cloud.browserstack.com/wd/hub
     userName: $(userName)
     password: $(password)
-    localTesting:
+    localTestingConfiguration:
         activate: true
         arguments:
             force: true

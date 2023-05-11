@@ -35,6 +35,32 @@ webengineConfiguration:
     userName: XXXXXXX
     password: XXXXXXX
 
+5-Rename LocalTesting
+Rename LocalTesting to LocalTestingConfiguration
+
+6-Rename CapabilitiesProperties
+Rename CapabilitiesProperties to AppiumCapabilities
+
+7-Rename AppiumSettingsProperties to AppiumConfiguration
+webengineConfiguration:
+  name: spoolnet-automation
+  platformName: WINDOWS
+  browserName: CHROME
+  browserOptionList:
+    - --incognito
+    - --remote-allow-origins=*
+  testCaseList:
+	- 	axa.fr
+	-	airfrance.fr
+  testCaseAndDataTestList:
+	axa-fr:jdd1;jdd2
+	airFrance-fr:jdd1;jdd2
+  appiumConfiguration:
+    gridConnection: https://hub-cloud.browserstack.com/wd/hub
+    userName: XXXXXXX
+    password: XXXXXXX
+    localTesting:
+      activate: false
 
 ================================================
 webengine 2.2.0

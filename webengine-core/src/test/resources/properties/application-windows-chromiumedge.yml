@@ -2,7 +2,7 @@ webengineConfiguration:
     name: spoolnet-automation
     platformName: WINDOWS
     browserName: CHROMIUMEDGE
-    appiumSettings:
+    appiumConfiguration:
         gridConnection: https://hub-cloud.browserstack.com/wd/hub
         userName: XXXXXXX
         password: XXXXXXX

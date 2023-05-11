@@ -5,8 +5,8 @@ import fr.axa.automation.webengine.global.Browser;
 import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.helper.BrowserTypeHelper;
 import fr.axa.automation.webengine.helper.PlatformTypeHelper;
-import fr.axa.automation.webengine.properties.AppiumSettingsProperties;
-import fr.axa.automation.webengine.properties.CapabilitiesProperties;
+import fr.axa.automation.webengine.properties.AppiumConfiguration;
+import fr.axa.automation.webengine.properties.AppiumCapabilities;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
@@ -83,7 +83,7 @@ public final class BrowserFactory {
     public static <T extends WebDriver> Optional<T> getAppiumDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         try {
-            AppiumSettingsProperties appiumSettings = globalConfiguration.getWebengineConfiguration().getAppiumSettings();
+            AppiumConfiguration appiumSettings = globalConfiguration.getWebengineConfiguration().getAppiumConfiguration();
             if (appiumSettings != null) {
                 if (platform == Platform.ANDROID) {
                     return (Optional<T>) Optional.of(new AndroidDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfiguration)));
@@ -106,9 +106,9 @@ public final class BrowserFactory {
         desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME, browser.getValue());
 
         Map<String, Object> browserStackOptions = new HashMap<>();
-        AppiumSettingsProperties appiumSettings = globalConfiguration.getWebengineConfiguration().getAppiumSettings();
+        AppiumConfiguration appiumSettings = globalConfiguration.getWebengineConfiguration().getAppiumConfiguration();
         if (appiumSettings != null) {
-            CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
+            AppiumCapabilities capabilitiesProperties = appiumSettings.getCapabilities();
             if (MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())) {
                 browserStackOptions.putAll(capabilitiesProperties.getDesiredCapabilitiesMap());
             }
@@ -117,7 +117,7 @@ public final class BrowserFactory {
         return desiredCapabilities;
     }
 
-    private static String getURLBrowserStack(AppiumSettingsProperties appiumSettings) throws WebEngineException {
+    private static String getURLBrowserStack(AppiumConfiguration appiumSettings) throws WebEngineException {
         if (appiumSettings != null) {
             if (appiumSettings.getGridConnection().contains("browserstack.com")) {
                 return "https://" + appiumSettings.getUserName() + ":" + appiumSettings.getPassword() + "@" +appiumSettings.getGridConnection().split("(?i)https://")[1];

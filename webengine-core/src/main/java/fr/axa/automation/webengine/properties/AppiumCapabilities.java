@@ -14,6 +14,6 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CapabilitiesProperties {
+public class AppiumCapabilities {
   Map<String,String> desiredCapabilitiesMap;
 }

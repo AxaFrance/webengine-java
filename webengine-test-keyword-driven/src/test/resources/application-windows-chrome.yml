@@ -4,7 +4,7 @@ webengineConfiguration:
     browserName: CHROME
     browserOptionList:
         - --remote-allow-origins=*
-    appiumSettings:
+    appiumConfiguration:
         gridConnection: https://hub-cloud.browserstack.com/wd/hub
         userName: XXXXXXX
         password: XXXXXXX

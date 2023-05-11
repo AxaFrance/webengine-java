@@ -2,7 +2,7 @@ webengineConfiguration:
     name: solaris-automation-gherkin
     platformName: WINDOWS
     browserName: CHROMIUM_EDGE
-    appiumSettings:
+    appiumConfiguration:
         gridConnection: https://hub-cloud.browserstack.com/wd/hub
         userName: XXXXXXX
         password: XXXXXXX
