@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.core;
+package fr.axa.automation.webengine.executor;
 
 import fr.axa.automation.webengine.api.ITestCaseDriveByExcelExecutor;
 import fr.axa.automation.webengine.api.ITestSuiteDriveByExcelExecutor;
@@ -11,6 +11,8 @@ import fr.axa.automation.webengine.checking.chain.impl.OptionalChecking;
 import fr.axa.automation.webengine.checking.chain.impl.ReferencedValueChecking;
 import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
+import fr.axa.automation.webengine.core.AbstractTestSuiteExecutor;
+import fr.axa.automation.webengine.core.ITestCaseExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
