@@ -46,20 +46,20 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws Exception;
 
-    protected WebElementDescription populateWebElement(AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData ,List<CommandResult> commandResultList) {
+    protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) {
         return WebElementDescription.builder()
                 .useDriver((WebDriver) testCaseContext.getWebDriver())
-                .id(populateBySelector(LocatingBy.BY_ID, commandData, commandResultList))
-                .name(populateBySelector(LocatingBy.BY_NAME, commandData, commandResultList))
-                .className(populateBySelector(LocatingBy.BY_CLASS_NAME, commandData, commandResultList))
-                .linkText(populateBySelector(LocatingBy.BY_LINK_TEXT, commandData, commandResultList))
-                .tagName(populateBySelector(LocatingBy.BY_TAG_NAME, commandData, commandResultList))
-                .cssSelector(populateBySelector(LocatingBy.BY_CSS_SELECTOR, commandData, commandResultList))
-                .xPath(populateBySelector(LocatingBy.BY_XPATH, commandData, commandResultList))
+                .id(populateBySelector(globalApplicationContext, LocatingBy.BY_ID, commandData, commandResultList))
+                .name(populateBySelector(globalApplicationContext, LocatingBy.BY_NAME, commandData, commandResultList))
+                .className(populateBySelector(globalApplicationContext, LocatingBy.BY_CLASS_NAME, commandData, commandResultList))
+                .linkText(populateBySelector(globalApplicationContext, LocatingBy.BY_LINK_TEXT, commandData, commandResultList))
+                .tagName(populateBySelector(globalApplicationContext, LocatingBy.BY_TAG_NAME, commandData, commandResultList))
+                .cssSelector(populateBySelector(globalApplicationContext, LocatingBy.BY_CSS_SELECTOR, commandData, commandResultList))
+                .xPath(populateBySelector(globalApplicationContext, LocatingBy.BY_XPATH, commandData, commandResultList))
                 .build();
     }
 
-    protected String populateBySelector(LocatingBy locatingBy,CommandDataDriveByExcel commandData,List<CommandResult> commandResultList) {
+    protected String populateBySelector(AbstractGlobalApplicationContext globalApplicationContext, LocatingBy locatingBy, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) {
         String value = "";
         switch (locatingBy) {
             case BY_ID:
@@ -76,7 +76,7 @@ public abstract class AbstractDriverCommand implements ICommand {
             default:
                 return StringUtils.EMPTY;
         }
-        return StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(value,commandResultList) : StringUtils.EMPTY;
+        return StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), value, commandResultList) : StringUtils.EMPTY; //For xpath, id ...etc dynamic
     }
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
@@ -115,12 +115,12 @@ public abstract class AbstractDriverCommand implements ICommand {
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 
-    protected String getValue(TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) {
+    protected String getValue(AbstractGlobalApplicationContext globalApplicationContext, TestCaseDriveByExcelContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) {
         String dataTestColumName = testCaseContext.getDataTestColumnName();
         Map<String, String> dataTestMap = commandData.getDataTestMap();
         if (MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))) {
             String originalValue = dataTestMap.get(dataTestColumName);
-            return EvaluateValueHelper.evaluateValue(originalValue, commandResultList);
+            return EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), originalValue, commandResultList);
         }
         return null;
     }

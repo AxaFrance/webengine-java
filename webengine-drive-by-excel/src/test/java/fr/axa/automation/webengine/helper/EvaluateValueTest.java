@@ -11,7 +11,7 @@ class EvaluateValueTest {
     void todayTest() {
         String value = "<<<TODAY>>>";
         List<CommandResult> commandResultList = null;
-        String result = EvaluateValueHelper.evaluateValue(value,commandResultList);
+        String result = EvaluateValueHelper.evaluateValue(null,value,commandResultList);
         System.out.println(result);
     }
 
@@ -19,7 +19,7 @@ class EvaluateValueTest {
     void todayPlusDayTest() {
         String value = "<<<TODAY+10>>>";
         List<CommandResult> commandResultList = null;
-        String result = EvaluateValueHelper.evaluateValue(value,commandResultList);
+        String result = EvaluateValueHelper.evaluateValue(null,value,commandResultList);
         System.out.println(result);
     }
 
@@ -27,7 +27,7 @@ class EvaluateValueTest {
     void todayHourTest() {
         String value = "<<<today_hour>>>";
         List<CommandResult> commandResultList = null;
-        String result = EvaluateValueHelper.evaluateValue(value,commandResultList);
+        String result = EvaluateValueHelper.evaluateValue(null,value,commandResultList);
         System.out.println(result);
     }
 }

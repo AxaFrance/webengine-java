@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.properties.WebengineConfiguration;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
+import fr.axa.automation.webengine.properties.WebengineConfiguration;
 import fr.axa.automation.webengine.util.SettingsForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

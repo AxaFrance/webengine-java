@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.constante.Constante;
 import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
+import fr.axa.automation.webengine.global.AbstractSettings;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FormatDate;
@@ -22,27 +23,50 @@ public class EvaluateValueHelper {
         return StringUtils.substringBetween(value,Constante.TRIPLE_CHEVRON_PREFIX.getValue(),Constante.TRIPLE_CHEVRON_SUFFIX.getValue());
     }
 
-    public static String evaluateValue(String completeValue, List<CommandResult> commandResultList){
-        List<String> referencedRegexValueList = RegexUtil.match(RegexContante.REFERENCED_REGEX_VALUE, completeValue);
-        if(CollectionUtils.isEmpty(referencedRegexValueList)){
-            return completeValue;
-        } else{
-            return evaluateRegexValue(completeValue, referencedRegexValueList, commandResultList );
-        }
+    public static String getValueBetweenBrackets(String value){
+        return StringUtils.substringBetween(value,Constante.BRACKETS_PREFIX.getValue(),Constante.BRACKETS_SUFFIX.getValue());
     }
 
-    private static String evaluateRegexValue(String completeValue, List<String> referencedRegexValueList, List<CommandResult> commandResultList ) {
+    public static String getValueBetweenRafter(String value,String prefix, String suffix){
+        return StringUtils.substringBetween(value,prefix,suffix);
+    }
+
+    public static String evaluateValue(AbstractSettings settings, String completeValue, List<CommandResult> commandResultList){
+        List<String> integrationRegexValueList = RegexUtil.match(RegexContante.INTEGRATION_REGEX_VALUE, completeValue);
+        List<String> referencedRegexValueList = RegexUtil.match(RegexContante.REFERENCED_REGEX_VALUE, completeValue);
+        String evaluateValue = completeValue;
+        if(CollectionUtils.isNotEmpty(integrationRegexValueList)){
+            evaluateValue = evaluateIntegrationRegexValue(completeValue, integrationRegexValueList, settings);
+        }
+        if(CollectionUtils.isNotEmpty(referencedRegexValueList)){
+            evaluateValue = evaluateReferencedRegexValue(evaluateValue, referencedRegexValueList, commandResultList );
+        }
+        return evaluateValue;
+    }
+
+    public static String evaluateIntegrationRegexValue(String completeValue, List<String> integrationRegexValueList,AbstractSettings settings) {
+        String resultValue = completeValue;
+        if (CollectionUtils.isNotEmpty(integrationRegexValueList)) {
+            for (String integrationRegexValue : integrationRegexValueList) {
+                String valueWithouBrackets = getValueBetweenBrackets(integrationRegexValue);
+                resultValue = resultValue.replace(integrationRegexValue, settings.getValues().get(valueWithouBrackets));
+            }
+        }
+        return resultValue;
+    }
+
+    private static String evaluateReferencedRegexValue(String completeValue, List<String> referencedRegexValueList, List<CommandResult> commandResultList ) {
         String resultValue = completeValue;
         if(CollectionUtils.isNotEmpty(referencedRegexValueList)){
-            for (String regexValue: referencedRegexValueList) {
-                String valueWithouRafter = getValueBetweenRafter(regexValue);
+            for (String referencedRegexValue: referencedRegexValueList) {
+                String valueWithouRafter = getValueBetweenRafter(referencedRegexValue);
                 if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)) {
-                    resultValue = resultValue.replace(regexValue,replaceTagDateValue(valueWithouRafter));
+                    resultValue = resultValue.replace(referencedRegexValue,replaceTagDateValue(valueWithouRafter));
                 } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
-                    resultValue = resultValue.replace(regexValue,PredefinedTagValue.valueOf(valueWithouRafter).getTagValue());
+                    resultValue = resultValue.replace(referencedRegexValue,PredefinedTagValue.valueOf(valueWithouRafter).getTagValue());
                 } else if (isContainsReferencedValue(valueWithouRafter, commandResultList)) {
-                    String referencedValue = getReferencedSaveData(valueWithouRafter,commandResultList);
-                    resultValue = resultValue.replace(regexValue,referencedValue);
+                    String savedData = getSavedData(valueWithouRafter,commandResultList);
+                    resultValue = resultValue.replace(referencedRegexValue,savedData);
                 }
             }
         }
@@ -56,7 +80,7 @@ public class EvaluateValueHelper {
         return false;
     }
 
-    public static String getReferencedSaveData(String value, List<CommandResult> commandResultList){
+    public static String getSavedData(String value, List<CommandResult> commandResultList){
         if(CollectionUtils.isNotEmpty(commandResultList)){
             List<String> saveDataList = commandResultList.stream()
                                                         .filter(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value))
@@ -96,6 +120,4 @@ public class EvaluateValueHelper {
         }
         return "";
     }
-
-
 }

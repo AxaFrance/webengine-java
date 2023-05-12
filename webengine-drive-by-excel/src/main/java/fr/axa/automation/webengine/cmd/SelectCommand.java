@@ -12,8 +12,8 @@ public class SelectCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(testCaseContext,commandData,commandResultList);
-        String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
+        webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
+        String value = getValue(globalApplicationContext,(TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
         executeActionInElement(value);
     }
 

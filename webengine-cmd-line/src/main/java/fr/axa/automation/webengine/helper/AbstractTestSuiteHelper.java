@@ -10,13 +10,16 @@ import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.FileUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public abstract class AbstractTestSuiteHelper {
@@ -63,6 +66,14 @@ public abstract class AbstractTestSuiteHelper {
             return BrowserTypeHelper.getBrowser(browser);
         }
     }
+
+    protected static Map<String,String> getValues(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        if (globalConfiguration != null && globalConfiguration.getApplicationConfiguration()!=null && MapUtils.isNotEmpty(globalConfiguration.getApplicationConfiguration().getValues())) {
+            return globalConfiguration.getApplicationConfiguration().getValues();
+        }
+        return new HashMap<>();
+    }
+
 
     protected static List<String> getBrowserOptionList(GlobalConfiguration globalConfiguration) {
         if (globalConfiguration != null && globalConfiguration.getWebengineConfiguration()!=null && CollectionUtils.isNotEmpty(globalConfiguration.getWebengineConfiguration().getBrowserOptionList())) {

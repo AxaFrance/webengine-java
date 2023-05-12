@@ -13,8 +13,8 @@ public class AssertSelectedCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(testCaseContext,commandData,commandResultList);
-        String value = getValue((TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
+        webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
+        String value = getValue(globalApplicationContext,(TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
         boolean isSelected = webElementDescription.assertContentByElementType(value);
         if(!isSelected){
             throw  new WebEngineException("The element is not selected with this value : "+value);

@@ -9,6 +9,11 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum Constante {
+
+    BRACKETS_PREFIX("#{"),
+
+    BRACKETS_SUFFIX("}#"),
+
     TRIPLE_CHEVRON_PREFIX("<<<"),
     TRIPLE_CHEVRON_SUFFIX(">>>"),
     SEMICOLON(";"),

@@ -13,7 +13,7 @@ public class AssertNotCheckedCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(testCaseContext,commandData,commandResultList);
+        webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
         boolean isChecked = webElementDescription.assertContentByElementType(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue());
         if(isChecked){
             throw  new WebEngineException("The element is checked");

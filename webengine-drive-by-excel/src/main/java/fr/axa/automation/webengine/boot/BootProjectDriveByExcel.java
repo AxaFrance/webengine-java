@@ -103,6 +103,6 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
 
     protected TestSuiteDataDriveByExcel getTestSuiteData(AbstractGlobalApplicationContext globalApplicationContext){
         SettingsDriveByExcel settingsDriveByExcel = (SettingsDriveByExcel)globalApplicationContext.getSettings();
-        return ExcelConverter.convert(settingsDriveByExcel.getFileName(),settingsDriveByExcel.getTestCaseAndDataTestColumName());
+        return ExcelConverter.convert(settingsDriveByExcel.getDataTestFileName(),settingsDriveByExcel.getTestCaseAndDataTestColumName());
     }
 }

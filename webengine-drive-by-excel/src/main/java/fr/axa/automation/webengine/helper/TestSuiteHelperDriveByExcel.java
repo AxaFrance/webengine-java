@@ -24,12 +24,13 @@ public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
     public static SettingsDriveByExcel getSettings(CommandLine cmd, GlobalConfiguration globalConfiguration) throws WebEngineException {
         loggerService.info("Loading settings running ");
         SettingsDriveByExcel settings = SettingsDriveByExcel.builder()
-                .fileName(getFileName(cmd))
+                .dataTestFileName(getFileName(cmd))
                 .propertiesFileList(getPropertiesFiles(cmd))
                 .platform(getPlatform(cmd, globalConfiguration))
                 .browser(getBrowser(cmd, globalConfiguration))
                 .browserOptionsList(getBrowserOptionList(globalConfiguration))
                 .testCaseAndDataTestColumName(getTestCaseAndDataTestColumnName(cmd))
+                .values(getValues(globalConfiguration))
                 .outputDir(getOutputDir(cmd, globalConfiguration))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());

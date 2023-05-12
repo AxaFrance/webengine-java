@@ -15,5 +15,5 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationConfiguration {
-    Map<String,String> valuesMap;
+    Map<String,String> values;
 }

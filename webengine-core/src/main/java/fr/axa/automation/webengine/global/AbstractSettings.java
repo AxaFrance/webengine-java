@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -21,4 +22,5 @@ public abstract class AbstractSettings {
     List<String> browserOptionsList;
     List<String> propertiesFileList;
     String outputDir;
+    Map<String,String> values;
 }

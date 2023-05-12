@@ -15,7 +15,7 @@ public class OpenCommand extends AbstractDriverCommand{
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
         String url = commandData.getTargetList().get(TargetKey.OPEN);
-        url = EvaluateValueHelper.evaluateValue(url,commandResultList);
+        url = EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(),url,commandResultList);
         ((WebDriver)testCaseContext.getWebDriver()).navigate().to(url);
     }
 }
