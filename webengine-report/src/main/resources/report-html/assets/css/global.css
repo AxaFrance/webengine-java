@@ -10,7 +10,7 @@ body {
     min-height: 100vh;  /*toute la hauteur du viewport (compatible IE9+) */
     margin: 0;
     background: #fff;
-    font-family: "Century Gothic", helvetica, arial, sans-serif;
+    font-family: Source Sans Pro,sans-serif;
     font-size: 14px!important;
     height: 100%;
     width: 100%;
@@ -97,6 +97,14 @@ section {
     color: #e30026!important;
     font-weight: bold;
 }
+
+.label-in-tab{
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+
 .shadow{
     -webkit-box-shadow: 10px 11px 5px 0px rgba(0,0,0,0.1);
     -moz-box-shadow: 10px 11px 5px 0px rgba(0,0,0,0.1);

@@ -4,10 +4,6 @@
     display: flex;
 }
 
-.tab-label{
-    flex-grow: 1;
-}
-
 .tab-content-container{
     width: 100%;
     padding: 10px;
@@ -15,11 +11,10 @@
 }
 
 .tab-label{
-    width: 100%;
-    height: 100%;
-    margin-bottom: 0px;
-    cursor: pointer;
+    flex-grow: 1;
 }
+
+
 
 .w3-third {
     /*float: left;*/
@@ -51,7 +46,7 @@
 
 .w3-padding{padding:8px 16px!important}
 
-.w3-border-red,.w3-hover-border-red:hover{
+.w3-border-blue,.w3-hover-border-blue:hover{
     color: #000072 !important;
     border-color:#000072!important
 }

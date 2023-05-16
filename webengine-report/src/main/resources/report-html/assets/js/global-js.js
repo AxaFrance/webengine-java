@@ -37,12 +37,12 @@ function unSelectedAllTab(className){
     var i;
     var tablinks = document.getElementsByClassName(className);
     for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
+        tablinks[i].className = tablinks[i].className.replace(" w3-border-blue", "");
     }
 }
 
 function addClassToElement(idTab) {
-    document.getElementById(idTab).classList.add("w3-border-red");
+    document.getElementById(idTab).classList.add("w3-border-blue");
 }
 
 function changeColorOfSelectedElement(event){
