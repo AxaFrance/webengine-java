@@ -35,10 +35,13 @@
 }
 
 .w3-hover-light-grey:hover {
-    color: #000 !important;
-    background-color: #f1f1f1 !important
+    color: #000072 !important;
+    background-color: #ffffff !important
 }
 
 .w3-padding{padding:8px 16px!important}
 
-.w3-border-red,.w3-hover-border-red:hover{border-color:#e30026!important}
+.w3-border-red,.w3-hover-border-red:hover{
+    color: #000072 !important;
+    border-color:#000072!important
+}

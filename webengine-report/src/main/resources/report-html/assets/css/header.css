@@ -38,7 +38,7 @@
     padding: 5px 15px;
     color: #515a5a;
     font-size: 25px;
-    color: #3498db;
+    color: #000072;
 }
 
 .site-header-item + .site-header-item {
@@ -51,7 +51,7 @@
 }
 
 .site-header-icon-application {
-    color: #3498db;;
+    color: #000072;
 }
 
 .site-header-search-button {

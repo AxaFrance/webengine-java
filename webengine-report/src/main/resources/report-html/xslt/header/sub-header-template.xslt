@@ -2,23 +2,23 @@
 
     <xsl:template name="sub-header-template">
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action">Test suite</span>
+            <span class="badge badge-secondary badge-action"><i class="fa fa-bars" aria-hidden="true"></i> Test suite</span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action">Start time : <xsl:value-of select="TestSuiteReport/StartTime"/></span>
+            <span class="badge badge-secondary badge-action"><i class="fa fa-hourglass-start" aria-hidden="true"></i> Start time : <xsl:value-of select="TestSuiteReport/StartTime"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action">End time : <xsl:value-of select="TestSuiteReport/EndTime"/></span>
+            <span class="badge badge-secondary badge-action"><i class="fa fa-hourglass-end" aria-hidden="true"></i> End time : <xsl:value-of select="TestSuiteReport/EndTime"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action">Hostname : <xsl:value-of select="TestSuiteReport/HostName"/></span>
+            <span class="badge badge-secondary badge-action"><i class="fa fa-desktop" aria-hidden="true"></i> Hostname : <xsl:value-of select="TestSuiteReport/HostName"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action">Number of test case : <xsl:value-of select="TestSuiteReport/NumberOfTestcase"/></span>
+            <span class="badge badge-secondary badge-action"><i class="fa fa-square" aria-hidden="true"></i> Number of test case : <xsl:value-of select="TestSuiteReport/NumberOfTestcase"/></span>
         </div>
 
         <div class="badge-container">
