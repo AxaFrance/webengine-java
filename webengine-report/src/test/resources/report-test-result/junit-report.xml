@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Testsuite name="WebEngine Test Suite" timestamp="2022-12-16T17:27:51.962+01:00" hostname="DESKTOP-4PEPTM0" tests="1" failures="0" errors="1" time="69938">
+    <testcase name="AFFICHAGE_DOCUMENT_SPOOLNET" classname="AFFICHAGE_DOCUMENT_SPOOLNET" time="69938">
+        <failure type="FAILED"/>
+    </testcase>
+</Testsuite>

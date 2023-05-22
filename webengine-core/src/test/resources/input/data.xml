@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestSuiteData xmlns="http://www.axa.fr/WebEngine/2022">
+   <TestData>
+    <TestName>TEST_CASE_1</TestName>
+    <Data>
+      <Variable>
+        <Name>TEST_CASE_1_NAME</Name>
+        <Value>Test case 1</Value>
+      </Variable>
+      <Variable>
+        <Name>COMMENTAIRE</Name>
+        <Value></Value>
+      </Variable>
+    </Data>
+  </TestData>
+  <TestData>
+    <TestName>TEST_CASE_2</TestName>
+    <Data>
+      <Variable>
+        <Name>TEST_CASE_2_VARIABLE</Name>
+        <Value>Test case 2 variable value</Value>
+      </Variable>
+      <Variable>
+        <Name>COMMENTAIRE</Name>
+        <Value />
+      </Variable>
+    </Data>
+  </TestData>
+</TestSuiteData>

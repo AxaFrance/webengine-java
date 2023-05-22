@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fr.axa.automation.webengine</groupId>
+        <artifactId>webengine-parent</artifactId>
+        <version>2.2.0</version>
+    </parent>
+
+    <artifactId>webengine-report-jacoco-aggregate</artifactId>
+    <version>2.2.0</version>
+    <packaging>jar</packaging>
+    <name>webengine-report-jacoco-aggregate</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-util</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+		
+		<dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-report</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+		
+		<dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+		
+		<dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-web</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>		
+		
+		<dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-runner</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+		
+		<dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-boot-keyword-driven</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+		
+		<dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-test-keyword-driven</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+		
+		<dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-boot-gherkin</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-test-gherkin</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-test-linear</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>fr/axa/automation/webengine/Application.class</exclude>
+                        <exclude>fr/axa/automation/webengine/dto/*</exclude>
+                        <exclude>fr/axa/automation/webengine/exception/*</exclude>
+                        <exclude>fr/axa/automation/webengine/xml/*</exclude>
+                        <exclude>fr/axa/automation/webengine/context/*</exclude>
+                        <exclude>fr/axa/automation/webengine/report/ReportDetail.class</exclude>
+                        <exclude>fr/axa/automation/webengine/report/*Builder.*</exclude>
+                        <exclude>fr/axa/automation/webengine/step/*</exclude>
+                        <exclude>fr/axa/automation/webengine/argument/ArgumentOption.class</exclude>
+                        <exclude>fr/axa/automation/webengine/constante/*</exclude>
+                        <exclude>fr/axa/automation/webengine/context/*</exclude>
+                        <exclude>fr/axa/automation/webengine/general/*</exclude>
+                        <exclude>fr/axa/automation/webengine/localtesting/*</exclude>
+                        <exclude>fr/axa/automation/webengine/properties/*</exclude>
+                        <exclude>fr/axa/automation/webengine/report/builder/*</exclude>
+                        <exclude>fr/axa/automation/webengine/report/constante/*</exclude>
+                        <exclude>fr/axa/automation/webengine/report/object/*</exclude>
+                        <exclude>fr/axa/automation/webengine/generated/*</exclude>
+                        <exclude>fr/axa/automation/junit/generated/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+			
+        </plugins>
+    </build>
+</project>

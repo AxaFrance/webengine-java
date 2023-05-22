@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<UserWithPackageInfo xmlns:ns2="http://www.axa.fr/WebEngine/2022" id="1">
+    <ns2:firstName>Ramesh</ns2:firstName>
+    <ns2:lastName>Fadatare</ns2:lastName>
+    <ns2:age>25</ns2:age>
+    <ns2:gender>Male</ns2:gender>
+</UserWithPackageInfo>

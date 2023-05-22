@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<UserWithoutPackageInfo id="1">
+    <firstName>Ramesh</firstName>
+    <lastName>Fadatare</lastName>
+    <age>25</age>
+    <gender>Male</gender>
+</UserWithoutPackageInfo>

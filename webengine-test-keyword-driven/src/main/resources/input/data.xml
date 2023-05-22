@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestSuiteData xmlns="http://www.axa.fr/WebEngine/2022">
+  <TestData>
+    <TestName>TEST_CASE_1</TestName>
+    <Data>
+      <Variable>
+        <Name>TEST_CASE_DESCRIPTION</Name>
+        <Value>First test case</Value>
+      </Variable>
+      <Variable>
+        <Name>LANGUAGE</Name>
+        <Value>fr</Value>
+      </Variable>
+      <Variable>
+        <Name>COMMENT</Name>
+        <Value>We test the flow</Value>
+      </Variable>
+      <Variable>
+        <Name>DATE</Name>
+        <Value>11/03/2023</Value>
+      </Variable>
+      <Variable>
+        <Name>PASSWORD</Name>
+        <Value>Azerty1234</Value>
+      </Variable>
+    </Data>
+  </TestData>
+
+<!-- We want to test that if test case doesn't exist in testdata file despite we define it in the TestSuite.java, it won't run -->
+<!--  <TestData>-->
+<!--    <TestName>TEST_CASE_2</TestName>-->
+<!--    <Data>-->
+<!--      <Variable>-->
+<!--        <Name>TEST_CASE_DESCRIPTION</Name>-->
+<!--        <Value>Second test case</Value>-->
+<!--      </Variable>-->
+<!--      <Variable>-->
+<!--        <Name>COMMENTAIRE</Name>-->
+<!--        <Value />-->
+<!--      </Variable>-->
+<!--    </Data>-->
+<!--  </TestData>-->
+
+  <TestData>
+    <TestName>TEST_CASE_3</TestName>
+    <Data></Data>
+  </TestData>
+
+</TestSuiteData>

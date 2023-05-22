@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="fr/axa/automation/webengine/logging/base.xml"/>
+    <logger name="fr.axa.automation.webengine" level="INFO" />
+</configuration>

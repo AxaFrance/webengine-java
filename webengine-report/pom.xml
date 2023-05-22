@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>webengine-parent</artifactId>
+        <groupId>fr.axa.automation.webengine</groupId>
+        <version>2.2.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>webengine-report</artifactId>
+    <version>2.2.0</version>
+    <packaging>jar</packaging>
+    <name>webengine-report</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-util</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>webengine-generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/xsd/webengine</schemaDirectory>
+                            <schemaIncludes>
+                                <include>environnementVariables.xsd</include>
+                                <include>testSuiteData.xsd</include>
+                                <include>webEngineReport.xsd</include>
+                            </schemaIncludes>
+                            <generatePackage>fr.axa.automation.webengine.generated</generatePackage>
+                            <generateDirectory>${project.build.directory}/generated-sources/webengine
+                            </generateDirectory>
+                            <bindingDirectory>src/main/resources/xsd/global-binding</bindingDirectory>
+                            <extension>true</extension>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>junit-generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/xsd/junit</schemaDirectory>
+                            <schemaIncludes>
+                                <include>junitTestReport.xsd</include>
+                            </schemaIncludes>
+                            <generatePackage>fr.axa.automation.junit.generated</generatePackage>
+                            <generateDirectory>${project.build.directory}/generated-sources/junit</generateDirectory>
+                            <bindingDirectory>src/main/resources/xsd/junit-binding</bindingDirectory>
+                            <extension>true</extension>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/junit</source>
+                                <source>target/generated-sources/webengine</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>${argLine} -Dfile.encoding=UTF-8</argLine>
+                    <excludes>
+                        <exclude>fr.axa.automation.webengine.report.object.*</exclude>
+                        <exclude>fr.axa.automation.webengine.report.constante.*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>fr/axa/automation/webengine/report/builder/*</exclude>
+                        <exclude>fr/axa/automation/webengine/report/constante/*</exclude>
+                        <exclude>fr/axa/automation/webengine/report/object/*</exclude>
+                        <exclude>fr/axa/automation/webengine/generated/*</exclude>
+                        <exclude>fr/axa/automation/junit/generated/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

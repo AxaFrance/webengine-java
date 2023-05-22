@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://www.axa.fr/WebEngine/2022" targetNamespace="http://www.axa.fr/WebEngine/2022">
+    <xs:include schemaLocation="type.xsd"/>
+    <xs:element name="TestSuiteReport" nillable="true" type="tns:TestSuiteReport"/>
+</xs:schema>
