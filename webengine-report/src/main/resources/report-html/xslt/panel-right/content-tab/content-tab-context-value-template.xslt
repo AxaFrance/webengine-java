@@ -4,8 +4,7 @@
 
     <xsl:template name="content-tab-context-value-template">
         <xsl:param name="id"/>
-        <div id="content-id-context-value-{$id}" class="tab-content-container class-container-tab "
-             style="display:none">
+        <div id="content-id-context-value-{$id}" class="tab-content-container class-container-tab" style="display:none">
             <xsl:call-template name="array-view-template">
                 <xsl:with-param name="parentTag" select="ContextValues"></xsl:with-param>
             </xsl:call-template>

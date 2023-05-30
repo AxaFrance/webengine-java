@@ -12,30 +12,10 @@
 
 .tab-label{
     flex-grow: 1;
-}
-
-
-
-.w3-third {
-    /*float: left;*/
     width: 100%;
-    flex-grow: 1;
 }
 
-/*@media (min-width: 601px) {*/
-
-/*    .w3-third {*/
-/*        !*width: 20%;*!*/
-/*        flex-grow: 1;*/
-/*    }*/
-
-/*}*/
-
-.w3-row-padding, .w3-row-padding > .w3-half, .w3-row-padding > .w3-third, .w3-row-padding > .w3-twothird, .w3-row-padding > .w3-threequarter, .w3-row-padding > .w3-quarter, .w3-row-padding > .w3-col {
-    padding: 0 8px
-}
-
-.w3-bottombar {
+.tab-bottombar {
     border-bottom: 6px solid #ccc !important
 }
 

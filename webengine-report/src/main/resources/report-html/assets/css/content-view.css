@@ -1,4 +1,3 @@
-
 .information{
     display: flex;
     flex-direction: column;
@@ -21,7 +20,6 @@
 }
 
 .card-header{
-    /*background-color: #616161;*/
     align-items: stretch;
     color: #000000;
     height: 25%;
@@ -42,4 +40,3 @@
 .card-image-container{
     height: 55%;
 }
-

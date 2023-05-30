@@ -3,7 +3,7 @@
     <xsl:template name="header-template">
         <div class="site-header-section site-header-section-left ">
             <i class="fa fa-registered fa-3x site-header-icon site-header-icon-application"></i>
-            <div class="site-header-item">Webengine report viewer</div>
+            <h2 class="site-header-item">Webengine report viewer</h2>
         </div>
     </xsl:template>
 
