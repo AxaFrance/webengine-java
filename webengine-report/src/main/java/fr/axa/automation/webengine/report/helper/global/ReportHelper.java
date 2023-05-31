@@ -3,7 +3,7 @@ package fr.axa.automation.webengine.report.helper.global;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.report.constante.ReportPath;
+import fr.axa.automation.webengine.report.constante.ReportKey;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.IJunitReportHelper;
 import lombok.AccessLevel;
@@ -21,7 +21,6 @@ import java.util.Map;
 public class ReportHelper implements IReportHelper{
 
     final IWebengineReportHelper webengineReportHelper;
-
     final IJunitReportHelper junitReportHelper;
     final ILoggerService loggerService;
 
@@ -32,13 +31,14 @@ public class ReportHelper implements IReportHelper{
         this.loggerService = loggerService;
     }
 
-    public Map<ReportPath,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
-        Map<ReportPath,String> path = new HashMap<>();
+    public Map<ReportKey,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
+        Map<ReportKey,String> path = new HashMap<>();
         loggerService.info("Start Generation of Junit and Webengine Report");
-        String webEngineReport = webengineReportHelper.generateWebengineReport(testSuiteReport, outputPath);
-        path.put(ReportPath.WEBENGINE_REPORT,webEngineReport);
+        String webEngineReport = webengineReportHelper.generateWebengineXmlReport(testSuiteReport, outputPath);
+        webengineReportHelper.generateWebengineHtmlReport(testSuiteReport, outputPath);
         String JunitReport = junitReportHelper.generateJUnitReport(testSuiteReport, testSuiteName, outputPath);
-        path.put(ReportPath.JUNIT_REPORT,JunitReport);
+        path.put(ReportKey.WEBENGINE_REPORT_KEY,webEngineReport);
+        path.put(ReportKey.JUNIT_REPORT_KEY,JunitReport);
         return path;
     }
 }

@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.generated.ScreenshotReport;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public final class ScreenshotHelper {
 
@@ -26,6 +27,7 @@ public final class ScreenshotHelper {
     public static ScreenshotReport getScreenshotReport(String name, byte[] dataInbase64) {
         ScreenshotReport screenshotReport = new ScreenshotReport();
         screenshotReport.setName(name);
+        screenshotReport.setId(UUID.randomUUID().toString());
         screenshotReport.setData(dataInbase64);
         return screenshotReport;
     }

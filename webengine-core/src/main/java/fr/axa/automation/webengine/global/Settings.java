@@ -16,7 +16,5 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 public class Settings extends AbstractSettings{
-
     List<String> testCaseToRunList;
-
 }

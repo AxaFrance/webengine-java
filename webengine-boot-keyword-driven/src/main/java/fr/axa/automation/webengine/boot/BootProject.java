@@ -79,8 +79,6 @@ public class BootProject extends AbstractBootProject{
         loggerService.info("End report ");
     }
 
-
-
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine, ITestSuite testSuite) throws WebEngineException, IOException {
         EnvironmentVariables environmentVariables = TestSuiteHelper.getEnvironmentVariables(commandLine);
         TestSuiteData testSuiteData = TestSuiteHelper.getTestSuiteData(commandLine);

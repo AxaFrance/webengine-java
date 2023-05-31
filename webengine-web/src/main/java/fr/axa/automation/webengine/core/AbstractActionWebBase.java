@@ -77,20 +77,27 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         screenShot("");
     }
 
-    public void screenShot(String name) {
-        byte[] screenshot = ((TakesScreenshot) actionDetailContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
-        ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
-        screenShotList.add(screenshotReport);
+    public void screenShot(String name) throws WebEngineException{
+        try {
+            byte[] screenshot = ((TakesScreenshot) actionDetailContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+            screenshot(name, screenshot);
+        } catch (Exception e) {
+            throw new WebEngineException("Erreur lors du screenshot",e);
+        }
     }
 
     public void screenShot(AbstractElementDescription elementDescription) throws WebEngineException {
         try {
             byte[] screenshot = elementDescription.getScreenshot();
-            ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport("Error message", screenshot);
-            screenShotList.add(screenshotReport);
+            screenshot("", screenshot);
         } catch (Exception e) {
-           throw new WebEngineException("Erreur lors du screenshot",e);
+            throw new WebEngineException("Erreur lors du screenshot",e);
         }
+    }
+
+    private void screenshot(String name, byte[] screenshot) {
+        ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
+        screenShotList.add(screenshotReport);
     }
 
     protected Optional<String> getEnvironnementValue(String name) {

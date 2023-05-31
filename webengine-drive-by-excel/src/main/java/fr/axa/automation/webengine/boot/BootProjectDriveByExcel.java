@@ -57,7 +57,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     public void runFromFramework(String... args) throws Exception {
         List<String> optionList = getCommandNameFileOption(args);
         if(CollectionUtils.isNotEmpty(optionList)){
-            FileUtil.copyFile(Constante.COMMAND_FILE_NAME.getValue(),optionList.get(1)+ File.separator+Constante.COMMAND_FILE_NAME.getValue());
+            FileUtil.copyFileFromResource(Constante.COMMAND_FILE_NAME.getValue(),optionList.get(1)+ File.separator+Constante.COMMAND_FILE_NAME.getValue());
         }else{
             CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
             runTestSuite(commandLine);
@@ -96,7 +96,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
         loggerService.info("End report ");
     }
 
-    public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException, IOException {
+    public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException {
         SettingsDriveByExcel settings = TestSuiteHelperDriveByExcel.getSettings(commandLine, globalConfiguration);
         return GlobalApplicationContextDriveByExcel.builder().settings(settings).build();
     }

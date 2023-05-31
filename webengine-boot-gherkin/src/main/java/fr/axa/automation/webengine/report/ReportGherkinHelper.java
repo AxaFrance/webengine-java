@@ -11,6 +11,7 @@ import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
+import fr.axa.automation.webengine.report.constante.ReportConstant;
 import fr.axa.automation.webengine.report.helper.TestCaseMetricHelper;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
@@ -114,7 +115,6 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
             applicationName = globalConfigProperties.get().getWebengineConfiguration().getName();
         }
 
-
         TestCaseMetric testCaseMetric = TestCaseMetricHelper.getMetrics(testCaseReportMap.values());
         testSuiteReport.setEndTime(Calendar.getInstance());
         testSuiteReport.getTestResults().addAll(testCaseReportMap.values());
@@ -124,6 +124,6 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         testSuiteReport.setIgnored(testCaseMetric.getNumberOfTestCaseIgnored());
 
         ReportHelper reportHelper =  new ReportHelper(new WebengineReportHelper(new LoggerService()),new JunitReportHelper(new LoggerService()),new LoggerService());
-        reportHelper.generateAllReport(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
+        reportHelper.generateAllReport(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(ReportConstant.REPORT_DIRECTORY_NAME.getValue()));
     }
 }

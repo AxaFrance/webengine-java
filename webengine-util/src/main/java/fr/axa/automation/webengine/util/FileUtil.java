@@ -6,13 +6,16 @@ import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -28,7 +31,6 @@ public final class FileUtil {
     }
 
     public static final String TARGET_DIRECTORY = "target";
-    public static final String RUN_RESULT_DIRECTORY = "report-test-result";
 
     public static final ILoggerService loggerService = LoggerServiceProvider.getInstance();
 
@@ -40,7 +42,7 @@ public final class FileUtil {
         }
     }
 
-    public static void copyFile(String source, String target) throws IOException {
+    public static void copyFileFromResource(String source, String target) throws IOException {
         Path pathTarget = Paths.get(target);
         if(Files.exists(pathTarget)){
             Files.delete(pathTarget);
@@ -50,6 +52,15 @@ public final class FileUtil {
 
     public static String saveAsXml(InputMarshallDTO inputMarshallDTO) throws WebEngineException {
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
+    }
+
+    public static void saveAsImage(Path path,byte[] base64Data) throws WebEngineException {
+        File file = new File(path.toAbsolutePath().toString());
+        try (OutputStream outputStream = new BufferedOutputStream((new FileOutputStream(file)))){
+            outputStream.write(base64Data);
+        }catch (IOException e){
+            throw new WebEngineException("Error during creating image report : " + path,e);
+        }
     }
 
     public static File createDirectoryInTmpDirectory(String directoryName){
@@ -122,8 +133,6 @@ public final class FileUtil {
             return new File(fileOrResource);
         }
     }
-
-
 
     public static String getCurrentPath() throws IOException {
         File currentDirFile = new File(".");
