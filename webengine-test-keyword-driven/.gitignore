@@ -10,7 +10,8 @@
 *.ear
 *.nar
 hs_err_pid*
-
+src/main/resources/html-report/*
+src/test/resources/html-report/*
 
 ##############################
 ## Maven

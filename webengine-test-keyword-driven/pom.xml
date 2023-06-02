@@ -86,94 +86,27 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-
                     <execution>
-                        <id>copy-resources-assets-to-main</id>
-                        <phase>validate</phase>
+                        <id>unpack</id>
+                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/src/main/resources/html-report/assets</outputDirectory>
-                            <encoding>UTF-8</encoding>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/webengine-report/src/main/resources/html-report/assets/</directory>
-                                    <includes>
-                                        <include>**/*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fr.axa.automation.webengine</groupId>
+                                    <artifactId>webengine-report</artifactId>
+                                    <version>3.0.0-SNAPSHOT</version>
+                                    <type>jar</type>
+                                    <includes>html-report/**</includes>
+                                    <outputDirectory>${basedir}/src/main/resources/</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
                     </execution>
-
-                    <execution>
-                        <id>copy-resources-xslt-to-main</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/main/resources/html-report/xslt</outputDirectory>
-                            <encoding>UTF-8</encoding>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/webengine-report/src/main/resources/html-report/xslt/</directory>
-                                    <includes>
-                                        <include>**/*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
-
-                    <execution>
-                        <id>copy-resources-assets-to-test</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/html-report/assets</outputDirectory>
-                            <encoding>UTF-8</encoding>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/webengine-report/src/main/resources/html-report/assets/</directory>
-                                    <includes>
-                                        <include>**/*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-resources-xslt-to-test</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/html-report/xslt</outputDirectory>
-                            <encoding>UTF-8</encoding>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/webengine-report/src/main/resources/html-report/xslt/</directory>
-                                    <includes>
-                                        <include>**/*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
                 </executions>
             </plugin>
 
