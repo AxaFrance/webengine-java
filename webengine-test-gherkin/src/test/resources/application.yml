@@ -1,7 +1,7 @@
 webengineConfiguration:
     name: solaris-automation-gherkin
     platformName: WINDOWS
-    browserName: CHROMIUMEDGE
+    browserName: CHROME
     browserOptionList:
         - --incognito
         - --remote-allow-origins=*
