@@ -23,6 +23,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -42,6 +43,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         String className = getClass().getSimpleName();
         String errorMessage = "Error during execution of this action : " + className;
         ActionReport actionReport = ActionReportHelper.getActionReport(className);
+        actionReport.setId(UUID.randomUUID().toString());
         try {
             doAction();
             actionReport.setResult(Result.PASSED);

@@ -18,11 +18,19 @@ public class FirstStepAction extends AbstractActionWebBase {
     public void doAction() throws Exception {
         String language = getParameterWithException(IParameter.LANGUAGE);
         webEngineFirstStepPage = new WebEngineFirstStepPage(getWebDriver());
+        screenShot("begin");
         webEngineFirstStepPage.getLanguage().highLight();
         webEngineFirstStepPage.getLanguage().selectByValue(language);
         webEngineFirstStepPage.getCoffeeRadio().scrollIntoViewAndclick();
         webEngineFirstStepPage.getNextStep().click();
         screenShot(webEngineFirstStepPage.getLanguage());
+        screenShot("end");
+        screenShot("end");
+        screenShot("end");
+        screenShot("end");
+        screenShot("end");
+        screenShot("end");
+        screenShot("end");
         addInformation("First step succeed");
     }
 

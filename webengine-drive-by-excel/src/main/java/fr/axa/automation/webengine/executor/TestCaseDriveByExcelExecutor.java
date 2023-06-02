@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -131,6 +132,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                 commandName = CommandNameHelper.getCommandName(commandData);
                 actionReport = new ActionReport();
                 actionReport.setName(commandName);
+                actionReport.setId(UUID.randomUUID().toString());
 
                 if(ignoredAllNextCmd){
                     actionReport.setResult(Result.IGNORED);

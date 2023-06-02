@@ -62,14 +62,14 @@ public class WebengineReportHelper implements IWebengineReportHelper {
         String jsSourceDirectory = assetsSourceDirectory + ReportConstant.JS_DIRECTORY_NAME.getValue();
 
         Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue());
-        Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator + ReportConstant.CSS_DIRECTORY_NAME.getValue());
-        Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator + ReportConstant.JS_DIRECTORY_NAME.getValue());
+        Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.CSS_DIRECTORY_NAME.getValue());
+        Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator +ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.JS_DIRECTORY_NAME.getValue());
         String htmlIndexFilePath = outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + "index.html";
         try {
             copyFilesFromResource(cssSourceDirectory,cssTargetDirectoryPath.toAbsolutePath().toString());
             copyFilesFromResource(jsSourceDirectory,jsTargetDirectoryPath.toAbsolutePath().toString());
             generateImageReport(testSuiteReport,htmlReportTargetDirectoryPath.toString());
-            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,FileUtil.getInputStreamFromResource(ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_INDEX_NAME.getValue()));
+            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_INDEX_NAME.getValue());
         }catch (IOException | WebEngineException e  ){
             throw new WebEngineException("Erreur lors de la génération du rapport html",e);
         }
@@ -84,7 +84,7 @@ public class WebengineReportHelper implements IWebengineReportHelper {
 
     private void generateImageReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
         List<ScreenshotReport> screenshotReportList = ImageReportHelper.getScreenShotReport(testSuiteReport);
-        Path directoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.IMAGE_DIRECTORY_NAME.getValue());
+        Path directoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.IMAGE_DIRECTORY_NAME.getValue());
         for (ScreenshotReport screenshotReport :screenshotReportList) {
             String fileName = screenshotReport.getId() + FileExtensionConstant.JPG;
             Path completePath = Paths.get(directoryPath.toString(),fileName);

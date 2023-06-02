@@ -10,9 +10,9 @@
             </p>
             <xsl:choose>
                 <xsl:when test="Screenshots">
-                    <xsl:for-each select="ScreenshotReport">
+                    <xsl:for-each select="Screenshots/ScreenshotReport">
                         <xsl:variable name="idImg" select="Id" />
-                        <img src="img/{$idImg}" class="img-thumbnail" width="304" height="236"/>
+                        <img src="assets/img/{$idImg}.jpg" class="img-thumbnail" width="304" height="236"/>
                     </xsl:for-each>
                 </xsl:when>
             </xsl:choose>

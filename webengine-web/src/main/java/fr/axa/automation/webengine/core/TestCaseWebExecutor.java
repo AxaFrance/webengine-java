@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -62,6 +63,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
         GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext)globalAppContext;
         String testCaseName = testCaseContext.getTestCaseName();
         TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
+        testCaseReport.setId(UUID.randomUUID().toString());
         List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
 
         List<TestData> testDataList = globalApplicationContext.getTestDataList();
@@ -102,6 +104,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
                 testStepName = testStep.getClass().getSimpleName();
                 actionReport = new ActionReport();
                 actionReport.setName(testStepName);
+                actionReport.setId(UUID.randomUUID().toString());
 
                 if(((TestCaseWebContext)testCaseContext).getTestCaseToExecute().isIgnoredAllTestStep() || ignoredAllNextTestStep){
                     actionReport.setResult(Result.IGNORED);
