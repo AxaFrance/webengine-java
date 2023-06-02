@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.report.helper.frmk;
 
 
+import fr.axa.automation.webengine.HtmlBuilder;
 import fr.axa.automation.webengine.constant.FileExtensionConstant;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -55,30 +56,37 @@ public class WebengineReportHelper implements IWebengineReportHelper {
                 .prefix(NS).build();
     }
 
-    @Override
-    public void generateWebengineHtmlReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
-        Path htmlDirectoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue());
+    public void generateWebengineHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException {
+        String assetsSourceDirectory = ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator;
+        String cssSourceDirectory = assetsSourceDirectory + ReportConstant.CSS_DIRECTORY_NAME.getValue();
+        String jsSourceDirectory = assetsSourceDirectory + ReportConstant.JS_DIRECTORY_NAME.getValue();
+
+        Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue());
+        Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator + ReportConstant.CSS_DIRECTORY_NAME.getValue());
+        Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator + ReportConstant.JS_DIRECTORY_NAME.getValue());
+        String htmlIndexFilePath = outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + "index.html";
         try {
-        copyDirectory(htmlDirectoryPath,ReportConstant.CSS_DIRECTORY_NAME.getValue(),ReportConstant.CSS_DIRECTORY_NAME.getValue());
-        copyDirectory(htmlDirectoryPath,ReportConstant.JS_DIRECTORY_NAME.getValue(),ReportConstant.JS_DIRECTORY_NAME.getValue());
-        generateImageReport(testSuiteReport,htmlDirectoryPath.toString());
+            copyFilesFromResource(cssSourceDirectory,cssTargetDirectoryPath.toAbsolutePath().toString());
+            copyFilesFromResource(jsSourceDirectory,jsTargetDirectoryPath.toAbsolutePath().toString());
+            generateImageReport(testSuiteReport,htmlReportTargetDirectoryPath.toString());
+            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,FileUtil.getInputStreamFromResource(ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_INDEX_NAME.getValue()));
         }catch (IOException | WebEngineException e  ){
             throw new WebEngineException("Erreur lors de la génération du rapport html",e);
         }
     }
 
-    private void copyDirectory(Path parentDirectory, String sourceDirectoryName, String targetDirectoryName) throws IOException {
-        String assetsDirectory = ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator;
-        String cssSourceDirectory = assetsDirectory + sourceDirectoryName;
-        String cssTargetDirectory = parentDirectory + File.separator + targetDirectoryName;
-        FileUtil.copyFileFromResource(cssSourceDirectory,cssTargetDirectory);
+    private void copyFilesFromResource( String sourceDirectoryName, String targetDirectoryName) throws IOException {
+        List<String> cssFileList = FileUtil.getResourceFiles(sourceDirectoryName);
+        for (String cssFileName:cssFileList) {
+            FileUtil.copyFileFromResource(sourceDirectoryName + File.separator + cssFileName, targetDirectoryName + File.separator + cssFileName);
+        }
     }
 
     private void generateImageReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
         List<ScreenshotReport> screenshotReportList = ImageReportHelper.getScreenShotReport(testSuiteReport);
-        Path directoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.IMAGE_DIRECTORY_NAME.getValue() + FileExtensionConstant.JPG);
+        Path directoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.IMAGE_DIRECTORY_NAME.getValue());
         for (ScreenshotReport screenshotReport :screenshotReportList) {
-            String fileName = screenshotReport.getId();
+            String fileName = screenshotReport.getId() + FileExtensionConstant.JPG;
             Path completePath = Paths.get(directoryPath.toString(),fileName);
             FileUtil.saveAsImage(completePath,screenshotReport.getData());
         }

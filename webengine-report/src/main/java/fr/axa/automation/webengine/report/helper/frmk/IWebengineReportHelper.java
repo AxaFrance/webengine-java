@@ -8,6 +8,6 @@ import java.io.IOException;
 public interface IWebengineReportHelper {
     String generateWebengineXmlReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException;
 
-    void generateWebengineHtmlReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException;
+    void generateWebengineHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException;
 
 }

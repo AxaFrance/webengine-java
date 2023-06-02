@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedOutputStream;
@@ -15,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URISyntaxException;
@@ -22,6 +24,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -49,6 +53,13 @@ public final class FileUtil {
         }
         Files.copy(getInputStreamFromResource(source), pathTarget);
     }
+
+    public static void copyDirectory(String sourceDirectoryLocation, String destinationDirectoryLocation) throws IOException {
+        File sourceDirectory = new File(sourceDirectoryLocation);
+        File destinationDirectory = new File(destinationDirectoryLocation);
+        FileUtils.copyDirectory(sourceDirectory, destinationDirectory);
+    }
+
 
     public static String saveAsXml(InputMarshallDTO inputMarshallDTO) throws WebEngineException {
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
@@ -99,6 +110,19 @@ public final class FileUtil {
         } else {
             return new File(resource.toURI());
         }
+    }
+
+    public static List<String> getResourceFiles(String path) throws IOException {
+        List<String> filenames = new ArrayList<>();
+        try (InputStream in = getInputStreamFromResource(path);
+             BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+            String resource;
+
+            while ((resource = br.readLine()) != null) {
+                filenames.add(resource);
+            }
+        }
+        return filenames;
     }
 
     public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {

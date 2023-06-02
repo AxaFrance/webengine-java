@@ -35,7 +35,7 @@ public class ReportHelper implements IReportHelper{
         Map<ReportKey,String> path = new HashMap<>();
         loggerService.info("Start Generation of Junit and Webengine Report");
         String webEngineReport = webengineReportHelper.generateWebengineXmlReport(testSuiteReport, outputPath);
-        webengineReportHelper.generateWebengineHtmlReport(testSuiteReport, outputPath);
+        webengineReportHelper.generateWebengineHtmlReport(testSuiteReport, outputPath,webEngineReport);
         String JunitReport = junitReportHelper.generateJUnitReport(testSuiteReport, testSuiteName, outputPath);
         path.put(ReportKey.WEBENGINE_REPORT_KEY,webEngineReport);
         path.put(ReportKey.JUNIT_REPORT_KEY,JunitReport);
