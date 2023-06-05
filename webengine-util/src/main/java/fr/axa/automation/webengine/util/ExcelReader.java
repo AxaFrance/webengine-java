@@ -14,7 +14,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExcelReader {
+public final class ExcelReader {
+
+    private ExcelReader() {
+    }
+
 
     public static Workbook getWorkbook(String fileName) {
         Workbook wb = getWorkbookByHSSF( fileName );

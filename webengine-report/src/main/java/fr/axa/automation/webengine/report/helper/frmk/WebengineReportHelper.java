@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.report.helper.frmk;
 
 
-import fr.axa.automation.webengine.HtmlBuilder;
+import fr.axa.automation.webengine.builder.HtmlBuilder;
 import fr.axa.automation.webengine.constant.FileExtensionConstant;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
