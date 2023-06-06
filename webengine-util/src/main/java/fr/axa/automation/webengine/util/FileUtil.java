@@ -116,14 +116,15 @@ public final class FileUtil {
         List<String> filenames = new ArrayList<>();
         try (InputStream in = getInputStreamFromResource(path);
              BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-            String resource;
 
+            String resource;
             while ((resource = br.readLine()) != null) {
                 filenames.add(resource);
             }
         }
         return filenames;
     }
+
 
     public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

@@ -16,12 +16,8 @@ public enum ReportConstant {
     IMAGE_DIRECTORY_NAME("img"),
     CSS_DIRECTORY_NAME("css"),
     JS_DIRECTORY_NAME("js"),
-
     XSLT_DIRECTORY_NAME("xslt"),
-
     XSLT_INDEX_NAME("index.xslt");
-
-
 
     final String value;
 }
