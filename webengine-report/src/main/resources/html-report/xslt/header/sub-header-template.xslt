@@ -30,7 +30,7 @@
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-circle badge-action-blue" aria-hidden="true"></i> Ignored tests : <xsl:value-of select="TestSuiteReport/Failed"/></span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-circle badge-action-gray" aria-hidden="true"></i> Ignored tests : <xsl:value-of select="TestSuiteReport/Failed"/></span>
         </div>
     </xsl:template>
 

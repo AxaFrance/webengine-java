@@ -26,6 +26,10 @@
     color: #3498DB!important;
 }
 
+.badge-action-gray{
+    color: #CCD1D1!important;
+}
+
 .badge-action-hover:hover{
     cursor: pointer;
     background-color: white!important;

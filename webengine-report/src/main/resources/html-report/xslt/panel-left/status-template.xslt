@@ -11,7 +11,7 @@
             <i class="fa fa-times badge-action-red" aria-hidden="true"></i>
         </xsl:if>
         <xsl:if test="$status='Ignored'">
-            <i class="fa fa-circle badge-action-blue" aria-hidden="true"></i>
+            <i class="fa fa-circle badge-action-gray" aria-hidden="true"></i>
         </xsl:if>
         <xsl:text> </xsl:text>
         <a href="#" onclick="changeColorOfSelectedElement(event);hideElement('body-right-container-class');showElement('{$id}');openSelectedTab('tab-id-information-{$id}','content-id-information-{$id}');"><xsl:value-of select="$label" /></a>

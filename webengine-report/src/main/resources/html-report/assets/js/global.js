@@ -10,11 +10,10 @@ function selectedTabById(idTab,idContentTab){
 }
 
 function openSelectedLineInTree() {
-    var i;
-    var toggler = document.getElementsByClassName("caret");
+    let toggler = document.getElementsByClassName("caret");
 
-    for (i = 0; i < toggler.length; i++) {
-        toggler[i].addEventListener("click", function() {
+    for (const togglerElement of toggler) {
+        togglerElement.addEventListener("click", function() {
             this.parentElement.querySelector(".nested").classList.toggle("active");
             this.classList.toggle("caret-down");
         });
@@ -26,18 +25,17 @@ function showElement(idTab){
 }
 
 function hideElement(className){
-    var i;
-    var tabArray = document.getElementsByClassName(className);
-    for (i = 0; i < tabArray.length; i++) {
-        tabArray[i].style.display = "none";
+    let tabArray = document.getElementsByClassName(className);
+    for (const tabArrayElement of tabArray) {
+        tabArrayElement.style.display = "none";
     }
 }
 
 function unSelectedAllTab(className){
-    var i;
-    var tablinks = document.getElementsByClassName(className);
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" w3-border-blue", "");
+    let i;
+    let tablinks = document.getElementsByClassName(className);
+    for (const tablink of tablinks) {
+        tablink.className = tablink.className.replace(" w3-border-blue", "");
     }
 }
 
@@ -46,30 +44,24 @@ function addClassToElement(idTab) {
 }
 
 function changeColorOfSelectedElement(event){
-    var tablinks = document.getElementsByClassName("selected-line");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace('selected-line','');
+    let tablinks = document.getElementsByClassName("selected-line");
+    for (const tablink of tablinks) {
+        tablink.className = tablink.className.replace("selected-line", "");
     }
     event.currentTarget.className += " selected-line";
 }
 
 function displayImage(imgToDisplay){
-
-    // Get the modal
-    var modal = document.getElementById("myModal");
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
-    var img = document.getElementById(imgToDisplay);
-    var modalImg = document.getElementById("img01");
-    var captionText = document.getElementById("caption");
+    let modal = document.getElementById("myModal");
+    let img = document.getElementById(imgToDisplay);
+    let modalImg = document.getElementById("img01");
+    let captionText = document.getElementById("caption");
 
     modal.style.display = "block";
     modalImg.src = img.src;
     captionText.innerHTML = img.alt;
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on <span> (x), close the modal
+    let span = document.getElementsByClassName("close")[0];
     span.onclick = function() {
         modal.style.display = "none";
     }
