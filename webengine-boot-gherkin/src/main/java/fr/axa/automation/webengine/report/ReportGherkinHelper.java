@@ -14,7 +14,8 @@ import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.constante.ReportConstant;
 import fr.axa.automation.webengine.report.helper.TestCaseMetricHelper;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
-import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
+import fr.axa.automation.webengine.report.helper.frmk.WebengineHtmlReportHelper;
+import fr.axa.automation.webengine.report.helper.frmk.WebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.global.ReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
 import fr.axa.automation.webengine.report.object.TestCaseMetric;
@@ -123,7 +124,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         testSuiteReport.setFailed(testCaseMetric.getNumberOfTestCaseFailed());
         testSuiteReport.setIgnored(testCaseMetric.getNumberOfTestCaseIgnored());
 
-        ReportHelper reportHelper =  new ReportHelper(new WebengineReportHelper(new LoggerService()),new JunitReportHelper(new LoggerService()),new LoggerService());
+        ReportHelper reportHelper =  new ReportHelper(new WebengineXmlReportHelper(new LoggerService()), new WebengineHtmlReportHelper(new LoggerService()), new JunitReportHelper(new LoggerService()),new LoggerService());
         reportHelper.generateAllReport(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(ReportConstant.REPORT_DIRECTORY_NAME.getValue()));
     }
 }

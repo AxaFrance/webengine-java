@@ -63,7 +63,7 @@ public class TestCaseWebExecutor extends AbstractTestCaseWebExecutor implements 
         GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext)globalAppContext;
         String testCaseName = testCaseContext.getTestCaseName();
         TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
-        testCaseReport.setId(UUID.randomUUID().toString());
+
         List<ActionReportDetail> actionReportDetailList = new ArrayList<>();
 
         List<TestData> testDataList = globalApplicationContext.getTestDataList();

@@ -5,7 +5,8 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.report.constante.ReportKey;
-import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
+import fr.axa.automation.webengine.report.helper.frmk.WebengineHtmlReportHelper;
+import fr.axa.automation.webengine.report.helper.frmk.WebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.XmlValidator;
@@ -25,7 +26,7 @@ public class ReportHelperTest {
     @Test
     void generateAllReport() throws URISyntaxException, IOException, WebEngineException {
         TestSuiteReport testSuiteReport = getTestSuiteReport();
-        IReportHelper reportHelper = new ReportHelper(new WebengineReportHelper(new LoggerService()),new JunitReportHelper(new LoggerService()),new LoggerService());
+        IReportHelper reportHelper = new ReportHelper(new WebengineXmlReportHelper(new LoggerService()), new WebengineHtmlReportHelper(new LoggerService()), new JunitReportHelper(new LoggerService()),new LoggerService());
         String path = FileUtil.createDirectoryInTarget(REPORT_TEST_RESULT_DIRECTORY);
 
         Map<ReportKey,String> reportMap =  reportHelper.generateAllReport(testSuiteReport,"TestSuiteName",path);
