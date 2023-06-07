@@ -54,6 +54,14 @@ public final class FileUtil {
         Files.copy(getInputStreamFromResource(source), pathTarget);
     }
 
+    public static void copyFileFromResource(InputStream source, String target) throws IOException {
+        Path pathTarget = Paths.get(target);
+        if(Files.exists(pathTarget)){
+            Files.delete(pathTarget);
+        }
+        Files.copy(source, pathTarget);
+    }
+
     public static void copyDirectory(String sourceDirectoryLocation, String destinationDirectoryLocation) throws IOException {
         File sourceDirectory = new File(sourceDirectoryLocation);
         File destinationDirectory = new File(destinationDirectoryLocation);

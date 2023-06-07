@@ -12,7 +12,7 @@
     <link href="assets/css/tree.css" rel="stylesheet">
     <link href="assets/css/content-view.css" rel="stylesheet">
     <link href="assets/css/tab.css" rel="stylesheet">
-    <script src="assets/js/global-js.js"></script>
+    <script src="assets/js/global.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <title>Webengine report viewer</title>
@@ -272,40 +272,3 @@
 </script>
 </body>
 </html>
-<script>
-    (function() {
-        var ws = new WebSocket('ws://' + window.location.host +
-            '/jb-server-page?reloadMode=RELOAD_ON_SAVE&'+
-            'referrer=' + encodeURIComponent(window.location.pathname));
-        ws.onmessage = function (msg) {
-            if (msg.data === 'reload') {
-                window.location.reload();
-            }
-            if (msg.data.startsWith('update-css ')) {
-                var messageId = msg.data.substring(11);
-                var links = document.getElementsByTagName('link');
-                for (var i = 0; i < links.length; i++) {
-                    var link = links[i];
-                    if (link.rel !== 'stylesheet') continue;
-                    var clonedLink = link.cloneNode(true);
-                    var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
-                    if (newHref !== link.href) {
-                        clonedLink.href = newHref;
-                    }
-                    else {
-                        var indexOfQuest = newHref.indexOf('?');
-                        if (indexOfQuest >= 0) {
-                            // to support ?foo#hash
-                            clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' +
-                                newHref.substring(indexOfQuest + 1);
-                        }
-                        else {
-                            clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
-                        }
-                    }
-                    link.replaceWith(clonedLink);
-                }
-            }
-        };
-    })();
-</script>

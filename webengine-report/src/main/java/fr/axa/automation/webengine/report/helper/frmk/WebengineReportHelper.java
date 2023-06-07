@@ -8,6 +8,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.report.constante.HtmlFileConstant;
 import fr.axa.automation.webengine.report.constante.ReportConstant;
 import fr.axa.automation.webengine.report.helper.ImageReportHelper;
 import fr.axa.automation.webengine.report.helper.ReportFileNameHelper;
@@ -20,8 +21,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -40,7 +43,7 @@ public class WebengineReportHelper implements IWebengineReportHelper {
     }
 
     @Override
-    public String generateWebengineXmlReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
+    public String buildXmlReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
         Path directoryPath = FileUtil.createDirectories(outputPath);
         String fileName = ReportFileNameHelper.getFileName(WEBENGINE_REPORT_NAME);
         Path completePath = Paths.get(directoryPath.toString(),fileName);
@@ -56,8 +59,8 @@ public class WebengineReportHelper implements IWebengineReportHelper {
                 .prefix(NS).build();
     }
 
-    public void generateWebengineHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException {
-        String assetsSourceDirectory = ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator;
+    public void buildHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException {
+        String assetsSourceDirectory = ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + "/";
         String cssSourceDirectory = assetsSourceDirectory + ReportConstant.CSS_DIRECTORY_NAME.getValue();
         String jsSourceDirectory = assetsSourceDirectory + ReportConstant.JS_DIRECTORY_NAME.getValue();
 
@@ -66,19 +69,20 @@ public class WebengineReportHelper implements IWebengineReportHelper {
         Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator +ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.JS_DIRECTORY_NAME.getValue());
         String htmlIndexFilePath = outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + "index.html";
         try {
-            copyFilesFromResource(cssSourceDirectory,cssTargetDirectoryPath.toAbsolutePath().toString());
-            copyFilesFromResource(jsSourceDirectory,jsTargetDirectoryPath.toAbsolutePath().toString());
+            copyFilesFromResource2(cssSourceDirectory,cssTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.CSS_FILE_LIST.getValue());
+            copyFilesFromResource2(jsSourceDirectory,jsTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.JS_FILE_LIST.getValue());
             generateImageReport(testSuiteReport,htmlReportTargetDirectoryPath.toString());
-            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.XSLT_INDEX_NAME.getValue());
+            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.XSLT_INDEX_NAME.getValue());
         }catch (IOException | WebEngineException e  ){
             throw new WebEngineException("Erreur lors de la génération du rapport html",e);
         }
     }
 
-    private void copyFilesFromResource( String sourceDirectoryName, String targetDirectoryName) throws IOException {
-        List<String> cssFileList = FileUtil.getResourceFiles(sourceDirectoryName);
-        for (String cssFileName:cssFileList) {
-            FileUtil.copyFileFromResource(sourceDirectoryName + File.separator + cssFileName, targetDirectoryName + File.separator + cssFileName);
+    private void copyFilesFromResource2( String sourceDirectoryName, String targetDirectoryName, List<String> fileNameList) throws IOException {
+        InputStream inputStream;
+        for (String fileName : fileNameList) {
+            inputStream = FileUtil.getInputStreamByPathOrResource(sourceDirectoryName + "/" + fileName);
+            FileUtil.copyFileFromResource(inputStream, targetDirectoryName + File.separator + fileName);
         }
     }
 

@@ -22,7 +22,7 @@
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Succes tests : <xsl:value-of select="TestSuiteReport/Passed"/></span>
+            <span class="badge badge-secondary badge-action "><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Passed tests : <xsl:value-of select="TestSuiteReport/Passed"/></span>
         </div>
 
         <div class="badge-container">
