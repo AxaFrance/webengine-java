@@ -16,7 +16,7 @@
                     <xsl:when test="Screenshots">
                         <xsl:for-each select="Screenshots/ScreenshotReport">
                             <xsl:variable name="idImg" select="Id"/>
-                            <img src="assets/img/{$idImg}.jpg" id="{$idImg}-jpg" class="img-thumbnail img-screenshot" onclick="displayImage('{$idImg}-jpg')"/>
+                            <img src="assets/img/{$idImg}.png" id="{$idImg}-png" class="img-thumbnail img-screenshot" onclick="displayImage('{$idImg}-png')"/>
                         </xsl:for-each>
                     </xsl:when>
                 </xsl:choose>

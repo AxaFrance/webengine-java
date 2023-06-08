@@ -69,7 +69,7 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
         List<ScreenshotReport> screenshotReportList = ImageReportHelper.getScreenShotReport(testSuiteReport);
         Path directoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.IMAGE_DIRECTORY_NAME.getValue());
         for (ScreenshotReport screenshotReport :screenshotReportList) {
-            String fileName = screenshotReport.getId() + FileExtensionConstant.JPG;
+            String fileName = screenshotReport.getId() + FileExtensionConstant.PNG;
             Path completePath = Paths.get(directoryPath.toString(),fileName);
             FileUtil.saveAsImage(completePath,screenshotReport.getData());
         }
