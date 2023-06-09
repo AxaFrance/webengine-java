@@ -45,12 +45,14 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
         Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue());
         Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.CSS_DIRECTORY_NAME.getValue());
         Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator +ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.JS_DIRECTORY_NAME.getValue());
+
+        String basePathXslt = ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + "/";
         String htmlIndexFilePath = outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + "index.html";
         try {
             copyFilesFromResource2(cssSourceDirectory,cssTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.CSS_FILE_LIST.getValue());
             copyFilesFromResource2(jsSourceDirectory,jsTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.JS_FILE_LIST.getValue());
             generateImageReport(testSuiteReport,htmlReportTargetDirectoryPath.toString());
-            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.XSLT_INDEX_NAME.getValue());
+            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,basePathXslt, basePathXslt + ReportConstant.XSLT_INDEX_NAME.getValue());
         }catch (IOException | WebEngineException e  ){
             loggerService.error("Erreur lors de la génération du rapport html",e);
         }

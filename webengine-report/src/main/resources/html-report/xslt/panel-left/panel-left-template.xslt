@@ -1,6 +1,6 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:import href="html-report/xslt/panel-left/status-template.xslt"/>
+    <xsl:import href="status-template.xslt"/>
 
     <xsl:template name="sub-tree-view-template">
         <xsl:param name="firstNode" />

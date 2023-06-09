@@ -1,10 +1,10 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:import href="html-report/xslt/panel-right/tab/tab-test-case-template.xslt"/>
-    <xsl:import href="html-report/xslt/panel-right/tab/tab-action-template.xslt"/>
-    <xsl:import href="html-report/xslt/panel-right/content-tab/content-tab-information-template.xslt"/>
-    <xsl:import href="html-report/xslt/panel-right/content-tab/content-tab-log-template.xslt"/>
-    <xsl:import href="html-report/xslt/panel-right/content-tab/content-tab-context-value-template.xslt"/>
+    <xsl:import href="tab/tab-test-case-template.xslt"/>
+    <xsl:import href="tab/tab-action-template.xslt"/>
+    <xsl:import href="content-tab/content-tab-information-template.xslt"/>
+    <xsl:import href="content-tab/content-tab-log-template.xslt"/>
+    <xsl:import href="content-tab/content-tab-context-value-template.xslt"/>
 
     <xsl:template name="content-tab-test-data-template">
         <xsl:param name="id"/>
