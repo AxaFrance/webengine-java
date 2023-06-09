@@ -4,8 +4,6 @@ import fr.axa.automation.webengine.constant.JavaConstant;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.ResourcesLister;
 import org.apache.commons.lang3.StringUtils;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -26,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -39,6 +36,7 @@ public final class HtmlBuilder {
 
     public static void build(String xmlFileName, String htmlFileName, String basePath, String xsltResource) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//        dbf.setNamespaceAware(true);
         try (InputStream is = new FileInputStream(xmlFileName)) {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(is);
