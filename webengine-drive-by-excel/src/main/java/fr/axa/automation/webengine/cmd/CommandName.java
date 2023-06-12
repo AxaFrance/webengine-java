@@ -35,6 +35,8 @@ public enum CommandName {
     ASSERT_CHECKED(ImmutableMap.of( Locale.ENGLISH, "assert checked",Locale.FRENCH, "coché ?" )),
     ASSERT_NOT_CHECKED(ImmutableMap.of( Locale.ENGLISH, "assert not checked",Locale.FRENCH, "non coché ?" )),
     SCREENSHOT(ImmutableMap.of( Locale.ENGLISH, "screenshot" , Locale.FRENCH, "capture")),
+    UPLOADFILE(ImmutableMap.of( Locale.ENGLISH, "upload file" , Locale.FRENCH, "choisir fichier")),
+    POPUP(ImmutableMap.of( Locale.ENGLISH, "handle popup" , Locale.FRENCH, "popup")),
     WAIT(ImmutableMap.of( Locale.ENGLISH, "wait" , Locale.FRENCH, "pause")),
     END_SCENARIO(ImmutableMap.of(Locale.ENGLISH, "end scenario" , Locale.FRENCH, "fin scenario"));
 
