@@ -28,6 +28,7 @@ ul, #idTree {
 #idTree li:hover {
     transform: scale(1.02);
 }
+
 .caret {
     cursor: pointer;
     -webkit-user-select: none; /* Safari 3.1+ */
@@ -36,6 +37,7 @@ ul, #idTree {
     user-select: none;
     font-size: 1.1em!important;
 }
+
 #idTree .badge-action-red,
 #idTree .badge-action-green {
     font-size: 1.5em;
