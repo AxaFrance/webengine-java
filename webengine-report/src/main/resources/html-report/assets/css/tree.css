@@ -1,3 +1,13 @@
+.tree-header-container {
+    background-color: #3414a6;
+    padding: 1em;
+    margin-bottom: 1em;
+    width: 100%;
+    height: 8%;
+    display: table-cell;
+    vertical-align: middle
+}
+
 .tree-header-container h1 {
     font-size: 1.3em;
     color: white;
@@ -42,16 +52,7 @@ ul, #idTree {
 #idTree .badge-action-green {
     font-size: 1.5em;
 }
-.tree-header-container {
-    background-color: #3414a6;
-    padding: 1em;
-    /*border-radius: 2em 0 2em 0;*/
-    margin-bottom: 1em;
-    width: 100%;
-    height: 8%;
-    display: table-cell;
-    vertical-align: middle
-}
+
 
 
 .caret::before {
