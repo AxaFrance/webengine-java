@@ -42,6 +42,10 @@ public class CommandFactory {
                 return new ElseCommand();
             case WAIT:
                 return new WaitCommand();
+            case POPUP:
+                return new PopUpCommand();
+            case UPLOADFILE:
+                return new UploadFileCommand();
             default:
                 throw new IllegalArgumentException("Command not recognized");
         }
