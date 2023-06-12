@@ -14,7 +14,7 @@
             <i class="fa fa-circle badge-action-gray" aria-hidden="true"></i>
         </xsl:if>
         <xsl:text> </xsl:text>
-        <a href="#" onclick="changeColorOfSelectedElement(event);hideElement('body-right-container-class');showElement('{$id}');openSelectedTab('tab-id-information-{$id}','content-id-information-{$id}');"><xsl:value-of select="$label" /></a>
+        <a href="#" onclick=";openTestResultContent(event,'{$id}');"><xsl:value-of select="$label" /></a>
     </xsl:template>
 
 </xsl:stylesheet>

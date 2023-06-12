@@ -3,7 +3,7 @@
     <xsl:import href="status-template.xslt"/>
 
     <xsl:template name="sub-tree-view-template">
-        <xsl:param name="firstNode" />
+        <xsl:param name="firstNode"/>
         <ul class="nested">
             <xsl:for-each select="$firstNode">
                 <li>
@@ -11,20 +11,20 @@
                         <xsl:when test="SubActionReports">
                             <span class="caret"></span>
                             <xsl:call-template name="status-template">
-                                <xsl:with-param name="status" select="Result" />
-                                <xsl:with-param name="label" select="Name" />
-                                <xsl:with-param name="id" select="Id" />
+                                <xsl:with-param name="status" select="Result"/>
+                                <xsl:with-param name="label" select="Name"/>
+                                <xsl:with-param name="id" select="Id"/>
                             </xsl:call-template>
 
                             <xsl:call-template name="sub-tree-view-template">
-                                <xsl:with-param name="firstNode" select="SubActionReports/ActionReport" />
+                                <xsl:with-param name="firstNode" select="SubActionReports/ActionReport"/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="status-template">
-                                <xsl:with-param name="status" select="Result" />
-                                <xsl:with-param name="label" select="Name" />
-                                <xsl:with-param name="id" select="Id" />
+                                <xsl:with-param name="status" select="Result"/>
+                                <xsl:with-param name="label" select="Name"/>
+                                <xsl:with-param name="id" select="Id"/>
                             </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -34,22 +34,30 @@
     </xsl:template>
 
     <xsl:template name="tree-view-template">
-        <ul id="idTree">
-            <xsl:for-each select="TestSuiteReport/TestResult">
-                <li>
-                    <span class="caret"></span>
-                    <xsl:call-template name="status-template">
-                        <xsl:with-param name="status" select="Result" />
-                        <xsl:with-param name="label" select="TestName" />
-                        <xsl:with-param name="id" select="Id" />
-                    </xsl:call-template>
+        <div id="body-left-container" class="body-left-container">
+            <div id='id-tree-header-container' class="tree-header-container">
+                <h1>Test cases</h1>
+            </div>
+            <div id='id-tree-container' class="tree-container">
+                <ul id="idTree">
+                    <xsl:for-each select="TestSuiteReport/TestResult">
+                        <li>
+                            <span class="caret">
+                                <xsl:call-template name="status-template">
+                                    <xsl:with-param name="status" select="Result"/>
+                                    <xsl:with-param name="label" select="TestName"/>
+                                    <xsl:with-param name="id" select="Id"/>
+                                </xsl:call-template>
+                            </span>
 
-                    <xsl:call-template name="sub-tree-view-template">
-                        <xsl:with-param name="firstNode" select="ActionReports/ActionReport" />
-                    </xsl:call-template>
-                </li>
-            </xsl:for-each >
-        </ul>
+                            <xsl:call-template name="sub-tree-view-template">
+                                <xsl:with-param name="firstNode" select="ActionReports/ActionReport"/>
+                            </xsl:call-template>
+                        </li>
+                    </xsl:for-each>
+                </ul>
+            </div>
+        </div>
     </xsl:template>
 
 </xsl:stylesheet>

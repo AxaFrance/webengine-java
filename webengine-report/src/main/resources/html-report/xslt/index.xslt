@@ -39,10 +39,7 @@
                     </div>
 
                     <div class="body-content-container">
-                        <div id='id-body-left-container' class="body-left-container">
-                            <xsl:call-template name="tree-view-template"/>
-                        </div>
-
+                        <xsl:call-template name="tree-view-template"/>
                         <xsl:call-template name="content-view-template"/>
                     </div>
                 </div>
