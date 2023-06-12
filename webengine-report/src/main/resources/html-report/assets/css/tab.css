@@ -34,7 +34,7 @@
 }
 
 .w3-hover-light-grey:hover {
-    color: #3414a6 !important;
+    color: #00008f !important;
     background-color: #ffffff !important;
 }
 
@@ -44,11 +44,11 @@
 
 .w3-border-blue,
 .w3-hover-border-blue:hover {
-    color: #3414a6 !important;
-    border-color: #3414a6 !important;
+    color: #00008f !important;
+    border-color: #00008f !important;
 }
 .tab-content-container.class-container-tab h6 {
-    color: #3414a6 !important;
+    color: #00008f !important;
     font-weight: 700 !important;
 }
 .border-div {
