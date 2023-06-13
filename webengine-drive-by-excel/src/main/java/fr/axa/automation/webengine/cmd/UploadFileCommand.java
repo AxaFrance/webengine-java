@@ -17,6 +17,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class UploadFileCommand extends AbstractDriverCommand {
+    static { /* works fine! ! */
+            System.setProperty("java.awt.headless", "false");
+    }
+
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws Exception {
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
@@ -28,19 +32,40 @@ public class UploadFileCommand extends AbstractDriverCommand {
         filepath = Paths.get(filepath).getParent().toString();
         filepath = filepath.replace("/","\\");
         StringSelection owner = new StringSelection(filepath+ "\\Upload\\"+value);
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(owner,owner);
-        //owner.lostOwnership(Toolkit.getDefaultToolkit().getSystemClipboard(),owner);
-        //imitate mouse events like ENTER, CTRL+C, CTRL+VRobot robot = new Robot();
         Robot robot = new Robot();
         robot.delay(1000);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ENTER);
-        robot.keyPress(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.delay(90);
-        robot.keyRelease(KeyEvent.VK_ENTER);
+        //try {
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(owner,owner);
+            //owner.lostOwnership(Toolkit.getDefaultToolkit().getSystemClipboard(),owner);
+            //imitate mouse events like ENTER, CTRL+C, CTRL+VRobot robot = new Robot();
+
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.delay(90);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+//        } catch (HeadlessException e) {
+//            sendKeys(robot,owner.toString());
+//        }
+
+    }
+
+    void sendKeys(Robot robot, String keys) {
+        for (char c : keys.toCharArray()) {
+            int keyCode = KeyEvent.getExtendedKeyCodeForChar(c);
+            if (KeyEvent.CHAR_UNDEFINED == keyCode) {
+                throw new RuntimeException(
+                        "Key code not found for character '" + c + "'");
+            }
+
+            robot.keyPress(keyCode);
+            robot.delay(100);
+            robot.keyRelease(keyCode);
+            robot.delay(100);
+        }
     }
 }
