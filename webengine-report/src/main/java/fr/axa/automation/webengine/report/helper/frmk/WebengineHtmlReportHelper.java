@@ -57,10 +57,10 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
             loggerService.info("base xslt path : " + basePathXslt);
             loggerService.info("xslt path : " + basePathXslt + ReportConstant.XSLT_INDEX_NAME.getValue());
             HtmlBuilder.build(xmlFileName,htmlIndexFilePath,basePathXslt, basePathXslt + ReportConstant.XSLT_INDEX_NAME.getValue());
+            loggerService.info("Create webengine html report in : " + htmlIndexFilePath);
         }catch (IOException | WebEngineException e  ){
             loggerService.error("Erreur lors de la génération du rapport html",e);
         }
-        loggerService.info("Create webengine html report in : " + htmlIndexFilePath);
     }
 
     private void copyFilesFromResource2( String sourceDirectoryName, String targetDirectoryName, List<String> fileNameList) throws IOException {
