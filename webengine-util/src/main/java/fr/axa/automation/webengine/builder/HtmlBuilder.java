@@ -36,7 +36,7 @@ public final class HtmlBuilder {
 
     public static void build(String xmlFileName, String htmlFileName, String basePath, String xsltResource) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//        dbf.setNamespaceAware(true);
+        dbf.setNamespaceAware(true);
         try (InputStream is = new FileInputStream(xmlFileName)) {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(is);
