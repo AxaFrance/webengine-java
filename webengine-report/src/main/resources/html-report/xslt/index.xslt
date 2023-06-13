@@ -5,7 +5,7 @@
     <xsl:import href="panel-left/panel-left-template.xslt"/>
     <xsl:import href="panel-right/panel-right-template.xslt"/>
 
-    <xsl:template match="/">
+    <xsl:template match="/we:TestSuiteReport">
         <html>
             <head>
                 <meta charset="utf-8" />

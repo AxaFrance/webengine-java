@@ -7,7 +7,7 @@
     <xsl:import href="content-tab/content-tab-context-value-template.xslt"/>
 
     <xsl:template name="content-view-template">
-        <xsl:for-each select="we:TestSuiteReport/we:TestResult">
+        <xsl:for-each select="we:TestResult">
             <xsl:call-template name="content-view-test-case-template-by-id">
                 <xsl:with-param name="id" select="we:Id"/>
             </xsl:call-template>

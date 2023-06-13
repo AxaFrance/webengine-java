@@ -52,6 +52,10 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
             copyFilesFromResource2(cssSourceDirectory,cssTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.CSS_FILE_LIST.getValue());
             copyFilesFromResource2(jsSourceDirectory,jsTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.JS_FILE_LIST.getValue());
             generateImageReport(testSuiteReport,htmlReportTargetDirectoryPath.toString());
+            loggerService.info("Xml file name : " + xmlFileName);
+            loggerService.info("html file name : " + htmlIndexFilePath);
+            loggerService.info("base xslt path : " + basePathXslt);
+            loggerService.info("xslt path : " + basePathXslt + ReportConstant.XSLT_INDEX_NAME.getValue());
             HtmlBuilder.build(xmlFileName,htmlIndexFilePath,basePathXslt, basePathXslt + ReportConstant.XSLT_INDEX_NAME.getValue());
         }catch (IOException | WebEngineException e  ){
             loggerService.error("Erreur lors de la génération du rapport html",e);

@@ -40,7 +40,7 @@
             </div>
             <div id='id-tree-container' class="tree-container">
                 <ul id="idTree">
-                    <xsl:for-each select="we:TestSuiteReport/we:TestResult">
+                    <xsl:for-each select="we:TestResult">
                         <li>
                             <span class="caret">
                                 <xsl:call-template name="status-template">
