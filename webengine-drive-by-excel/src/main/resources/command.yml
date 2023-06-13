@@ -98,6 +98,16 @@
   VALUE:
     ENGLISH: wait
     FRENCH: pause
+-POPUP:
+  DESCRIPTION: permet de gerer les alertes javascript
+  VALUE:
+    ENGLISH: accept alert
+    FRENCH: accepter alerte ?
+-UPLOAD:
+  DESCRIPTION: permet d'uploader un fichier présent dans le répertoire nommé Upload lui-même présent au même niveau que le fichier excel
+  VALUE:
+    ENGLISH: upload file
+    FRENCH: choisir fichier
 -END_SCENARIO:
   DESCRIPTION: Indique la fin du scénario courant
   VALUE:
