@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.core;
 
-import fr.axa.automation.webengine.general.SettingsWeb;
+import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.global.SettingsWeb;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -53,8 +54,8 @@ public abstract class AbstractElementDescription {
         return function.apply(param);
     }
 
-    protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(SettingsWeb.TIMEOUT_SECONDS);
+    protected <T, R> R retry(IFunction<T, R> function, T param, Integer timeOutInSeconds) throws Exception {
+        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeOutInSeconds);
         Exception exception = new Exception();
         UUID uuid = UUID.randomUUID();
 
@@ -71,6 +72,9 @@ public abstract class AbstractElementDescription {
             log.debug(uuid+"-retry timeout "+function.toString()+" at "+LocalDateTime.now());
         }
         throw exception;
+    }
+    protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
+        return retry(function,param,SettingsWeb.TIMEOUT_SECONDS);
     }
 
     public WebElement findElement() throws Exception {
@@ -117,6 +121,10 @@ public abstract class AbstractElementDescription {
         return (Collection<WebElement>) findElement(SettingsWeb.TIMEOUT_SECONDS);
     }
 
+    public Boolean isNotExists() throws Exception {
+        return !exists();
+    }
+
     public Boolean exists() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> exists(SettingsWeb.TIMEOUT_SECONDS);
         return retry(fun,null);
@@ -133,11 +141,15 @@ public abstract class AbstractElementDescription {
 
     public void click() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-                WebElement webElement = findElement();
-                webElement.click();
-                return null;
+            WebElement webElement = findElement();
+            click(webElement);
+            return null;
         };
-        retry(fun,null);
+        retry(fun, null);
+    }
+
+    protected void click(WebElement webElement) {
+        webElement.click();
     }
 
     public void autocompletion(String text) throws Exception {
@@ -150,13 +162,18 @@ public abstract class AbstractElementDescription {
         sendKeys(s);
     }
 
+
     public void sendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            webElement.sendKeys(x);
+            sendKeys(x, webElement);
             return null;
         };
         retry(fun,text);
+    }
+
+    protected void sendKeys(String x, WebElement webElement) {
+        webElement.sendKeys(x);
     }
 
     public byte[] getScreenshot() throws Exception {
@@ -169,7 +186,7 @@ public abstract class AbstractElementDescription {
         IFunction<String, Void> fun = (x) -> {
             WebElement element = findElement();
             element.clear();
-            element.sendKeys(x);
+            sendKeys(x, element);
             return null;
         };
         retry(fun,text);
@@ -181,6 +198,10 @@ public abstract class AbstractElementDescription {
             return element.getText();
         };
         return retry(fun,null);
+    }
+
+    public Boolean isNotSelected() throws Exception {
+        return !isSelected();
     }
 
     public Boolean isSelected() throws Exception {
@@ -197,6 +218,10 @@ public abstract class AbstractElementDescription {
             return webElement.isEnabled();
         };
         return retry(fun,null);
+    }
+
+    public Boolean isNotDisplayed() throws Exception {
+        return !isDisplayed();
     }
 
     public Boolean isDisplayed() throws Exception {

@@ -7,17 +7,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
 class WebElementDescriptionTest {
 
-    public static final String HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET = "http://webengine-test.azurewebsites.net/";
+    public static final String HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";
 
     @Test
     public void sendKeysTest() throws Exception {
         String baseUrl = HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET;
-        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome");
+        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();
             driver.get(baseUrl);
@@ -33,7 +34,7 @@ class WebElementDescriptionTest {
     @Test
     public void findByCollectionElementTest() throws Exception {
         String baseUrl = HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET;
-        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome");
+        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();
             driver.get(baseUrl);
@@ -49,7 +50,7 @@ class WebElementDescriptionTest {
     @Test
     public void findByElementTest() throws Exception {
         String baseUrl = HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET;
-        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome");
+        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();
             driver.get(baseUrl);
@@ -65,7 +66,7 @@ class WebElementDescriptionTest {
     @Test
     public void getAttributeTest() throws Exception {
         String baseUrl = HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET;
-        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome");
+        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();
             driver.get(baseUrl);
@@ -81,7 +82,7 @@ class WebElementDescriptionTest {
     @Test
     public void isDisplayedTest() throws Exception {
         String baseUrl = HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET;
-        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome");
+        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();
             driver.get(baseUrl);
@@ -98,7 +99,7 @@ class WebElementDescriptionTest {
     @Test
     public void isEnabledTest() throws Exception {
         String baseUrl = HTTP_WEBENGINE_TEST_AZUREWEBSITES_NET;
-        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome");
+        Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
         if(optionalWebdriver.isPresent()){
             WebDriver driver = optionalWebdriver.get();
             driver.get(baseUrl);

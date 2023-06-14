@@ -34,7 +34,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <reflections.version>0.9.12</reflections.version>
         <commons-cli.version>1.5.0</commons-cli.version>
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.11.0</commons-io.version>
         <guava.version>31.1-jre</guava.version>
         <jaxb-api.version>2.2.7</jaxb-api.version>
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
@@ -45,8 +45,8 @@
         <gson.version>2.10</gson.version>
 
         <jna-platform.version>4.2.2</jna-platform.version>
-        <webdrivermanager.version>5.2.3</webdrivermanager.version>
-        <selenium-java.version>4.4.0</selenium-java.version>
+        <webdrivermanager.version>5.3.2</webdrivermanager.version>
+        <selenium-java.version>4.8.3</selenium-java.version>
         <appium-java-client-.version>8.1.1</appium-java-client-.version>
         <browserstack-local-java.version>1.0.6</browserstack-local-java.version>
 
@@ -65,6 +65,7 @@
         <cluecumber-report-plugin.version>2.9.4</cluecumber-report-plugin.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
 
+        <poi.version>5.2.3</poi.version>
     </properties>
 
     <modules>
@@ -79,6 +80,8 @@
         <module>webengine-test-gherkin</module>
         <module>webengine-test-linear</module>
 		<module>webengine-report-jacoco-aggregate</module>
+        <module>webengine-drive-by-excel</module>
+        <module>webengine-cmd-line</module>
     </modules>
 
     <dependencies>
@@ -241,6 +244,18 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
             </dependency>
 
             <dependency>
@@ -498,6 +513,12 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
                 </plugin>
 
             </plugins>

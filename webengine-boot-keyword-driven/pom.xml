@@ -17,7 +17,7 @@
 
         <dependency>
             <groupId>fr.axa.automation.webengine</groupId>
-            <artifactId>webengine-web</artifactId>
+            <artifactId>webengine-cmd-line</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

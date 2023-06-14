@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.context;
 
+import fr.axa.automation.webengine.util.ListUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collections;
@@ -13,7 +14,7 @@ public class ExecutionDetail {
 
     public static void addInformation(String information){
         if(CollectionUtils.isNotEmpty(STEP_IN_PROGRESS)){
-            Optional<String> optionalKey = STEP_IN_PROGRESS.stream().reduce((one, two) -> two); //Get last value of set
+            Optional<String> optionalKey = ListUtil.getLastElement(STEP_IN_PROGRESS);
             if(optionalKey.isPresent()){
                 String key = optionalKey.get();
                 SharedInformation.addInformation(key,information);

@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.Platform;
+import fr.axa.automation.webengine.global.Platform;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Arrays;

@@ -10,6 +10,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class ActionReportHelper {
@@ -25,12 +26,17 @@ public final class ActionReportHelper {
     }
 
     public static ActionReport getActionReport(String name) {
+        return getActionReport(name,Result.NONE);
+    }
+
+    public static ActionReport getActionReport(String name,Result result) {
         ActionReport actionReport = new ActionReport();
         actionReport.setName(name);
+        actionReport.setId(UUID.randomUUID().toString());
         actionReport.setStartTime(Calendar.getInstance());
         actionReport.setContextValues(new ArrayOfVariable());
         actionReport.setScreenshots(new ArrayOfScreenshotReport());
-        actionReport.setResult(Result.NONE);
+        actionReport.setResult(result);
         return actionReport;
     }
 }

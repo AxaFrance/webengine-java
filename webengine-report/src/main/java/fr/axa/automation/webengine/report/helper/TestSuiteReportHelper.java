@@ -29,5 +29,4 @@ public final class TestSuiteReportHelper {
         testSuiteReport.setSystemError(testSuiteReportInformation.getSystemError());
         return testSuiteReport;
     }
-
 }

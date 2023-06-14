@@ -1,14 +1,22 @@
 package fr.axa.automation.webengine.core;
 
+import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.HtmlAttributeConstante;
+import fr.axa.automation.webengine.constante.HtmlAttributeValueConstante;
+import fr.axa.automation.webengine.constante.HtmlTag;
+import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.util.ListUtil;
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -28,6 +36,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,7 +55,8 @@ public class WebElementDescription extends AbstractElementDescription {
 
     String name;
     String innerText;
-    Collection<HtmlAttribute> attributeList;
+    Map<String,String> attributeList;
+
     String xPath;
     String cssSelector;
     String className;
@@ -97,14 +107,14 @@ public class WebElementDescription extends AbstractElementDescription {
     public Collection<WebElement> internalFindElements() {
         final List<WebElement> elements = new ArrayList<>();
         Map<String, Collection<WebElement>> findElementsMap = new HashMap<>();
-        findElementsMap.put("id", getInternalFindElementsById(this.id));
-        findElementsMap.put("name", getInternalFindElementsByName(this.name));
-        findElementsMap.put("className", getInternalFindElementByClassName(this.className));
-        findElementsMap.put("linkText", getInternalFindElementByLinkText(this.linkText));
-        findElementsMap.put("tagName", getInternalFindElementByTagName(this.tagName));
-        findElementsMap.put("cssSelector", getInternalFindElementByCssSelector(this.cssSelector));
-        findElementsMap.put("xPath", getInternalFindElementByXpath(this.xPath));
-        findElementsMap.put("attributeList", getInternalFindElementByAttributeList(this.attributeList));
+        findElementsMap.put(LocatingBy.BY_ID.getValue(), getInternalFindElementsById(this.id));
+        findElementsMap.put(LocatingBy.BY_NAME.getValue(), getInternalFindElementsByName(this.name));
+        findElementsMap.put(LocatingBy.BY_CLASS_NAME.getValue(),  getInternalFindElementByClassName(this.className));
+        findElementsMap.put(LocatingBy.BY_LINK_TEXT.getValue(), getInternalFindElementByLinkText(this.linkText));
+        findElementsMap.put(LocatingBy.BY_TAG_NAME.getValue(), getInternalFindElementByTagName(this.tagName));
+        findElementsMap.put(LocatingBy.BY_CSS_SELECTOR.getValue(), getInternalFindElementByCssSelector(this.cssSelector));
+        findElementsMap.put(LocatingBy.BY_XPATH.getValue(), getInternalFindElementByXpath(this.xPath));
+        findElementsMap.put(LocatingBy.BY_ATTRIBUTE_LIST.getValue(), getInternalFindElementByAttributeList(this.attributeList));
 
         findElementsMap.forEach((k, v) -> elements.addAll(findElementsMap.get(k)));
 
@@ -118,16 +128,15 @@ public class WebElementDescription extends AbstractElementDescription {
                 return ListUtil.findDuplicateElements(elements);
             }
         }
-
         throw new NoSuchElementException("No such WebElement found in the page");
     }
 
-    private Collection<WebElement> getInternalFindElementByAttributeList(Collection<HtmlAttribute> attributeList) {
-        if (CollectionUtils.isNotEmpty(attributeList)) {
+    private Collection<WebElement> getInternalFindElementByAttributeList(Map<String,String> attributeList) {
+        if (MapUtils.isNotEmpty(attributeList)) {
             List<String> attributes = new ArrayList<>();
-            attributeList.stream().forEach(htmlAttribute -> attributes.add("[{" + htmlAttribute.getName() + "}=\"{" + htmlAttribute.getValue() + "}\"]"));
+            attributeList.entrySet().stream().forEach(entry -> attributes.add("[" + entry.getKey() + "=" + entry.getValue() + "]"));
             String cssSelector = String.join("", attributes);
-            return getInternalFindElementByCssSelector(cssSelector);
+            return getInternalFindElementByCssSelector(getTagName() + cssSelector);
         }
         return new ArrayList<>();
     }
@@ -233,22 +242,44 @@ public class WebElementDescription extends AbstractElementDescription {
         actions.dragAndDrop(findWebElement, element).build().perform();
     }
 
+    private void executeJavascript(String script, WebElement webElement) {
+        JavascriptExecutor js = (JavascriptExecutor) useDriver;
+        js.executeScript(script, webElement);
+    }
+
+    /**
+     *
+     * @deprecated
+     * Use method scrollToElement or focus()
+     */
+    @Deprecated
     public void scrollIntoView() throws Exception {
+        scrollToElement();
+    }
+
+    /**
+     *
+     * @deprecated
+     * Use method scrollToElementAndclick
+     */
+    public void scrollIntoViewAndclick() throws Exception {
+        scrollToElementAndclick();
+    }
+
+    public void scrollToElement() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement findWebElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].scrollIntoView(true);", findWebElement);
+            WebElement webElement = findElement();
+            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
             return null;
         };
         retry(fun,null);
     }
 
-    public void scrollIntoViewAndclick() throws Exception {
+    public void scrollToElementAndclick() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].scrollIntoView(true);", webElement);
-            webElement.click();
+            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
+            click(webElement);
             return null;
         };
         retry(fun,null);
@@ -256,38 +287,229 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public void scrollIntoCenterView() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement findWebElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", findWebElement);
+            WebElement webElement = findElement();
+            executeJavascript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", webElement);
             return null;
         };
         retry(fun,null);
+    }
+
+    public void focusAndClick() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            click(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+    public void focusAndsendKeys(String text) throws Exception {
+        IFunction<String, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            sendKeys(x,webElement);
+            return null;
+        };
+        retry(fun,text);
     }
 
     public void highLight() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
-            WebElement findWebElement = findElement();
-            JavascriptExecutor js = (JavascriptExecutor) useDriver;
-            js.executeScript("arguments[0].style.border='3px solid red'", findWebElement);
+            WebElement webElement = findElement();
+            highLight(webElement);
             return null;
         };
         retry(fun,null);
     }
 
+    private void highLight(WebElement webElement) {
+        executeJavascript("arguments[0].style.border='3px solid red'", webElement);
+    }
 
+    public Boolean isInputSelect() throws Exception {
+        IFunction<Void, Boolean> fun = (x) -> {
+            WebElement webElement = findElement();
+            return isInputSelect(webElement);
+        };
+        return retry(fun,null);
+    }
+
+    private Boolean isInputSelect(WebElement webElement) throws Exception {
+        if(webElement.getTagName().equalsIgnoreCase(HtmlTag.SELECT.getValue())){
+            return true;
+        }
+        return false;
+    }
+
+    public void focus() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+    private Boolean isInputRadio(WebElement webElement) {
+        if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) &&  isTypeElementByAttribute(webElement, HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO)){
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean isInputRadio() throws Exception {
+        return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO);
+    }
+
+    public Boolean isInputText() throws Exception {
+        return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_TEXT);
+    }
+
+    public Boolean isInputCheckbox() throws Exception {
+        return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_CHECKBOX);
+    }
+
+    private Boolean isTypeElementByAttribute(HtmlAttributeValueConstante htmlAttributeValueConstante) throws Exception {
+        IFunction<HtmlAttributeValueConstante, Boolean> fun = (attributeValueConstante) -> {
+            WebElement webElement = findElement();
+            return isTypeElementByAttribute(webElement, attributeValueConstante);
+        };
+        return retry(fun, htmlAttributeValueConstante);
+    }
+
+    private Boolean isTypeElementByAttribute( WebElement webElement, HtmlAttributeValueConstante htmlAttributeValueConstante) {
+        String typeWebElement = webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_TYPE.getValue());
+        if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(htmlAttributeValueConstante.getValue())){
+            return true;
+        }
+        return false;
+    }
 
     public Select asSelect() throws Exception {
         IFunction<Void, Select> fun = (x) -> {
-            WebElement element = findElement();
-            return new Select(element);
+            WebElement webElement = findElement();
+            return new Select(webElement);
         };
         return retry(fun,null);
+    }
+
+    public void selectByValueOrText(String text) throws Exception {
+        IFunction<String, Void> fun = (value) -> {
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            click(webElement);
+            Select select = new Select(webElement);
+            List<WebElement> elementListInSelect = getElementExistInSelect(select,value);
+            if(CollectionUtils.isNotEmpty(elementListInSelect) && elementListInSelect.size()==1){
+                select.selectByVisibleText(elementListInSelect.get(0).getText());
+            }else if(isValueExistInSelect(select,value)){
+                select.selectByValue(value);
+            }else{
+                throw new WebEngineException("The option value or the text : "+value+" doesn't exist");
+            }
+            return null;
+        };
+        retry(fun,text);
+    }
+
+    private boolean isTextExistInSelect(Select select, String valueToSelect) {
+        List<String> optionTextList = getOptionTextListInSelect(select);
+        return optionTextList.stream().anyMatch(optionText -> StringUtil.equalsIgnoreCase(optionText,valueToSelect) || StringUtil.contains(optionText,valueToSelect.split("\\*{4}")[0].trim()));
+    }
+
+    private List<String> getOptionTextListInSelect(Select select) {
+        return select.getOptions().stream().map(webElement ->  webElement.getText()).collect(Collectors.toList());
+    }
+
+    private List<WebElement> getElementExistInSelect(Select select, String valueToSelect) {
+        List<WebElement> elementListInSelect = getElementListInSelect(select);
+        return elementListInSelect.stream().filter(webElement -> StringUtil.equalsIgnoreCase(webElement.getText(),valueToSelect) || StringUtil.contains(webElement.getText(),valueToSelect.split("\\*{4}")[0].trim())).collect(Collectors.toList());
+    }
+
+    private List<WebElement> getElementListInSelect(Select select) {
+        return select.getOptions().stream().map(webElement ->  webElement).collect(Collectors.toList());
+    }
+
+    private boolean isValueExistInSelect(Select select, String valueToSelect) {
+        List<String> optionValueList = getOptionValueListInSelect(select);
+        return optionValueList.stream().anyMatch(optionValue -> StringUtil.equalsIgnoreCase(optionValue,valueToSelect));
+    }
+
+    private List<String> getOptionValueListInSelect(Select select) {
+        return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
+    }
+
+    public String getTextByElement() throws Exception {
+        IFunction<Void, String> fun = (value) ->{
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            if(isInputSelect(webElement)){
+                return getSelectedOption(webElement);
+            }else if(isTypeElementByAttribute(webElement,HtmlAttributeValueConstante.ATTRIBUTE_TYPE_TEXT) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
+                return webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue());
+            }else{
+                return webElement.getText();
+            }
+        };
+        return retry(fun,null);
+    }
+
+    public boolean assertContentByElementType(String text) throws Exception {
+        IFunction<String, Boolean> fun = (value) ->{
+            Boolean resultAssert;
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            if(isInputSelect(webElement)){
+                resultAssert = assertContentInSelect(webElement,value);
+            }else if(isInputRadio(webElement)){
+                resultAssert = StringUtil.equalsIgnoreCase(Constante.TRUE.getValue(),webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue()));
+            }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
+                resultAssert = StringUtil.contains(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()),value);
+            }else{
+                resultAssert = StringUtil.contains(webElement.getText(),value);
+            }
+            return resultAssert;
+        };
+        return retry(fun,text);
+    }
+
+    private String getSelectedOption(WebElement webElement) throws Exception{
+        if(webElement!=null){
+            Select select = new Select(webElement);
+            if (!webElement.isEnabled()){
+                throw new Exception("Select WebElement is not enabled for the while...");
+            }
+            List<WebElement> webElementList = select.getOptions().stream().filter(we -> we.isSelected()).collect(Collectors.toList());
+            if(CollectionUtils.isNotEmpty(webElementList)){
+                if(webElementList.size()>1){
+                    throw new Exception("Impossible case, many options are selected, not only one");
+                }
+                Optional<WebElement> webElementSelected = webElementList.stream().findFirst();
+                if(webElementSelected.isPresent()){
+                    return webElementSelected.get().getText();
+                }
+            }
+        }
+        return StringUtils.EMPTY;
+    }
+
+    private boolean assertContentInSelect(WebElement webElement,String text){
+        if(webElement!=null){
+            Select select = new Select(webElement);
+            if(isTextExistInSelect(select,text) || isValueExistInSelect(select,text)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void selectByText(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = this.findElement();
-            webElement.click();
+            click(webElement);
             Select se = new Select(webElement);
             se.selectByVisibleText(x);
             return null;
@@ -298,7 +520,7 @@ public class WebElementDescription extends AbstractElementDescription {
     public void selectByIndex(Integer index) throws Exception {
         IFunction<Integer, Void> fun = (x) -> {
             WebElement element = this.findElement();
-            element.click();
+            click(element);
             Select se = new Select(element);
             se.selectByIndex(x);
             return null;
@@ -309,9 +531,27 @@ public class WebElementDescription extends AbstractElementDescription {
     public void selectByValue(String value) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement element = this.findElement();
-            element.click();
+            click(element);
             Select se = new Select(element);
             se.selectByValue(x);
+            return null;
+        };
+        retry(fun,value);
+    }
+
+    public void scrollToElementAndcheckByValue(String value) throws Exception {
+        IFunction<String, Void> fun = (x) -> {
+            Collection<WebElement> elementCollection = this.internalFindElements();
+            if (CollectionUtils.isNotEmpty(elementCollection)) {
+                WebElement webElementFilter = elementCollection.stream().filter(webElt-> StringUtil.equalsIgnoreCase(x,webElt.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()))).findFirst().orElse(null);
+                if(webElementFilter!=null) {
+                    executeJavascript("arguments[0].scrollIntoView(true);", webElementFilter);
+                    focus(webElementFilter);
+                    click(webElementFilter);
+                }else{
+                    throw new WebEngineException("The element is null");
+                }
+            }
             return null;
         };
         retry(fun,value);
@@ -323,7 +563,7 @@ public class WebElementDescription extends AbstractElementDescription {
             if (CollectionUtils.isNotEmpty(elementCollection)) {
                 WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(x)).findFirst().orElse(null);
                 if(webElementFilter!=null) {
-                    webElementFilter.click();
+                    click(webElementFilter);
                 }else{
                     throw new WebEngineException("Element is null");
                 }
@@ -341,13 +581,11 @@ public class WebElementDescription extends AbstractElementDescription {
         return webElement!=null;
     }
 
-
-    public void focus() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
-            WebElement element = this.findElement();
-            new Actions(getUseDriver()).moveToElement(element).perform();
-            return null;
-        };
-        retry(fun,null);
+    private void focus(WebElement webElement) {
+        if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue())){
+            webElement.sendKeys("");
+        } else{
+            new Actions(getUseDriver()).moveToElement(webElement).perform();
+        }
     }
 }

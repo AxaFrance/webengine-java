@@ -10,7 +10,7 @@ class PropertiesUtilTest {
     @Test
     void testLoadPropertiesFile() throws WebEngineException {
         WebengineTestProperties webengineTestProperties = PropertiesUtil.loadPropertiesFile("yaml/application.yml", WebengineTestProperties.class);
-        Assertions.assertEquals("webengine", webengineTestProperties.getApplication().getName());
+        Assertions.assertEquals("webengine", webengineTestProperties.getWebengineConfiguration().getName());
     }
 
     @Test

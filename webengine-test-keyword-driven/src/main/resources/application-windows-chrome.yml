@@ -1,26 +1,26 @@
-application:
+webengineConfiguration:
     name: spoolnet-automation
     platformName: WINDOWS
     browserName: CHROME
-appiumSettings:
-    gridConnection: https://hub-cloud.browserstack.com/wd/hub
-    userName: XXXXXXX
-    password: XXXXXXX
-    localTesting:
-        activate: false
-        arguments:
-            force: true
-            forcelocal: true
-            binarypath: C:\\BrowserStack\\BrowserStackLocal.exe
-            localIdentifier: XXXXYYYY
-    capabilities:
-        desiredCapabilitiesMap:
-            geoLocation: FR
-            deviceName: Samsung Galaxy S20 Ultra
-            osVersion: 10.0
-            projectName: spoolnet-automation
-            buildName: spoolnet-automation-mobile
-            sessionName: Samsung
-            local: true
-            networkLogs: true
-            localIdentifier: XXXXYYYY
+    appiumConfiguration:
+        gridConnection: https://hub-cloud.browserstack.com/wd/hub
+        userName: XXXXXXX
+        password: XXXXXXX
+        localTesting:
+            activate: false
+            arguments:
+                force: true
+                forcelocal: true
+                binarypath: C:\\BrowserStack\\BrowserStackLocal.exe
+                localIdentifier: XXXXYYYY
+        capabilities:
+            desiredCapabilitiesMap:
+                geoLocation: FR
+                deviceName: Samsung Galaxy S20 Ultra
+                osVersion: 10.0
+                projectName: spoolnet-automation
+                buildName: spoolnet-automation-mobile
+                sessionName: Samsung
+                local: true
+                networkLogs: true
+                localIdentifier: XXXXYYYY

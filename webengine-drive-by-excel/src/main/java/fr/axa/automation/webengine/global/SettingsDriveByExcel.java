@@ -1,0 +1,20 @@
+package fr.axa.automation.webengine.global;
+
+
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+import java.util.Map;
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Data
+@NoArgsConstructor
+@SuperBuilder
+public class SettingsDriveByExcel extends AbstractSettings {
+    String dataTestFileName;
+    Map<String, List<String>> testCaseAndDataTestColumName;
+}

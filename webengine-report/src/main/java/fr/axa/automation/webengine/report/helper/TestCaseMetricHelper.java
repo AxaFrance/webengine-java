@@ -5,7 +5,6 @@ import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.report.object.TestCaseMetric;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public final class TestCaseMetricHelper {
