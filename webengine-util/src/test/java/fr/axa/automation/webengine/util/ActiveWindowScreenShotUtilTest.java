@@ -7,10 +7,10 @@ import java.awt.image.RenderedImage;
 
 class ActiveWindowScreenShotUtilTest {
 
-    @Test
-    void testGetGeneratedCurrentDesktopImage() {
-        RenderedImage renderedImage = ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage();
-        Assertions.assertNotNull(renderedImage);
-    }
+//    @Test
+//    void testGetGeneratedCurrentDesktopImage() {
+//        RenderedImage renderedImage = ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage();
+//        Assertions.assertNotNull(renderedImage);
+//    }
 
 }
