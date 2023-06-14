@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 
 class ImageUtilTest {
 
-//    @Test
-//    void testGetImage() {
-//        byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage());
-//        Assertions.assertNotNull(screenshot);
-//    }
+    @Test
+    void testGetImage() {
+        byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage());
+        Assertions.assertNotNull(screenshot);
+    }
 }
