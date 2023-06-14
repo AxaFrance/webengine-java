@@ -1,6 +1,8 @@
 package fr.axa.automation.webengine.builder;
 
 import fr.axa.automation.webengine.constant.JavaConstant;
+import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.ResourcesLister;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 public final class HtmlBuilder {
     private HtmlBuilder() {
     }
+    private static final ILoggerService loggerService = new LoggerService();
 
     public static void build(String xmlFileName, String htmlFileName, String basePath, String xsltResource) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
