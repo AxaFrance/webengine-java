@@ -70,7 +70,7 @@ class FileUtilTest {
     public void testGetPathDirectoryInTargetDirectory() {
         String filePath = FileUtil.getPathInTargetDirectory("test-create-directory-in-target");
         logger.info("Define directory in target directory : "+ filePath);
-        Assertions.assertTrue(filePath.contains("\\target\\"));
+        Assertions.assertTrue(filePath.contains(File.separator+"target"+File.separator));
     }
 
     @Test
@@ -105,7 +105,7 @@ class FileUtilTest {
     @Test
     void testGetInputStreamByPath() throws  IOException {
         String currentDirectoryPath = FileUtil.getCurrentPath();
-        String completePathToFile = currentDirectoryPath + "src\\test\\resources\\jaxb-users.xml";
+        String completePathToFile = currentDirectoryPath + "src"+File.separator+"test"+File.separator+"resources"+File.separator+"jaxb-users.xml";
         logger.info("Current path : "+currentDirectoryPath);
         logger.info("Complete path to directory : "+completePathToFile);
         InputStream inputStream = FileUtil.getInputStreamByPathOrResource(completePathToFile);
@@ -114,13 +114,13 @@ class FileUtilTest {
 
     @Test
     void testAssertContentToFalse() throws URISyntaxException, IOException {
-        boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"), FileUtil.getFileFromResource("xml/user-with-initial-namespace.xml"));
+        boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml"+File.separator+"user-with-custom-namespace.xml"), FileUtil.getFileFromResource("xml"+File.separator+"user-with-initial-namespace.xml"));
         Assertions.assertFalse(resultCompareFile);
     }
 
     @Test
     void testAssertContentToTrue() throws URISyntaxException, IOException {
-        boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"), FileUtil.getFileFromResource("xml/user-with-custom-namespace.xml"));
+        boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml"+File.separator+"user-with-custom-namespace.xml"), FileUtil.getFileFromResource("xml"+File.separator+"user-with-custom-namespace.xml"));
         Assertions.assertTrue(resultCompareFile);
     }
 }
