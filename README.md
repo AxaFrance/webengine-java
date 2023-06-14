@@ -23,7 +23,7 @@ WebEngine Framework resolves some common problems every test automation project 
 
 ## Prerequisites 
 
-Java 8 or higher
+Java 8 or higher 
 
 Maven
 
