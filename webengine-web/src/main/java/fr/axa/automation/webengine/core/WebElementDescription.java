@@ -457,6 +457,25 @@ public class WebElementDescription extends AbstractElementDescription {
         return retry(fun,null);
     }
 
+
+    public String getSelectedOption(String text) throws Exception {
+        IFunction<String, String> fun = (value) ->{
+            String selectedOption;
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            if(isInputSelect(webElement)){
+                selectedOption = getSelectedOption(webElement);
+            }else{
+                throw new Exception("It's not a select element");
+            }
+            return selectedOption;
+        };
+        return retry(fun,text);
+    }
+
+
+
+
     public boolean assertContentByElementType(String text) throws Exception {
         IFunction<String, Boolean> fun = (value) ->{
             Boolean resultAssert;

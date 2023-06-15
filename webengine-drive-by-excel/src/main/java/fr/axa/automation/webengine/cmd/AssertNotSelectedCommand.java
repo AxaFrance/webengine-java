@@ -6,6 +6,7 @@ import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
+import fr.axa.automation.webengine.util.StringUtil;
 
 import java.util.List;
 
@@ -15,9 +16,11 @@ public class AssertNotSelectedCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
         String value = getValue(globalApplicationContext,(TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
-        boolean isSelected = webElementDescription.assertContentByElementType(value);
-        if(isSelected){
-            throw  new WebEngineException("The element is selected");
+        String selectedOption = webElementDescription.getSelectedOption(value);
+        if(StringUtil.equalsIgnoreCase(value,selectedOption)){
+            String errorMessage = "The value is : "+value+" and the selected option is : "+selectedOption;
+            getLogReport().append(errorMessage);
+            throw  new WebEngineException(errorMessage);
         }
     }
 }
