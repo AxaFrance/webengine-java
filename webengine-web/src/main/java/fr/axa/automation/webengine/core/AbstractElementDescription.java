@@ -207,7 +207,10 @@ public abstract class AbstractElementDescription {
     public Boolean isSelected() throws Exception {
         IFunction<Void, Boolean> fun = (x) -> {
             WebElement webElement = findElement();
-            return webElement.isSelected();
+            if(webElement.isEnabled() && webElement.isDisplayed()){
+                return webElement.isSelected();
+            }
+            throw new Exception("Element is not enabled or displayed");
         };
         return retry(fun,null);
     }

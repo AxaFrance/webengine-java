@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.boot;
 
 import fr.axa.automation.webengine.api.ITestSuiteDriveByExcelExecutor;
 import fr.axa.automation.webengine.argument.ArgumentOption;
-import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.ConstanteDriveByExcel;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
@@ -57,7 +57,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     public void runFromFramework(String... args) throws Exception {
         List<String> optionList = getCommandNameFileOption(args);
         if(CollectionUtils.isNotEmpty(optionList)){
-            FileUtil.copyFileFromResource(Constante.COMMAND_FILE_NAME.getValue(),optionList.get(1)+ File.separator+Constante.COMMAND_FILE_NAME.getValue());
+            FileUtil.copyFileFromResource(ConstanteDriveByExcel.COMMAND_FILE_NAME.getValue(),optionList.get(1)+ File.separator+ ConstanteDriveByExcel.COMMAND_FILE_NAME.getValue());
         }else{
             CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
             runTestSuite(commandLine);
@@ -67,7 +67,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     private List<String> getCommandNameFileOption(String... args){
         if(args!=null && Arrays.asList(args).size()==1 ){
             String[] option = getArgumentsSeparatedByOptionAndValue(Arrays.asList(args));
-            if(StringUtil.equalsIgnoreCase(option[0], Constante.DASH.getValue() + ArgumentOption.COMMAND_NAME_FILE.getOption())){
+            if(StringUtil.equalsIgnoreCase(option[0], ConstanteDriveByExcel.DASH.getValue() + ArgumentOption.COMMAND_NAME_FILE.getOption())){
                 return Arrays.asList(option);
             }
         }

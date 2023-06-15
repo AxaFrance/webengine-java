@@ -1,11 +1,11 @@
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:we="http://www.axa.fr/WebEngine/2022">
 
     <xsl:import href="header/header-template.xslt"/>
     <xsl:import href="header/sub-header-template.xslt"/>
     <xsl:import href="panel-left/panel-left-template.xslt"/>
     <xsl:import href="panel-right/panel-right-template.xslt"/>
 
-    <xsl:template match="/">
+    <xsl:template match="/we:TestSuiteReport">
         <html>
             <head>
                 <meta charset="utf-8" />

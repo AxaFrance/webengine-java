@@ -21,9 +21,9 @@ WebEngine Framework resolves some common problems every test automation project 
 -   Graphical test report.
 -   **Open Source**, free usage and let’s improve it together!
 
-## Prerequisites
+## Prerequisites 
 
-Java 8 or higher
+Java 8 or higher 
 
 Maven
 

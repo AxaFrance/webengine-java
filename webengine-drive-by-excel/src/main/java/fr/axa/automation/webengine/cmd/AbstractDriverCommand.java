@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.cmd;
 
-import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.ConstanteDriveByExcel;
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.core.WebElementDescription;
@@ -42,7 +42,7 @@ public abstract class AbstractDriverCommand implements ICommand {
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
     String savedData;
     ILoggerService loggerService = LoggerServiceProvider.getInstance();
-    StringBuffer stringBuffer = new StringBuffer();
+    StringBuffer logReport = new StringBuffer();
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws Exception;
 
@@ -81,32 +81,32 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
-        getStringBuffer().append(Constante.CR_LF.getValue()).append("Executed command : ").append(commandData);
+        getLogReport().append(ConstanteDriveByExcel.CR_LF.getValue()).append("Executed command : ").append(commandData);
         try {
             String dataTestColumName = ((TestCaseDriveByExcelContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
                 actionReport.setResult(Result.PASSED);
-                getStringBuffer().append(Constante.CR_LF.getValue()).append("Status :").append(Result.PASSED.value());
+                getLogReport().append(ConstanteDriveByExcel.CR_LF.getValue()).append("Status :").append(Result.PASSED.value());
             } else {
                 actionReport.setResult(Result.IGNORED);
-                getStringBuffer().append(Constante.CR_LF.getValue()).append("Warning : ").append(Constante.CR_LF.getValue()).append("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
+                getLogReport().append(ConstanteDriveByExcel.CR_LF.getValue()).append("Warning : ").append(ConstanteDriveByExcel.CR_LF.getValue()).append("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
             }
-            actionReport.setLog(getStringBuffer().toString());
+            actionReport.setLog(getLogReport().toString());
         } catch (Throwable e) {
             actionReport.setResult(Result.FAILED);
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
-                getStringBuffer().append(Constante.CR_LF.getValue()).append("Warning : ").append(Constante.CR_LF.getValue()).append(" Command failed but ignored because this command is optional");
+                getLogReport().append(ConstanteDriveByExcel.CR_LF.getValue()).append("Warning : ").append(ConstanteDriveByExcel.CR_LF.getValue()).append(" Command failed but ignored because this command is optional");
             }
-            getStringBuffer().append(Constante.CR_LF.getValue()).append("Exception : ").append(Constante.CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
-            actionReport.setLog(getStringBuffer().toString());
+            getLogReport().append(ConstanteDriveByExcel.CR_LF.getValue()).append("Exception : ").append(ConstanteDriveByExcel.CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
+            actionReport.setLog(getLogReport().toString());
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
-        loggerService.info(getStringBuffer().toString());
+        loggerService.info(getLogReport().toString());
         return CommandResult.builder().commandData(commandData).actionReport(actionReport).savedData(savedData).build();
     }
 
@@ -125,11 +125,4 @@ public abstract class AbstractDriverCommand implements ICommand {
         return null;
     }
 
-    protected void selectByValueForInputRadio(String value) throws Exception {
-        webElementDescription.scrollToElementAndcheckByValue(value);
-    }
-
-    protected void selectByValueOrText(String value) throws Exception {
-        webElementDescription.selectByValueOrText(value);
-    }
 }
