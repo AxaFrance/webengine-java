@@ -1,14 +1,15 @@
 package fr.axa.automation.webengine.report.helper.frmk;
 
 
-import fr.axa.automation.webengine.builder.HtmlBuilder;
+import fr.axa.automation.webengine.report.builder.HtmlBuilder;
 import fr.axa.automation.webengine.constant.FileExtensionConstant;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.report.constante.HtmlFileConstant;
-import fr.axa.automation.webengine.report.constante.ReportConstant;
+import fr.axa.automation.webengine.report.constante.ReportPathConstant;
+import fr.axa.automation.webengine.report.constante.XsltFileConstant;
 import fr.axa.automation.webengine.report.helper.ImageReportHelper;
 import fr.axa.automation.webengine.util.FileUtil;
 import lombok.AccessLevel;
@@ -38,42 +39,35 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
 
 
     public void buildHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException {
-        String assetsSourceDirectory = ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + "/";
-        String cssSourceDirectory = assetsSourceDirectory + ReportConstant.CSS_DIRECTORY_NAME.getValue();
-        String jsSourceDirectory = assetsSourceDirectory + ReportConstant.JS_DIRECTORY_NAME.getValue();
 
-        Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue());
-        Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.CSS_DIRECTORY_NAME.getValue());
-        Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + File.separator +ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.JS_DIRECTORY_NAME.getValue());
+        Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath);
+        Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath().toString() + "/" +ReportPathConstant.CSS_DIRECTORY_NAME.getValue());
+        Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath().toString() + "/" +ReportPathConstant.JS_DIRECTORY_NAME.getValue());
 
-        String basePathXslt = ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + "/" + ReportConstant.XSLT_DIRECTORY_NAME.getValue() + "/";
-        String htmlIndexFilePath = outputPath + File.separator + ReportConstant.HTML_REPORT_DIRECTORY_NAME.getValue() + File.separator + "index.html";
+        String basePathXslt = ReportPathConstant.XSLT_DIRECTORY_NAME.getValue() + "/";
+        String htmlIndexFilePath = outputPath + File.separator + HtmlFileConstant.INDEX_HTML_FILE.getValue().get(0);
         try {
-            copyFilesFromResource2(cssSourceDirectory,cssTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.CSS_FILE_LIST.getValue());
-            copyFilesFromResource2(jsSourceDirectory,jsTargetDirectoryPath.toAbsolutePath().toString(),HtmlFileConstant.JS_FILE_LIST.getValue());
+            copyFilesFromResource2(HtmlFileConstant.CSS_FILE_LIST.getValue(),cssTargetDirectoryPath.toAbsolutePath().toString());
+            copyFilesFromResource2(HtmlFileConstant.JS_FILE_LIST.getValue(),jsTargetDirectoryPath.toAbsolutePath().toString());
             generateImageReport(testSuiteReport,htmlReportTargetDirectoryPath.toString());
-            loggerService.info("Xml file name : " + xmlFileName);
-            loggerService.info("html file name : " + htmlIndexFilePath);
-            loggerService.info("base xslt path : " + basePathXslt);
-            loggerService.info("xslt path : " + basePathXslt + ReportConstant.XSLT_INDEX_NAME.getValue());
-            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,basePathXslt, basePathXslt + ReportConstant.XSLT_INDEX_NAME.getValue());
+            HtmlBuilder.build(xmlFileName,htmlIndexFilePath,basePathXslt, XsltFileConstant.XSLT_INDEX_FILE.getValue().get(0));
             loggerService.info("Create webengine html report in : " + htmlIndexFilePath);
         }catch (IOException | WebEngineException e  ){
             loggerService.error("Erreur lors de la génération du rapport html",e);
         }
     }
 
-    private void copyFilesFromResource2( String sourceDirectoryName, String targetDirectoryName, List<String> fileNameList) throws IOException {
+    private void copyFilesFromResource2( List<String> fileNameList, String targetDirectoryName) throws IOException {
         InputStream inputStream;
         for (String fileName : fileNameList) {
-            inputStream = FileUtil.getInputStreamByPathOrResource(sourceDirectoryName + "/" + fileName);
-            FileUtil.copyFileFromResource(inputStream, targetDirectoryName + File.separator + fileName);
+            inputStream = FileUtil.getInputStreamByPathOrResource(fileName);
+            FileUtil.copyFileFromResource(inputStream, targetDirectoryName + File.separator + Paths.get(fileName).getFileName().toString());
         }
     }
 
     private void generateImageReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
         List<ScreenshotReport> screenshotReportList = ImageReportHelper.getScreenShotReport(testSuiteReport);
-        Path directoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportConstant.ASSETS_DIRECTORY_NAME.getValue() + File.separator + ReportConstant.IMAGE_DIRECTORY_NAME.getValue());
+        Path directoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportPathConstant.IMAGE_DIRECTORY_NAME.getValue());
         for (ScreenshotReport screenshotReport :screenshotReportList) {
             String fileName = screenshotReport.getId() + FileExtensionConstant.PNG;
             Path completePath = Paths.get(directoryPath.toString(),fileName);
