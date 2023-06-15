@@ -1,14 +1,11 @@
 package fr.axa.automation.webengine.cmd;
 
-import fr.axa.automation.webengine.constante.HtmlAttributeConstante;
-import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.SettingsDriveByExcel;
 import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
 import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
 import fr.axa.automation.webengine.object.CommandResult;
-import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;

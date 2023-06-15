@@ -18,6 +18,6 @@ public class SelectCommand extends AbstractDriverCommand{
     }
 
     protected void executeActionInElement(String value)throws Exception {
-        selectByValueOrText(value);
+        webElementDescription.selectByValueOrText(value);
     }
 }

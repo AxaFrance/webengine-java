@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.ConstanteDriveByExcel;
 import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -23,12 +23,12 @@ public class CommandDataHelper {
             }else{
                 if(list1.size()==1){
                     for (String item : list2) {
-                        if (!list1.contains(Constante.EXCLAMATION_MARK.getValue() + item)) {
+                        if (!list1.contains(ConstanteDriveByExcel.EXCLAMATION_MARK.getValue() + item)) {
                             result.add(item);
                         }
                     }
                 }else{
-                    result.addAll(list1.stream().filter(value-> !value.contains(Constante.EXCLAMATION_MARK.getValue())).collect(Collectors.toList()));
+                    result.addAll(list1.stream().filter(value-> !value.contains(ConstanteDriveByExcel.EXCLAMATION_MARK.getValue())).collect(Collectors.toList()));
                 }
             }
         }
@@ -36,7 +36,7 @@ public class CommandDataHelper {
     }
 
     public static boolean canExecuteDataTestColumn(List<String> dataTestRefList,String dataTestColumnName){
-        if(CollectionUtils.isNotEmpty(dataTestRefList) && dataTestRefList.size()==1 && StringUtil.equalsIgnoreCase(Constante.EXCLAMATION_MARK.getValue(),dataTestRefList.get(0))){
+        if(CollectionUtils.isNotEmpty(dataTestRefList) && dataTestRefList.size()==1 && StringUtil.equalsIgnoreCase(ConstanteDriveByExcel.EXCLAMATION_MARK.getValue(),dataTestRefList.get(0))){
             return false;
         }
         List<String> result = mergeLists(dataTestRefList, Arrays.asList(dataTestColumnName));

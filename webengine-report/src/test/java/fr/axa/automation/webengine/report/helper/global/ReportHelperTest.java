@@ -3,21 +3,13 @@ package fr.axa.automation.webengine.report.helper.global;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
-import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.report.constante.ReportKey;
-import fr.axa.automation.webengine.report.helper.frmk.WebengineHtmlReportHelper;
-import fr.axa.automation.webengine.report.helper.frmk.WebengineXmlReportHelper;
-import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
 import fr.axa.automation.webengine.util.FileUtil;
-import fr.axa.automation.webengine.util.XmlValidator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 public class ReportHelperTest {
 

@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
-import fr.axa.automation.webengine.constante.Constante;
+import fr.axa.automation.webengine.constante.ConstanteDriveByExcel;
 import fr.axa.automation.webengine.constante.RegexContante;
 import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
 import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
@@ -54,7 +54,7 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     protected List<String> getDataTestReferenceWhichDoesntExist(List<String> dataTestReferenceList, List<String> dataTestColumnNameList ){
         List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
         for (String dataTestReference : dataTestReferenceList) {
-            List<String> dataTestReferenceSplitList = Arrays.asList(dataTestReference.split(Constante.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
+            List<String> dataTestReferenceSplitList = Arrays.asList(dataTestReference.split(ConstanteDriveByExcel.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
             dataTestReferenceWhichDoesntExistList.addAll(getDataTestReferenceWhichDoesntExistInOneCmd(dataTestReferenceSplitList,dataTestColumnNameList));
         }
         return dataTestReferenceWhichDoesntExistList;

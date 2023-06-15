@@ -457,24 +457,18 @@ public class WebElementDescription extends AbstractElementDescription {
         return retry(fun,null);
     }
 
-
     public String getSelectedOption(String text) throws Exception {
         IFunction<String, String> fun = (value) ->{
-            String selectedOption;
             WebElement webElement = this.findElement();
             focus(webElement);
             if(isInputSelect(webElement)){
-                selectedOption = getSelectedOption(webElement);
+                return getSelectedOption(webElement);
             }else{
                 throw new Exception("It's not a select element");
             }
-            return selectedOption;
         };
         return retry(fun,text);
     }
-
-
-
 
     public boolean assertContentByElementType(String text) throws Exception {
         IFunction<String, Boolean> fun = (value) ->{
@@ -493,6 +487,19 @@ public class WebElementDescription extends AbstractElementDescription {
             return resultAssert;
         };
         return retry(fun,text);
+    }
+
+    public boolean isChecked() throws Exception {
+        IFunction<Void, Boolean> fun = (value) ->{
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            if(isInputRadio(webElement)){
+                return StringUtil.equalsIgnoreCase(Constante.TRUE.getValue(), webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue()));
+            }else{
+                throw new Exception("It's not a radio element");
+            }
+        };
+        return retry(fun,null);
     }
 
     private String getSelectedOption(WebElement webElement) throws Exception{
@@ -558,30 +565,13 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,value);
     }
 
-    public void scrollToElementAndcheckByValue(String value) throws Exception {
-        IFunction<String, Void> fun = (x) -> {
-            Collection<WebElement> elementCollection = this.internalFindElements();
-            if (CollectionUtils.isNotEmpty(elementCollection)) {
-                WebElement webElementFilter = elementCollection.stream().filter(webElt-> StringUtil.equalsIgnoreCase(x,webElt.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()))).findFirst().orElse(null);
-                if(webElementFilter!=null) {
-                    executeJavascript("arguments[0].scrollIntoView(true);", webElementFilter);
-                    focus(webElementFilter);
-                    click(webElementFilter);
-                }else{
-                    throw new WebEngineException("The element is null");
-                }
-            }
-            return null;
-        };
-        retry(fun,value);
-    }
-
     public void checkByValue(String value) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             Collection<WebElement> elementCollection = this.internalFindElements();
             if (CollectionUtils.isNotEmpty(elementCollection)) {
-                WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute("value").equalsIgnoreCase(x)).findFirst().orElse(null);
+                WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()).equalsIgnoreCase(x)).findFirst().orElse(null);
                 if(webElementFilter!=null) {
+                    focus(webElementFilter);
                     click(webElementFilter);
                 }else{
                     throw new WebEngineException("Element is null");

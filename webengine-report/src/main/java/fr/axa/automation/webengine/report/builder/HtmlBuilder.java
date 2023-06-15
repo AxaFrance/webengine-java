@@ -3,11 +3,8 @@ package fr.axa.automation.webengine.report.builder;
 import fr.axa.automation.webengine.constant.JavaConstant;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.report.constante.HtmlFileConstant;
 import fr.axa.automation.webengine.report.constante.XsltFileConstant;
 import fr.axa.automation.webengine.util.FileUtil;
-import fr.axa.automation.webengine.util.ResourcesLister;
-import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -30,9 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class HtmlBuilder {
