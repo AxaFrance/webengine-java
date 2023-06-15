@@ -46,6 +46,10 @@ public class CommandFactory {
                 return new PopUpCommand();
             case UPLOADFILE:
                 return new UploadFileCommand();
+            case SWITCH_FRAME:
+                return new SwitchFrameCommand();
+            case EXIT_FRAME:
+                return new ExitFrameCommand();
             default:
                 throw new IllegalArgumentException("Command not recognized");
         }

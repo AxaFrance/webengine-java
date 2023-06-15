@@ -104,7 +104,7 @@
     ENGLISH: accept alert
     FRENCH: accepter alerte ?
 -UPLOAD:
-  DESCRIPTION: permet d'uploader un fichier présent dans le répertoire nommé Upload lui-même présent au même niveau que le fichier excel
+  DESCRIPTION: Permet d'uploader un fichier présent dans le répertoire nommé Upload lui-même présent au même niveau que le fichier excel
   VALUE:
     ENGLISH: upload file
     FRENCH: choisir fichier
