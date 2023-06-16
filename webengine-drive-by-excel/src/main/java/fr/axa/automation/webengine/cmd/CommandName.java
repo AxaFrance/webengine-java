@@ -1,12 +1,18 @@
 package fr.axa.automation.webengine.cmd;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
 import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.io.FileUtils;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -96,7 +102,33 @@ public enum CommandName {
     final Map<Locale, String> commandLibelleMap;
     final Map<Locale, String> commandDescriptionMap;
 
+    @Override
+    public String toString() {
+        //handle encoding
+        return  "-"+this.name()+":\n" +
+                "  DESCRIPTION:\n" +
+                "    ENGLISH: " + this.commandDescriptionMap.get(Locale.ENGLISH) + "\n"+
+                "    FRENCH: " + this.commandDescriptionMap.get(Locale.FRENCH) + "\n"+
+                "  VALUE:\n" +
+                "    ENGLISH: " + this.commandLibelleMap.get(Locale.ENGLISH) + "\n"+
+                "    FRENCH: " + this.commandLibelleMap.get(Locale.FRENCH) + "\n" ;
 
+        /**return "'CommandName  ': { " +
+                "'name : '" + this.name()  +
+                "'label' : '" + commandLibelleMap +
+                ", 'description' : " + commandDescriptionMap +
+                '}';
+    *  */
+    }
+
+    public static void main(String[] args) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir")+"/webengine-drive-by-excel/src/main/resources/command.yaml");
+        for (CommandName cmd: CommandName.values()) {
+            fileOutputStream.write(cmd.toString().getBytes());
+        }
+        fileOutputStream.close();
+        System.out.println("******** YAML *******************************");
+    }
 
 
     public static CommandName fromValue(String value) {
