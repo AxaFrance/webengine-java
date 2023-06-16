@@ -32,6 +32,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -415,27 +416,27 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,text);
     }
 
-    private boolean isTextExistInSelect(Select select, String valueToSelect) {
+    private boolean isTextExistInSelect(Select select, String expected) {
         List<String> optionTextList = getOptionTextListInSelect(select);
-        return optionTextList.stream().anyMatch(optionText -> StringUtil.equalsIgnoreCase(optionText,valueToSelect) || StringUtil.contains(optionText,valueToSelect.split("\\*{4}")[0].trim()));
+        return optionTextList.stream().anyMatch(optionText -> StringUtil.equalsIgnoreCase(optionText,expected) || StringUtil.contains(optionText,expected.split("\\*{4}")[0].trim()));
     }
 
     private List<String> getOptionTextListInSelect(Select select) {
         return select.getOptions().stream().map(webElement ->  webElement.getText()).collect(Collectors.toList());
     }
 
-    private List<WebElement> getElementExistInSelect(Select select, String valueToSelect) {
+    private List<WebElement> getElementExistInSelect(Select select, String expected) {
         List<WebElement> elementListInSelect = getElementListInSelect(select);
-        return elementListInSelect.stream().filter(webElement -> StringUtil.equalsIgnoreCase(webElement.getText(),valueToSelect) || StringUtil.contains(webElement.getText(),valueToSelect.split("\\*{4}")[0].trim())).collect(Collectors.toList());
+        return elementListInSelect.stream().filter(webElement -> StringUtil.equalsIgnoreCase(webElement.getText(),expected) || StringUtil.contains(webElement.getText(),expected.split("\\*{4}")[0].trim())).collect(Collectors.toList());
     }
 
     private List<WebElement> getElementListInSelect(Select select) {
         return select.getOptions().stream().map(webElement ->  webElement).collect(Collectors.toList());
     }
 
-    private boolean isValueExistInSelect(Select select, String valueToSelect) {
+    private boolean isValueExistInSelect(Select select, String expected) {
         List<String> optionValueList = getOptionValueListInSelect(select);
-        return optionValueList.stream().anyMatch(optionValue -> StringUtil.equalsIgnoreCase(optionValue,valueToSelect));
+        return optionValueList.stream().anyMatch(optionValue -> StringUtil.equalsIgnoreCase(optionValue,expected));
     }
 
     private List<String> getOptionValueListInSelect(Select select) {
@@ -457,7 +458,7 @@ public class WebElementDescription extends AbstractElementDescription {
         return retry(fun,null);
     }
 
-    public String getSelectedOption(String text) throws Exception {
+    public String getSelectedOption() throws Exception {
         IFunction<String, String> fun = (value) ->{
             WebElement webElement = this.findElement();
             focus(webElement);
@@ -467,7 +468,25 @@ public class WebElementDescription extends AbstractElementDescription {
                 throw new Exception("It's not a select element");
             }
         };
-        return retry(fun,text);
+        return retry(fun,null);
+    }
+
+    public Map<String,List<String>> getContentByElementType(String expected) throws Exception {
+        IFunction<String, Map<String,List<String>>> fun = (value) ->{
+            Map<String,List<String>> contentList = new HashMap<>();
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            if(isInputSelect(webElement)){
+                contentList = getTextAndValueContentInSelect(webElement);
+            }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
+                contentList.put(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())));
+            }else{
+                contentList.put(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getText()));
+
+            }
+            return contentList;
+        };
+        return retry(fun,expected);
     }
 
     public boolean assertContentByElementType(String text) throws Exception {
@@ -522,10 +541,21 @@ public class WebElementDescription extends AbstractElementDescription {
         return StringUtils.EMPTY;
     }
 
-    private boolean assertContentInSelect(WebElement webElement,String text){
+    private Map<String,List<String>> getTextAndValueContentInSelect(WebElement webElement){
+        Map<String,List<String>> contentSelecteMap = new HashMap<>();
         if(webElement!=null){
             Select select = new Select(webElement);
-            if(isTextExistInSelect(select,text) || isValueExistInSelect(select,text)){
+            contentSelecteMap.put("text",getOptionTextListInSelect(select));
+            contentSelecteMap.put(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue(),getOptionValueListInSelect(select));
+        }
+        return contentSelecteMap;
+    }
+
+
+    private boolean assertContentInSelect(WebElement webElement,String expected){
+        if(webElement!=null){
+            Select select = new Select(webElement);
+            if(isTextExistInSelect(select,expected) || isValueExistInSelect(select,expected)){
                 return true;
             }
         }

@@ -16,9 +16,9 @@ public class AssertNotSelectedCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
         String value = getValue(globalApplicationContext,(TestCaseDriveByExcelContext) testCaseContext, commandData, commandResultList);
-        String selectedOption = webElementDescription.getSelectedOption(value);
+        String selectedOption = webElementDescription.getSelectedOption();
         if(StringUtil.equalsIgnoreCase(value,selectedOption)){
-            String errorMessage = "The value is : "+value+" and the selected option is : "+selectedOption;
+            String errorMessage = "The expected value is : "+value+" and the actual selected option is : "+selectedOption;
             getLogReport().append(errorMessage);
             throw  new WebEngineException(errorMessage);
         }

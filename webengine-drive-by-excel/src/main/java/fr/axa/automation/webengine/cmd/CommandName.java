@@ -1,18 +1,12 @@
 package fr.axa.automation.webengine.cmd;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
 import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.io.FileUtils;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
