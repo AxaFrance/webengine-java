@@ -24,7 +24,7 @@ public final class TestCaseHelperNoCode {
 
     public static AbstractTestCaseContext getTestCaseContext(AbstractTestCaseContext testCaseContext , String testCaseName){
         TestCaseNoCodeContext testCaseNoCodeContext = (TestCaseNoCodeContext) testCaseContext;
-        List<TestCaseNodeNoCode> list = testCaseNoCodeContext.getTestSuiteData().getTestCaseNodeList().stream().filter(testCaseNodeDriveByExcel -> testCaseNodeDriveByExcel.getName().equalsIgnoreCase(testCaseName)).collect(Collectors.toList());
+        List<TestCaseNodeNoCode> list = testCaseNoCodeContext.getTestSuiteData().getTestCaseNodeList().stream().filter(testCaseNodeNoCode -> testCaseNodeNoCode.getName().equalsIgnoreCase(testCaseName)).collect(Collectors.toList());
         return TestCaseNoCodeContext.builder().testCaseName(testCaseName).webDriver(testCaseNoCodeContext.getWebDriver()).testSuiteData(testCaseNoCodeContext.getTestSuiteData()).testCaseToRun(list.get(0)).dataTestColumnName(testCaseNoCodeContext.getDataTestColumnName()).build();
     }
 

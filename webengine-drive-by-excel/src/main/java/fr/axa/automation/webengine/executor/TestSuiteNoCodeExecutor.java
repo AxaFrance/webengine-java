@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@Qualifier("testSuiteDriveByExcelExecutor")
+@Qualifier("testSuiteNoCodeExecutor")
 public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implements ITestSuiteNoCodeExecutor {
 
     @Autowired
@@ -100,7 +100,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
     private List<TestCaseNodeNoCode> getTestCaseToRun(TestSuiteDataNoCode testSuiteData, SettingsNoCode settingsNoCode) {
         List<TestCaseNodeNoCode> testCaseNodeList = testSuiteData.getTestCaseNodeList();
         List<String> nameOfTestCaseToRun = new ArrayList<>(settingsNoCode.getTestCaseAndDataTestColumName().keySet());
-        return testCaseNodeList.stream().filter(testCaseDataDriveByExcel -> nameOfTestCaseToRun.contains(testCaseDataDriveByExcel.getName())).collect(Collectors.toList());
+        return testCaseNodeList.stream().filter(testCaseNodeNoCode -> nameOfTestCaseToRun.contains(testCaseNodeNoCode.getName())).collect(Collectors.toList());
     }
 
     public void checkInput(TestSuiteDataNoCode testSuiteData) {

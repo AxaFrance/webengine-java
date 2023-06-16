@@ -27,7 +27,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Slf4j
 @Component
-@Qualifier("testStepDriveByExcelExecutor")
+@Qualifier("testStepNoCodeExecutor")
 public class TestStepNoCodeExecutor extends AbstractTestStepExecutor implements ITestStepNoCodeExecutor {
 
     public TestStepNoCodeExecutor() {

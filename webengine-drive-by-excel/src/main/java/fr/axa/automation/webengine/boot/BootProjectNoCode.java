@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-@Qualifier("bootProjectDriveByExcel")
+@Qualifier("bootProjectNoCode")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProjectNoCode extends AbstractBootProject{

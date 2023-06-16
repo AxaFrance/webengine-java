@@ -46,7 +46,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@Qualifier("testCaseDriveByExcelExecutor")
+@Qualifier("testCaseNoCodeExecutor")
 public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implements ITestCaseNoCodeExecutor {
 
     @Autowired
