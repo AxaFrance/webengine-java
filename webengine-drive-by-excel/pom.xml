@@ -128,7 +128,7 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>src/main/resources/command.yml</file>
+                                    <file>src/main/resources/command.yaml</file>
                                     <type>yml</type>
                                     <classifier>command</classifier>
                                 </artifact>
