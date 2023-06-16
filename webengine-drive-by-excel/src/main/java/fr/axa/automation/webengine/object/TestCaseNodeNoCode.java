@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
 @Builder
-public class TestCaseNodeDriveByExcel {
+public class TestCaseNodeNoCode {
     String uid;
     String name;
     TreeNode treeNode;

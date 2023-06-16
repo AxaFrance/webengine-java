@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestCaseDriveByExcelExecutor;
-import fr.axa.automation.webengine.api.ITestStepDriveByExcelExecutor;
+import fr.axa.automation.webengine.api.ITestCaseNoCodeExecutor;
+import fr.axa.automation.webengine.api.ITestStepNoCodeExecutor;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.core.AbstractTestCaseWebExecutor;
@@ -13,17 +13,17 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
+import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.CommandNameHelper;
 import fr.axa.automation.webengine.helper.CommandResultHelper;
-import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
+import fr.axa.automation.webengine.helper.TestCaseHelperNoCode;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
-import fr.axa.automation.webengine.object.TestCaseNodeDriveByExcel;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseNodeNoCode;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.tree.TreeNode;
@@ -47,20 +47,20 @@ import java.util.stream.Collectors;
 
 @Component
 @Qualifier("testCaseDriveByExcelExecutor")
-public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor implements ITestCaseDriveByExcelExecutor {
+public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implements ITestCaseNoCodeExecutor {
 
     @Autowired
-    public TestCaseDriveByExcelExecutor(@Qualifier("testStepDriveByExcelExecutor") ITestStepExecutor testStepExecutor, GlobalConfiguration globalConfiguration, ILoggerService loggerService ) {
+    public TestCaseNoCodeExecutor(@Qualifier("testStepNoCodeExecutor") ITestStepExecutor testStepExecutor, GlobalConfiguration globalConfiguration, ILoggerService loggerService ) {
         super(testStepExecutor, globalConfiguration, loggerService);
     }
 
     @Override
     public AbstractTestCaseContext getTestCaseContext() {
-        return TestCaseDriveByExcelContext.builder().build();
+        return TestCaseNoCodeContext.builder().build();
     }
 
     @Override
-    public AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataDriveByExcel testSuiteData, TestCaseNodeDriveByExcel testCaseToRun, String dataTestColmnName ) throws WebEngineException {
+    public AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseToRun, String dataTestColmnName ) throws WebEngineException {
         Object webDriver = initializeWebDriver(globalApplicationContext);
         return createTestCaseContext(webDriver, testSuiteData, testCaseToRun,dataTestColmnName);
     }
@@ -71,23 +71,23 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         return webDriver;
     }
 
-    protected AbstractTestCaseContext createTestCaseContext(Object webDriver, TestSuiteDataDriveByExcel testSuiteData, TestCaseNodeDriveByExcel testCaseToRun, String dataTestColmnName ) throws WebEngineException {
+    protected AbstractTestCaseContext createTestCaseContext(Object webDriver, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseToRun, String dataTestColmnName ) throws WebEngineException {
         AbstractTestCaseContext testCaseContext = super.createTestCaseContext(webDriver,testCaseToRun.getName());
-        ((TestCaseDriveByExcelContext)testCaseContext).setTestSuiteData(testSuiteData);
-        ((TestCaseDriveByExcelContext)testCaseContext).setTestCaseToRun(testCaseToRun);
-        ((TestCaseDriveByExcelContext)testCaseContext).setDataTestColumnName(dataTestColmnName);
+        ((TestCaseNoCodeContext)testCaseContext).setTestSuiteData(testSuiteData);
+        ((TestCaseNoCodeContext)testCaseContext).setTestCaseToRun(testCaseToRun);
+        ((TestCaseNoCodeContext)testCaseContext).setDataTestColumnName(dataTestColmnName);
         return testCaseContext;
     }
 
     @Override
     public TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
-        TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext)testCaseContext;
-        String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
-        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(TestCaseHelperDriveByExcel.getReportTestCaseName(testCaseContext));
+        TestCaseNoCodeContext testCaseNoCodeContext = (TestCaseNoCodeContext)testCaseContext;
+        String testCaseName = testCaseNoCodeContext.getTestCaseName();
+        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(TestCaseHelperNoCode.getReportTestCaseName(testCaseContext));
         List<CommandResult> commandResultList = new ArrayList<>();
 
         try {
-            commandResultList.addAll(runTestStep(globalApplicationContext, testCaseDriveByExcelContext));
+            commandResultList.addAll(runTestStep(globalApplicationContext, testCaseNoCodeContext));
         } catch (Throwable e) {
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);
@@ -102,14 +102,14 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
     }
 
     protected List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
-        TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
-        TreeNode rootNode = testCaseDriveByExcelContext.getTestCaseToRun().getTreeNode();
+        TestCaseNoCodeContext testCaseNoCodeContext = (TestCaseNoCodeContext) testCaseContext;
+        TreeNode rootNode = testCaseNoCodeContext.getTestCaseToRun().getTreeNode();
         return runTestStep(globalApplicationContext, testCaseContext, rootNode);
     }
 
     protected List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode) throws WebEngineException {
-        ITestStepDriveByExcelExecutor stepExecutor = ((ITestStepDriveByExcelExecutor)testStepExecutor);
-        CommandDataDriveByExcel commandData = null;
+        ITestStepNoCodeExecutor stepExecutor = ((ITestStepNoCodeExecutor)testStepExecutor);
+        CommandDataNoCode commandData = null;
         ActionReport actionReport = new ActionReport();
         CommandResult commandResult = null;
         boolean isSubReport = false;
@@ -120,15 +120,15 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         String commandName = "";
         boolean ignoredAllNextCmd = false;
 
-        TestCaseDriveByExcelContext testCaseDriveByExcelContext = (TestCaseDriveByExcelContext) testCaseContext;
-        String testCaseName = testCaseDriveByExcelContext.getTestCaseName();
-        String dataTestColumName = testCaseDriveByExcelContext.getDataTestColumnName();
+        TestCaseNoCodeContext testCaseNoCodeContext = (TestCaseNoCodeContext) testCaseContext;
+        String testCaseName = testCaseNoCodeContext.getTestCaseName();
+        String dataTestColumName = testCaseNoCodeContext.getDataTestColumnName();
 
         List<TreeNode> treeNodeCommandList = treeNode.getChildren();
         try {
             for (TreeNode treeNodeCommand : treeNodeCommandList){
                 isSubReport = false;
-                commandData = ((CommandDataDriveByExcel)treeNodeCommand.getData());
+                commandData = ((CommandDataNoCode)treeNodeCommand.getData());
                 commandName = CommandNameHelper.getCommandName(commandData);
                 actionReport = new ActionReport();
                 actionReport.setName(commandName);
@@ -171,7 +171,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
                     case CALL:
                         if(CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)){
                             commandResult = CommandResultHelper.getCommandResult(commandData,ActionReportHelper.getActionReport(commandData.getName(),Result.PASSED),"");
-                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperDriveByExcel.getTestCaseContext(testCaseContext,commandData.getTargetList().get(TargetKey.CALL)));
+                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperNoCode.getTestCaseContext(testCaseContext,commandData.getTargetList().get(TargetKey.CALL)));
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;
@@ -212,7 +212,7 @@ public class TestCaseDriveByExcelExecutor extends AbstractTestCaseWebExecutor im
         List<CommandResult> actionReportList = new ArrayList<>();
         List<TreeNode> treeNodeCommandChildrenList = treeNodeCommand.getChildren();
         for (TreeNode treeNodeChildren:treeNodeCommandChildrenList) {
-            CommandDataDriveByExcel commandData = ((CommandDataDriveByExcel)treeNodeChildren.getData());
+            CommandDataNoCode commandData = ((CommandDataNoCode)treeNodeChildren.getData());
             String commandName = CommandNameHelper.getCommandName(commandData);
             ActionReport actionReport = ActionReportHelper.getActionReport(commandName,Result.IGNORED);
             actionReportList.add(CommandResultHelper.getCommandResult(commandData,actionReport,""));

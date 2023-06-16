@@ -1,9 +1,9 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.constante.RegexContante;
-import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.helper.TestCaseHelperNoCode;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.util.RegexUtil;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 
 public class ReferencedValueChecking extends AbstractValueChecking{
     @Override
-    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
+    public boolean check(TestSuiteDataNoCode testSuiteData) {
+        List<TestCaseDataNoCode> testCaseDataList = testSuiteData.getTestCaseList();
         List<ReferencedValueAndIdByTestCase> referencedValueAndNameListByTestCase = new ArrayList<>();
-        for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
-            List<String> nameListByTestCase = TestCaseHelperDriveByExcel.getNameListByTestCase(testCaseData);
-            Map<String,List<String>> referencedValueByColumnNameMap = TestCaseHelperDriveByExcel.getReferencedValueByColumName(testCaseData);
+        for (TestCaseDataNoCode testCaseData : testCaseDataList) {
+            List<String> nameListByTestCase = TestCaseHelperNoCode.getNameListByTestCase(testCaseData);
+            Map<String,List<String>> referencedValueByColumnNameMap = TestCaseHelperNoCode.getReferencedValueByColumName(testCaseData);
             referencedValueAndNameListByTestCase.add(ReferencedValueAndIdByTestCase.builder().testCaseName(testCaseData.getName()).referencedValueByColumNameMap(referencedValueByColumnNameMap).nameList(nameListByTestCase).build());
         }
         List<ReferencedValueWhichDoesntExist> referencedValueWhichDoesntExistList = getReferencedValueWhichDoesntExist(referencedValueAndNameListByTestCase);

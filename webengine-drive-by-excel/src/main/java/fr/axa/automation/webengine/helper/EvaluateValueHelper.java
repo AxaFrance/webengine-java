@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.constante.ConstanteDriveByExcel;
+import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class EvaluateValueHelper {
 
     public static String getValueBetweenRafter(String value){
-        return StringUtils.substringBetween(value, ConstanteDriveByExcel.TRIPLE_CHEVRON_PREFIX.getValue(), ConstanteDriveByExcel.TRIPLE_CHEVRON_SUFFIX.getValue());
+        return StringUtils.substringBetween(value, ConstantNoCode.TRIPLE_CHEVRON_PREFIX.getValue(), ConstantNoCode.TRIPLE_CHEVRON_SUFFIX.getValue());
     }
 
     public static String getValueBetweenBrackets(String value){
-        return StringUtils.substringBetween(value, ConstanteDriveByExcel.BRACKETS_PREFIX.getValue(), ConstanteDriveByExcel.BRACKETS_SUFFIX.getValue());
+        return StringUtils.substringBetween(value, ConstantNoCode.BRACKETS_PREFIX.getValue(), ConstantNoCode.BRACKETS_SUFFIX.getValue());
     }
 
     public static String getValueBetweenRafter(String value,String prefix, String suffix){
@@ -95,9 +95,9 @@ public class EvaluateValueHelper {
 
     private static String replaceTagDateValue(String value){
         String onlyTagValue = getOnlyTagValue(value);
-        if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstanteDriveByExcel.MINUS.getValue())) {
+        if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstantNoCode.MINUS.getValue())) {
             return DateUtil.minusDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
-        } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstanteDriveByExcel.PLUS.getValue())) {
+        } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstantNoCode.PLUS.getValue())) {
             return DateUtil.addDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue())) {
             return DateUtil.getDateTime(FormatDate.DDMMYYYY);

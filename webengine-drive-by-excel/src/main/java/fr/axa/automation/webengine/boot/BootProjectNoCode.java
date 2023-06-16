@@ -1,18 +1,18 @@
 package fr.axa.automation.webengine.boot;
 
-import fr.axa.automation.webengine.api.ITestSuiteDriveByExcelExecutor;
+import fr.axa.automation.webengine.api.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.argument.ArgumentOption;
-import fr.axa.automation.webengine.constante.ConstanteDriveByExcel;
+import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
-import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
-import fr.axa.automation.webengine.global.SettingsDriveByExcel;
+import fr.axa.automation.webengine.global.GlobalApplicationContextNoCode;
+import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.helper.ExcelConverter;
-import fr.axa.automation.webengine.helper.TestSuiteHelperDriveByExcel;
+import fr.axa.automation.webengine.helper.TestSuiteHelperNoCode;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import fr.axa.automation.webengine.util.FileUtil;
@@ -36,11 +36,11 @@ import java.util.List;
 @Qualifier("bootProjectDriveByExcel")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
-public class BootProjectDriveByExcel extends AbstractBootProject{
+public class BootProjectNoCode extends AbstractBootProject{
     static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR);
 
     @Autowired
-    public BootProjectDriveByExcel(@Qualifier("testSuiteDriveByExcelExecutor")ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
+    public BootProjectNoCode(@Qualifier("testSuiteNoCodeExecutor")ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
         super(testSuiteExecutor,reportHelper,loggerService, globalConfiguration);
     }
 
@@ -57,7 +57,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     public void runFromFramework(String... args) throws Exception {
         List<String> optionList = getCommandNameFileOption(args);
         if(CollectionUtils.isNotEmpty(optionList)){
-            FileUtil.copyFileFromResource(ConstanteDriveByExcel.COMMAND_FILE_NAME.getValue(),optionList.get(1)+ File.separator+ ConstanteDriveByExcel.COMMAND_FILE_NAME.getValue());
+            FileUtil.copyFileFromResource(ConstantNoCode.COMMAND_FILE_NAME.getValue(),optionList.get(1)+ File.separator+ ConstantNoCode.COMMAND_FILE_NAME.getValue());
         }else{
             CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
             runTestSuite(commandLine);
@@ -67,7 +67,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     private List<String> getCommandNameFileOption(String... args){
         if(args!=null && Arrays.asList(args).size()==1 ){
             String[] option = getArgumentsSeparatedByOptionAndValue(Arrays.asList(args));
-            if(StringUtil.equalsIgnoreCase(option[0], ConstanteDriveByExcel.DASH.getValue() + ArgumentOption.COMMAND_NAME_FILE.getOption())){
+            if(StringUtil.equalsIgnoreCase(option[0], ConstantNoCode.DASH.getValue() + ArgumentOption.COMMAND_NAME_FILE.getOption())){
                 return Arrays.asList(option);
             }
         }
@@ -76,7 +76,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
         AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
-        TestSuiteDataDriveByExcel testSuiteData = getTestSuiteData(globalApplicationContext);
+        TestSuiteDataNoCode testSuiteData = getTestSuiteData(globalApplicationContext);
 
         loggerService.info("Start Phase initialize test suite ");
         testSuiteExecutor.initialize(globalApplicationContext);
@@ -84,7 +84,7 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
 
         loggerService.info("Start run test ");
 
-        TestSuiteReport testSuiteReport = ((ITestSuiteDriveByExcelExecutor)testSuiteExecutor).run(globalApplicationContext, testSuiteData);
+        TestSuiteReport testSuiteReport = ((ITestSuiteNoCodeExecutor)testSuiteExecutor).run(globalApplicationContext, testSuiteData);
         loggerService.info("End run test ");
 
         loggerService.info("Start clean ");
@@ -97,12 +97,12 @@ public class BootProjectDriveByExcel extends AbstractBootProject{
     }
 
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException {
-        SettingsDriveByExcel settings = TestSuiteHelperDriveByExcel.getSettings(commandLine, globalConfiguration);
-        return GlobalApplicationContextDriveByExcel.builder().settings(settings).build();
+        SettingsNoCode settings = TestSuiteHelperNoCode.getSettings(commandLine, globalConfiguration);
+        return GlobalApplicationContextNoCode.builder().settings(settings).build();
     }
 
-    protected TestSuiteDataDriveByExcel getTestSuiteData(AbstractGlobalApplicationContext globalApplicationContext){
-        SettingsDriveByExcel settingsDriveByExcel = (SettingsDriveByExcel)globalApplicationContext.getSettings();
-        return ExcelConverter.convert(settingsDriveByExcel.getDataTestFileName(),settingsDriveByExcel.getTestCaseAndDataTestColumName());
+    protected TestSuiteDataNoCode getTestSuiteData(AbstractGlobalApplicationContext globalApplicationContext){
+        SettingsNoCode settingsNoCode = (SettingsNoCode)globalApplicationContext.getSettings();
+        return ExcelConverter.convert(settingsNoCode.getDataTestFileName(), settingsNoCode.getTestCaseAndDataTestColumName());
     }
 }

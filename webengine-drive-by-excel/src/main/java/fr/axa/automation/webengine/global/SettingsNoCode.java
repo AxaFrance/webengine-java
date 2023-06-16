@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @SuperBuilder
-public class SettingsDriveByExcel extends AbstractSettings {
+public class SettingsNoCode extends AbstractSettings {
     String dataTestFileName;
     Map<String, List<String>> testCaseAndDataTestColumName;
 }

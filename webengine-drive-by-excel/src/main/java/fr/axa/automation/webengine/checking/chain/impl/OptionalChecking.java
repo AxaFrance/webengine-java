@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -13,19 +13,19 @@ import java.util.List;
 
 public class OptionalChecking extends AbstractChecking{
     @Override
-    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
+    public boolean check(TestSuiteDataNoCode testSuiteData) {
+        List<TestCaseDataNoCode> testCaseDataList = testSuiteData.getTestCaseList();
         List<NumberOfOptionalByTestCase> numberOfOptionalList = new ArrayList<>();
-        for(TestCaseDataDriveByExcel testCaseData : testCaseDataList){
+        for(TestCaseDataNoCode testCaseData : testCaseDataList){
             numberOfOptionalList.add(getNumberOfOptional(testCaseData));
         }
         assertCommand(numberOfOptionalList);
         return checkNext(testSuiteData);
     }
 
-    private NumberOfOptionalByTestCase getNumberOfOptional(TestCaseDataDriveByExcel testCaseData) {
-        List<CommandDataDriveByExcel> optionalCommandList = getOptionalCommand(testCaseData);
-        List<CommandDataDriveByExcel> optionalAndDependsOnPreviousCommandList = getOptionalAndDependsOnPreviousCommand(testCaseData);
+    private NumberOfOptionalByTestCase getNumberOfOptional(TestCaseDataNoCode testCaseData) {
+        List<CommandDataNoCode> optionalCommandList = getOptionalCommand(testCaseData);
+        List<CommandDataNoCode> optionalAndDependsOnPreviousCommandList = getOptionalAndDependsOnPreviousCommand(testCaseData);
         return NumberOfOptionalByTestCase.builder().testCaseName(testCaseData.getName()).numberOfCommandWithOptional(optionalCommandList.size()).numberOfCommandWithOptionalAndDependsOnPrevious(optionalAndDependsOnPreviousCommandList.size()).build();
     }
 

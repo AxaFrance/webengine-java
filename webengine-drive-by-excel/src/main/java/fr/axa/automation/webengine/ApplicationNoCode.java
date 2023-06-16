@@ -14,20 +14,20 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SpringBootApplication
-public class ApplicationDriveByExcel implements CommandLineRunner {
+public class ApplicationNoCode implements CommandLineRunner {
 
     final ILoggerService loggerService;
 
     final IBootProject bootProject;
 
     @Autowired
-    public ApplicationDriveByExcel(LoggerService loggerService, @Qualifier("bootProjectDriveByExcel") IBootProject bootProject) {
+    public ApplicationNoCode(LoggerService loggerService, @Qualifier("bootProjectNoCode") IBootProject bootProject) {
         this.loggerService = loggerService;
         this.bootProject = bootProject;
     }
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(ApplicationDriveByExcel.class).web(WebApplicationType.NONE).run(args);
+        new SpringApplicationBuilder(ApplicationNoCode.class).web(WebApplicationType.NONE).run(args);
     }
 
     @Override

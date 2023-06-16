@@ -31,7 +31,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommandDataDriveByExcel {
+public class CommandDataNoCode {
     @JsonProperty("uid")
     private String uid;
     @JsonProperty("name")

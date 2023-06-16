@@ -1,8 +1,8 @@
 package fr.axa.automation.webengine.helper;
 
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseNodeDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
+import fr.axa.automation.webengine.object.TestCaseNodeNoCode;
 import fr.axa.automation.webengine.tree.TreeNode;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -13,18 +13,18 @@ import java.util.stream.Collectors;
 
 public class TreeCreator {
 
-    public static List<TestCaseNodeDriveByExcel> createTree(List<TestCaseDataDriveByExcel> testCaseDataList) {
+    public static List<TestCaseNodeNoCode> createTree(List<TestCaseDataNoCode> testCaseDataList) {
         return testCaseDataList.stream().map(TreeCreator::createTree).collect(Collectors.toList());
     }
 
-    public static TestCaseNodeDriveByExcel createTree(TestCaseDataDriveByExcel testCaseData) {
+    public static TestCaseNodeNoCode createTree(TestCaseDataNoCode testCaseData) {
         Deque<Deque<TreeNode>> nestedIfList = new LinkedList<>();
         Deque<TreeNode> optionalCommandList =  new LinkedList<>();
-        TreeNode<CommandDataDriveByExcel> rootNode = new TreeNode<>(new CommandDataDriveByExcel());
-        List<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
+        TreeNode<CommandDataNoCode> rootNode = new TreeNode<>(new CommandDataNoCode());
+        List<CommandDataNoCode> commandDataSet = testCaseData.getCommandList();
 
         TreeNode treeNode;
-        for (CommandDataDriveByExcel commandData : commandDataSet) {
+        for (CommandDataNoCode commandData : commandDataSet) {
             Deque<TreeNode> ifGroupList = nestedIfList.isEmpty() ? new LinkedList<>() : nestedIfList.getLast();
 
             if((commandData.isOptionalEmpty() || commandData.isOptional()) && CollectionUtils.isNotEmpty(optionalCommandList)){
@@ -65,7 +65,7 @@ public class TreeCreator {
             }
         }
         rootNode.printTree("--",rootNode);
-        return TestCaseNodeDriveByExcel.builder().uid(testCaseData.getUid()).name(testCaseData.getName()).treeNode(rootNode).build();
+        return TestCaseNodeNoCode.builder().uid(testCaseData.getUid()).name(testCaseData.getName()).treeNode(rootNode).build();
     }
 
     private static TreeNode getLastElement(Deque linkedParentList) {
@@ -79,7 +79,7 @@ public class TreeCreator {
     }
 
     private static boolean isOptional(TreeNode treeNode){
-        CommandDataDriveByExcel commandDataDriveByExcel = ((CommandDataDriveByExcel)treeNode.getData());
-        return commandDataDriveByExcel.isOptional();
+        CommandDataNoCode commandDataNoCode = ((CommandDataNoCode)treeNode.getData());
+        return commandDataNoCode.isOptional();
     }
 }

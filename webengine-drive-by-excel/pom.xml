@@ -14,7 +14,7 @@
     <name>webengine-drive-by-excel</name>
 
     <properties>
-        <start-class>fr.axa.automation.webengine.ApplicationDriveByExcel</start-class>
+        <start-class>fr.axa.automation.webengine.ApplicationNoCode</start-class>
     </properties>
 
     <dependencies>
@@ -128,7 +128,7 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>src/main/resources/command.yaml</file>
+                                    <file>src/main/resources/command.yml</file>
                                     <type>yml</type>
                                     <classifier>command</classifier>
                                 </artifact>

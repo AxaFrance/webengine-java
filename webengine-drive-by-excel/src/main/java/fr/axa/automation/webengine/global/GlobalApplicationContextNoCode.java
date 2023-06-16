@@ -9,10 +9,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @NoArgsConstructor
-public class GlobalApplicationContextDriveByExcel extends AbstractGlobalApplicationContext{
+public class GlobalApplicationContextNoCode extends AbstractGlobalApplicationContext{
 
     @Builder
-    public GlobalApplicationContextDriveByExcel(AbstractSettings settings) {
+    public GlobalApplicationContextNoCode(AbstractSettings settings) {
         super(settings);
     }
 }

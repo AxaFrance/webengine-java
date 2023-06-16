@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.global.SettingsDriveByExcel;
+import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.cli.CommandLine;
@@ -15,15 +15,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class TestSuiteHelperDriveByExcel extends AbstractTestSuiteHelper {
+public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
 
     public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([\\w-]+\\[[-\\w:;]+\\])|([\\w-]+)";; // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
     public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
     public static final String DATA_TEST_COLUMN_NAME_PATTERN = "(?<=:)([^\\]]+)";
 
-    public static SettingsDriveByExcel getSettings(CommandLine cmd, GlobalConfiguration globalConfiguration) throws WebEngineException {
+    public static SettingsNoCode getSettings(CommandLine cmd, GlobalConfiguration globalConfiguration) throws WebEngineException {
         loggerService.info("Loading settings running ");
-        SettingsDriveByExcel settings = SettingsDriveByExcel.builder()
+        SettingsNoCode settings = SettingsNoCode.builder()
                 .dataTestFileName(getFileName(cmd))
                 .propertiesFileList(getPropertiesFiles(cmd))
                 .platform(getPlatform(cmd, globalConfiguration))

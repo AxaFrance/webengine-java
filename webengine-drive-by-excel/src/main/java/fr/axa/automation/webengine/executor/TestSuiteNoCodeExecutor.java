@@ -1,7 +1,7 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestCaseDriveByExcelExecutor;
-import fr.axa.automation.webengine.api.ITestSuiteDriveByExcelExecutor;
+import fr.axa.automation.webengine.api.ITestCaseNoCodeExecutor;
+import fr.axa.automation.webengine.api.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
 import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
@@ -18,14 +18,14 @@ import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.GlobalApplicationContextDriveByExcel;
-import fr.axa.automation.webengine.global.SettingsDriveByExcel;
-import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
+import fr.axa.automation.webengine.global.GlobalApplicationContextNoCode;
+import fr.axa.automation.webengine.global.SettingsNoCode;
+import fr.axa.automation.webengine.helper.TestCaseHelperNoCode;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseNodeDriveByExcel;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
+import fr.axa.automation.webengine.object.TestCaseNodeNoCode;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
 import fr.axa.automation.webengine.report.object.TestSuiteReportInformation;
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,16 +42,16 @@ import java.util.stream.Collectors;
 
 @Component
 @Qualifier("testSuiteDriveByExcelExecutor")
-public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor implements ITestSuiteDriveByExcelExecutor {
+public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implements ITestSuiteNoCodeExecutor {
 
     @Autowired
-    public TestSuiteDriveByExcelExecutor(@Qualifier("testCaseDriveByExcelExecutor") ITestCaseExecutor testCaseExecutor, ILocalTestingRunner localTestingRunner, ILoggerService loggerService) {
+    public TestSuiteNoCodeExecutor(@Qualifier("testCaseNoCodeExecutor") ITestCaseExecutor testCaseExecutor, ILocalTestingRunner localTestingRunner, ILoggerService loggerService) {
         super(testCaseExecutor, localTestingRunner, loggerService);
     }
 
     @Override
-    public TestSuiteReport run(AbstractGlobalApplicationContext globalAppContext, TestSuiteDataDriveByExcel testSuiteData) throws WebEngineException, UnknownHostException {
-        GlobalApplicationContextDriveByExcel globalApplicationContext = (GlobalApplicationContextDriveByExcel) globalAppContext;
+    public TestSuiteReport run(AbstractGlobalApplicationContext globalAppContext, TestSuiteDataNoCode testSuiteData) throws WebEngineException, UnknownHostException {
+        GlobalApplicationContextNoCode globalApplicationContext = (GlobalApplicationContextNoCode) globalAppContext;
         Calendar startTime = Calendar.getInstance();
         TestSuiteReport testSuiteReport;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
@@ -68,19 +68,19 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
         return testSuiteReport;
     }
 
-    protected List<TestCaseReport> runTestCaseData(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataDriveByExcel testSuiteData) throws WebEngineException {
-        List<TestCaseDataDriveByExcel> testCaseDataList = testSuiteData.getTestCaseList();
+    protected List<TestCaseReport> runTestCaseData(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData) throws WebEngineException {
+        List<TestCaseDataNoCode> testCaseDataList = testSuiteData.getTestCaseList();
         if (CollectionUtils.isEmpty(testCaseDataList)) {
             throw new WebEngineException("No Test case found in the file");
         }
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
-        SettingsDriveByExcel settingsDriveByExcel = (SettingsDriveByExcel) globalApplicationContext.getSettings();
-        List<TestCaseNodeDriveByExcel> testCaseToRunList = getTestCaseToRun(testSuiteData, settingsDriveByExcel);
+        SettingsNoCode settingsNoCode = (SettingsNoCode) globalApplicationContext.getSettings();
+        List<TestCaseNodeNoCode> testCaseToRunList = getTestCaseToRun(testSuiteData, settingsNoCode);
 
-        for (TestCaseNodeDriveByExcel testCaseNodeToRun : testCaseToRunList) {
-            List<String> dataTestColumNameList = getDataTestColumNameList(settingsDriveByExcel, testCaseNodeToRun);
+        for (TestCaseNodeNoCode testCaseNodeToRun : testCaseToRunList) {
+            List<String> dataTestColumNameList = getDataTestColumNameList(settingsNoCode, testCaseNodeToRun);
             for (String dataTestColumnName : dataTestColumNameList) {
-                AbstractTestCaseContext testCaseContext = ((ITestCaseDriveByExcelExecutor) testCaseExecutor).initialize(globalApplicationContext, testSuiteData, testCaseNodeToRun, dataTestColumnName );
+                AbstractTestCaseContext testCaseContext = ((ITestCaseNoCodeExecutor) testCaseExecutor).initialize(globalApplicationContext, testSuiteData, testCaseNodeToRun, dataTestColumnName );
                 TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
                 testCaseExecutor.cleanUp(testCaseContext);
                 testCaseReportList.add(testCaseReport);
@@ -89,21 +89,21 @@ public class TestSuiteDriveByExcelExecutor extends AbstractTestSuiteExecutor imp
         return testCaseReportList;
     }
 
-    private List<String> getDataTestColumNameList(SettingsDriveByExcel settingsDriveByExcel, TestCaseNodeDriveByExcel testCaseNodeToRun) {
-        List<String> dataTestColumNameList = settingsDriveByExcel.getTestCaseAndDataTestColumName().get(testCaseNodeToRun.getName());
+    private List<String> getDataTestColumNameList(SettingsNoCode settingsNoCode, TestCaseNodeNoCode testCaseNodeToRun) {
+        List<String> dataTestColumNameList = settingsNoCode.getTestCaseAndDataTestColumName().get(testCaseNodeToRun.getName());
         if(CollectionUtils.isEmpty(dataTestColumNameList)){
-            dataTestColumNameList = TestCaseHelperDriveByExcel.getDataTestColumnName(testCaseNodeToRun);
+            dataTestColumNameList = TestCaseHelperNoCode.getDataTestColumnName(testCaseNodeToRun);
         }
         return dataTestColumNameList;
     }
 
-    private List<TestCaseNodeDriveByExcel> getTestCaseToRun(TestSuiteDataDriveByExcel testSuiteData, SettingsDriveByExcel settingsDriveByExcel) {
-        List<TestCaseNodeDriveByExcel> testCaseNodeList = testSuiteData.getTestCaseNodeList();
-        List<String> nameOfTestCaseToRun = new ArrayList<>(settingsDriveByExcel.getTestCaseAndDataTestColumName().keySet());
+    private List<TestCaseNodeNoCode> getTestCaseToRun(TestSuiteDataNoCode testSuiteData, SettingsNoCode settingsNoCode) {
+        List<TestCaseNodeNoCode> testCaseNodeList = testSuiteData.getTestCaseNodeList();
+        List<String> nameOfTestCaseToRun = new ArrayList<>(settingsNoCode.getTestCaseAndDataTestColumName().keySet());
         return testCaseNodeList.stream().filter(testCaseDataDriveByExcel -> nameOfTestCaseToRun.contains(testCaseDataDriveByExcel.getName())).collect(Collectors.toList());
     }
 
-    public void checkInput(TestSuiteDataDriveByExcel testSuiteData) {
+    public void checkInput(TestSuiteDataNoCode testSuiteData) {
         IChecking checking = AbstractChecking.link(
                 new IfChecking(),
                 new OptionalChecking(),

@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestStepDriveByExcelExecutor;
+import fr.axa.automation.webengine.api.ITestStepNoCodeExecutor;
 import fr.axa.automation.webengine.cmd.AbstractDriverCommand;
 import fr.axa.automation.webengine.cmd.CommandFactory;
 import fr.axa.automation.webengine.cmd.ScrenshotCommand;
@@ -12,7 +12,7 @@ import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -28,14 +28,14 @@ import java.util.List;
 @Slf4j
 @Component
 @Qualifier("testStepDriveByExcelExecutor")
-public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor implements ITestStepDriveByExcelExecutor {
+public class TestStepNoCodeExecutor extends AbstractTestStepExecutor implements ITestStepNoCodeExecutor {
 
-    public TestStepDriveByExcelExecutor() {
+    public TestStepNoCodeExecutor() {
         super();
     }
 
     @Override
-    public CommandResult run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
+    public CommandResult run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         CommandResult commandResult = null;
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
 
@@ -54,14 +54,14 @@ public class TestStepDriveByExcelExecutor extends AbstractTestStepExecutor imple
                                         .build();
     }
 
-    private ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList) throws WebEngineException {
+    private ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ScrenshotCommand screnshotCommand = new ScrenshotCommand();
         ActionReport actionReport = screnshotCommand.execute(globalApplicationContext,testCaseContext,commandData,commandResultList).getActionReport();
         return actionReport.getScreenshots().getScreenshotReports().get(0);
     }
 
     @Async("threadPoolTaskExecutor")
-    public CommandResult executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData,  List<CommandResult> commandResultList) throws WebEngineException {
+    public CommandResult executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         AbstractDriverCommand command = CommandFactory.getCommand(commandData);
         return command.execute(globalApplicationContext,testCaseContext,commandData,commandResultList);
     }

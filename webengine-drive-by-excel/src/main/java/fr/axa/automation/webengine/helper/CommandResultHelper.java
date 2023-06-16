@@ -2,7 +2,7 @@ package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class CommandResultHelper {
 
-    public static CommandResult getCommandResult(CommandDataDriveByExcel commandData,ActionReport actionReport, String data){
+    public static CommandResult getCommandResult(CommandDataNoCode commandData, ActionReport actionReport, String data){
         return CommandResult.builder().commandData(commandData).actionReport(actionReport).savedData(data).build();
     }
 

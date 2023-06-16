@@ -1,10 +1,10 @@
 package fr.axa.automation.webengine.cmd;
 
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
 
 public class CommandFactory {
 
-    public static AbstractDriverCommand getCommand(CommandDataDriveByExcel commandData) throws IllegalArgumentException {
+    public static AbstractDriverCommand getCommand(CommandDataNoCode commandData) throws IllegalArgumentException {
         switch (commandData.getCommand()){
             case OPEN:
                 return new OpenCommand();

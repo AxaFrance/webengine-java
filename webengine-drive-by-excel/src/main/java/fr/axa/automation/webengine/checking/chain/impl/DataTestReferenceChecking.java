@@ -1,10 +1,10 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
-import fr.axa.automation.webengine.constante.ConstanteDriveByExcel;
+import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.RegexContante;
-import fr.axa.automation.webengine.helper.TestCaseHelperDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.helper.TestCaseHelperNoCode;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -23,12 +23,12 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     private final static List<String> KEYWORD_DATA_REFERENCE = Arrays.asList("!");
 
     @Override
-    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        List<TestCaseDataDriveByExcel> testCaseDataList =testSuiteData.getTestCaseList();
+    public boolean check(TestSuiteDataNoCode testSuiteData) {
+        List<TestCaseDataNoCode> testCaseDataList =testSuiteData.getTestCaseList();
         Map<String,List<String>> dataTestReferenceWhichDoesntExistMap = new HashMap<>();
-        for (TestCaseDataDriveByExcel testCaseData : testCaseDataList) {
+        for (TestCaseDataNoCode testCaseData : testCaseDataList) {
             List<String> dataTestReferenceList = getDataTestReferenceList(testCaseData);
-            List<String> dataTestColumnNameList = TestCaseHelperDriveByExcel.getDataTestColumnName(testCaseData);
+            List<String> dataTestColumnNameList = TestCaseHelperNoCode.getDataTestColumnName(testCaseData);
             if(CollectionUtils.isNotEmpty(dataTestReferenceList)){
                 List<String> dataTestReferenceWhichDoesnt = getDataTestReferenceWhichDoesntExist(dataTestReferenceList, dataTestColumnNameList);
                 if(CollectionUtils.isNotEmpty(dataTestReferenceWhichDoesnt)){
@@ -42,7 +42,7 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
         return checkNext(testSuiteData);
     }
 
-    protected List<String> getDataTestReferenceList(TestCaseDataDriveByExcel testCaseData){
+    protected List<String> getDataTestReferenceList(TestCaseDataNoCode testCaseData){
         return testCaseData.getCommandList()
                 .stream()
                 .filter(commandData -> StringUtils.isNotEmpty(StringUtils.trim(commandData.getDataTestReference())) && !KEYWORD_DATA_REFERENCE.contains(StringUtils.trim(commandData.getDataTestReference())))
@@ -54,7 +54,7 @@ public class DataTestReferenceChecking extends AbstractValueChecking{
     protected List<String> getDataTestReferenceWhichDoesntExist(List<String> dataTestReferenceList, List<String> dataTestColumnNameList ){
         List<String> dataTestReferenceWhichDoesntExistList = new ArrayList<>();
         for (String dataTestReference : dataTestReferenceList) {
-            List<String> dataTestReferenceSplitList = Arrays.asList(dataTestReference.split(ConstanteDriveByExcel.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
+            List<String> dataTestReferenceSplitList = Arrays.asList(dataTestReference.split(ConstantNoCode.SEMICOLON.getValue())); //data-test-auto-rec;!data-test-auto-rec
             dataTestReferenceWhichDoesntExistList.addAll(getDataTestReferenceWhichDoesntExistInOneCmd(dataTestReferenceSplitList,dataTestColumnNameList));
         }
         return dataTestReferenceWhichDoesntExistList;

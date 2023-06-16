@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor
-public enum ConstanteDriveByExcel {
+public enum ConstantNoCode {
     BRACKETS_PREFIX("#{"),
     BRACKETS_SUFFIX("}#"),
     TRIPLE_CHEVRON_PREFIX("<<<"),

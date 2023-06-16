@@ -5,9 +5,9 @@ import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.OptionalConstante;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.util.StringUtil;
 
 import java.util.List;
@@ -28,34 +28,34 @@ public abstract class AbstractChecking implements IChecking {
         return first;
     }
 
-    protected List<CommandDataDriveByExcel> getCommandDataByName(TestCaseDataDriveByExcel testCaseData, CommandName commandName) {
-        List<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
+    protected List<CommandDataNoCode> getCommandDataByName(TestCaseDataNoCode testCaseData, CommandName commandName) {
+        List<CommandDataNoCode> commandDataSet = testCaseData.getCommandList();
         return commandDataSet.stream().filter(commandData -> commandData.getCommand() == commandName).collect(Collectors.toList());
     }
 
-    protected List<CommandDataDriveByExcel> getOptionalCommand(TestCaseDataDriveByExcel testCaseData) {
+    protected List<CommandDataNoCode> getOptionalCommand(TestCaseDataNoCode testCaseData) {
         return getCommandByOptional(testCaseData,OptionalConstante.OPTIONAL);
     }
 
-    protected List<CommandDataDriveByExcel> getOptionalAndDependsOnPreviousCommand(TestCaseDataDriveByExcel testCaseData) {
+    protected List<CommandDataNoCode> getOptionalAndDependsOnPreviousCommand(TestCaseDataNoCode testCaseData) {
         return getCommandByOptional(testCaseData,OptionalConstante.OPTIONAL_AND_DEPENDS_ON_PREVIOUS);
     }
 
-    private List<CommandDataDriveByExcel> getCommandByOptional(TestCaseDataDriveByExcel testCaseData, OptionalConstante optionalConstante) {
-        List<CommandDataDriveByExcel> commandDataSet = testCaseData.getCommandList();
+    private List<CommandDataNoCode> getCommandByOptional(TestCaseDataNoCode testCaseData, OptionalConstante optionalConstante) {
+        List<CommandDataNoCode> commandDataSet = testCaseData.getCommandList();
         return commandDataSet.stream().filter(commandData -> StringUtil.equalsIgnoreCase(optionalConstante.getValue(),commandData.getOptional())).collect(Collectors.toList());
     }
 
-    public abstract boolean check(TestSuiteDataDriveByExcel testSuiteData);
+    public abstract boolean check(TestSuiteDataNoCode testSuiteData);
 
-    protected boolean checkNext(TestSuiteDataDriveByExcel testSuiteData) {
+    protected boolean checkNext(TestSuiteDataNoCode testSuiteData) {
         if (next == null) {
             return true;
         }
         return next.check(testSuiteData);
     }
 
-    protected List<String> getTestCaseNameList(List<TestCaseDataDriveByExcel> testCaseDataList) {
+    protected List<String> getTestCaseNameList(List<TestCaseDataNoCode> testCaseDataList) {
         return testCaseDataList.stream().map(testCaseData -> testCaseData.getName()).collect(Collectors.toList());
     }
 }

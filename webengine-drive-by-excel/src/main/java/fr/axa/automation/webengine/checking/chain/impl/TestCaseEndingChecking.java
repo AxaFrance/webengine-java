@@ -1,9 +1,9 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestCaseDataDriveByExcel;
-import fr.axa.automation.webengine.object.TestSuiteDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
+import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.util.ListUtil;
 import org.apache.commons.collections4.MapUtils;
 
@@ -15,20 +15,20 @@ import java.util.Optional;
 public class TestCaseEndingChecking extends AbstractChecking{
 
     @Override
-    public boolean check(TestSuiteDataDriveByExcel testSuiteData) {
-        List<TestCaseDataDriveByExcel> testCaseDataList = ((TestSuiteDataDriveByExcel)testSuiteData).getTestCaseList();
+    public boolean check(TestSuiteDataNoCode testSuiteData) {
+        List<TestCaseDataNoCode> testCaseDataList = ((TestSuiteDataNoCode)testSuiteData).getTestCaseList();
         Map<String,Boolean> testCaseEndingWithRightCommandMap = new HashMap<>();
-        for(TestCaseDataDriveByExcel testCaseData : testCaseDataList){
+        for(TestCaseDataNoCode testCaseData : testCaseDataList){
             testCaseEndingWithRightCommandMap.put(testCaseData.getName(),isTestCaseEndingWithRightCommand(testCaseData));
         }
         assertEndScenario(testCaseEndingWithRightCommandMap);
         return checkNext(testSuiteData);
     }
 
-    private boolean isTestCaseEndingWithRightCommand(TestCaseDataDriveByExcel testCaseData) {
-        Optional<CommandDataDriveByExcel> commandDataOptional = ListUtil.getLastElement(testCaseData.getCommandList());
+    private boolean isTestCaseEndingWithRightCommand(TestCaseDataNoCode testCaseData) {
+        Optional<CommandDataNoCode> commandDataOptional = ListUtil.getLastElement(testCaseData.getCommandList());
         if(commandDataOptional.isPresent()){
-            CommandDataDriveByExcel lastCommandData = commandDataOptional.get();
+            CommandDataNoCode lastCommandData = commandDataOptional.get();
             return lastCommandData.getCommand() == CommandName.END_SCENARIO;
         }
         return true;

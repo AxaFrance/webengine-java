@@ -3,9 +3,9 @@ package fr.axa.automation.webengine.cmd;
 import fr.axa.automation.webengine.constante.RegexContante;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.TestCaseDriveByExcelContext;
+import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
-import fr.axa.automation.webengine.object.CommandDataDriveByExcel;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -16,9 +16,9 @@ import java.util.List;
 public class SaveDataCommand extends AbstractDriverCommand{
 
     @Override
-    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataDriveByExcel commandData, List<CommandResult> commandResultList)throws Exception{
+    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
-        String dataTestColumName = ((TestCaseDriveByExcelContext)testCaseContext).getDataTestColumnName();
+        String dataTestColumName = ((TestCaseNoCodeContext)testCaseContext).getDataTestColumnName();
         String dataToSave = "";
         if(MapUtils.isEmpty(commandData.getTargetList())){
             String value = commandData.getDataTestMap().get(dataTestColumName);
