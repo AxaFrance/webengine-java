@@ -121,15 +121,6 @@ public enum CommandName {
     *  */
     }
 
-    public static void main(String[] args) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir")+"/webengine-drive-by-excel/src/main/resources/command.yaml");
-        for (CommandName cmd: CommandName.values()) {
-            fileOutputStream.write(cmd.toString().getBytes());
-        }
-        fileOutputStream.close();
-        System.out.println("******** YAML *******************************");
-    }
-
 
     public static CommandName fromValue(String value) {
         for (CommandName commandName: CommandName.values()) {
