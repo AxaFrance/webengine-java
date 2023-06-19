@@ -302,6 +302,17 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
+    public void focusAndClickFromActions() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            highLight(webElement);
+            clickFromActions(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+
     public void focusAndsendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
@@ -617,10 +628,16 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private void focus(WebElement webElement) {
-        if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue())){
+        if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue())
+                && !StringUtil.equalsIgnoreCase(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_TYPE.getValue()),HtmlAttributeValueConstant.ATTRIBUTE_TYPE_FILE.getValue())){
             webElement.sendKeys("");
         } else{
             new Actions(getUseDriver()).moveToElement(webElement).perform();
         }
     }
+
+    private void clickFromActions(WebElement webElement) {
+        new Actions(getUseDriver()).moveToElement(webElement).click().build().perform();
+    }
+
 }
