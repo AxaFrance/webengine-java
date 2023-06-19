@@ -11,6 +11,7 @@ import fr.axa.automation.webengine.report.constante.HtmlFileConstant;
 import fr.axa.automation.webengine.report.constante.ReportPathConstant;
 import fr.axa.automation.webengine.report.constante.XsltFileConstant;
 import fr.axa.automation.webengine.report.helper.ImageReportHelper;
+import fr.axa.automation.webengine.report.helper.ReportFileNameHelper;
 import fr.axa.automation.webengine.util.FileUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -37,31 +38,30 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
         this.loggerService = loggerService;
     }
 
-
     public String buildHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException {
 
-        Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath);
-        Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath().toString() + "/" +ReportPathConstant.CSS_DIRECTORY_NAME.getValue());
-        Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath().toString() + "/" +ReportPathConstant.JS_DIRECTORY_NAME.getValue());
+        Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath + File.separator + ReportFileNameHelper.getDirectoryName(ReportPathConstant.HTML_REPORT_DIRECTORY_NAME.getValue()));
+        Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + "/" + ReportPathConstant.CSS_DIRECTORY_NAME.getValue());
+        Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + "/" + ReportPathConstant.JS_DIRECTORY_NAME.getValue());
 
-        String basePathXslt = ReportPathConstant.XSLT_DIRECTORY_NAME.getValue() + "/";
-        String htmlIndexFilePath = outputPath + File.separator + HtmlFileConstant.INDEX_HTML_FILE.getValue().get(0);
+        String basePathXslt = ReportPathConstant.XSLT_DIRECTORY_NAME.getValue() + "/"; //Don't use File.separator because it's a path for xslt in the resource!!!!!!!
+        String htmlIndexFilePath = htmlReportTargetDirectoryPath + File.separator + HtmlFileConstant.INDEX_HTML_FILE.getValue().get(0);
         try {
-            copyFilesFromResource2(HtmlFileConstant.CSS_FILE_LIST.getValue(),cssTargetDirectoryPath.toAbsolutePath().toString());
-            copyFilesFromResource2(HtmlFileConstant.JS_FILE_LIST.getValue(),jsTargetDirectoryPath.toAbsolutePath().toString());
+            copyFilesFromResource(ReportPathConstant.HTML_REPORT_DIRECTORY_NAME.getValue(),HtmlFileConstant.CSS_FILE_LIST.getValue(), cssTargetDirectoryPath.toAbsolutePath().toString());
+            copyFilesFromResource(ReportPathConstant.HTML_REPORT_DIRECTORY_NAME.getValue(),HtmlFileConstant.JS_FILE_LIST.getValue(),jsTargetDirectoryPath.toAbsolutePath().toString());
             generateImageReport(testSuiteReport,htmlReportTargetDirectoryPath.toString());
             HtmlBuilder.build(xmlFileName,htmlIndexFilePath,basePathXslt, XsltFileConstant.XSLT_INDEX_FILE.getValue().get(0));
-            loggerService.info("Create webengine html report in : " + htmlIndexFilePath);
+            loggerService.info("Create webengine html report in : " + htmlReportTargetDirectoryPath.toString());
         }catch (IOException | WebEngineException e  ){
             loggerService.error("Erreur lors de la génération du rapport html",e);
         }
         return Paths.get(htmlIndexFilePath).getParent().toString();
     }
 
-    private void copyFilesFromResource2( List<String> fileNameList, String targetDirectoryName) throws IOException {
+    private void copyFilesFromResource(String basePath, List<String> fileNameList, String targetDirectoryName) throws IOException {
         InputStream inputStream;
         for (String fileName : fileNameList) {
-            inputStream = FileUtil.getInputStreamByPathOrResource(fileName);
+            inputStream = FileUtil.getInputStreamByPathOrResource(basePath + "/" +fileName);
             FileUtil.copyFileFromResource(inputStream, targetDirectoryName + File.separator + Paths.get(fileName).getFileName().toString());
         }
     }

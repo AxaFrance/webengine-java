@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.report.helper.frmk;
 
 
+import fr.axa.automation.webengine.constant.FileExtensionConstant;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
@@ -34,7 +35,7 @@ public class WebengineXmlReportHelper implements IWebengineXmlReportHelper {
     @Override
     public String buildXmlReport(TestSuiteReport testSuiteReport, String outputPath) throws WebEngineException {
         Path directoryPath = FileUtil.createDirectories(outputPath);
-        String fileName = ReportFileNameHelper.getFileName(WEBENGINE_REPORT_NAME);
+        String fileName = ReportFileNameHelper.getFileName(WEBENGINE_REPORT_NAME, FileExtensionConstant.XML);
         Path completePath = Paths.get(directoryPath.toString(),fileName);
         String webengineReportPath = FileUtil.saveAsXml(getInputMarshallDTO(testSuiteReport,completePath));
         loggerService.info("Create webengine xml report in : "+webengineReportPath);

@@ -23,10 +23,9 @@ public enum HtmlFileConstant {
                                 ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"tab.css",
                                 ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"table.css",
                                 ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"tree.css")),
-
     JS_FILE_LIST(Arrays.asList(ReportPathConstant.JS_DIRECTORY_NAME.getValue()+"/"+"global.js")),
 
-    INDEX_HTML_FILE(Arrays.asList(ReportPathConstant.HTML_REPORT_DIRECTORY_NAME.getValue()+"/"+"index.html"));
+    INDEX_HTML_FILE(Arrays.asList("index.html"));
 
     final List<String> value;
 }

@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.report.constante;
 
 
+import fr.axa.automation.webengine.report.helper.ReportFileNameHelper;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,11 +13,10 @@ import lombok.experimental.FieldDefaults;
 public enum ReportPathConstant {
     REPORT_DIRECTORY_NAME("report-test-result"),
     HTML_REPORT_DIRECTORY_NAME("html-report"),
-    IMAGE_DIRECTORY_NAME(HTML_REPORT_DIRECTORY_NAME.getValue()+"/"+"assets/img"),
-    CSS_DIRECTORY_NAME(HTML_REPORT_DIRECTORY_NAME.getValue()+"/"+"assets/css"),
-    JS_DIRECTORY_NAME(HTML_REPORT_DIRECTORY_NAME.getValue()+"/"+"assets/js"),
+    IMAGE_DIRECTORY_NAME("assets/img"),
+    CSS_DIRECTORY_NAME("assets/css"),
+    JS_DIRECTORY_NAME("assets/js"),
     XSLT_DIRECTORY_NAME(HTML_REPORT_DIRECTORY_NAME.getValue()+"/"+"xslt");
-
 
     final String value;
 }
