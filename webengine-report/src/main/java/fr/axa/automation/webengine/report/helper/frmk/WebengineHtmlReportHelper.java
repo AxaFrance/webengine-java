@@ -38,7 +38,7 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
     }
 
 
-    public void buildHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException {
+    public String buildHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException {
 
         Path htmlReportTargetDirectoryPath = FileUtil.createDirectories(outputPath);
         Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath().toString() + "/" +ReportPathConstant.CSS_DIRECTORY_NAME.getValue());
@@ -55,6 +55,7 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
         }catch (IOException | WebEngineException e  ){
             loggerService.error("Erreur lors de la génération du rapport html",e);
         }
+        return Paths.get(htmlIndexFilePath).getParent().toString();
     }
 
     private void copyFilesFromResource2( List<String> fileNameList, String targetDirectoryName) throws IOException {

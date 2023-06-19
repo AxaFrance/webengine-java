@@ -5,5 +5,5 @@ import fr.axa.automation.webengine.generated.TestSuiteReport;
 
 public interface IWebengineHtmlReportHelper {
 
-    void buildHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException;
+    String buildHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String xmlFileName) throws WebEngineException;
 }

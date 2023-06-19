@@ -3,7 +3,7 @@ package fr.axa.automation.webengine.report.helper.global;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
-import fr.axa.automation.webengine.report.constante.ReportKey;
+import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineHtmlReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.IJunitReportHelper;
@@ -36,14 +36,30 @@ public class ReportHelper implements IReportHelper{
         this.loggerService = loggerService;
     }
 
-    public Map<ReportKey,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
-        Map<ReportKey,String> path = new HashMap<>();
-        loggerService.info("Start Generation of Junit and Webengine Report");
-        String webEngineReport = webengineXmlReportHelper.buildXmlReport(testSuiteReport, outputPath);
-        webengineHtmlReportHelper.buildHtmlReport(testSuiteReport, outputPath,webEngineReport);
-        String JunitReport = junitReportHelper.generateJUnitReport(testSuiteReport, testSuiteName, outputPath);
-        path.put(ReportKey.WEBENGINE_REPORT_KEY,webEngineReport);
-        path.put(ReportKey.JUNIT_REPORT_KEY,JunitReport);
+    public Map<ReportPathKey,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
+        Map<ReportPathKey,String> path = new HashMap<>();
+        path.put(ReportPathKey.XML_REPORT_PATH_KEY,generateWebengineXmlReport(testSuiteReport, outputPath));
+        path.put(ReportPathKey.HTML_REPORT_PATH_KEY,generateWebengineHtmlReport(testSuiteReport, outputPath,path.get(ReportPathKey.XML_REPORT_PATH_KEY).toString()));
+        path.put(ReportPathKey.JUNIT_REPORT_PATH_KEY,generateJunitReport(testSuiteReport, testSuiteName, outputPath));
         return path;
     }
+
+    public String generateWebengineXmlReport(TestSuiteReport testSuiteReport, String outputPath) throws  WebEngineException {
+        Map<ReportPathKey,String> path = new HashMap<>();
+        loggerService.info("Start generation Webengine Report");
+        return webengineXmlReportHelper.buildXmlReport(testSuiteReport, outputPath);
+    }
+
+    public String generateJunitReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
+        Map<ReportPathKey,String> path = new HashMap<>();
+        loggerService.info("Start Generation of Junit Report");
+        return junitReportHelper.generateJUnitReport(testSuiteReport, testSuiteName, outputPath);
+    }
+
+    public String generateWebengineHtmlReport(TestSuiteReport testSuiteReport, String outputPath, String webEngineXmlReport) throws  WebEngineException {
+        Map<ReportPathKey,String> path = new HashMap<>();
+        loggerService.info("Start Generation of Webengine HTML Report");
+        return webengineHtmlReportHelper.buildHtmlReport(testSuiteReport, outputPath,webEngineXmlReport);
+    }
+
 }

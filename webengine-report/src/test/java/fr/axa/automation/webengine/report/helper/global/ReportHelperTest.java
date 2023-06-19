@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.report.constante.ReportKey;
+import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineHtmlReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.WebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
@@ -29,13 +29,13 @@ public class ReportHelperTest {
         IReportHelper reportHelper = new ReportHelper(new WebengineXmlReportHelper(new LoggerService()), new WebengineHtmlReportHelper(new LoggerService()), new JunitReportHelper(new LoggerService()),new LoggerService());
         String path = FileUtil.createDirectoryInTarget(REPORT_TEST_RESULT_DIRECTORY);
 
-        Map<ReportKey,String> reportMap =  reportHelper.generateAllReport(testSuiteReport,"TestSuiteName",path);
-        boolean resultCompareWebengineReportFile = FileUtil.assertContent(FileUtil.getFileFromResource("report-test-result/webengine-report.xml"), new File(reportMap.get(ReportKey.WEBENGINE_REPORT_KEY)));
-        FileUtil.displayContent(reportMap.get(ReportKey.WEBENGINE_REPORT_KEY));
+        Map<ReportPathKey,String> reportMap =  reportHelper.generateAllReport(testSuiteReport,"TestSuiteName",path);
+        boolean resultCompareWebengineReportFile = FileUtil.assertContent(FileUtil.getFileFromResource("report-test-result/webengine-report.xml"), new File(reportMap.get(ReportPathKey.XML_REPORT_PATH_KEY)));
+        FileUtil.displayContent(reportMap.get(ReportPathKey.XML_REPORT_PATH_KEY));
         Assertions.assertTrue(resultCompareWebengineReportFile);
 
-        boolean resultValidateJunitReportFile = XmlValidator.validateXMLSchema(FileUtil.getFileFromResource("xsd/junit-report-schema.xsd"),new File(reportMap.get(ReportKey.JUNIT_REPORT_KEY)));
-        FileUtil.displayContent(reportMap.get(ReportKey.JUNIT_REPORT_KEY));
+        boolean resultValidateJunitReportFile = XmlValidator.validateXMLSchema(FileUtil.getFileFromResource("xsd/junit-report-schema.xsd"),new File(reportMap.get(ReportPathKey.JUNIT_REPORT_PATH_KEY)));
+        FileUtil.displayContent(reportMap.get(ReportPathKey.JUNIT_REPORT_PATH_KEY));
         Assertions.assertTrue(resultValidateJunitReportFile);
     }
 
