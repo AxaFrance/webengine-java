@@ -312,6 +312,17 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
+    public void focusAndClickWithJS() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            highLight(webElement);
+            executeJavascript("arguments[0].click();", webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+
 
     public void focusAndsendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {

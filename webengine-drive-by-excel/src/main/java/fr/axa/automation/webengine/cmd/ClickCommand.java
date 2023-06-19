@@ -20,7 +20,11 @@ public class ClickCommand extends AbstractDriverCommand{
 
     protected void executeActionInElement(String value)throws Exception {
         if(StringUtils.isEmpty(value)){
-            webElementDescription.focusAndClick();
+            try {
+                webElementDescription.focusAndClick();
+            }catch (Exception e) {
+                webElementDescription.focusAndClickWithJS();
+            }
         } else if (webElementDescription.isInputRadio()) {
             webElementDescription.checkByValue(value);
         }
