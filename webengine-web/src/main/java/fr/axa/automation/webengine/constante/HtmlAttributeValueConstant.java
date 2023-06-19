@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @AllArgsConstructor
-public enum Constante {
-    TRUE("true");
+public enum HtmlAttributeValueConstant {
+    ATTRIBUTE_TYPE_TEXT("text"),ATTRIBUTE_TYPE_RADIO("radio"), ATTRIBUTE_TYPE_CHECKBOX("checkbox");
     final String value;
 }

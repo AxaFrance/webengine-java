@@ -1,9 +1,9 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.api.IFunction;
-import fr.axa.automation.webengine.constante.Constante;
-import fr.axa.automation.webengine.constante.HtmlAttributeConstante;
-import fr.axa.automation.webengine.constante.HtmlAttributeValueConstante;
+import fr.axa.automation.webengine.constante.Constant;
+import fr.axa.automation.webengine.constante.HtmlAttributeConstant;
+import fr.axa.automation.webengine.constante.HtmlAttributeValueConstant;
 import fr.axa.automation.webengine.constante.HtmlTag;
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.exception.MultipleElementException;
@@ -49,8 +49,6 @@ public class WebElementDescription extends AbstractElementDescription {
 
     public static final String INNER_HTML = "innerHTML";
     public static final String OUTER_HTML = "outerHTML";
-
-    public static final String OK = "OK";
 
     String id;
     String name;
@@ -353,35 +351,35 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private Boolean isInputRadio(WebElement webElement) {
-        if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) &&  isTypeElementByAttribute(webElement, HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO)){
+        if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) &&  isTypeElementByAttribute(webElement, HtmlAttributeValueConstant.ATTRIBUTE_TYPE_RADIO)){
             return true;
         }
         return false;
     }
 
     public Boolean isInputRadio() throws Exception {
-        return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_RADIO);
+        return isTypeElementByAttribute(HtmlAttributeValueConstant.ATTRIBUTE_TYPE_RADIO);
     }
 
     public Boolean isInputText() throws Exception {
-        return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_TEXT);
+        return isTypeElementByAttribute(HtmlAttributeValueConstant.ATTRIBUTE_TYPE_TEXT);
     }
 
     public Boolean isInputCheckbox() throws Exception {
-        return isTypeElementByAttribute(HtmlAttributeValueConstante.ATTRIBUTE_TYPE_CHECKBOX);
+        return isTypeElementByAttribute(HtmlAttributeValueConstant.ATTRIBUTE_TYPE_CHECKBOX);
     }
 
-    private Boolean isTypeElementByAttribute(HtmlAttributeValueConstante htmlAttributeValueConstante) throws Exception {
-        IFunction<HtmlAttributeValueConstante, Boolean> fun = (attributeValueConstante) -> {
+    private Boolean isTypeElementByAttribute(HtmlAttributeValueConstant htmlAttributeValueConstant) throws Exception {
+        IFunction<HtmlAttributeValueConstant, Boolean> fun = (attributeValueConstante) -> {
             WebElement webElement = findElement();
             return isTypeElementByAttribute(webElement, attributeValueConstante);
         };
-        return retry(fun, htmlAttributeValueConstante);
+        return retry(fun, htmlAttributeValueConstant);
     }
 
-    private Boolean isTypeElementByAttribute( WebElement webElement, HtmlAttributeValueConstante htmlAttributeValueConstante) {
-        String typeWebElement = webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_TYPE.getValue());
-        if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(htmlAttributeValueConstante.getValue())){
+    private Boolean isTypeElementByAttribute( WebElement webElement, HtmlAttributeValueConstant htmlAttributeValueConstant) {
+        String typeWebElement = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_TYPE.getValue());
+        if(typeWebElement!=null && typeWebElement.equalsIgnoreCase(htmlAttributeValueConstant.getValue())){
             return true;
         }
         return false;
@@ -438,7 +436,7 @@ public class WebElementDescription extends AbstractElementDescription {
     }
 
     private List<String> getOptionValueListInSelect(Select select) {
-        return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
+        return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
     }
 
     public String getTextByElement() throws Exception {
@@ -447,8 +445,8 @@ public class WebElementDescription extends AbstractElementDescription {
             focus(webElement);
             if(isInputSelect(webElement)){
                 return getSelectedOption(webElement);
-            }else if(isTypeElementByAttribute(webElement,HtmlAttributeValueConstante.ATTRIBUTE_TYPE_TEXT) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
-                return webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue());
+            }else if(isTypeElementByAttribute(webElement, HtmlAttributeValueConstant.ATTRIBUTE_TYPE_TEXT) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
+                return webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
             }else{
                 return webElement.getText();
             }
@@ -477,9 +475,9 @@ public class WebElementDescription extends AbstractElementDescription {
             if(isInputSelect(webElement)){
                 contentList = getTextAndValueContentInSelect(webElement);
             }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
-                contentList.put(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue())));
+                contentList.put(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue())));
             }else{
-                contentList.put(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getText()));
+                contentList.put(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getText()));
 
             }
             return contentList;
@@ -495,9 +493,9 @@ public class WebElementDescription extends AbstractElementDescription {
             if(isInputSelect(webElement)){
                 resultAssert = assertContentInSelect(webElement,value);
             }else if(isInputRadio(webElement)){
-                resultAssert = StringUtil.equalsIgnoreCase(Constante.TRUE.getValue(),webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue()));
+                resultAssert = StringUtil.equalsIgnoreCase(Constant.TRUE.getValue(),webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_CHECKED.getValue()));
             }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
-                resultAssert = StringUtil.contains(webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()),value);
+                resultAssert = StringUtil.contains(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue()),value);
             }else{
                 resultAssert = StringUtil.contains(webElement.getText(),value);
             }
@@ -511,7 +509,7 @@ public class WebElementDescription extends AbstractElementDescription {
             WebElement webElement = this.findElement();
             focus(webElement);
             if(isInputRadio(webElement)){
-                return StringUtil.equalsIgnoreCase(Constante.TRUE.getValue(), webElement.getAttribute(HtmlAttributeConstante.ATTRIBUTE_CHECKED.getValue()));
+                return StringUtil.equalsIgnoreCase(Constant.TRUE.getValue(), webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_CHECKED.getValue()));
             }else{
                 throw new Exception("It's not a radio element");
             }
@@ -544,7 +542,7 @@ public class WebElementDescription extends AbstractElementDescription {
         if(webElement!=null){
             Select select = new Select(webElement);
             contentSelecteMap.put("text",getOptionTextListInSelect(select));
-            contentSelecteMap.put(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue(),getOptionValueListInSelect(select));
+            contentSelecteMap.put(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue(),getOptionValueListInSelect(select));
         }
         return contentSelecteMap;
     }
@@ -597,7 +595,7 @@ public class WebElementDescription extends AbstractElementDescription {
         IFunction<String, Void> fun = (x) -> {
             Collection<WebElement> elementCollection = this.internalFindElements();
             if (CollectionUtils.isNotEmpty(elementCollection)) {
-                WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute(HtmlAttributeConstante.ATTRIBUTE_VALUE.getValue()).equalsIgnoreCase(x)).findFirst().orElse(null);
+                WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue()).equalsIgnoreCase(x)).findFirst().orElse(null);
                 if(webElementFilter!=null) {
                     focus(webElementFilter);
                     click(webElementFilter);
