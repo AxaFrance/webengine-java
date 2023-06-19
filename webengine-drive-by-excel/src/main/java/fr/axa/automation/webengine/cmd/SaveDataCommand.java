@@ -31,7 +31,6 @@ public class SaveDataCommand extends AbstractDriverCommand{
         }else{
             dataToSave = webElementDescription.getTextByElement();
         }
-//        String dataToSave = MapUtils.isEmpty(commandData.getTargetList()) ? commandData.getDataTestMap().get(dataTestColumName) : webElementDescription.getTextByElement();
         setSavedData(dataToSave);
     }
 }

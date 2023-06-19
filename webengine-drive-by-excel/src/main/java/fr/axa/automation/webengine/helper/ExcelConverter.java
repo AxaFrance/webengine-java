@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class ExcelConverter {
 
     public static final String XPATH_PATTERN = "^([/]{1,2}.*)$";
-    public static final String MANY_LOCATED_PATTERN = "^[\\{].*[\\n|\\r]";
+    public static final String JSON_PATTERN = "^\\{.*\\}$";
 
     public static TestSuiteDataNoCode convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumNameMap) {
         List<TestCaseDataNoCode> testCaseList = new LinkedList<>();
@@ -188,7 +188,7 @@ public class ExcelConverter {
             targets.put(TargetKey.OPEN, targetCellValue);
         }else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
             targets.put(TargetKey.XPATH, targetCellValue);
-        } else if (CollectionUtils.isNotEmpty(RegexUtil.match(MANY_LOCATED_PATTERN, targetCellValue))) {
+        } else if (CollectionUtils.isNotEmpty(RegexUtil.match(JSON_PATTERN, targetCellValue))) {
             targets.put(TargetKey.COMBINAISON_OF_LOCATOR, targetCellValue);
         } else {
             targets.put(TargetKey.ID, targetCellValue);

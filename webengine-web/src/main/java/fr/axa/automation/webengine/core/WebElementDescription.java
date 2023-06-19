@@ -53,11 +53,9 @@ public class WebElementDescription extends AbstractElementDescription {
     public static final String OK = "OK";
 
     String id;
-
     String name;
     String innerText;
     Map<String,String> attributeList;
-
     String xPath;
     String cssSelector;
     String className;

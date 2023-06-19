@@ -1,5 +1,7 @@
 package fr.axa.automation.webengine.cmd;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.constante.TargetKey;
@@ -8,6 +10,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
+import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
@@ -29,10 +32,13 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import java.io.FileReader;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -46,37 +52,92 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception;
 
-    protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
-        return WebElementDescription.builder()
-                .useDriver((WebDriver) testCaseContext.getWebDriver())
-                .id(populateBySelector(globalApplicationContext, LocatingBy.BY_ID, commandData, commandResultList))
-                .name(populateBySelector(globalApplicationContext, LocatingBy.BY_NAME, commandData, commandResultList))
-                .className(populateBySelector(globalApplicationContext, LocatingBy.BY_CLASS_NAME, commandData, commandResultList))
-                .linkText(populateBySelector(globalApplicationContext, LocatingBy.BY_LINK_TEXT, commandData, commandResultList))
-                .tagName(populateBySelector(globalApplicationContext, LocatingBy.BY_TAG_NAME, commandData, commandResultList))
-                .cssSelector(populateBySelector(globalApplicationContext, LocatingBy.BY_CSS_SELECTOR, commandData, commandResultList))
-                .xPath(populateBySelector(globalApplicationContext, LocatingBy.BY_XPATH, commandData, commandResultList))
-                .build();
+//    protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
+//        return WebElementDescription.builder()
+//                .useDriver((WebDriver) testCaseContext.getWebDriver())
+//                .id(populateBySelector(globalApplicationContext, LocatingBy.BY_ID, commandData, commandResultList))
+//                .name(populateBySelector(globalApplicationContext, LocatingBy.BY_NAME, commandData, commandResultList))
+//                .className(populateBySelector(globalApplicationContext, LocatingBy.BY_CLASS_NAME, commandData, commandResultList))
+//                .linkText(populateBySelector(globalApplicationContext, LocatingBy.BY_LINK_TEXT, commandData, commandResultList))
+//                .tagName(populateBySelector(globalApplicationContext, LocatingBy.BY_TAG_NAME, commandData, commandResultList))
+//                .cssSelector(populateBySelector(globalApplicationContext, LocatingBy.BY_CSS_SELECTOR, commandData, commandResultList))
+//                .xPath(populateBySelector(globalApplicationContext, LocatingBy.BY_XPATH, commandData, commandResultList))
+//                .build();
+//    }
+//
+//    protected String populateBySelector(AbstractGlobalApplicationContext globalApplicationContext, LocatingBy locatingBy, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
+//        String value = "";
+//        switch (locatingBy) {
+//            case BY_ID:
+//                value = commandData.getTargetList().get(TargetKey.ID);
+//                break;
+//            case BY_XPATH:
+//                value = commandData.getTargetList().get(TargetKey.XPATH);
+//                break;
+//            default:
+//                return StringUtils.EMPTY;
+//        }
+//        return StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), value, commandResultList) : StringUtils.EMPTY; //For xpath, id ...etc dynamic
+//    }
+
+    protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
+        Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
+        if(entry==null){
+            return WebElementDescription.builder()
+                    .useDriver((WebDriver) testCaseContext.getWebDriver())
+                    .build();
+        }
+
+        switch (entry.getKey()){
+            case ID:
+                return WebElementDescription.builder()
+                        .useDriver((WebDriver) testCaseContext.getWebDriver())
+                        .id(entry.getValue())
+                        .build();
+            case XPATH:
+                return WebElementDescription.builder()
+                        .useDriver((WebDriver) testCaseContext.getWebDriver())
+                        .xPath(entry.getValue())
+                        .build();
+            case COMBINAISON_OF_LOCATOR:
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    WebElementDescription webElementDescription = mapper.readValue(entry.getValue(), WebElementDescription.class);
+                    webElementDescription.setUseDriver((WebDriver) testCaseContext.getWebDriver());
+                    return webElementDescription;
+                } catch (JsonProcessingException e) {
+                    throw new WebEngineException("Veuillez vérifier le format de la combinaison de locator : "+entry.getValue(), e);
+                }
+
+            default:
+                return WebElementDescription.builder()
+                        .useDriver((WebDriver) testCaseContext.getWebDriver())
+                        .build();
+        }
     }
 
-    protected String populateBySelector(AbstractGlobalApplicationContext globalApplicationContext, LocatingBy locatingBy, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
-        String value = "";
-        switch (locatingBy) {
-            case BY_ID:
-                value = commandData.getTargetList().get(TargetKey.ID);
-                break;
-//            case BY_NAME:
-//            case BY_CLASS_NAME:
-//            case BY_LINK_TEXT:
-//            case BY_TAG_NAME:
-//            case BY_CSS_SELECTOR:
-            case BY_XPATH:
-                value = commandData.getTargetList().get(TargetKey.XPATH);
-                break;
-            default:
-                return StringUtils.EMPTY;
+    protected Map.Entry<TargetKey,String> getTargetValue(AbstractGlobalApplicationContext globalApplicationContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
+        String value;
+        Set<TargetKey> targetKeyList = commandData.getTargetList().keySet();
+        if (MapUtils.isNotEmpty(commandData.getTargetList()) && targetKeyList.size() == 1) {
+            TargetKey targetKey = targetKeyList.iterator().next();
+            switch (targetKey) {
+                case ID:
+                    value = commandData.getTargetList().get(TargetKey.ID);
+                    break;
+                case XPATH:
+                    value = commandData.getTargetList().get(TargetKey.XPATH);
+                    break;
+                case COMBINAISON_OF_LOCATOR:
+                    value = commandData.getTargetList().get(TargetKey.COMBINAISON_OF_LOCATOR);
+                    break;
+                default:
+                    value = StringUtils.EMPTY;
+            }
+            String evaluateValue = StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), value, commandResultList) : StringUtils.EMPTY; //For xpath, id ...etc dynamic
+            return MapUtils.isNotEmpty(commandData.getTargetList()) ? new AbstractMap.SimpleEntry(targetKeyList.iterator().next(), evaluateValue) : null;
         }
-        return StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), value, commandResultList) : StringUtils.EMPTY; //For xpath, id ...etc dynamic
+        return null;
     }
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
