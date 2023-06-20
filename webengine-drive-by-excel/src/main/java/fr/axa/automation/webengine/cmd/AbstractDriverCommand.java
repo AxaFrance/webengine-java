@@ -52,34 +52,6 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception;
 
-//    protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
-//        return WebElementDescription.builder()
-//                .useDriver((WebDriver) testCaseContext.getWebDriver())
-//                .id(populateBySelector(globalApplicationContext, LocatingBy.BY_ID, commandData, commandResultList))
-//                .name(populateBySelector(globalApplicationContext, LocatingBy.BY_NAME, commandData, commandResultList))
-//                .className(populateBySelector(globalApplicationContext, LocatingBy.BY_CLASS_NAME, commandData, commandResultList))
-//                .linkText(populateBySelector(globalApplicationContext, LocatingBy.BY_LINK_TEXT, commandData, commandResultList))
-//                .tagName(populateBySelector(globalApplicationContext, LocatingBy.BY_TAG_NAME, commandData, commandResultList))
-//                .cssSelector(populateBySelector(globalApplicationContext, LocatingBy.BY_CSS_SELECTOR, commandData, commandResultList))
-//                .xPath(populateBySelector(globalApplicationContext, LocatingBy.BY_XPATH, commandData, commandResultList))
-//                .build();
-//    }
-//
-//    protected String populateBySelector(AbstractGlobalApplicationContext globalApplicationContext, LocatingBy locatingBy, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
-//        String value = "";
-//        switch (locatingBy) {
-//            case BY_ID:
-//                value = commandData.getTargetList().get(TargetKey.ID);
-//                break;
-//            case BY_XPATH:
-//                value = commandData.getTargetList().get(TargetKey.XPATH);
-//                break;
-//            default:
-//                return StringUtils.EMPTY;
-//        }
-//        return StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), value, commandResultList) : StringUtils.EMPTY; //For xpath, id ...etc dynamic
-//    }
-
     protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
         Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
         if(entry==null){

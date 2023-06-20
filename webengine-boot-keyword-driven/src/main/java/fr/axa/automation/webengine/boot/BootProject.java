@@ -15,6 +15,7 @@ import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.helper.TestSuiteHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
+import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -75,7 +76,7 @@ public class BootProject extends AbstractBootProject{
         loggerService.info("End clean ");
 
         loggerService.info("Start report ");
-        reportHelper.generateAllReport(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getOutputDir());
+        Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getOutputDir());
         loggerService.info("End report ");
     }
 
