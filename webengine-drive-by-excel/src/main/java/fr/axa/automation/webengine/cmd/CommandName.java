@@ -90,8 +90,10 @@ public enum CommandName {
                     Locale.ENGLISH, "Exit the current iframe" )),
     END_SCENARIO(ImmutableMap.of(Locale.ENGLISH, "end scenario" , Locale.FRENCH, "fin scenario"),
             ImmutableMap.of(Locale.FRENCH, "Indique la fin du scénario courant" ,
-                    Locale.ENGLISH, "Indicates the end of the current scenario"));
-
+                    Locale.ENGLISH, "Indicates the end of the current scenario")),
+    REFRESH(ImmutableMap.of(Locale.ENGLISH, "refresh" , Locale.FRENCH, "rafraichir"),
+            ImmutableMap.of(Locale.FRENCH, "Permet de rafraichir la page courante" ,
+                    Locale.ENGLISH, "Refresh the current page"));
 
     final Map<Locale, String> commandLibelleMap;
     final Map<Locale, String> commandDescriptionMap;

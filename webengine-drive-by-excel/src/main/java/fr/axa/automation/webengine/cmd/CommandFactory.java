@@ -50,6 +50,8 @@ public class CommandFactory {
                 return new SwitchFrameCommand();
             case EXIT_FRAME:
                 return new ExitFrameCommand();
+            case REFRESH:
+                return new RefreshCommand();
             default:
                 throw new IllegalArgumentException("Command not recognized");
         }
