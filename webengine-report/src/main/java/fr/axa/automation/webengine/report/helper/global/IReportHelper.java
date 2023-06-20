@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import java.util.Map;
 
 public interface IReportHelper {
-    Map<ReportPathKey,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws WebEngineException;
+    Map<ReportPathKey,String> generateReports(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws WebEngineException;
+    void openReport(String reportPath) throws WebEngineException;
 
 }

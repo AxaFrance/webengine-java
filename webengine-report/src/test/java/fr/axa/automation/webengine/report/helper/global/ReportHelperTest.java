@@ -29,7 +29,7 @@ public class ReportHelperTest {
         IReportHelper reportHelper = new ReportHelper(new WebengineXmlReportHelper(new LoggerService()), new WebengineHtmlReportHelper(new LoggerService()), new JunitReportHelper(new LoggerService()),new LoggerService());
         String path = FileUtil.createDirectoryInTarget(REPORT_TEST_RESULT_DIRECTORY);
 
-        Map<ReportPathKey,String> reportMap =  reportHelper.generateAllReport(testSuiteReport,"TestSuiteName",path);
+        Map<ReportPathKey,String> reportMap =  reportHelper.generateReports(testSuiteReport,"TestSuiteName",path);
         boolean resultCompareWebengineReportFile = FileUtil.assertContent(FileUtil.getFileFromResource("report-test-result/webengine-report.xml"), new File(reportMap.get(ReportPathKey.XML_REPORT_PATH_KEY)));
         FileUtil.displayContent(reportMap.get(ReportPathKey.XML_REPORT_PATH_KEY));
         Assertions.assertTrue(resultCompareWebengineReportFile);

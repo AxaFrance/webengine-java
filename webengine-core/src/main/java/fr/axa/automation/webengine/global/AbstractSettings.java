@@ -23,4 +23,5 @@ public abstract class AbstractSettings {
     List<String> propertiesFileList;
     String outputDir;
     Map<String,String> values;
+    Boolean showReport;
 }

@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineHtmlReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.IJunitReportHelper;
+import fr.axa.automation.webengine.util.BrowserDesktop;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +37,10 @@ public class ReportHelper implements IReportHelper{
         this.loggerService = loggerService;
     }
 
-    public Map<ReportPathKey,String> generateAllReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
+    public Map<ReportPathKey,String> generateReports(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
         Map<ReportPathKey,String> path = new HashMap<>();
         path.put(ReportPathKey.XML_REPORT_PATH_KEY,generateWebengineXmlReport(testSuiteReport, outputPath));
-        path.put(ReportPathKey.HTML_REPORT_PATH_KEY,generateWebengineHtmlReport(testSuiteReport, outputPath,path.get(ReportPathKey.XML_REPORT_PATH_KEY).toString()));
+        path.put(ReportPathKey.HTML_REPORT_PATH_KEY,generateWebengineHtmlReport(testSuiteReport, outputPath,path.get(ReportPathKey.XML_REPORT_PATH_KEY)));
         path.put(ReportPathKey.JUNIT_REPORT_PATH_KEY,generateJunitReport(testSuiteReport, testSuiteName, outputPath));
         return path;
     }
@@ -62,4 +63,8 @@ public class ReportHelper implements IReportHelper{
         return webengineHtmlReportHelper.buildHtmlReport(testSuiteReport, outputPath,webEngineXmlReport);
     }
 
+    public void openReport(String reportPath) throws WebEngineException {
+        loggerService.info("Start Opening Report");
+        BrowserDesktop.openDefaultBrowser(reportPath);
+    }
 }
