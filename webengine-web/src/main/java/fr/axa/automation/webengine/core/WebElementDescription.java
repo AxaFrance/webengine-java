@@ -379,6 +379,13 @@ public class WebElementDescription extends AbstractElementDescription {
         return false;
     }
 
+    public Boolean isInputCheckbox(WebElement webElement) {
+        if(webElement.getTagName().equalsIgnoreCase(HtmlTag.INPUT.getValue()) &&  isTypeElementByAttribute(webElement, HtmlAttributeValueConstant.ATTRIBUTE_TYPE_CHECKBOX)){
+            return true;
+        }
+        return false;
+    }
+
     public Boolean isInputRadio() throws Exception {
         return isTypeElementByAttribute(HtmlAttributeValueConstant.ATTRIBUTE_TYPE_RADIO);
     }
@@ -530,10 +537,10 @@ public class WebElementDescription extends AbstractElementDescription {
         IFunction<Void, Boolean> fun = (value) ->{
             WebElement webElement = this.findElement();
             focus(webElement);
-            if(isInputRadio(webElement)){
+            if(isInputRadio(webElement) || isInputCheckbox(webElement)) {
                 return StringUtil.equalsIgnoreCase(Constant.TRUE.getValue(), webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_CHECKED.getValue()));
             }else{
-                throw new Exception("It's not a radio element");
+                throw new Exception("It's not a radio or checkbox element");
             }
         };
         return retry(fun,null);
