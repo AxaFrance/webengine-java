@@ -32,9 +32,16 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
                 .testCaseAndDataTestColumName(getTestCaseAndDataTestColumnName(cmd))
                 .values(getValues(globalConfiguration))
                 .outputDir(getOutputDir(cmd, globalConfiguration))
+                .showReport(getShowReport(cmd))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;
+    }
+
+    public static Boolean getShowReport(CommandLine cmd) {
+        return Optional.ofNullable(cmd.getOptionValue(ArgumentOption.SHOW_REPORT.getOption()))
+                .map(Boolean::parseBoolean)
+                .orElse(false);
     }
 
     public static String getFileName(CommandLine cmd) {
