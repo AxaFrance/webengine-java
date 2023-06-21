@@ -111,6 +111,16 @@ public enum CommandName {
                 "}";
     }
 
+    public String toYamlString() {
+        return  "-"+this.name()+":\n" +
+                "  DESCRIPTION:\n" +
+                "    ENGLISH: " + this.commandDescriptionMap.get(Locale.ENGLISH) + "\n"+
+                "    FRENCH: " + this.commandDescriptionMap.get(Locale.FRENCH) + "\n"+
+                "  VALUE:\n" +
+                "    ENGLISH: " + this.commandLibelleMap.get(Locale.ENGLISH) + "\n"+
+                "    FRENCH: " + this.commandLibelleMap.get(Locale.FRENCH) + "\n" ;
+    }
+
 
     public static CommandName fromValue(String value) {
         for (CommandName commandName: CommandName.values()) {
