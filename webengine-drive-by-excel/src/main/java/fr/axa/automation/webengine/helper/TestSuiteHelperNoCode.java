@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
 
-    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([\\w-]+\\[[-\\w:;]+\\])|([\\w-]+)";; // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
+    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([ \\p{L}0-9-]+\\[[-\\p{L}0-9: ;]+\\])|([ \\p{L}0-9-]+)";  // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
     public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
     public static final String DATA_TEST_COLUMN_NAME_PATTERN = "(?<=:)([^\\]]+)";
 
