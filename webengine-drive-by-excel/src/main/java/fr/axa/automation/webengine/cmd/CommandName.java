@@ -100,21 +100,15 @@ public enum CommandName {
 
     @Override
     public String toString() {
-        //handle encoding
-        return  "-"+this.name()+":\n" +
-                "  DESCRIPTION:\n" +
-                "    ENGLISH: " + this.commandDescriptionMap.get(Locale.ENGLISH) + "\n"+
-                "    FRENCH: " + this.commandDescriptionMap.get(Locale.FRENCH) + "\n"+
-                "  VALUE:\n" +
-                "    ENGLISH: " + this.commandLibelleMap.get(Locale.ENGLISH) + "\n"+
-                "    FRENCH: " + this.commandLibelleMap.get(Locale.FRENCH) + "\n" ;
-
-        /**return "'CommandName  ': { " +
-                "'name : '" + this.name()  +
-                "'label' : '" + commandLibelleMap +
-                ", 'description' : " + commandDescriptionMap +
-                '}';
-    *  */
+        return "CommandName  : { " +
+                "Name : " + this.name()  + ";" +
+                "Description : { " +
+                "English: " + this.commandDescriptionMap.get(Locale.ENGLISH) + ";" +
+                "French: " + this.commandDescriptionMap.get(Locale.FRENCH) + "}; " +
+                "Value: { " +
+                "English: " + this.commandLibelleMap.get(Locale.ENGLISH) +
+                "French: " + this.commandLibelleMap.get(Locale.FRENCH) + "}; " +
+                "}";
     }
 
 
