@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.RegexUtil;
+import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
 
-    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([\\w-]+\\[[-\\w:;]+\\])|([\\w-]+)";; // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
+    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([.*-]+\\[[-.*:;]+\\])|([.*-]+)";; // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
     public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
     public static final String DATA_TEST_COLUMN_NAME_PATTERN = "(?<=:)([^\\]]+)";
 
@@ -52,12 +53,15 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
         List<String> argumentList = getArgumentList(cmd, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME); // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
         Map<String, List<String>> testCaseAndDataTestColumName =new HashMap<>() ;
         for (String argument : argumentList) {
-            List<String> testCaseAndDataTestColumnSet = RegexUtil.match(TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN,argument);
+            List<String> testCaseAndDataTestColumnSet = Arrays.asList(argument.split("]"));
             if(CollectionUtils.isNotEmpty(testCaseAndDataTestColumnSet)){
                 for (String testCaseAndDataTestColumn:testCaseAndDataTestColumnSet) { //firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto]
-                    String testCase = getTestCase(testCaseAndDataTestColumn);
+                    if(StringUtil.equalsIgnoreCase(testCaseAndDataTestColumn,";")){
+                        continue;
+                    }
+                    String testCase = getTestCase(testCaseAndDataTestColumn.contains("-tc:")?testCaseAndDataTestColumn.split("-tc:")[1]:testCaseAndDataTestColumn);
                     List<String> dataTestColumnNameList = getDataTestColumnName(testCaseAndDataTestColumn);
-                    testCaseAndDataTestColumName.put(testCase,dataTestColumnNameList);
+                    testCaseAndDataTestColumName.put(testCase.startsWith(";")?testCase.split(";")[1]:testCase,dataTestColumnNameList);
                 }
             }else{
                 testCaseAndDataTestColumName.put(argument,null);
