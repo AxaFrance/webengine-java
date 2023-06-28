@@ -73,3 +73,19 @@ function displayImage(imgToDisplay){
         modal.style.display = "none";
     }
 }
+
+function expandAll() {
+    let toggler = document.getElementsByClassName("caret");
+    for (const togglerElement of toggler) {
+        togglerElement.parentElement.querySelector(".nested").classList.add("active");
+        togglerElement.classList.add("caret-down");
+    }
+}
+
+function collapseAll() {
+    let toggler = document.getElementsByClassName("caret");
+    for (const togglerElement of toggler) {
+        togglerElement.parentElement.querySelector(".nested").classList.remove("active");
+        togglerElement.classList.remove("caret-down");
+    }
+}

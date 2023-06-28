@@ -36,7 +36,13 @@
     <xsl:template name="tree-view-template">
         <div id="body-left-container" class="body-left-container">
             <div id='id-tree-header-container' class="tree-header-container">
-                <h1>Test cases</h1>
+                <div class="tree-title-container">
+                    <h1>Test cases</h1>
+                </div>
+                <div class="tree-action-container">
+                    <div class="tree-one-action-container" onclick="expandAll()"><i class="fa fa-plus icon-action-tree"></i></div>
+                    <div class="tree-one-action-container" onclick="collapseAll()"><i class="fa fa-minus icon-action-tree"></i></div>
+                </div>
             </div>
             <div id='id-tree-container' class="tree-container">
                 <ul id="idTree">
