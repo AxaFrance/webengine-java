@@ -7,7 +7,10 @@
 .tab-content-container {
     width: 100%;
     padding: 10px;
-    word-break: break-all;
+}
+
+.tab-content-log-container {
+    white-space: pre-line;
 }
 
 .tab-label {

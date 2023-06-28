@@ -114,25 +114,27 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
-        getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Executed command : ").append(commandData);
+        getLogReport().append("Executed command : ").append(commandData);
         try {
             String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
                 actionReport.setResult(Result.PASSED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status :").append(Result.PASSED.value());
+                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status : ").append(Result.PASSED.value());
             } else {
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
+                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
             }
             actionReport.setLog(getLogReport().toString());
         } catch (Throwable e) {
-            actionReport.setResult(Result.FAILED);
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional");
+                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
+            }else{
+                actionReport.setResult(Result.FAILED);
+                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status : ").append(Result.FAILED.value());
             }
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Exception : ").append(ConstantNoCode.CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
             actionReport.setLog(getLogReport().toString());
