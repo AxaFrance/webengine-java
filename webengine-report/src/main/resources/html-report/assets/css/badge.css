@@ -3,13 +3,9 @@
 }
 
 .badge-container {
-    margin-right: 5px;
+    margin: 5px;
     transition: 200ms all ease-in-out;
 }
-/*.badge-container:hover {*/
-/*    transform: translateY(-4px);*/
-/*    cursor: pointer;*/
-/*}*/
 
 .badge-action {
     font-weight: 350 !important;
