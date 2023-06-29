@@ -53,11 +53,15 @@ section {
     height: 100%;
     margin-bottom: 0px;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1.2em;
-    color: #00008f;
-    font-family: "Poppins" !important;
+    color: #ffffff;
 }
+
+.label-in-tab:hover {
+    color: #00008f!important;
+}
+
 
 .shadow {
     -webkit-box-shadow: 10px 11px 5px 0px rgba(0, 0, 0, 0.1);
