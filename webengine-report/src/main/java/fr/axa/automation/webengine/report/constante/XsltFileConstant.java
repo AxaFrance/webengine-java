@@ -19,6 +19,7 @@ public enum XsltFileConstant {
                                 ReportPathConstant.XSLT_DIRECTORY_NAME.getValue()+"/"+"panel-left/panel-left-template.xslt",
                                 ReportPathConstant.XSLT_DIRECTORY_NAME.getValue()+"/"+"panel-right/content-tab/content-tab-context-value-template.xslt",
                                 ReportPathConstant.XSLT_DIRECTORY_NAME.getValue()+"/"+"header/sub-header-template.xslt",
+                                ReportPathConstant.XSLT_DIRECTORY_NAME.getValue()+"/"+"header/chart-header-template.xslt",
                                 ReportPathConstant.XSLT_DIRECTORY_NAME.getValue()+"/"+"header/header-template.xslt",
                                 ReportPathConstant.XSLT_DIRECTORY_NAME.getValue()+"/"+"panel-left/status-template.xslt",
                                 ReportPathConstant.XSLT_DIRECTORY_NAME.getValue()+"/"+"panel-right/content-tab/content-tab-log-template.xslt",

@@ -2,6 +2,7 @@
 
     <xsl:import href="header/header-template.xslt"/>
     <xsl:import href="header/sub-header-template.xslt"/>
+    <xsl:import href="header/chart-header-template.xslt"/>
     <xsl:import href="panel-left/panel-left-template.xslt"/>
     <xsl:import href="panel-right/panel-right-template.xslt"/>
 
@@ -20,6 +21,7 @@
                 <link href="assets/css/modal.css" rel="stylesheet" />
 
                 <script src="assets/js/global.js"></script>
+                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
@@ -33,8 +35,11 @@
                         <xsl:call-template name="header-template"/>
                     </div>
 
-                    <div class="sub-site-header scrollbar">
+                    <div class="sub-site-header">
                         <xsl:call-template name="sub-header-template"/>
+                    </div>
+                    <div class="chart-header">
+                        <xsl:call-template name="chart-header-template"/>
                     </div>
 
                     <div class="body-content-container">

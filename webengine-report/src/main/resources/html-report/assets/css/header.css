@@ -41,7 +41,7 @@
     color: #000072;
 }
 
-.sub-site-header {
+.sub-site-header, .chart-header {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

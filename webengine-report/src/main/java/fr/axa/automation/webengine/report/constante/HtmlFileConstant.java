@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public enum HtmlFileConstant {
     CSS_FILE_LIST(Arrays.asList(ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"badge.css",
-                                ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"banner-information.css",
                                 ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"body-content.css",
                                 ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"content-view.css",
                                 ReportPathConstant.CSS_DIRECTORY_NAME.getValue()+"/"+"global.css",
