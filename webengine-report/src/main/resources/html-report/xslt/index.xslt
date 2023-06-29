@@ -13,7 +13,6 @@
                 <link href="assets/css/header.css" rel="stylesheet" />
                 <link href="assets/css/table.css" rel="stylesheet" />
                 <link href="assets/css/badge.css" rel="stylesheet" />
-                <link href="assets/css/banner-information.css" rel="stylesheet" />
                 <link href="assets/css/body-content.css" rel="stylesheet" />
                 <link href="assets/css/tree.css" rel="stylesheet" />
                 <link href="assets/css/content-view.css" rel="stylesheet" />
@@ -34,7 +33,7 @@
                         <xsl:call-template name="header-template"/>
                     </div>
 
-                    <div class="general-information scrollbar">
+                    <div class="sub-site-header scrollbar">
                         <xsl:call-template name="sub-header-template"/>
                     </div>
 
