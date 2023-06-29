@@ -2,15 +2,15 @@
     <xsl:template name="tab-test-case-template">
         <xsl:param name="id"/>
         <div class="tab-bar">
-            <div id="tab-id-information-{$id}" class="tab-label tablink tab-bottombar w3-hover-light-grey "
+            <div id="tab-id-information-{$id}" class="tab-label tablink w3-hover-light-grey "
                  onclick="openSelectedTab('tab-id-information-{$id}', 'content-id-information-{$id}');">
                     <label class="label-in-tab">Information</label>
             </div>
-            <div id="tab-id-log-{$id}" class="tab-label tablink tab-bottombar w3-hover-light-grey "
+            <div id="tab-id-log-{$id}" class="tab-label tablink w3-hover-light-grey "
                  onclick="openSelectedTab('tab-id-log-{$id}', 'content-id-log-{$id}');">
                     <label class="label-in-tab">Log</label>
             </div>
-            <div id="tab-id-test-data-{$id}" class="tab-label tablink tab-bottombar w3-hover-light-grey "
+            <div id="tab-id-test-data-{$id}" class="tab-label tablink w3-hover-light-grey "
                  onclick="openSelectedTab('tab-id-test-data-{$id}', 'content-id-test-data-{$id}');">
                     <label class="label-in-tab">Test data</label>
             </div>
