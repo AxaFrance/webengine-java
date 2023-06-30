@@ -18,7 +18,7 @@ public enum ConstantNoCode {
     MINUS("-"),
     PLUS("+"),
     DASH("-"),
-    COMMAND_FILE_NAME("command.yml"),
+
     CR_LF ("\r\n \r\n");
     final String value;
 }
