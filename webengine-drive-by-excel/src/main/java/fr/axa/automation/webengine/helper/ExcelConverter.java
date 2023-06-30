@@ -73,6 +73,9 @@ public class ExcelConverter {
 
     private static boolean isEndOfFile(Sheet currentSheet, Integer rowIndex) {
         String cellValue = ExcelReader.getCellValue(currentSheet, rowIndex, ExcelColumn.COMMAND.getValue());
+        if (StringUtils.isEmpty(cellValue)) {
+            throw new IllegalArgumentException("The command column is empty in the row " + rowIndex + " of the sheet '" + currentSheet.getSheetName()+"'");
+        }
         if(CommandName.fromValue(cellValue) == CommandName.END_SCENARIO){
             return true;
         }

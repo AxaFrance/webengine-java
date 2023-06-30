@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 import java.util.Map;
@@ -123,12 +124,15 @@ public enum CommandName {
 
 
     public static CommandName fromValue(String value) {
+        if(StringUtils.isEmpty(value)){
+            throw new IllegalArgumentException("La valeur de la commande ne peut pas être vide");
+        }
         for (CommandName commandName: CommandName.values()) {
             Optional<String> findValue = commandName.getCommandLibelleMap().values().stream().filter(s -> StringUtil.equalsIgnoreCase(value,s)).findFirst();
             if(findValue.isPresent()){
                 return commandName;
             }
         }
-        throw new IllegalArgumentException(value);
+        throw new IllegalArgumentException("Cette command n'existe pas : "+value+"");
     }
 }
