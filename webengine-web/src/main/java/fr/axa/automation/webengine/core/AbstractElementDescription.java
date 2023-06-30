@@ -86,7 +86,7 @@ public abstract class AbstractElementDescription {
         Exception exception = new Exception();
         UUID uuid = UUID.randomUUID();
 
-        log.debug(uuid+"-Element search  "+toString()+" at "+LocalDateTime.now()+". Defined time out is :"+timeOutSecond);
+        log.debug(uuid+"-Element search at "+LocalDateTime.now()+". Defined time out is :"+timeOutSecond);
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
                 WebElement element = internalFindElement();

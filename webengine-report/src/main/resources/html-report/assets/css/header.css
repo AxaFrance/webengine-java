@@ -41,7 +41,13 @@
     color: #000072;
 }
 
-.sub-site-header, .chart-header {
+.sub-site-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.information-sub-header, .chart-header {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -51,4 +57,5 @@
     color: gray;
     background-color: white;
     margin: 1em 0;
+    flex-grow: 1;
 }
