@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.cmd;
 
+import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
@@ -26,7 +27,7 @@ public class AssertContentCommand extends AbstractDriverCommand {
 
         if (MapUtils.isEmpty(filterContentMap)) {
             String errorMessage = "The expected value is : " + expected + " and the actual contentMap is : " + contentMap;
-            getLogReport().append(errorMessage);
+            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }
     }

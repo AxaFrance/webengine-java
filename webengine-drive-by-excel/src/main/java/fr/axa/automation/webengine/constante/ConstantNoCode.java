@@ -18,7 +18,6 @@ public enum ConstantNoCode {
     MINUS("-"),
     PLUS("+"),
     DASH("-"),
-
     CR_LF ("\r\n \r\n");
     final String value;
 }
