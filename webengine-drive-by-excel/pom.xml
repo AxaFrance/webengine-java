@@ -120,22 +120,6 @@
                 <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>src/main/resources/command.yml</file>
-                                    <type>yml</type>
-                                    <classifier>command</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>attach-artifacts-yaml</id>
                         <phase>package</phase>
                         <goals>
