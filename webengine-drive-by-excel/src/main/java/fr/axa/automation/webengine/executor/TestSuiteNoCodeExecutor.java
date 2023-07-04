@@ -75,7 +75,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         }
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
         SettingsNoCode settingsNoCode = (SettingsNoCode) globalApplicationContext.getSettings();
-        List<TestCaseNodeNoCode> testCaseToRunList = getTestCaseToRun(testSuiteData, settingsNoCode);
+        List<TestCaseNodeNoCode> testCaseToRunList = getTestCaseListToRun(testSuiteData, settingsNoCode);
 
         for (TestCaseNodeNoCode testCaseNodeToRun : testCaseToRunList) {
             List<String> dataTestColumNameList = getDataTestColumNameList(settingsNoCode, testCaseNodeToRun);
@@ -97,7 +97,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         return dataTestColumNameList;
     }
 
-    private List<TestCaseNodeNoCode> getTestCaseToRun(TestSuiteDataNoCode testSuiteData, SettingsNoCode settingsNoCode) {
+    private List<TestCaseNodeNoCode> getTestCaseListToRun(TestSuiteDataNoCode testSuiteData, SettingsNoCode settingsNoCode) {
         List<TestCaseNodeNoCode> testCaseNodeList = testSuiteData.getTestCaseNodeList();
         List<String> nameOfTestCaseToRun = new ArrayList<>(settingsNoCode.getTestCaseAndDataTestColumName().keySet());
         return testCaseNodeList.stream().filter(testCaseNodeNoCode -> nameOfTestCaseToRun.contains(testCaseNodeNoCode.getName())).collect(Collectors.toList());

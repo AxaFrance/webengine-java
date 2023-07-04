@@ -66,9 +66,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
     }
 
     public Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
-        Object webDriver = super.initializeWebDriver(globalApplicationContext);
-        ((WebDriver)webDriver).manage().window().maximize();
-        return webDriver;
+        return super.initializeWebDriver(globalApplicationContext);
     }
 
     protected AbstractTestCaseContext createTestCaseContext(Object webDriver, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseToRun, String dataTestColmnName ) throws WebEngineException {
@@ -245,7 +243,6 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
     }
 
     protected List<CommandResult> filterCommandResult(List<CommandResult> commandResultList) {
-        Result result = Result.PASSED;
         return commandResultList.stream().filter(commandResult -> CommandName.IF!=commandResult.getCommandData().getCommand() && CommandName.ELSE_IF!=commandResult.getCommandData().getCommand()).collect(Collectors.toList());
     }
 }
