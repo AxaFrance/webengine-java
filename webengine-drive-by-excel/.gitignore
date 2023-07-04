@@ -12,6 +12,7 @@
 hs_err_pid*
 src/main/resources/html-report/*
 src/test/resources/html-report/*
+src/main/resources/command.yaml
 
 
 ##############################
