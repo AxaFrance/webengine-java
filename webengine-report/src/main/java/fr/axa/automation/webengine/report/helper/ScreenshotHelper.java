@@ -28,7 +28,7 @@ public final class ScreenshotHelper {
     public static ScreenshotReport getScreenshotReport(String name, byte[] dataInbase64) {
         ScreenshotReport screenshotReport = new ScreenshotReport();
         screenshotReport.setName(name);
-//        screenshotReport.setId(UUID.randomUUID().toString());
+        screenshotReport.setId(UUID.randomUUID().toString());
         screenshotReport.setData(dataInbase64);
         return screenshotReport;
     }
