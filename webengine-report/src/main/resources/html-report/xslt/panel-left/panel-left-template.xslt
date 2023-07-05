@@ -9,12 +9,13 @@
                 <li>
                     <xsl:choose>
                         <xsl:when test="we:SubActionReports">
-                            <span class="caret"></span>
-                            <xsl:call-template name="status-template">
-                                <xsl:with-param name="status" select="we:Result"/>
-                                <xsl:with-param name="label" select="we:Name"/>
-                                <xsl:with-param name="id" select="we:Id"/>
-                            </xsl:call-template>
+                            <span class="caret">
+                                <xsl:call-template name="status-template">
+                                    <xsl:with-param name="status" select="we:Result"/>
+                                    <xsl:with-param name="label" select="we:Name"/>
+                                    <xsl:with-param name="id" select="we:Id"/>
+                                </xsl:call-template>
+                            </span>
 
                             <xsl:call-template name="sub-tree-view-template">
                                 <xsl:with-param name="firstNode" select="we:SubActionReports/we:ActionReport"/>
