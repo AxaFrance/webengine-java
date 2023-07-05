@@ -1,7 +1,8 @@
-package fr.axa.automation.webengine.helper;
+package fr.axa.automation.webengine.report.helper;
 
 import fr.axa.automation.webengine.generated.ArrayOfScreenshotReport;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,14 @@ public final class ScreenshotHelper {
         screenshotReport.setName(name);
         screenshotReport.setId(UUID.randomUUID().toString());
         screenshotReport.setData(dataInbase64);
+        return screenshotReport;
+    }
+
+    public static ScreenshotReport copyIfNecessary(ScreenshotReport screenshotReport) {
+        ScreenshotReport screenshotReportCopy = new ScreenshotReport();
+        screenshotReport.setName(screenshotReport.getName());
+        screenshotReport.setId(StringUtils.isNotEmpty(screenshotReport.getId()) ? screenshotReport.getId() : UUID.randomUUID().toString());
+        screenshotReport.setData(screenshotReport.getData());
         return screenshotReport;
     }
 }

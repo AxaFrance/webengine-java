@@ -9,5 +9,6 @@
         <xjc:javaType name="java.util.Calendar" xmlType="xsd:time"
                       adapter="javax.xml.bind.DatatypeConverter" />
         <xjc:simple />
+        <xjc:serializable uid="-1"/>
     </globalBindings>
 </bindings>

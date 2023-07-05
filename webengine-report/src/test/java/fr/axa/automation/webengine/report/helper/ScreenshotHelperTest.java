@@ -1,7 +1,8 @@
-package fr.axa.automation.webengine.helper;
+package fr.axa.automation.webengine.report.helper;
 
 import fr.axa.automation.webengine.generated.ArrayOfScreenshotReport;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
+import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -44,7 +44,7 @@ public class WebengineHtmlReportHelper implements IWebengineHtmlReportHelper {
         Path cssTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + "/" + ReportPathConstant.CSS_DIRECTORY_NAME.getValue());
         Path jsTargetDirectoryPath = FileUtil.createDirectories(htmlReportTargetDirectoryPath.toAbsolutePath() + "/" + ReportPathConstant.JS_DIRECTORY_NAME.getValue());
 
-        String basePathXslt = ReportPathConstant.XSLT_DIRECTORY_NAME.getValue() + "/"; //Don't use File.separator because it's a path for xslt in the resource!!!!!!!
+        String basePathXslt = ReportPathConstant.XSLT_DIRECTORY_NAME.getValue() + "/"; //Don't use File.separator attribute because it's a path for xslt in the resource!!!!!!!
         String htmlIndexFilePath = htmlReportTargetDirectoryPath + File.separator + HtmlFileConstant.INDEX_HTML_FILE.getValue().get(0);
         try {
             copyFilesFromResource(ReportPathConstant.HTML_REPORT_DIRECTORY_NAME.getValue(),HtmlFileConstant.CSS_FILE_LIST.getValue(), cssTargetDirectoryPath.toAbsolutePath().toString());

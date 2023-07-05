@@ -1,21 +1,35 @@
 package fr.axa.automation.webengine.report.helper.global;
 
+import fr.axa.automation.webengine.constant.FileExtensionConstant;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.report.constante.ReportPathConstant;
 import fr.axa.automation.webengine.report.constante.ReportPathKey;
+import fr.axa.automation.webengine.report.helper.ImageReportHelper;
+import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineHtmlReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.IJunitReportHelper;
 import fr.axa.automation.webengine.util.BrowserDesktop;
+import fr.axa.automation.webengine.util.FileUtil;
+import fr.axa.automation.webengine.util.SerializationUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -38,10 +52,11 @@ public class ReportHelper implements IReportHelper{
     }
 
     public Map<ReportPathKey,String> generateReports(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
+        TestSuiteReport testSuiteReportCopy = TestSuiteReportHelper.clone(testSuiteReport);
         Map<ReportPathKey,String> path = new HashMap<>();
-        path.put(ReportPathKey.XML_REPORT_PATH_KEY,generateWebengineXmlReport(testSuiteReport, outputPath));
-        path.put(ReportPathKey.HTML_REPORT_PATH_KEY,generateWebengineHtmlReport(testSuiteReport, outputPath,path.get(ReportPathKey.XML_REPORT_PATH_KEY)));
-        path.put(ReportPathKey.JUNIT_REPORT_PATH_KEY,generateJunitReport(testSuiteReport, testSuiteName, outputPath));
+        path.put(ReportPathKey.XML_REPORT_PATH_KEY,generateWebengineXmlReport(testSuiteReportCopy, outputPath));
+        path.put(ReportPathKey.HTML_REPORT_PATH_KEY,generateWebengineHtmlReport(testSuiteReportCopy, outputPath,path.get(ReportPathKey.XML_REPORT_PATH_KEY)));
+        path.put(ReportPathKey.JUNIT_REPORT_PATH_KEY,generateJunitReport(testSuiteReportCopy, testSuiteName, outputPath));
         return path;
     }
 

@@ -9,7 +9,7 @@ import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.global.ActionContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.EnvironmentVariablesHelper;
-import fr.axa.automation.webengine.helper.ScreenshotHelper;
+import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.helper.TestCaseDataHelper;
 import fr.axa.automation.webengine.report.builder.ActionReportBuilder;
 import lombok.AccessLevel;
