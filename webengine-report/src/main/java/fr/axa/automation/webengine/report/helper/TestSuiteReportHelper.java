@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.report.object.TestCaseMetric;
 import fr.axa.automation.webengine.report.object.TestSuiteReportInformation;
 import fr.axa.automation.webengine.util.SerializationUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -45,27 +46,52 @@ public final class TestSuiteReportHelper {
         try {
             testSuiteReportCopy = SerializationUtils.clone(testSuiteReport);
             List< TestCaseReport> testCaseReportList = testSuiteReportCopy.getTestResults();
-            for (TestCaseReport testCaseReport : testCaseReportList) {
-                if(StringUtils.isEmpty(testCaseReport.getId())){
-                    testCaseReport.setId(UUID.randomUUID().toString());
-                }
-                ArrayOfActionReport arrayOfActionReport = testCaseReport.getActionReports();
-                for (ActionReport actionReport :arrayOfActionReport.getActionReports()) {
-                    if(StringUtils.isEmpty(actionReport.getId())){
-                        actionReport.setId(UUID.randomUUID().toString());
-                    }
-                }
-            }
-            List<ScreenshotReport> screenshotReportList = ImageReportHelper.getScreenShotReport(testSuiteReportCopy);
+            updateTestCaseReport(testCaseReportList);
+            updateScreenshotReport(testSuiteReportCopy);
+            TestCaseMetric testCaseMetric = TestCaseMetricHelper.getMetrics(testSuiteReportCopy.getTestResults());
+            testSuiteReportCopy.setPassed(testCaseMetric.getNumberOfTestCasePassed());
+            testSuiteReportCopy.setFailed(testCaseMetric.getNumberOfTestCaseFailed());
+            testSuiteReportCopy.setIgnored(testCaseMetric.getNumberOfTestCaseIgnored());
+        } catch (IOException e) {
+            throw new WebEngineException("Error during copy of object TestSuiteReport",e);
+        }
+        return testSuiteReportCopy;
+    }
+
+    private static void updateScreenshotReport(TestSuiteReport testSuiteReportCopy) throws WebEngineException {
+        List<ScreenshotReport> screenshotReportList = ImageReportHelper.getScreenShotReport(testSuiteReportCopy);
+        if(CollectionUtils.isNotEmpty(screenshotReportList)){
             for (ScreenshotReport screenshotReport :screenshotReportList) {
                 if(StringUtils.isEmpty(screenshotReport.getId())){
                     screenshotReport.setId(UUID.randomUUID().toString());
                 }
             }
-
-        } catch (IOException e) {
-            throw new WebEngineException("Error during copy of object TestSuiteReport",e);
         }
-        return testSuiteReportCopy;
+    }
+
+    private static void updateTestCaseReport(List<TestCaseReport> testCaseReportList) {
+        if(CollectionUtils.isNotEmpty(testCaseReportList)){
+            for (TestCaseReport testCaseReport : testCaseReportList) {
+                if(StringUtils.isEmpty(testCaseReport.getId())){
+                    testCaseReport.setId(UUID.randomUUID().toString());
+                }
+                updateArrayOfActionReport(testCaseReport);
+            }
+        }
+    }
+
+    private static void updateArrayOfActionReport(TestCaseReport testCaseReport) {
+        updateActionReport(testCaseReport.getActionReports());
+    }
+
+    private static void updateActionReport(ArrayOfActionReport arrayOfActionReport) {
+        if(arrayOfActionReport!=null && CollectionUtils.isNotEmpty(arrayOfActionReport.getActionReports())){
+            for (ActionReport actionReport : arrayOfActionReport.getActionReports()) {
+                if(StringUtils.isEmpty(actionReport.getId())){
+                    actionReport.setId(UUID.randomUUID().toString());
+                }
+                updateActionReport(actionReport.getSubActionReports());
+            }
+        }
     }
 }
