@@ -40,8 +40,10 @@ public final class ImageReportHelper {
     private static List<ScreenshotReport> getScreenShotReport(ActionReport actionReport) {
         List<ScreenshotReport> screenshotReportList = new ArrayList<>();
         List<ScreenshotReport> screenshotReportListOfSubReport = new ArrayList<>();
-        if(actionReport!=null && actionReport.getScreenshots()!=null && CollectionUtils.isNotEmpty(actionReport.getScreenshots().getScreenshotReports())){
-            screenshotReportList = actionReport.getScreenshots().getScreenshotReports().stream().collect(Collectors.toList());
+        if(actionReport != null){
+            if(actionReport.getScreenshots() != null && CollectionUtils.isNotEmpty(actionReport.getScreenshots().getScreenshotReports())){
+                screenshotReportList = actionReport.getScreenshots().getScreenshotReports().stream().collect(Collectors.toList());
+            }
             if(actionReport.getSubActionReports()!=null){
                 actionReport.getSubActionReports().getActionReports().stream().forEach(at -> screenshotReportListOfSubReport.addAll(getScreenShotReport(at)));
             }
