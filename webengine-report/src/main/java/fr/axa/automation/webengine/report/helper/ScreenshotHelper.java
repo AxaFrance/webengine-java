@@ -28,16 +28,8 @@ public final class ScreenshotHelper {
     public static ScreenshotReport getScreenshotReport(String name, byte[] dataInbase64) {
         ScreenshotReport screenshotReport = new ScreenshotReport();
         screenshotReport.setName(name);
-        screenshotReport.setId(UUID.randomUUID().toString());
+//        screenshotReport.setId(UUID.randomUUID().toString());
         screenshotReport.setData(dataInbase64);
-        return screenshotReport;
-    }
-
-    public static ScreenshotReport copyIfNecessary(ScreenshotReport screenshotReport) {
-        ScreenshotReport screenshotReportCopy = new ScreenshotReport();
-        screenshotReport.setName(screenshotReport.getName());
-        screenshotReport.setId(StringUtils.isNotEmpty(screenshotReport.getId()) ? screenshotReport.getId() : UUID.randomUUID().toString());
-        screenshotReport.setData(screenshotReport.getData());
         return screenshotReport;
     }
 }
