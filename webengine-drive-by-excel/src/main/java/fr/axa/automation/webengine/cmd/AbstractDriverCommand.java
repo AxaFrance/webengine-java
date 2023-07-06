@@ -15,11 +15,11 @@ import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
-import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -51,28 +51,29 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
         Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
+        WebDriver webDriver = (WebDriver)((TestCaseNoCodeContext)testCaseContext).getWebDriver(commandData);
         if(entry==null){
             return WebElementDescription.builder()
-                    .useDriver((WebDriver) testCaseContext.getWebDriver())
+                    .useDriver(webDriver)
                     .build();
         }
 
         switch (entry.getKey()){
             case ID:
                 return WebElementDescription.builder()
-                        .useDriver((WebDriver) testCaseContext.getWebDriver())
+                        .useDriver(webDriver)
                         .id(entry.getValue())
                         .build();
             case XPATH:
                 return WebElementDescription.builder()
-                        .useDriver((WebDriver) testCaseContext.getWebDriver())
+                        .useDriver(webDriver)
                         .xPath(entry.getValue())
                         .build();
             case COMBINAISON_OF_LOCATOR:
                 ObjectMapper mapper = new ObjectMapper();
                 try {
                     WebElementDescription webElementDescription = mapper.readValue(entry.getValue(), WebElementDescription.class);
-                    webElementDescription.setUseDriver((WebDriver) testCaseContext.getWebDriver());
+                    webElementDescription.setUseDriver(webDriver);
                     return webElementDescription;
                 } catch (JsonProcessingException e) {
                     throw new WebEngineException("Veuillez vérifier le format de la combinaison de locator : "+entry.getValue(), e);
@@ -80,7 +81,7 @@ public abstract class AbstractDriverCommand implements ICommand {
 
             default:
                 return WebElementDescription.builder()
-                        .useDriver((WebDriver) testCaseContext.getWebDriver())
+                        .useDriver(webDriver)
                         .build();
         }
     }
@@ -125,7 +126,7 @@ public abstract class AbstractDriverCommand implements ICommand {
             }
             actionReport.setLog(getLogReport().toString());
         } catch (Throwable e) {
-            actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext, ""));
+            actionReport.getScreenshots().getScreenshotReports().add(screenShot(testCaseContext,commandData, ""));
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
                 getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
@@ -142,8 +143,8 @@ public abstract class AbstractDriverCommand implements ICommand {
         return CommandResult.builder().commandData(commandData).actionReport(actionReport).savedData(savedData).build();
     }
 
-    protected ScreenshotReport screenShot(AbstractTestCaseContext testCaseContext, String name) {
-        byte[] screenshot = ((TakesScreenshot) testCaseContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+    protected ScreenshotReport screenShot(AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, String name) {
+        byte[] screenshot = ((TakesScreenshot) ((TestCaseNoCodeContext)testCaseContext).getWebDriver(commandData)).getScreenshotAs(OutputType.BYTES);
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 

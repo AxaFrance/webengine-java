@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
+import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
@@ -23,8 +24,8 @@ public class IfChecking extends AbstractChecking{
     }
 
     private boolean checkConsistencyCommand(TestCaseDataNoCode testCaseData) {
-        List<CommandDataNoCode> ifCommandDataSet = getCommandDataByName(testCaseData,CommandName.IF);
-        List<CommandDataNoCode> endIfCommandDataSet = getCommandDataByName(testCaseData,CommandName.END_IF);
+        List<CommandDataNoCode> ifCommandDataSet = CommandDataHelper.getCommandDataByName(testCaseData,CommandName.IF);
+        List<CommandDataNoCode> endIfCommandDataSet = CommandDataHelper.getCommandDataByName(testCaseData,CommandName.END_IF);
         return ifCommandDataSet.size() == endIfCommandDataSet.size();
     }
 

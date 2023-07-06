@@ -14,13 +14,13 @@ import java.util.List;
 public class PopUpCommand extends AbstractDriverCommand {
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
-        WebDriver driver = (WebDriver) testCaseContext.getWebDriver();
+        WebDriver webDriver = (WebDriver) ((TestCaseNoCodeContext)testCaseContext).getWebDriver(commandData);
         String value = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        if (driver != null) {
+        if (webDriver != null) {
             if(StringUtil.equalsIgnoreCase(value, Constant.OUI.getValue()) || StringUtil.equalsIgnoreCase(value, Constant.OK.getValue())){
-                driver.switchTo().alert().accept();
+                webDriver.switchTo().alert().accept();
             } else{
-                driver.switchTo().alert().dismiss();
+                webDriver.switchTo().alert().dismiss();
             }
         }else {
             throw new Exception("WebDriver is null");

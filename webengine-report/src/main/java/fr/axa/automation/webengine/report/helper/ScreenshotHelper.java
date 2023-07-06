@@ -2,7 +2,6 @@ package fr.axa.automation.webengine.report.helper;
 
 import fr.axa.automation.webengine.generated.ArrayOfScreenshotReport;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;

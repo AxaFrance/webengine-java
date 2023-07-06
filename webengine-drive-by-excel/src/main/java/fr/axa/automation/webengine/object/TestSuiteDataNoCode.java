@@ -24,12 +24,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestSuiteDataNoCode {
+
     @JsonProperty("uid")
     String uid;
+
     @JsonProperty("version")
     String version;
+
     @JsonProperty("name")
     String name;
+
     @JsonProperty("testCaseList")
     List<TestCaseDataNoCode> testCaseList;
 

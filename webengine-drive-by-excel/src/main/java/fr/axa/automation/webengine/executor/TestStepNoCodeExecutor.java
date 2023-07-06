@@ -44,7 +44,7 @@ public class TestStepNoCodeExecutor extends AbstractTestStepExecutor implements 
         } catch (Throwable throwable){
             actionReport.setResult(Result.FAILED);
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,commandData,commandResultList));
-            actionReport.setLog("Command "+commandData.toString()+" Failed");
+            actionReport.setLog("Command " + commandData + " Failed");
         }finally {
             actionReport.setEndTime(Calendar.getInstance());
         }

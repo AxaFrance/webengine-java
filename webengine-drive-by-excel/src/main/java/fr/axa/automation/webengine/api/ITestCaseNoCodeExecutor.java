@@ -9,7 +9,7 @@ import fr.axa.automation.webengine.object.TestCaseNodeNoCode;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 
 public interface ITestCaseNoCodeExecutor extends ITestCaseExecutor {
-    AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseToRun, String dataTestColmnName) throws WebEngineException;
+    AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun, String dataTestColumnName) throws WebEngineException;
 
     TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException;
 }

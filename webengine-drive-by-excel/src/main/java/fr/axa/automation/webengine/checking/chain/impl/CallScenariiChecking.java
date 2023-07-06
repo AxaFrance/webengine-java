@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.TargetKey;
+import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
@@ -23,9 +24,9 @@ public class CallScenariiChecking extends AbstractChecking{
         List<String> testCaseNameList = getTestCaseNameList(testCaseDataList);
 
         for(TestCaseDataNoCode testCaseData : testCaseDataList){
-            List<CommandDataNoCode> commandCallList = getCommandDataByName(testCaseData,CommandName.CALL);
+            List<CommandDataNoCode> commandCallList = CommandDataHelper.getCommandDataByName(testCaseData,CommandName.CALL);
             if(CollectionUtils.isNotEmpty(commandCallList)){
-                callCommandByTestCaseMap.put(testCaseData.getName(), getCommandDataByName(testCaseData,CommandName.CALL));
+                callCommandByTestCaseMap.put(testCaseData.getName(), CommandDataHelper.getCommandDataByName(testCaseData,CommandName.CALL));
             }
         }
         if(MapUtils.isNotEmpty(callCommandByTestCaseMap)){

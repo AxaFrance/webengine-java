@@ -1,6 +1,9 @@
 package fr.axa.automation.webengine.helper;
 
+import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.ConstantNoCode;
+import fr.axa.automation.webengine.object.CommandDataNoCode;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -44,5 +47,10 @@ public class CommandDataHelper {
             return true;
         }
         return  false;
+    }
+
+    public static List<CommandDataNoCode> getCommandDataByName(TestCaseDataNoCode testCaseData, CommandName commandName) {
+        List<CommandDataNoCode> commandDataSet = testCaseData.getCommandList();
+        return commandDataSet.stream().filter(commandData -> commandData.getCommand() == commandName).collect(Collectors.toList());
     }
 }

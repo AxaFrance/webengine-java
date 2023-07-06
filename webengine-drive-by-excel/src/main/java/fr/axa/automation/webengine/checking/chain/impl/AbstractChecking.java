@@ -28,11 +28,6 @@ public abstract class AbstractChecking implements IChecking {
         return first;
     }
 
-    protected List<CommandDataNoCode> getCommandDataByName(TestCaseDataNoCode testCaseData, CommandName commandName) {
-        List<CommandDataNoCode> commandDataSet = testCaseData.getCommandList();
-        return commandDataSet.stream().filter(commandData -> commandData.getCommand() == commandName).collect(Collectors.toList());
-    }
-
     protected List<CommandDataNoCode> getOptionalCommand(TestCaseDataNoCode testCaseData) {
         return getCommandByOptional(testCaseData,OptionalConstante.OPTIONAL);
     }
