@@ -67,6 +67,11 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
 
     @Override
     public AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun, String dataTestColumnName) throws WebEngineException {
+        Map<CommandDataNoCode, Object> webDriverByApplicationVisitedList = getWebDriverByApplicationVisited(globalApplicationContext, testSuiteData, testCaseNodeToRun);
+        return createTestCaseContext(webDriverByApplicationVisitedList, testSuiteData, testCaseNodeToRun, dataTestColumnName);
+    }
+
+    private Map<CommandDataNoCode, Object> getWebDriverByApplicationVisited(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun) throws WebEngineException {
         TestCaseDataNoCode testCaseDataNoCode = TestSuiteHelperNoCode.getTestCaseDataNoCode(testSuiteData, testCaseNodeToRun.getName());
         List<CommandDataNoCode> applicationVisitedList = TestSuiteHelperNoCode.getApplicationVisited(testCaseDataNoCode);
         Map<CommandDataNoCode, Object> webDriverByApplicationVisitedList = new LinkedHashMap();
@@ -80,7 +85,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             }
             webDriverByApplicationVisitedList.put(commandDataNoCode, initializeWebDriver(globalApplicationContext));
         }
-        return createTestCaseContext(webDriverByApplicationVisitedList, testSuiteData, testCaseNodeToRun, dataTestColumnName);
+        return webDriverByApplicationVisitedList;
     }
 
     public Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
