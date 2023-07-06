@@ -69,18 +69,18 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
     public AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun, String dataTestColumnName) throws WebEngineException {
         TestCaseDataNoCode testCaseDataNoCode = TestSuiteHelperNoCode.getTestCaseDataNoCode(testSuiteData, testCaseNodeToRun.getName());
         List<CommandDataNoCode> applicationVisitedList = TestSuiteHelperNoCode.getApplicationVisited(testCaseDataNoCode);
-        Map<CommandDataNoCode, Object> webDriverByUrlList = new LinkedHashMap();
+        Map<CommandDataNoCode, Object> webDriverByApplicationVisitedList = new LinkedHashMap();
         for (CommandDataNoCode commandDataNoCode : applicationVisitedList) {
-            if (MapUtils.isNotEmpty(webDriverByUrlList)) {
-                List<CommandDataNoCode> commandDataListWithSameApplicationVisitedList = webDriverByUrlList.keySet().stream().filter(cmdData -> StringUtil.equalsIgnoreCase(cmdData.getTargetList().get(TargetKey.OPEN),commandDataNoCode.getTargetList().get(TargetKey.OPEN))).collect(Collectors.toList());
+            if (MapUtils.isNotEmpty(webDriverByApplicationVisitedList)) {
+                List<CommandDataNoCode> commandDataListWithSameApplicationVisitedList = webDriverByApplicationVisitedList.keySet().stream().filter(cmdData -> StringUtil.equalsIgnoreCase(cmdData.getTargetList().get(TargetKey.OPEN),commandDataNoCode.getTargetList().get(TargetKey.OPEN))).collect(Collectors.toList());
                 if (CollectionUtils.isNotEmpty(commandDataListWithSameApplicationVisitedList)) {
-                    webDriverByUrlList.put(commandDataNoCode, webDriverByUrlList.get(commandDataListWithSameApplicationVisitedList.get(0)));
+                    webDriverByApplicationVisitedList.put(commandDataNoCode, webDriverByApplicationVisitedList.get(commandDataListWithSameApplicationVisitedList.get(0)));
                     continue;
                 }
             }
-            webDriverByUrlList.put(commandDataNoCode, initializeWebDriver(globalApplicationContext));
+            webDriverByApplicationVisitedList.put(commandDataNoCode, initializeWebDriver(globalApplicationContext));
         }
-        return createTestCaseContext(webDriverByUrlList, testSuiteData, testCaseNodeToRun, dataTestColumnName);
+        return createTestCaseContext(webDriverByApplicationVisitedList, testSuiteData, testCaseNodeToRun, dataTestColumnName);
     }
 
     public Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
