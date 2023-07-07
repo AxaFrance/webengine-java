@@ -67,14 +67,14 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
 
     @Override
     public AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun, String dataTestColumnName) throws WebEngineException {
-        Map<CommandDataNoCode, Object> webDriverByApplicationVisitedList = getWebDriverByApplicationVisited(globalApplicationContext, testSuiteData, testCaseNodeToRun);
+        Map<CommandDataNoCode, WebDriver> webDriverByApplicationVisitedList = getWebDriverByApplicationVisited(globalApplicationContext, testSuiteData, testCaseNodeToRun);
         return createTestCaseContext(webDriverByApplicationVisitedList, testSuiteData, testCaseNodeToRun, dataTestColumnName);
     }
 
-    private Map<CommandDataNoCode, Object> getWebDriverByApplicationVisited(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun) throws WebEngineException {
+    private Map<CommandDataNoCode, WebDriver> getWebDriverByApplicationVisited(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun) throws WebEngineException {
         TestCaseDataNoCode testCaseDataNoCode = TestSuiteHelperNoCode.getTestCaseDataNoCode(testSuiteData, testCaseNodeToRun.getName());
         List<CommandDataNoCode> applicationVisitedList = TestSuiteHelperNoCode.getApplicationVisited(testCaseDataNoCode);
-        Map<CommandDataNoCode, Object> webDriverByApplicationVisitedList = new LinkedHashMap();
+        Map<CommandDataNoCode, WebDriver> webDriverByApplicationVisitedList = new LinkedHashMap();
         for (CommandDataNoCode commandDataNoCode : applicationVisitedList) {
             if (MapUtils.isNotEmpty(webDriverByApplicationVisitedList)) {
                 List<CommandDataNoCode> commandDataListWithSameApplicationVisitedList = webDriverByApplicationVisitedList.keySet().stream().filter(cmdData -> StringUtil.equalsIgnoreCase(cmdData.getTargetList().get(TargetKey.OPEN),commandDataNoCode.getTargetList().get(TargetKey.OPEN))).collect(Collectors.toList());
@@ -83,7 +83,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                     continue;
                 }
             }
-            webDriverByApplicationVisitedList.put(commandDataNoCode, initializeWebDriver(globalApplicationContext));
+            webDriverByApplicationVisitedList.put(commandDataNoCode, (WebDriver) initializeWebDriver(globalApplicationContext));
         }
         return webDriverByApplicationVisitedList;
     }
@@ -95,8 +95,9 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
     @Override
     public void cleanUp(Object testCaseContext) {
         try {
-            ((TestCaseNoCodeContext)testCaseContext).getDriverByCommandData().entrySet().stream().forEach(entry -> {
-                WebDriver webDriver = (WebDriver) entry.getValue();
+
+            List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getDriverByCommandData().values().stream().distinct().collect(Collectors.toList());
+            webDriverList.stream().forEach(webDriver -> {
                 if (webDriver != null) {
                     webDriver.quit();
                 }
@@ -108,12 +109,12 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
     }
 
 
-    protected AbstractTestCaseContext createTestCaseContext(Map<CommandDataNoCode, Object> webDriverByUrlList, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseToRun, String dataTestColumnName) throws WebEngineException {
+    protected AbstractTestCaseContext createTestCaseContext(Map<CommandDataNoCode, WebDriver> webDriverByUrlList, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseToRun, String dataTestColumnName) throws WebEngineException {
         AbstractTestCaseContext testCaseContext = getTestCaseContext();
         testCaseContext.setTestCaseName(testCaseToRun.getName());
         TestCaseDataNoCode testCaseDataNoCode = TestSuiteHelperNoCode.getTestCaseDataNoCode(testSuiteData, testCaseToRun.getName());
-        Map<String, Object> driverByCommandData = new HashMap<>();
-        Object currentWebDriver = webDriverByUrlList.keySet().stream().findFirst().get();
+        Map<String, WebDriver> driverByCommandData = new HashMap<>();
+        WebDriver currentWebDriver = webDriverByUrlList.entrySet().stream().findFirst().get().getValue();
         for (CommandDataNoCode commandDataNoCode : testCaseDataNoCode.getCommandList()) {
             if (commandDataNoCode.getCommand() == CommandName.OPEN) {
                 currentWebDriver = webDriverByUrlList.get(commandDataNoCode);

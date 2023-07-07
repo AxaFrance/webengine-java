@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
 
@@ -17,9 +18,9 @@ public class TestCaseNoCodeContext extends AbstractTestCaseContext {
     TestCaseNodeNoCode testCaseToRun;
     String dataTestColumnName;
     TestSuiteDataNoCode testSuiteData;
-    Map<String,Object> driverByCommandData;
+    Map<String, WebDriver> driverByCommandData;
 
-    public Object getWebDriver(CommandDataNoCode commandDataNoCode){
+    public WebDriver getWebDriver(CommandDataNoCode commandDataNoCode){
         return driverByCommandData.get(commandDataNoCode.getUid());
     }
 }
