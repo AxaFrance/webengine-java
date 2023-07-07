@@ -39,6 +39,7 @@
         <jaxb-api.version>2.2.7</jaxb-api.version>
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
         <jackson-databind.version>2.13.2.2</jackson-databind.version>
+        <jackson-annotations.version>2.13.2</jackson-annotations.version>
         <jackson-dataformat-yaml.version>2.13.2</jackson-dataformat-yaml.version>
         <istack-commons-runtime.version>2.16</istack-commons-runtime.version>
         <snakeyaml.version>1.33</snakeyaml.version>
@@ -66,6 +67,8 @@
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
 
         <poi.version>5.2.3</poi.version>
+
+        <jackson-core.version>2.13.2</jackson-core.version>
     </properties>
 
     <modules>
@@ -121,6 +124,20 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson-annotations.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-core.version}</version>
+        </dependency>
+
 
         <!-- JUNIT 5 -->
         <dependency>

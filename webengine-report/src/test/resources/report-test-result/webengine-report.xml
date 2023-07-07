@@ -64,8 +64,8 @@
     <ns:HostName>DESKTOP-4PEPTM0</ns:HostName>
     <ns:SystemOut></ns:SystemOut>
     <ns:SystemError></ns:SystemError>
-    <ns:NumberOfTestcase>11</ns:NumberOfTestcase>
-    <ns:Passed>10</ns:Passed>
-    <ns:Failed>0</ns:Failed>
-    <ns:Ignored>1</ns:Ignored>
+    <ns:NumberOfTestcase>1</ns:NumberOfTestcase>
+    <ns:Passed>0</ns:Passed>
+    <ns:Failed>1</ns:Failed>
+    <ns:Ignored>0</ns:Ignored>
 </ns:TestSuiteReport>
