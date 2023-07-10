@@ -33,7 +33,7 @@ public class ExcelConverter {
     public static final String XPATH_PATTERN = "^([/]{1,2}.*)$";
     public static final String JSON_PATTERN = "^\\{.*\\}$";
 
-    private static final Integer NUMBER_OF_LINE_EMPTY_FOR_END_OF_SCENARIO = 2;
+    private static final Integer NUMBER_OF_EMPTY_LINE_FOR_ENDING_SCENARIO = 2;
 
     public static TestSuiteDataNoCode convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumNameMap) {
         List<TestCaseDataNoCode> testCaseList = new LinkedList<>();
@@ -102,11 +102,12 @@ public class ExcelConverter {
         boolean endOfFile ;
         int cptEndOfFile = 0;
 
-        while (cptEndOfFile != NUMBER_OF_LINE_EMPTY_FOR_END_OF_SCENARIO) {
+        while (cptEndOfFile != NUMBER_OF_EMPTY_LINE_FOR_ENDING_SCENARIO) {
             endOfFile = isEndOfFile(testCaseSheet, rowIndex);
             if(endOfFile){
                 cptEndOfFile++;
             }else {
+                cptEndOfFile=0;
                 Row currentRow = testCaseSheet.getRow(rowIndex);
                 CommandDataNoCode commandData = CommandDataNoCode.builder()
                         .uid(UUID.randomUUID().toString())
