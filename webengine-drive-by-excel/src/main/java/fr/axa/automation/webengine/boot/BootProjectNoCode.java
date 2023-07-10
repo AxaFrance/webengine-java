@@ -52,6 +52,7 @@ public class BootProjectNoCode extends AbstractBootProject {
     }
 
     public void runFromFramework(String... args) throws Exception {
+        loggerService.info("Arguments : "+ Arrays.asList(args));
         CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
         runTestSuite(commandLine);
     }
