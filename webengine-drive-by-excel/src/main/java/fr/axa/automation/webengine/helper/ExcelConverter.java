@@ -33,6 +33,8 @@ public class ExcelConverter {
     public static final String XPATH_PATTERN = "^([/]{1,2}.*)$";
     public static final String JSON_PATTERN = "^\\{.*\\}$";
 
+    private static final Integer NUMBER_OF_LINE_EMPTY_FOR_END_OF_SCENARIO = 2;
+
     public static TestSuiteDataNoCode convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumNameMap) {
         List<TestCaseDataNoCode> testCaseList = new LinkedList<>();
         Workbook workbook = ExcelReader.getWorkbook(excelFileName);
@@ -73,10 +75,7 @@ public class ExcelConverter {
 
     private static boolean isEndOfFile(Sheet currentSheet, Integer rowIndex) {
         String cellValue = ExcelReader.getCellValue(currentSheet, rowIndex, ExcelColumn.COMMAND.getValue());
-        if (StringUtils.isEmpty(cellValue)) {
-            throw new IllegalArgumentException("The command column is empty in the row " + rowIndex + " of the sheet '" + currentSheet.getSheetName()+"'");
-        }
-        if(CommandName.fromValue(cellValue) == CommandName.END_SCENARIO){
+        if(StringUtils.isEmpty(cellValue) || CommandName.fromValue(cellValue) == CommandName.END_SCENARIO){
             return true;
         }
         return false;
@@ -100,26 +99,33 @@ public class ExcelConverter {
         List<CommandDataNoCode> commandDataList = new LinkedList<>();
         Sheet testCaseSheet = workbook.getSheet(testCaseSheetName);
         int rowIndex = 1;
+        boolean endOfFile ;
+        int cptEndOfFile = 0;
 
-        while (!isEndOfFile(testCaseSheet, rowIndex)) {
-            Row currentRow = testCaseSheet.getRow(rowIndex);
-            CommandDataNoCode commandData = CommandDataNoCode.builder()
-                    .uid(UUID.randomUUID().toString())
-                    .name(getIdValue(currentRow))
-                    .command(getCommandValue(currentRow))
-                    .targetList(getTargetValueList(currentRow))
-                    .optional(getOptionalValue(currentRow))
-                    .dataTestReference(getDataTestReferenceValue(currentRow))
-                    .dataTestMap(getDataTestList(testCaseSheet, currentRow, dataTestColumnNameList))
-                    .build();
+        while (cptEndOfFile != NUMBER_OF_LINE_EMPTY_FOR_END_OF_SCENARIO) {
+            endOfFile = isEndOfFile(testCaseSheet, rowIndex);
+            if(endOfFile){
+                cptEndOfFile++;
+            }else {
+                Row currentRow = testCaseSheet.getRow(rowIndex);
+                CommandDataNoCode commandData = CommandDataNoCode.builder()
+                        .uid(UUID.randomUUID().toString())
+                        .name(getIdValue(currentRow))
+                        .command(getCommandValue(currentRow))
+                        .targetList(getTargetValueList(currentRow))
+                        .optional(getOptionalValue(currentRow))
+                        .dataTestReference(getDataTestReferenceValue(currentRow))
+                        .dataTestMap(getDataTestList(testCaseSheet, currentRow, dataTestColumnNameList))
+                        .build();
 
-            commandDataList.add(commandData);
+                commandDataList.add(commandData);
 
-            if (commandData.getCommand() == CommandName.CALL) {
-                String testCaseNameToCall = commandData.getTargetList().get(TargetKey.CALL);
-                Map<String, TestCaseDataNoCode> testCaseDataCalledMap = getTestCaseDataList(workbook, testCaseNameToCall, dataTestColumnNameList);
-                if (!testCaseDataMap.containsKey(testCaseNameToCall)) {
-                    testCaseDataMap.putAll(testCaseDataCalledMap);
+                if (commandData.getCommand() == CommandName.CALL) {
+                    String testCaseNameToCall = commandData.getTargetList().get(TargetKey.CALL);
+                    Map<String, TestCaseDataNoCode> testCaseDataCalledMap = getTestCaseDataList(workbook, testCaseNameToCall, dataTestColumnNameList);
+                    if (!testCaseDataMap.containsKey(testCaseNameToCall)) {
+                        testCaseDataMap.putAll(testCaseDataCalledMap);
+                    }
                 }
             }
             rowIndex++;
