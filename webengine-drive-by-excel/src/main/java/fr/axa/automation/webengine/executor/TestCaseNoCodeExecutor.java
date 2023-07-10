@@ -31,6 +31,7 @@ import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.tree.TreeNode;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.StringUtil;
+import fr.axa.automation.webengine.util.UriUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -77,7 +78,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         Map<CommandDataNoCode, WebDriver> webDriverByApplicationVisitedList = new LinkedHashMap();
         for (CommandDataNoCode commandDataNoCode : applicationVisitedList) {
             if (MapUtils.isNotEmpty(webDriverByApplicationVisitedList)) {
-                List<CommandDataNoCode> commandDataListWithSameApplicationVisitedList = webDriverByApplicationVisitedList.keySet().stream().filter(cmdData -> StringUtil.equalsIgnoreCase(cmdData.getTargetList().get(TargetKey.OPEN),commandDataNoCode.getTargetList().get(TargetKey.OPEN))).collect(Collectors.toList());
+                List<CommandDataNoCode> commandDataListWithSameApplicationVisitedList = webDriverByApplicationVisitedList.keySet().stream().filter(cmdData -> isSameUrl(commandDataNoCode, cmdData)).collect(Collectors.toList());
                 if (CollectionUtils.isNotEmpty(commandDataListWithSameApplicationVisitedList)) {
                     webDriverByApplicationVisitedList.put(commandDataNoCode, webDriverByApplicationVisitedList.get(commandDataListWithSameApplicationVisitedList.get(0)));
                     continue;
@@ -86,6 +87,14 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             webDriverByApplicationVisitedList.put(commandDataNoCode, (WebDriver) initializeWebDriver(globalApplicationContext));
         }
         return webDriverByApplicationVisitedList;
+    }
+
+    private static boolean isSameUrl(CommandDataNoCode commandDataNoCode, CommandDataNoCode cmdData)  {
+        try {
+            return StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(cmdData.getTargetList().get(TargetKey.OPEN)), UriUtil.getHostFromURI(commandDataNoCode.getTargetList().get(TargetKey.OPEN)));
+        } catch (WebEngineException e) {
+            return false;
+        }
     }
 
     public Object initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
@@ -113,7 +122,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         AbstractTestCaseContext testCaseContext = getTestCaseContext();
         testCaseContext.setTestCaseName(testCaseToRun.getName());
         TestCaseDataNoCode testCaseDataNoCode = TestSuiteHelperNoCode.getTestCaseDataNoCode(testSuiteData, testCaseToRun.getName());
-        Map<String, WebDriver> driverByCommandData = new HashMap<>();
+        Map<String, WebDriver> driverByCommandData = new LinkedHashMap<>();
         WebDriver currentWebDriver = webDriverByUrlList.entrySet().stream().findFirst().get().getValue();
         for (CommandDataNoCode commandDataNoCode : testCaseDataNoCode.getCommandList()) {
             if (commandDataNoCode.getCommand() == CommandName.OPEN) {

@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import fr.axa.automation.webengine.util.StringUtil;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -17,10 +18,12 @@ public class OpenCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         String url = commandData.getTargetList().get(TargetKey.OPEN);
         url = EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(),url,commandResultList);
-        WebDriver webDriver = (WebDriver)((TestCaseNoCodeContext)testCaseContext).getWebDriver(commandData);
+        WebDriver webDriver = ((TestCaseNoCodeContext)testCaseContext).getWebDriver(commandData);
         String originalWindow = webDriver.getWindowHandle();
         webDriver.switchTo().window(originalWindow);
         webDriver.manage().window().maximize();
-        webDriver.navigate().to(url);
+        if(StringUtil.equalsIgnoreCase(webDriver.getCurrentUrl(),"data:,")){
+            webDriver.navigate().to(url);
+        }
     }
 }
