@@ -17,4 +17,6 @@ import java.util.Map;
 public class SettingsNoCode extends AbstractSettings {
     String dataTestFileName;
     Map<String, List<String>> testCaseAndDataTestColumName;
+    String keePassDatabasePath;
+    String keePassDatabasePassword;
 }

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
 
     public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([.*-]+\\[[-.*:;]+\\])|([.*-]+)";; // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
@@ -39,9 +40,19 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
                 .outputDir(getOutputDir(cmd, globalConfiguration))
                 .showReport(getShowReport(cmd))
                 .closeBrowser(getCloseBrowser(cmd))
+                .keePassDatabasePath(getKeepassPath(cmd))
+                .keePassDatabasePassword(getKeepassPassword(cmd))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;
+    }
+
+    private static String getKeepassPassword(CommandLine cmd) {
+        return cmd.getOptionValue(ArgumentOption.KEEPASS_PASSWORD.getOption());
+    }
+
+    private static String getKeepassPath(CommandLine cmd) {
+        return cmd.getOptionValue(ArgumentOption.KEEPASS_FILE.getOption());
     }
 
     public static Boolean getShowReport(CommandLine cmd) {
