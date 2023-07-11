@@ -235,7 +235,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                             isSubReport = true;
                         } else {
                             actionReport = ActionReportHelper.getActionReport(commandData.getName(), Result.IGNORED);
-                            actionReport.setLog("Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
+                            actionReport.setLog("Command ignored because the colum data-test-ref not contains '" + dataTestColumName + "' column");
                             commandResult = CommandResultHelper.getCommandResult(commandData, actionReport, "");
                         }
                         break;
@@ -251,7 +251,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                         break;
                 }
                 commandResultList.add(commandResult);
-                if (isSubReport) {
+                if (isSubReport && CollectionUtils.isNotEmpty(commandResultOfSubCommandList)) {
                     commandResult.getActionReport().setSubActionReports(new ArrayOfActionReport());
                     commandResult.getActionReport().getSubActionReports().getActionReports().addAll(CommandResultHelper.getActionReportList(commandResultOfSubCommandList));
                 }

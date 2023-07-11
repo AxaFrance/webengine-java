@@ -108,7 +108,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
                 new IfChecking(),
                 new OptionalChecking(),
                 new CallScenariiChecking(),
-                new DataTestReferenceChecking(),
+//                new DataTestReferenceChecking(),
                 new ReferencedValueChecking()
         );
         ICheckingRunner checkingRunner = new CheckingRunner();

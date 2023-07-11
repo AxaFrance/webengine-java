@@ -122,7 +122,7 @@ public abstract class AbstractDriverCommand implements ICommand {
                 getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status : ").append(Result.PASSED.value());
             } else {
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command ignored because the colum data-test-ref contains '!" + dataTestColumName + "'");
+                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command ignored because the colum data-test-ref not contains '" + dataTestColumName + "' column ");
             }
             actionReport.setLog(getLogReport().toString());
         } catch (Throwable e) {
