@@ -12,4 +12,8 @@ public interface ITestCaseNoCodeExecutor extends ITestCaseExecutor {
     AbstractTestCaseContext initialize(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseNodeToRun, String dataTestColumnName) throws WebEngineException;
 
     TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException;
+
+    default void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, Object object) throws WebEngineException{
+    }
+
 }

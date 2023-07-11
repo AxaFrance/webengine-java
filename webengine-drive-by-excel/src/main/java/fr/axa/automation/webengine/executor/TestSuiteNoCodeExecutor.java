@@ -82,7 +82,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
             for (String dataTestColumnName : dataTestColumNameList) {
                 AbstractTestCaseContext testCaseContext = ((ITestCaseNoCodeExecutor) testCaseExecutor).initialize(globalApplicationContext, testSuiteData, testCaseNodeToRun, dataTestColumnName );
                 TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
-                testCaseExecutor.cleanUp(testCaseContext);
+                ((ITestCaseNoCodeExecutor) testCaseExecutor).cleanUp(globalApplicationContext,testCaseContext);
                 testCaseReportList.add(testCaseReport);
             }
         }

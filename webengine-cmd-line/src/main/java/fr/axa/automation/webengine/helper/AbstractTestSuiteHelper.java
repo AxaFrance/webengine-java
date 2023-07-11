@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public abstract class AbstractTestSuiteHelper {
@@ -96,5 +97,11 @@ public abstract class AbstractTestSuiteHelper {
             }
         }
         return outputDir;
+    }
+
+    public static Boolean getCloseBrowser(CommandLine cmd) {
+        return Optional.ofNullable(cmd.getOptionValue(ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO.getOption()))
+                .map(Boolean::parseBoolean)
+                .orElse(true);
     }
 }

@@ -13,6 +13,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
@@ -102,21 +103,22 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
     }
 
     @Override
-    public void cleanUp(Object testCaseContext) {
+    public void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, Object testCaseContext) {
         try {
+            if(globalApplicationContext.getSettings().isCloseBrowser()){
+                List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getDriverByCommandData().values().stream().distinct().collect(Collectors.toList());
+                webDriverList.stream().forEach(webDriver -> {
+                    if (webDriver != null) {
+                        webDriver.quit();
+                    }
+                });
+                loggerService.info("Browser close properly");
+            }
 
-            List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getDriverByCommandData().values().stream().distinct().collect(Collectors.toList());
-            webDriverList.stream().forEach(webDriver -> {
-                if (webDriver != null) {
-                    webDriver.quit();
-                }
-            });
-            loggerService.info("Browser close properly");
         }catch (NoSuchSessionException e){
             loggerService.warn("Warning during quit browser",e);
         }
     }
-
 
     protected AbstractTestCaseContext createTestCaseContext(Map<CommandDataNoCode, WebDriver> webDriverByUrlList, TestSuiteDataNoCode testSuiteData, TestCaseNodeNoCode testCaseToRun, String dataTestColumnName) throws WebEngineException {
         AbstractTestCaseContext testCaseContext = getTestCaseContext();

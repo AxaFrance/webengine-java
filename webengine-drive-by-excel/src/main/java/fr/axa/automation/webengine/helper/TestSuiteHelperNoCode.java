@@ -40,6 +40,7 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
                 .values(getValues(globalConfiguration))
                 .outputDir(getOutputDir(cmd, globalConfiguration))
                 .showReport(getShowReport(cmd))
+                .closeBrowser(getCloseBrowser(cmd))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;

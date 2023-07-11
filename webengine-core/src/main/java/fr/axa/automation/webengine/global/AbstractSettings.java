@@ -24,4 +24,5 @@ public abstract class AbstractSettings {
     String outputDir;
     Map<String,String> values;
     boolean showReport;
+    boolean closeBrowser;
 }
