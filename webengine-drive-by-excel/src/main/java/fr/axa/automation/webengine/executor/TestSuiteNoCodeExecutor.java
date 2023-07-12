@@ -5,7 +5,6 @@ import fr.axa.automation.webengine.api.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
 import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
-import fr.axa.automation.webengine.checking.chain.impl.DataTestReferenceChecking;
 import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
 import fr.axa.automation.webengine.checking.chain.impl.OptionalChecking;
 import fr.axa.automation.webengine.checking.chain.impl.ReferencedValueChecking;

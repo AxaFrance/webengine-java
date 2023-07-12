@@ -147,15 +147,4 @@ public abstract class AbstractDriverCommand implements ICommand {
         byte[] screenshot = ((TakesScreenshot) ((TestCaseNoCodeContext)testCaseContext).getWebDriver(commandData)).getScreenshotAs(OutputType.BYTES);
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
-
-    protected String getValue(AbstractGlobalApplicationContext globalApplicationContext, TestCaseNoCodeContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
-        String dataTestColumName = testCaseContext.getDataTestColumnName();
-        Map<String, String> dataTestMap = commandData.getDataTestMap();
-        if (MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))) {
-            String originalValue = dataTestMap.get(dataTestColumName);
-            return EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), originalValue, commandResultList);
-        }
-        return null;
-    }
-
 }

@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
+import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import org.apache.commons.collections4.MapUtils;
@@ -18,7 +19,7 @@ public class AssertContentCommand extends AbstractDriverCommand {
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
         webElementDescription = populateWebElement(globalApplicationContext, testCaseContext, commandData, commandResultList);
-        String expected = getValue(globalApplicationContext, (TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+        String expected = EvaluateValueHelper.getValue(globalApplicationContext, (TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         Map<String, List<String>> contentMap = webElementDescription.getContentByElementType(expected);
 
         Map<String, List<String>> filterContentMap = contentMap.entrySet().stream()
