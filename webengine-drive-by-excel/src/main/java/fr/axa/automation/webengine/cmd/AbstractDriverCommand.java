@@ -173,12 +173,22 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     protected WebDriver getWebDriver(AbstractGlobalApplicationContext globalApplicationContext,List<CommandResult> commandResultList) throws WebEngineException {
-        List<WebDriver> commandDataNoCodeList = commandResultList.stream().filter(commandResult -> commandResult.getWebDriver()!=null).map(commandResult -> commandResult.getWebDriver()).collect(Collectors.toList());
-        if(CollectionUtils.isEmpty(commandDataNoCodeList)){
-            WebDriver webDriver = initializeWebDriver(globalApplicationContext);
-            setWebDriver(webDriver);
-            return webDriver;
+        WebDriver webDriver ;
+        if(CollectionUtils.isEmpty(commandResultList)){
+            webDriver = initializeWebDriver(globalApplicationContext);
+        }else{
+            webDriver = getLastWebDriver(commandResultList);
         }
-        return ListUtil.getLastElement(commandDataNoCodeList).get();
+        setWebDriver(webDriver);
+        return webDriver;
+    }
+
+    protected WebDriver getLastWebDriver(List<CommandResult> commandResultList) {
+        WebDriver webDriver = null;
+        List<WebDriver> commandDataNoCodeList = commandResultList.stream().filter(commandResult -> commandResult.getWebDriver()!=null).map(commandResult -> commandResult.getWebDriver()).collect(Collectors.toList());
+        if(CollectionUtils.isNotEmpty(commandDataNoCodeList)){
+            webDriver = ListUtil.getLastElement(commandDataNoCodeList).get();
+        }
+        return webDriver;
     }
 }
