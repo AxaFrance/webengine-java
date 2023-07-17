@@ -80,9 +80,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
             List<String> dataTestColumNameList = getDataTestColumNameList(settingsNoCode, testCaseNodeToRun);
             for (String dataTestColumnName : dataTestColumNameList) {
                 AbstractTestCaseContext testCaseContext = ((ITestCaseNoCodeExecutor) testCaseExecutor).initialize(globalApplicationContext, testSuiteData, testCaseNodeToRun, dataTestColumnName );
-                TestCaseReport testCaseReport = testCaseExecutor.run(globalApplicationContext, testCaseContext);
-                ((ITestCaseNoCodeExecutor) testCaseExecutor).cleanUp(globalApplicationContext,testCaseContext);
-                testCaseReportList.add(testCaseReport);
+                testCaseReportList.add(testCaseExecutor.run(globalApplicationContext, testCaseContext));
             }
         }
         return testCaseReportList;

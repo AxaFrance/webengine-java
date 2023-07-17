@@ -1,9 +1,11 @@
 package fr.axa.automation.webengine.helper;
 
+import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,5 +22,17 @@ public class CommandResultHelper {
 
     public static boolean isResultExpected(CommandResult commandResult, Result result){
         return commandResult.getActionReport().getResult()==result;
+    }
+
+    public static List<CommandResult>  getCommand(List<CommandResult> commandResultList, CommandName commandName){
+        return commandResultList
+                .stream()
+                .filter(commandResult -> commandResult.getCommandData().getCommand()==commandName)
+                .collect(Collectors.toList());
+    }
+
+    public static List<WebDriver> getWebDriverByOpenCommand(List<CommandResult> commandResultList) {
+        List<CommandResult> commandResultOpen = CommandResultHelper.getCommand(commandResultList,CommandName.OPEN);
+        return commandResultOpen.stream().map(commandResult -> commandResult.getWebDriver()).collect(Collectors.toList());
     }
 }

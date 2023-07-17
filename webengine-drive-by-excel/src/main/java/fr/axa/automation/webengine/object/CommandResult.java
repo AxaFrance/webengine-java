@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.openqa.selenium.WebDriver;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -13,4 +14,5 @@ public class CommandResult {
     CommandDataNoCode commandData;
     ActionReport actionReport;
     String savedData;
+    WebDriver webDriver ;
 }
