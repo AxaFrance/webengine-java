@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -81,8 +82,8 @@ public class ExcelConverter {
         return false;
     }
 
-    private static Set<TestCaseDataNoCode> getTestCaseDataList(Workbook workbook, Map<String, List<String>> testCaseAndDataTestColumNameMap ) {
-        Map<String, TestCaseDataNoCode> testCaseDataMap = new HashMap<>();
+    private static List<TestCaseDataNoCode> getTestCaseDataList(Workbook workbook, Map<String, List<String>> testCaseAndDataTestColumNameMap ) {
+        Map<String, TestCaseDataNoCode> testCaseDataMap = new LinkedHashMap<>();
         if (MapUtils.isNotEmpty(testCaseAndDataTestColumNameMap)) {
             for (String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
                 if(!testCaseDataMap.containsKey(testCaseToRun)){
@@ -90,12 +91,12 @@ public class ExcelConverter {
                 }
             }
         }
-        return new HashSet<>(testCaseDataMap.values());
+        return new ArrayList<>(testCaseDataMap.values());
     }
 
     private static Map<String, TestCaseDataNoCode> getTestCaseDataList(Workbook workbook, String testCaseSheetName, List<String> dataTestColumnNameList) {
 
-        Map<String, TestCaseDataNoCode> testCaseDataMap = new HashMap<>();
+        Map<String, TestCaseDataNoCode> testCaseDataMap = new LinkedHashMap<>();
         List<CommandDataNoCode> commandDataList = new LinkedList<>();
         Sheet testCaseSheet = workbook.getSheet(testCaseSheetName);
         int rowIndex = 1;

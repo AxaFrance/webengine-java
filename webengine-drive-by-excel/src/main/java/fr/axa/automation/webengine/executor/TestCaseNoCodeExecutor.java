@@ -100,7 +100,6 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
 
         try {
             commandResultList.addAll(runTestStep(globalApplicationContext, testCaseNoCodeContext));
-            cleanUp(globalApplicationContext, commandResultList);
         } catch (Throwable e) {
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);
@@ -110,6 +109,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             testCaseReport.setResult(getResultOfTestCase(CommandResultHelper.getActionReportList(filterCommandResult(commandResultList))));
             testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
             //testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
+            cleanUp(globalApplicationContext, commandResultList);
         }
         return testCaseReport;
     }

@@ -15,7 +15,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,7 +56,7 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
 
     public static Map<String, List<String>> getTestCaseAndDataTestColumnName(CommandLine cmd){
         List<String> argumentList = getArgumentList(cmd, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME); // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
-        Map<String, List<String>> testCaseAndDataTestColumName =new HashMap<>() ;
+        Map<String, List<String>> testCaseAndDataTestColumName =new LinkedHashMap<>() ;
         for (String argument : argumentList) {
             List<String> testCaseAndDataTestColumnSet = Arrays.asList(argument.split("]"));
             if(CollectionUtils.isNotEmpty(testCaseAndDataTestColumnSet)){
