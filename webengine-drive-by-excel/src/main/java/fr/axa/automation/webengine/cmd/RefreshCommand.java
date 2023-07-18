@@ -12,7 +12,7 @@ import java.util.List;
 public class RefreshCommand extends AbstractDriverCommand {
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
-        WebDriver webDriver = getWebDriver(globalApplicationContext,commandResultList);
+        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
         if (webDriver != null) {
             webDriver.navigate().refresh();
         }else {

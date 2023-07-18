@@ -20,10 +20,12 @@ import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.util.BrowserFactory;
 import fr.axa.automation.webengine.util.ListUtil;
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -51,15 +53,28 @@ public abstract class AbstractDriverCommand implements ICommand {
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
     String savedData;
-    WebDriver webDriver;
+    WebDriver webDriverToUse;
 
     ILoggerService loggerService = LoggerServiceProvider.getInstance();
     StringBuffer logReport = new StringBuffer();
 
     public WebDriver initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
+       return getDriver(globalApplicationContext,false);
+    }
+
+    public WebDriver initializeIncognitoWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
+        return getDriver(globalApplicationContext,true);
+    }
+
+    public WebDriver getDriver(AbstractGlobalApplicationContext globalApplicationContext,boolean incognito) throws WebEngineException {
         try {
             GlobalConfiguration globalConfiguration = GlobalConfigPropertiesHelper.getGlobalConfigProperties(globalApplicationContext.getSettings());
-            Optional<WebDriver> optional = BrowserFactory.getDriver(globalConfiguration);
+            Optional<WebDriver> optional = null;
+            if(incognito){
+                 optional = BrowserFactory.getIncognitoDriver(globalConfiguration);
+            }else {
+                optional = BrowserFactory.getDriver(globalConfiguration);
+            }
             if(optional.isPresent()){
                 return optional.get();
             }
@@ -69,12 +84,13 @@ public abstract class AbstractDriverCommand implements ICommand {
         return null;
     }
 
+
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception;
 
     protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
         Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
-        WebDriver webDriver = getWebDriver(globalApplicationContext,commandResultList);
-        setWebDriver(webDriver);
+        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
+        setWebDriverToUse(webDriver);
         if(entry==null){
             return WebElementDescription.builder()
                     .useDriver(webDriver)
@@ -149,7 +165,7 @@ public abstract class AbstractDriverCommand implements ICommand {
             }
             actionReport.setLog(getLogReport().toString());
         } catch (Throwable e) {
-            actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,"",commandResultList));
+            actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,"",commandResultList));
             if (commandData.isOptional()) {
                 actionReport.setResult(Result.IGNORED);
                 getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
@@ -163,23 +179,30 @@ public abstract class AbstractDriverCommand implements ICommand {
             actionReport.setEndTime(Calendar.getInstance());
         }
         loggerService.info(getLogReport().toString());
-        return CommandResult.builder().commandData(commandData).actionReport(actionReport).webDriver(webDriver).savedData(savedData).build();
+        return CommandResult.builder().commandData(commandData).actionReport(actionReport).webDriver(webDriverToUse).savedData(savedData).build();
     }
 
-    protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
-        WebDriver webDriver = getWebDriver(globalApplicationContext,commandResultList);
+    protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
+        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
         byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 
-    protected WebDriver getWebDriver(AbstractGlobalApplicationContext globalApplicationContext,List<CommandResult> commandResultList) throws WebEngineException {
-        WebDriver webDriver ;
+    protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
+        WebDriver webDriver = null;
         if(CollectionUtils.isEmpty(commandResultList)){
-            webDriver = initializeWebDriver(globalApplicationContext);
+            CommandDataNoCode commandDataNoCode = getFirstCommandOpen(testCaseContext);
+            if(commandDataNoCode==null){
+                throw new WebEngineException("No command open found");
+            } else if (commandDataNoCode.getCommand() == CommandName.OPEN) {
+                webDriver = initializeWebDriver(globalApplicationContext);
+            }else if(commandDataNoCode.getCommand() == CommandName.OPEN_PRIVATE){
+                webDriver = initializeIncognitoWebDriver(globalApplicationContext);
+            }
         }else{
             webDriver = getLastWebDriver(commandResultList);
         }
-        setWebDriver(webDriver);
+        setWebDriverToUse(webDriver);
         return webDriver;
     }
 
@@ -190,5 +213,18 @@ public abstract class AbstractDriverCommand implements ICommand {
             webDriver = ListUtil.getLastElement(commandDataNoCodeList).get();
         }
         return webDriver;
+    }
+
+    protected CommandDataNoCode getFirstCommandOpen(AbstractTestCaseContext testCaseContext) {
+        CommandDataNoCode commandDataNoCode = getFirstCommandFoundByName(testCaseContext,CommandName.OPEN);
+        if(commandDataNoCode==null){
+            commandDataNoCode = getFirstCommandFoundByName(testCaseContext,CommandName.OPEN_PRIVATE);
+        }
+        return commandDataNoCode;
+    }
+
+    protected CommandDataNoCode getFirstCommandFoundByName(AbstractTestCaseContext testCaseContext, CommandName commandName) {
+        List<TestCaseDataNoCode> testCaseDataNoCodeList = ((TestCaseNoCodeContext)testCaseContext).getTestSuiteData().getTestCaseList().stream().filter(testCase -> StringUtil.equalsIgnoreCase(testCase.getName(),testCaseContext.getTestCaseName())).collect(Collectors.toList());
+        return testCaseDataNoCodeList.get(0).getCommandList().stream().filter(commandDataNoCode -> commandDataNoCode.getCommand()==commandName).findFirst().orElse(null);
     }
 }

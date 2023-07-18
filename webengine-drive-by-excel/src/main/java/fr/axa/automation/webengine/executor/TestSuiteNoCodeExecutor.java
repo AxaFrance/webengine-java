@@ -57,7 +57,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         String systemError = "";
         checkInput(testSuiteData);
         try {
-            testCaseReportList.addAll(runTestCaseData(globalApplicationContext, testSuiteData));
+            testCaseReportList.addAll(runTestCase(globalApplicationContext, testSuiteData));
         } catch (WebEngineException e) {
             systemError = ExceptionUtils.getStackTrace(e);
         } finally {
@@ -67,7 +67,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         return testSuiteReport;
     }
 
-    protected List<TestCaseReport> runTestCaseData(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData) throws WebEngineException {
+    protected List<TestCaseReport> runTestCase(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData) throws WebEngineException {
         List<TestCaseDataNoCode> testCaseDataList = testSuiteData.getTestCaseList();
         if (CollectionUtils.isEmpty(testCaseDataList)) {
             throw new WebEngineException("No Test case found in the file");
@@ -105,7 +105,6 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
                 new IfChecking(),
                 new OptionalChecking(),
                 new CallScenariiChecking(),
-//                new DataTestReferenceChecking(),
                 new ReferencedValueChecking()
         );
         ICheckingRunner checkingRunner = new CheckingRunner();

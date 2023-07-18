@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import org.apache.commons.collections4.CollectionUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -32,7 +33,10 @@ public class CommandResultHelper {
     }
 
     public static List<WebDriver> getWebDriverByOpenCommand(List<CommandResult> commandResultList) {
-        List<CommandResult> commandResultOpen = CommandResultHelper.getCommand(commandResultList,CommandName.OPEN);
-        return commandResultOpen.stream().map(commandResult -> commandResult.getWebDriver()).collect(Collectors.toList());
+        List<CommandResult> commandResultOpenList = CommandResultHelper.getCommand(commandResultList,CommandName.OPEN);
+        if(CollectionUtils.isEmpty(commandResultOpenList)){
+            commandResultOpenList = CommandResultHelper.getCommand(commandResultList,CommandName.OPEN_PRIVATE);;
+        }
+        return commandResultOpenList.stream().map(commandResult -> commandResult.getWebDriver()).collect(Collectors.toList());
     }
 }

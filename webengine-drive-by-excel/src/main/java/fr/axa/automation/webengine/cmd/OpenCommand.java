@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.cmd;
 
+import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
@@ -31,12 +32,16 @@ public class OpenCommand extends AbstractDriverCommand{
             }
         }
         if(webDriver==null) {
-            webDriver = initializeWebDriver(globalApplicationContext);
+            webDriver = instantiateWebDrive(globalApplicationContext);
         }
-        setWebDriver(webDriver);
+        setWebDriverToUse(webDriver);
         String originalWindow = webDriver.getWindowHandle();
         webDriver.switchTo().window(originalWindow);
         webDriver.manage().window().maximize();
         webDriver.navigate().to(url);
+    }
+
+    protected WebDriver instantiateWebDrive(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
+        return initializeWebDriver(globalApplicationContext);
     }
 }

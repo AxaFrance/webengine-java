@@ -11,6 +11,6 @@ public class ScrenshotCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
-       getScreenshotReportList().add(screenShot(globalApplicationContext,"",commandResultList));
+       getScreenshotReportList().add(screenShot(globalApplicationContext,testCaseContext,"",commandResultList));
     }
 }

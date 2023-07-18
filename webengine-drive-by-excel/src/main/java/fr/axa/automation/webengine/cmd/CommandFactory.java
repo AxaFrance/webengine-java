@@ -8,6 +8,8 @@ public class CommandFactory {
         switch (commandData.getCommand()){
             case OPEN:
                 return new OpenCommand();
+            case OPEN_PRIVATE:
+                return new OpenInPrivateModeCommand();
             case SEND_KEYS:
                 return new SendKeysCommand();
             case CLICK:

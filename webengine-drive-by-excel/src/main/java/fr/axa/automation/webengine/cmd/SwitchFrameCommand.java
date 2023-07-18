@@ -15,7 +15,7 @@ public class SwitchFrameCommand extends AbstractDriverCommand{
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
         String value = EvaluateValueHelper.getValue(globalApplicationContext, (TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        WebDriver webDriver = getWebDriver(globalApplicationContext,commandResultList);
+        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
         if (webDriver != null) {
             webDriver.switchTo().frame(value);
         }

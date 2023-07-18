@@ -15,7 +15,7 @@ import java.util.List;
 public class PopUpCommand extends AbstractDriverCommand {
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
-        WebDriver webDriver = getWebDriver(globalApplicationContext,commandResultList);
+        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
         String value = EvaluateValueHelper.getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         if (webDriver != null) {
             if(StringUtil.equalsIgnoreCase(value, Constant.OUI.getValue()) || StringUtil.equalsIgnoreCase(value, Constant.OK.getValue())){

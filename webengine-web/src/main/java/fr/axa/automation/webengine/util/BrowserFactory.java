@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.util;
 
+import fr.axa.automation.webengine.constante.IncognitoBrowserOption;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.Browser;
 import fr.axa.automation.webengine.global.Platform;
@@ -39,6 +40,21 @@ public final class BrowserFactory {
             throw new WebEngineException("Not recognized the 'platform' parameter.");
         }
     }
+
+    public static Optional<WebDriver> getIncognitoDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
+        Optional<WebDriver> optional = null;
+        if (platform == Platform.WINDOWS) {
+            return BrowserFactory.getWebDriver(platform, browser, IncognitoBrowserOption.getIncognitoBrowserOption(browser).getOptions());
+        } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
+           return BrowserFactory.getDriver(globalConfiguration);
+        } else {
+            throw new WebEngineException("Not recognized the 'platform' parameter.");
+        }
+    }
+
+
 
     public static Optional<WebDriver> getDesktopDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
