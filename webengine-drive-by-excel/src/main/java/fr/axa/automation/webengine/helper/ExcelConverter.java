@@ -18,12 +18,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -195,8 +193,6 @@ public class ExcelConverter {
         }
         if (CommandName.CALL == commandName) {
             targets.put(TargetKey.CALL, targetCellValue);
-        }else if (CommandName.OPEN == commandName) {
-            targets.put(TargetKey.OPEN, targetCellValue);
         }else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
             targets.put(TargetKey.XPATH, targetCellValue);
         } else if (CollectionUtils.isNotEmpty(RegexUtil.match(JSON_PATTERN, targetCellValue))) {
