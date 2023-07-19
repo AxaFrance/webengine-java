@@ -207,6 +207,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                 }
                 commandResultList.add(commandResult);
                 if (isSubReport && CollectionUtils.isNotEmpty(commandResultOfSubCommandList)) {
+                    commandResult.addSubCommandResult(commandResultOfSubCommandList);
                     commandResult.getActionReport().setSubActionReports(new ArrayOfActionReport());
                     commandResult.getActionReport().getSubActionReports().getActionReports().addAll(CommandResultHelper.getActionReportList(commandResultOfSubCommandList));
                 }

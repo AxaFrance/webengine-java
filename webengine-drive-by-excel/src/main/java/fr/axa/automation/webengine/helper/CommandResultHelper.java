@@ -37,6 +37,14 @@ public class CommandResultHelper {
         if(CollectionUtils.isEmpty(commandResultOpenList)){
             commandResultOpenList = CommandResultHelper.getCommand(commandResultList,CommandName.OPEN_PRIVATE);;
         }
+
+        if(CollectionUtils.isEmpty(commandResultOpenList)){
+            for ( CommandResult commandResult : commandResultList ) {
+                 if(CollectionUtils.isNotEmpty(commandResult.getSubCommandResultList())){
+                     return  getWebDriverByOpenCommand(commandResult.getSubCommandResultList());
+                 }
+            }
+        }
         return commandResultOpenList.stream().map(commandResult -> commandResult.getWebDriver()).collect(Collectors.toList());
     }
 }

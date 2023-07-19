@@ -40,9 +40,9 @@ public class ExcelConverter {
         List<String> sheetNameList = ExcelReader.getAllSheetName(workbook);
         assertSheetName(sheetNameList,testCaseAndDataTestColumNameMap);
         if (MapUtils.isEmpty(testCaseAndDataTestColumNameMap)) {
-            testCaseList.addAll(getTestCaseDataList(workbook, getTestCaseNameAndDataTestColumnName(sheetNameList)));
+            testCaseList.addAll(getTestCaseList(workbook, getTestCaseNameAndDataTestColumnName(sheetNameList)));
         } else {
-            testCaseList.addAll(getTestCaseDataList(workbook, testCaseAndDataTestColumNameMap));
+            testCaseList.addAll(getTestCaseList(workbook, testCaseAndDataTestColumNameMap));
         }
 
         TestSuiteDataNoCode testSuite = TestSuiteDataNoCode.builder()
@@ -80,19 +80,19 @@ public class ExcelConverter {
         return false;
     }
 
-    private static List<TestCaseDataNoCode> getTestCaseDataList(Workbook workbook, Map<String, List<String>> testCaseAndDataTestColumNameMap ) {
+    private static List<TestCaseDataNoCode> getTestCaseList(Workbook workbook, Map<String, List<String>> testCaseAndDataTestColumNameMap ) {
         Map<String, TestCaseDataNoCode> testCaseDataMap = new LinkedHashMap<>();
         if (MapUtils.isNotEmpty(testCaseAndDataTestColumNameMap)) {
             for (String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
                 if(!testCaseDataMap.containsKey(testCaseToRun)){
-                    testCaseDataMap.putAll(getTestCaseDataList(workbook, testCaseToRun, testCaseAndDataTestColumNameMap.get(testCaseToRun)));
+                    testCaseDataMap.putAll(getTestCaseList(workbook, testCaseToRun, testCaseAndDataTestColumNameMap.get(testCaseToRun)));
                 }
             }
         }
         return new ArrayList<>(testCaseDataMap.values());
     }
 
-    private static Map<String, TestCaseDataNoCode> getTestCaseDataList(Workbook workbook, String testCaseSheetName, List<String> dataTestColumnNameList) {
+    private static Map<String, TestCaseDataNoCode> getTestCaseList(Workbook workbook, String testCaseSheetName, List<String> dataTestColumnNameList) {
 
         Map<String, TestCaseDataNoCode> testCaseDataMap = new LinkedHashMap<>();
         List<CommandDataNoCode> commandDataList = new LinkedList<>();
@@ -122,7 +122,7 @@ public class ExcelConverter {
 
                 if (commandData.getCommand() == CommandName.CALL) {
                     String testCaseNameToCall = commandData.getTargetList().get(TargetKey.CALL);
-                    Map<String, TestCaseDataNoCode> testCaseDataCalledMap = getTestCaseDataList(workbook, testCaseNameToCall, dataTestColumnNameList);
+                    Map<String, TestCaseDataNoCode> testCaseDataCalledMap = getTestCaseList(workbook, testCaseNameToCall, dataTestColumnNameList);
                     if (!testCaseDataMap.containsKey(testCaseNameToCall)) {
                         testCaseDataMap.putAll(testCaseDataCalledMap);
                     }
