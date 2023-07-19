@@ -90,7 +90,6 @@ public abstract class AbstractDriverCommand implements ICommand {
     protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
         Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
         WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
-        setWebDriverToUse(webDriver);
         if(entry==null){
             return WebElementDescription.builder()
                     .useDriver(webDriver)
@@ -189,20 +188,7 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
-        WebDriver webDriver = null;
-        if(CollectionUtils.isEmpty(commandResultList)){
-            CommandDataNoCode commandDataNoCode = getFirstCommandOpen(testCaseContext);
-            if(commandDataNoCode==null){
-                throw new WebEngineException("No command open found");
-            } else if (commandDataNoCode.getCommand() == CommandName.OPEN) {
-                webDriver = initializeWebDriver(globalApplicationContext);
-            }else if(commandDataNoCode.getCommand() == CommandName.OPEN_PRIVATE){
-                webDriver = initializeIncognitoWebDriver(globalApplicationContext);
-            }
-        }else{
-            webDriver = getLastWebDriver(commandResultList);
-        }
-        setWebDriverToUse(webDriver);
+        WebDriver webDriver = getLastWebDriver(commandResultList);
         return webDriver;
     }
 

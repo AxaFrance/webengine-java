@@ -209,12 +209,12 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                         }
                         break;
                 }
-                commandResultList.add(commandResult);
                 if (isSubReport && CollectionUtils.isNotEmpty(commandResultOfSubCommandList)) {
                     commandResult.addSubCommandResult(commandResultOfSubCommandList);
                     commandResult.getActionReport().setSubActionReports(new ArrayOfActionReport());
                     commandResult.getActionReport().getSubActionReports().getActionReports().addAll(CommandResultHelper.getActionReportList(commandResultOfSubCommandList));
                 }
+                commandResultList.add(commandResult);
                 ignoredAllNextCmd = isIgnoredAllOtherAction(commandResult);
             }
         } catch (Throwable e) {

@@ -22,9 +22,7 @@ public class OpenCommand extends AbstractDriverCommand{
         String url = EvaluateValueHelper.getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         WebDriver webDriver = null;
         List<WebDriver> webDriverList = CommandResultHelper.getWebDriverByOpenCommand(commandResultList);
-        if(CollectionUtils.isEmpty(webDriverList)){
-            webDriver = getLastWebDriver(commandResultList);
-        }else{
+        if(CollectionUtils.isNotEmpty(webDriverList)){//Dans le cas ou l'application a déjà été ouvert, on reutilise le même driver
             for ( WebDriver webDriverStored : webDriverList ) {
                 if(StringUtil.equalsIgnoreCase(webDriverStored.getCurrentUrl(),"data:,") || StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(webDriverStored.getCurrentUrl()),UriUtil.getHostFromURI(url))){
                     webDriver = webDriverStored;
