@@ -131,7 +131,7 @@ public class WebElementDescription extends AbstractElementDescription {
     private Collection<WebElement> getInternalFindElementByAttributeList(Map<String,String> attributeList) {
         if (MapUtils.isNotEmpty(attributeList)) {
             List<String> attributes = new ArrayList<>();
-            attributeList.entrySet().stream().forEach(entry -> attributes.add("[" + entry.getKey() + "=" + entry.getValue() + "]"));
+            attributeList.entrySet().stream().forEach(entry -> attributes.add("[" + entry.getKey() + "='" + entry.getValue() + "']"));
             String cssSelector = String.join("", attributes);
             return getInternalFindElementByCssSelector(getTagName() + cssSelector);
         }
