@@ -29,6 +29,7 @@ import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
 import fr.axa.automation.webengine.tree.TreeNode;
 import fr.axa.automation.webengine.util.DateUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
@@ -76,7 +77,6 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                 });
                 loggerService.info("Browser close properly");
             }
-
         }catch (NoSuchSessionException e){
             loggerService.warn("Warning during quit browser",e);
         }
@@ -184,7 +184,11 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                     case CALL:
                         if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                             commandResult = CommandResultHelper.getCommandResult(commandData, ActionReportHelper.getActionReport(commandData.getName(), Result.PASSED), "");
-                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperNoCode.getTestCaseContext(testCaseContext, commandData.getTargetList().get(TargetKey.CALL)));
+                            String dataTestColumnNameForCall = commandData.getDataTestMap().get(dataTestColumName);
+                            if(StringUtils.isEmpty(dataTestColumnNameForCall)){
+                                dataTestColumnNameForCall = dataTestColumName;
+                            }
+                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperNoCode.getTestCaseContext(testCaseContext, commandData.getTargetList().get(TargetKey.CALL), dataTestColumnNameForCall ));
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;

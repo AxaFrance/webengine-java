@@ -22,10 +22,18 @@ import java.util.stream.Collectors;
 
 public final class TestCaseHelperNoCode {
 
-    public static AbstractTestCaseContext getTestCaseContext(AbstractTestCaseContext testCaseContext , String testCaseName){
+    public static AbstractTestCaseContext getTestCaseContext(AbstractTestCaseContext testCaseContext , String testCaseName, String dataTestColumnName){
         TestCaseNoCodeContext testCaseNoCodeContext = (TestCaseNoCodeContext) testCaseContext;
-        List<TestCaseNodeNoCode> list = testCaseNoCodeContext.getTestSuiteData().getTestCaseNodeList().stream().filter(testCaseNodeNoCode -> testCaseNodeNoCode.getName().equalsIgnoreCase(testCaseName)).collect(Collectors.toList());
-        return TestCaseNoCodeContext.builder().testCaseName(testCaseName).webDriver(testCaseNoCodeContext.getWebDriver()).testSuiteData(testCaseNoCodeContext.getTestSuiteData()).testCaseToRun(list.get(0)).dataTestColumnName(testCaseNoCodeContext.getDataTestColumnName()).build();
+        List<TestCaseNodeNoCode> list = testCaseNoCodeContext.getTestSuiteData().getTestCaseNodeList().stream()
+                                        .filter(testCaseNodeNoCode -> testCaseNodeNoCode.getName().equalsIgnoreCase(testCaseName))
+                                        .collect(Collectors.toList());
+        return TestCaseNoCodeContext.builder()
+                .testCaseName(testCaseName)
+                .webDriver(testCaseNoCodeContext.getWebDriver())
+                .testSuiteData(testCaseNoCodeContext.getTestSuiteData())
+                .testCaseToRun(list.get(0))
+                .dataTestColumnName(dataTestColumnName)
+                .build();
     }
 
     public static String getReportTestCaseName(AbstractTestCaseContext testCaseContext){

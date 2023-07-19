@@ -122,7 +122,7 @@ public class ExcelConverter {
 
                 if (commandData.getCommand() == CommandName.CALL) {
                     String testCaseNameToCall = commandData.getTargetList().get(TargetKey.CALL);
-                    Map<String, TestCaseDataNoCode> testCaseDataCalledMap = getTestCaseList(workbook, testCaseNameToCall, dataTestColumnNameList);
+                    Map<String, TestCaseDataNoCode> testCaseDataCalledMap = getTestCaseList(workbook, testCaseNameToCall, null); //Get all date test column name with the data
                     if (!testCaseDataMap.containsKey(testCaseNameToCall)) {
                         testCaseDataMap.putAll(testCaseDataCalledMap);
                     }
