@@ -10,9 +10,5 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class TestCaseWebContext extends AbstractTestCaseContext  {
-
     ITestCase testCaseToExecute;
-
-
-
 }

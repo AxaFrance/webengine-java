@@ -13,7 +13,7 @@ public interface ITestCaseNoCodeExecutor extends ITestCaseExecutor {
 
     TestCaseReport run(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException;
 
-    default void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, Object object) throws WebEngineException{
+    default void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException{
     }
 
 }

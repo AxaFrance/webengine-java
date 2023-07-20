@@ -28,11 +28,12 @@ public final class TestCaseHelperNoCode {
                                         .filter(testCaseNodeNoCode -> testCaseNodeNoCode.getName().equalsIgnoreCase(testCaseName))
                                         .collect(Collectors.toList());
         return TestCaseNoCodeContext.builder()
-                .testCaseName(testCaseName)
-                .webDriver(testCaseNoCodeContext.getWebDriver())
                 .testSuiteData(testCaseNoCodeContext.getTestSuiteData())
                 .testCaseToRun(list.get(0))
+                .testCaseName(testCaseName)
                 .dataTestColumnName(dataTestColumnName)
+                .webDriverList(testCaseNoCodeContext.getWebDriverList())
+                .webDriver(testCaseNoCodeContext.getWebDriver())
                 .build();
     }
 

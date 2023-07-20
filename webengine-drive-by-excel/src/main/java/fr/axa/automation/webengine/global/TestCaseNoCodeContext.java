@@ -6,12 +6,16 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.openqa.selenium.WebDriver;
+
+import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @SuperBuilder
 public class TestCaseNoCodeContext extends AbstractTestCaseContext {
+    TestSuiteDataNoCode testSuiteData;
     TestCaseNodeNoCode testCaseToRun;
     String dataTestColumnName;
-    TestSuiteDataNoCode testSuiteData;
+    List<WebDriver> webDriverList;
 }

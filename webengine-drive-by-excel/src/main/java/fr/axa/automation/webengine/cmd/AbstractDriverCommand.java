@@ -20,16 +20,12 @@ import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
-import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.util.BrowserFactory;
-import fr.axa.automation.webengine.util.ListUtil;
-import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -44,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -53,7 +48,6 @@ public abstract class AbstractDriverCommand implements ICommand {
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
     String savedData;
-    WebDriver webDriverToUse;
 
     ILoggerService loggerService = LoggerServiceProvider.getInstance();
     StringBuffer logReport = new StringBuffer();
@@ -178,7 +172,10 @@ public abstract class AbstractDriverCommand implements ICommand {
             actionReport.setEndTime(Calendar.getInstance());
         }
         loggerService.info(getLogReport().toString());
-        return CommandResult.builder().commandData(commandData).actionReport(actionReport).webDriver(webDriverToUse).savedData(savedData).build();
+        return CommandResult.builder()
+                .commandData(commandData)
+                .actionReport(actionReport)
+                .savedData(savedData).build();
     }
 
     protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
@@ -188,29 +185,7 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
-        WebDriver webDriver = getLastWebDriver(commandResultList);
-        return webDriver;
+        return (WebDriver)((TestCaseNoCodeContext)testCaseContext).getWebDriver();
     }
 
-    protected WebDriver getLastWebDriver(List<CommandResult> commandResultList) {
-        WebDriver webDriver = null;
-        List<WebDriver> commandDataNoCodeList = commandResultList.stream().filter(commandResult -> commandResult.getWebDriver()!=null).map(commandResult -> commandResult.getWebDriver()).collect(Collectors.toList());
-        if(CollectionUtils.isNotEmpty(commandDataNoCodeList)){
-            webDriver = ListUtil.getLastElement(commandDataNoCodeList).get();
-        }
-        return webDriver;
-    }
-
-    protected CommandDataNoCode getFirstCommandOpen(AbstractTestCaseContext testCaseContext) {
-        CommandDataNoCode commandDataNoCode = getFirstCommandFoundByName(testCaseContext,CommandName.OPEN);
-        if(commandDataNoCode==null){
-            commandDataNoCode = getFirstCommandFoundByName(testCaseContext,CommandName.OPEN_PRIVATE);
-        }
-        return commandDataNoCode;
-    }
-
-    protected CommandDataNoCode getFirstCommandFoundByName(AbstractTestCaseContext testCaseContext, CommandName commandName) {
-        List<TestCaseDataNoCode> testCaseDataNoCodeList = ((TestCaseNoCodeContext)testCaseContext).getTestSuiteData().getTestCaseList().stream().filter(testCase -> StringUtil.equalsIgnoreCase(testCase.getName(),testCaseContext.getTestCaseName())).collect(Collectors.toList());
-        return testCaseDataNoCodeList.get(0).getCommandList().stream().filter(commandDataNoCode -> commandDataNoCode.getCommand()==commandName).findFirst().orElse(null);
-    }
 }

@@ -66,10 +66,10 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         return createTestCaseContext(testSuiteData, testCaseNodeToRun, dataTestColumnName);
     }
 
-    public void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, List<CommandResult> commandResultList) {
+    public void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) {
         try {
             if(globalApplicationContext.getSettings().isCloseBrowser()){
-                List<WebDriver> webDriverList = CommandResultHelper.getWebDriverByOpenCommand(commandResultList);
+                List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getWebDriverList();
                 webDriverList.stream().forEach(webDriver -> {
                     if (webDriver != null) {
                         webDriver.quit();
@@ -88,6 +88,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         ((TestCaseNoCodeContext) testCaseContext).setTestSuiteData(testSuiteData);
         ((TestCaseNoCodeContext) testCaseContext).setTestCaseToRun(testCaseToRun);
         ((TestCaseNoCodeContext) testCaseContext).setDataTestColumnName(dataTestColumnName);
+        ((TestCaseNoCodeContext) testCaseContext).setWebDriverList(new ArrayList<>());
         return testCaseContext;
     }
 
@@ -109,7 +110,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             testCaseReport.setResult(getResultOfTestCase(CommandResultHelper.getActionReportList(filterCommandResult(commandResultList))));
             testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
             //testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
-            cleanUp(globalApplicationContext, commandResultList);
+            cleanUp(globalApplicationContext, testCaseContext);
         }
         return testCaseReport;
     }
@@ -188,7 +189,9 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                             if(StringUtils.isEmpty(dataTestColumnNameForCall)){
                                 dataTestColumnNameForCall = dataTestColumName;
                             }
-                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, TestCaseHelperNoCode.getTestCaseContext(testCaseContext, commandData.getTargetList().get(TargetKey.CALL), dataTestColumnNameForCall ));
+                            AbstractTestCaseContext testCaseContextCall = TestCaseHelperNoCode.getTestCaseContext(testCaseContext, commandData.getTargetList().get(TargetKey.CALL), dataTestColumnNameForCall);
+                            commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContextCall);
+                            testCaseContext.setWebDriver(testCaseContextCall.getWebDriver());
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;
@@ -209,12 +212,14 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                         }
                         break;
                 }
+
+                commandResultList.add(commandResult);
                 if (isSubReport && CollectionUtils.isNotEmpty(commandResultOfSubCommandList)) {
-                    commandResult.addSubCommandResult(commandResultOfSubCommandList);
+//                    commandResultList.addAll(commandResultOfSubCommandList);
                     commandResult.getActionReport().setSubActionReports(new ArrayOfActionReport());
                     commandResult.getActionReport().getSubActionReports().getActionReports().addAll(CommandResultHelper.getActionReportList(commandResultOfSubCommandList));
                 }
-                commandResultList.add(commandResult);
+
                 ignoredAllNextCmd = isIgnoredAllOtherAction(commandResult);
             }
         } catch (Throwable e) {

@@ -51,7 +51,6 @@ public class TestStepNoCodeExecutor extends AbstractTestStepExecutor implements 
         return CommandResult.builder().commandData(commandData)
                                         .actionReport(commandResult !=null ? commandResult.getActionReport() : actionReport)
                                         .savedData(commandResult !=null ? commandResult.getSavedData() : "")
-                                        .webDriver(commandResult !=null ? commandResult.getWebDriver() : null)
                                         .build();
     }
 
