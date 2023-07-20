@@ -176,6 +176,11 @@ public abstract class AbstractElementDescription {
         webElement.sendKeys(x);
     }
 
+    protected void sendKeysWithClear(String x, WebElement webElement) {
+        webElement.clear();
+        webElement.sendKeys(x);
+    }
+
     public byte[] getScreenshot() throws Exception {
         return perform(internalGetScreenshot());
     }

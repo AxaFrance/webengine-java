@@ -31,9 +31,8 @@ public class OpenCommand extends AbstractDriverCommand{
         }
         if(webDriver==null) {
             webDriver = instantiateWebDrive(globalApplicationContext);
-            ((TestCaseNoCodeContext)testCaseContext).getWebDriverList().add(webDriver);
         }
-        ((TestCaseNoCodeContext)testCaseContext).setWebDriver(webDriver);
+        ((TestCaseNoCodeContext)testCaseContext).getWebDriverList().add(webDriver);
         String originalWindow = webDriver.getWindowHandle();
         webDriver.switchTo().window(originalWindow);
         webDriver.manage().window().maximize();

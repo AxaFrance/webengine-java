@@ -329,7 +329,7 @@ public class WebElementDescription extends AbstractElementDescription {
             WebElement webElement = findElement();
             focus(webElement);
             highLight(webElement);
-            sendKeys(x,webElement);
+            sendKeysWithClear(x,webElement);
             return null;
         };
         retry(fun,text);

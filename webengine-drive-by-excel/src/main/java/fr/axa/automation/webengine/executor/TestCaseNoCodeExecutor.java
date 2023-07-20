@@ -191,7 +191,6 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                             }
                             AbstractTestCaseContext testCaseContextCall = TestCaseHelperNoCode.getTestCaseContext(testCaseContext, commandData.getTargetList().get(TargetKey.CALL), dataTestColumnNameForCall);
                             commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContextCall);
-                            testCaseContext.setWebDriver(testCaseContextCall.getWebDriver());
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;

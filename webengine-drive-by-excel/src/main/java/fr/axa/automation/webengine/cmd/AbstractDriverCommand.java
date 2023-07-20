@@ -23,9 +23,11 @@ import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.util.BrowserFactory;
+import fr.axa.automation.webengine.util.ListUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -185,7 +187,11 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
-        return (WebDriver)((TestCaseNoCodeContext)testCaseContext).getWebDriver();
+        List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getWebDriverList();
+        if(CollectionUtils.isNotEmpty(webDriverList)){
+            return ListUtil.getLastElement(webDriverList).get();
+        }
+        return null;
     }
 
 }
