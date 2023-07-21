@@ -7,7 +7,6 @@ import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
 import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
 import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
 import fr.axa.automation.webengine.checking.chain.impl.OptionalChecking;
-import fr.axa.automation.webengine.checking.chain.impl.ReferencedValueChecking;
 import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.core.AbstractTestSuiteExecutor;

@@ -15,7 +15,6 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
-import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.CommandNameHelper;
 import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.helper.TestCaseHelperNoCode;
@@ -183,8 +182,8 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                         nestedIfList.removeLast();
                         break;
                     case CALL:
-                        if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
-                            commandResult = CommandResultHelper.getCommandResult(commandData, ActionReportHelper.getActionReport(commandData.getName(), Result.PASSED), "");
+                        commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, commandResultList);
+                        if (CommandResultHelper.isResultExpected(commandResult, Result.PASSED)) { //Call command can't be optional
                             String dataTestColumnNameForCall = commandData.getDataTestMap().get(dataTestColumName);
                             if(StringUtils.isEmpty(dataTestColumnNameForCall)){
                                 dataTestColumnNameForCall = dataTestColumName;
@@ -194,10 +193,6 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;
-                        } else {
-                            actionReport = ActionReportHelper.getActionReport(commandData.getName(), Result.IGNORED);
-                            actionReport.setLog("Command ignored because the colum data-test-ref not contains '" + dataTestColumName + "' column");
-                            commandResult = CommandResultHelper.getCommandResult(commandData, actionReport, "");
                         }
                         break;
                     default:

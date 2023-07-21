@@ -16,6 +16,8 @@ public class CommandFactory {
                 return new ClickCommand();
             case SAVE_DATA:
                 return new SaveDataCommand();
+            case CALL:
+                return new CallCommand();
             case SELECT:
                 return new SelectCommand();
             case ASSERT_EXIST:

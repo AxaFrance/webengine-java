@@ -54,6 +54,8 @@ public abstract class AbstractDriverCommand implements ICommand {
     ILoggerService loggerService = LoggerServiceProvider.getInstance();
     StringBuffer logReport = new StringBuffer();
 
+    public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception;
+
     public WebDriver initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
        return getDriver(globalApplicationContext,false);
     }
@@ -79,9 +81,6 @@ public abstract class AbstractDriverCommand implements ICommand {
         }
         return null;
     }
-
-
-    public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception;
 
     protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
         Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
