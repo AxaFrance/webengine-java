@@ -104,8 +104,8 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         IChecking checking = AbstractChecking.link(
                 new IfChecking(),
                 new OptionalChecking(),
-                new CallScenariiChecking(),
-                new ReferencedValueChecking()
+                new CallScenariiChecking()
+//                new ReferencedValueChecking()
         );
         ICheckingRunner checkingRunner = new CheckingRunner();
         checkingRunner.setChecking(checking);
