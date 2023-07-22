@@ -99,7 +99,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         List<CommandResult> commandResultList = new ArrayList<>();
 
         try {
-            commandResultList.addAll(runTestStep(globalApplicationContext, testCaseNoCodeContext));
+            commandResultList = runTestStep(globalApplicationContext, testCaseNoCodeContext);
         } catch (Throwable e) {
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);
@@ -143,9 +143,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                 isSubReport = false;
                 commandData = ((CommandDataNoCode) treeNodeCommand.getData());
                 commandName = CommandNameHelper.getCommandName(commandData);
-                actionReport = new ActionReport();
-                actionReport.setName(commandName);
-                actionReport.setId(UUID.randomUUID().toString());
+                actionReport = ActionReportHelper.getActionReport(commandName);
 
                 if (ignoredAllNextCmd) {
                     actionReport.setResult(Result.IGNORED);
@@ -184,10 +182,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                     case CALL:
                         commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, commandResultList);
                         if (CommandResultHelper.isResultExpected(commandResult, Result.PASSED)) { //Call command can't be optional
-                            String dataTestColumnNameForCall = commandData.getDataTestMap().get(dataTestColumName);
-                            if(StringUtils.isEmpty(dataTestColumnNameForCall)){
-                                dataTestColumnNameForCall = dataTestColumName;
-                            }
+                            String dataTestColumnNameForCall = StringUtils.isEmpty(commandData.getDataTestMap().get(dataTestColumName)) ? dataTestColumName : commandData.getDataTestMap().get(dataTestColumName);
                             AbstractTestCaseContext testCaseContextCall = TestCaseHelperNoCode.getTestCaseContext(testCaseContext, commandData.getTargetList().get(TargetKey.CALL), dataTestColumnNameForCall);
                             commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContextCall);
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
