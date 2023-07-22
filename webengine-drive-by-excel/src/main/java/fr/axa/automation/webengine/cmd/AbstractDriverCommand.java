@@ -14,6 +14,7 @@ import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
+import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.helper.GlobalConfigPropertiesHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
@@ -49,7 +50,9 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
+    WebDriver webDriver;
     String savedData;
+
 
     ILoggerService loggerService = LoggerServiceProvider.getInstance();
     StringBuffer logReport = new StringBuffer();
@@ -176,6 +179,7 @@ public abstract class AbstractDriverCommand implements ICommand {
         return CommandResult.builder()
                 .commandData(commandData)
                 .actionReport(actionReport)
+                .webDriver(webDriver)
                 .savedData(savedData).build();
     }
 
@@ -186,7 +190,7 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
-        List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getWebDriverList();
+        List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
         if(CollectionUtils.isNotEmpty(webDriverList)){
             return ListUtil.getLastElement(webDriverList).get();
         }

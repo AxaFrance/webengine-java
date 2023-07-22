@@ -5,7 +5,10 @@ import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import org.apache.commons.collections4.CollectionUtils;
+import org.openqa.selenium.WebDriver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,4 +32,26 @@ public class CommandResultHelper {
                 .filter(commandResult -> commandResult.getCommandData().getCommand()==commandName)
                 .collect(Collectors.toList());
     }
+
+    public static List<WebDriver>  getWebDriverList(List<CommandResult> commandResultList){
+        List<CommandResult> commandResultFlatList = flatCommandResult(commandResultList, new ArrayList<>());
+        return commandResultFlatList
+                .stream()
+                .filter(commandResult -> commandResult.getWebDriver()!=null)
+                .map(commandResult -> commandResult.getWebDriver())
+                .collect(Collectors.toList());
+    }
+
+    public static List<CommandResult> flatCommandResult(List<CommandResult> commandResultList, List<CommandResult> destination) {
+        for (CommandResult commandResult : commandResultList) {
+            if (CollectionUtils.isNotEmpty(commandResult.getSubCommandResultList())) {
+                flatCommandResult(commandResult.getSubCommandResultList(), destination);
+            } else {
+                destination.add(commandResult);
+            }
+        }
+        return destination;
+    }
+
+
 }

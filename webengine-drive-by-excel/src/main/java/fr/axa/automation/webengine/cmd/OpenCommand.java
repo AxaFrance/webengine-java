@@ -4,6 +4,7 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
+import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
@@ -21,7 +22,7 @@ public class OpenCommand extends AbstractDriverCommand{
         String url = EvaluateValueHelper.getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         WebDriver webDriver = null;
 
-        List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getWebDriverList();
+        List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
         if(CollectionUtils.isNotEmpty(webDriverList)){//Dans le cas ou l'application a déjà été ouvert, on reutilise le même driver
             for ( WebDriver webDriverStored : webDriverList ) {
                 if(StringUtil.equalsIgnoreCase(webDriverStored.getCurrentUrl(),"data:,") || StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(webDriverStored.getCurrentUrl()),UriUtil.getHostFromURI(url))){
@@ -32,7 +33,7 @@ public class OpenCommand extends AbstractDriverCommand{
         if(webDriver==null) {
             webDriver = instantiateWebDrive(globalApplicationContext);
         }
-        ((TestCaseNoCodeContext)testCaseContext).getWebDriverList().add(webDriver);
+        setWebDriver(webDriver);
         String originalWindow = webDriver.getWindowHandle();
         webDriver.switchTo().window(originalWindow);
         webDriver.manage().window().maximize();

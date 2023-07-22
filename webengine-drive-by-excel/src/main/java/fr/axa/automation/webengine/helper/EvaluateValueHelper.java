@@ -17,6 +17,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -90,14 +91,16 @@ public class EvaluateValueHelper {
 
     public static boolean isContainsReferencedValue(String value, List<CommandResult> commandResultList){
         if(CollectionUtils.isNotEmpty(commandResultList)){
-            return commandResultList.stream().anyMatch(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value));
+            List<CommandResult> commandResultFlatList = CommandResultHelper.flatCommandResult(commandResultList,new ArrayList<>());
+            return commandResultFlatList.stream().anyMatch(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value));
         }
         return false;
     }
 
     public static String getSavedData(String value, List<CommandResult> commandResultList){
         if(CollectionUtils.isNotEmpty(commandResultList)){
-            List<String> saveDataList = commandResultList.stream()
+            List<CommandResult> commandResultFlatList = CommandResultHelper.flatCommandResult(commandResultList,new ArrayList<>());
+            List<String> saveDataList = commandResultFlatList.stream()
                                                         .filter(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value))
                                                         .map(commandResult -> commandResult.getSavedData())
                                                         .collect(Collectors.toList());

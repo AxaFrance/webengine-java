@@ -32,8 +32,6 @@ public final class TestCaseHelperNoCode {
                 .testCaseToRun(list.get(0))
                 .testCaseName(testCaseName)
                 .dataTestColumnName(dataTestColumnName)
-                .webDriverList(testCaseNoCodeContext.getWebDriverList())
-                .webDriver(testCaseNoCodeContext.getWebDriver())
                 .build();
     }
 

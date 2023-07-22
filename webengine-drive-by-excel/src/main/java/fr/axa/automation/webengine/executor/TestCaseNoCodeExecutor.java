@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -65,10 +64,10 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         return createTestCaseContext(testSuiteData, testCaseNodeToRun, dataTestColumnName);
     }
 
-    public void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) {
+    public void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext,List<CommandResult> commandResultList) {
         try {
             if(globalApplicationContext.getSettings().isCloseBrowser()){
-                List<WebDriver> webDriverList = ((TestCaseNoCodeContext)testCaseContext).getWebDriverList();
+                List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
                 webDriverList.stream().forEach(webDriver -> {
                     if (webDriver != null) {
                         webDriver.quit();
@@ -87,7 +86,6 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         ((TestCaseNoCodeContext) testCaseContext).setTestSuiteData(testSuiteData);
         ((TestCaseNoCodeContext) testCaseContext).setTestCaseToRun(testCaseToRun);
         ((TestCaseNoCodeContext) testCaseContext).setDataTestColumnName(dataTestColumnName);
-        ((TestCaseNoCodeContext) testCaseContext).setWebDriverList(new ArrayList<>());
         return testCaseContext;
     }
 
@@ -99,7 +97,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
         List<CommandResult> commandResultList = new ArrayList<>();
 
         try {
-            commandResultList = runTestStep(globalApplicationContext, testCaseNoCodeContext);
+            commandResultList = runTestStep(globalApplicationContext, testCaseNoCodeContext,new ArrayList<>());
         } catch (Throwable e) {
             testCaseReport.setResult(Result.FAILED);
             loggerService.error("Error during execution of test case : " + testCaseName, e);
@@ -109,35 +107,37 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             testCaseReport.setResult(getResultOfTestCase(CommandResultHelper.getActionReportList(filterCommandResult(commandResultList))));
             testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
             //testCaseReport.setTestData(testDataByTestCase.map(TestData::getData).orElse(null));
-            cleanUp(globalApplicationContext, testCaseContext);
+            cleanUp(globalApplicationContext, testCaseContext,commandResultList);
         }
         return testCaseReport;
     }
 
-    protected List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext) throws WebEngineException {
+    protected List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext,List<CommandResult> commandResultList) throws WebEngineException {
         TestCaseNoCodeContext testCaseNoCodeContext = (TestCaseNoCodeContext) testCaseContext;
         TreeNode rootNode = testCaseNoCodeContext.getTestCaseToRun().getTreeNode();
-        return runTestStep(globalApplicationContext, testCaseContext, rootNode);
+        return runTestStep(globalApplicationContext, testCaseContext, rootNode,commandResultList);
     }
 
-    protected List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode) throws WebEngineException {
+    protected List<CommandResult> runTestStep(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, TreeNode treeNode,List<CommandResult> commandResultList) throws WebEngineException {
         ITestStepNoCodeExecutor stepExecutor = ((ITestStepNoCodeExecutor) testStepExecutor);
-        CommandDataNoCode commandData = null;
-        ActionReport actionReport = new ActionReport();
-        CommandResult commandResult;
-        boolean isSubReport;
-        List<CommandResult> commandResultList = new ArrayList<>();
-        List<CommandResult> commandResultOfSubCommandList = new ArrayList<>();
-        Deque<Map<CommandName, Result>> nestedIfList = new LinkedList<>();
-
-        String commandName = "";
-        boolean ignoredAllNextCmd = false;
-
         TestCaseNoCodeContext testCaseNoCodeContext = (TestCaseNoCodeContext) testCaseContext;
         String testCaseName = testCaseNoCodeContext.getTestCaseName();
         String dataTestColumName = testCaseNoCodeContext.getDataTestColumnName();
 
+        CommandDataNoCode commandData = null;
+        String commandName = "";
+        ActionReport actionReport = new ActionReport();
+        CommandResult commandResult;
+        boolean isSubReport;
+        boolean ignoredAllNextCmd = false;
+
+        List<CommandResult> firstParentCommandResultOnlyList = new ArrayList<>();
+        List<CommandResult> allCommandResultList = commandResultList;
+        List<CommandResult> commandResultOfSubCommandList = new ArrayList<>();
+        Deque<Map<CommandName, Result>> nestedIfList = new LinkedList<>();
+
         List<TreeNode> treeNodeCommandList = treeNode.getChildren();
+
         try {
             for (TreeNode treeNodeCommand : treeNodeCommandList) {
                 isSubReport = false;
@@ -147,53 +147,67 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
 
                 if (ignoredAllNextCmd) {
                     actionReport.setResult(Result.IGNORED);
-                    commandResultList.add(CommandResultHelper.getCommandResult(commandData, actionReport, ""));
+                    firstParentCommandResultOnlyList.add(CommandResultHelper.getCommandResult(commandData, actionReport, ""));
                     loggerService.info("All command are ignored. Test case is : " + testCaseName + " and command name is : " + commandName);
                     continue;
                 }
 
                 switch (commandData.getCommand()) {
                     case IF:
-                        commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, commandResultList);
+                        commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, allCommandResultList);
+                        firstParentCommandResultOnlyList.add(commandResult);
+                        allCommandResultList.add(commandResult);
                         nestedIfList.addLast(getResultOfCommand(CommandName.IF, commandResult.getActionReport().getResult()));
-                        commandResultOfSubCommandList = CommandResultHelper.isResultExpected(commandResult, Result.PASSED) ? runTestStep(globalApplicationContext, testCaseContext, treeNodeCommand) : ignoreCommand(treeNodeCommand);
+                        commandResultOfSubCommandList = CommandResultHelper.isResultExpected(commandResult, Result.PASSED) ?
+                                                        runTestStep(globalApplicationContext, testCaseContext, treeNodeCommand, allCommandResultList) :
+                                                        ignoreCommand(treeNodeCommand);
                         isSubReport = true;
                         break;
                     case ELSE_IF:
                     case ELSE:
                         Map<CommandName, Result> map = nestedIfList.getLast();
                         if (canExecute(map)) {
-                            commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, commandResultList);
+                            commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, allCommandResultList);
+                            firstParentCommandResultOnlyList.add(commandResult);
+                            allCommandResultList.add(commandResult);
                             if (CommandResultHelper.isResultExpected(commandResult, Result.PASSED)) {
-                                commandResultOfSubCommandList = runTestStep(globalApplicationContext, testCaseContext, treeNodeCommand);
+                                commandResultOfSubCommandList = runTestStep(globalApplicationContext, testCaseContext, treeNodeCommand,allCommandResultList);
                                 isSubReport = true;
                             }
                             map.put(commandData.getCommand(), commandResult.getActionReport().getResult());
                         } else {
                             commandResult = CommandResultHelper.getCommandResult(commandData, ActionReportHelper.getActionReport(commandName, Result.IGNORED), "");
+                            firstParentCommandResultOnlyList.add(commandResult);
+                            allCommandResultList.add(commandResult);
                             commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
                             isSubReport = true;
                         }
                         break;
                     case END_IF:
                         commandResult = CommandResultHelper.getCommandResult(commandData, ActionReportHelper.getActionReport(commandData.getName(), Result.PASSED), "");
+                        firstParentCommandResultOnlyList.add(commandResult);
+                        allCommandResultList.add(commandResult);
                         nestedIfList.removeLast();
                         break;
                     case CALL:
-                        commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, commandResultList);
+                        commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, allCommandResultList);
+                        firstParentCommandResultOnlyList.add(commandResult);
+                        allCommandResultList.add(commandResult);
                         if (CommandResultHelper.isResultExpected(commandResult, Result.PASSED)) { //Call command can't be optional
                             String dataTestColumnNameForCall = StringUtils.isEmpty(commandData.getDataTestMap().get(dataTestColumName)) ? dataTestColumName : commandData.getDataTestMap().get(dataTestColumName);
                             AbstractTestCaseContext testCaseContextCall = TestCaseHelperNoCode.getTestCaseContext(testCaseContext, commandData.getTargetList().get(TargetKey.CALL), dataTestColumnNameForCall);
-                            commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContextCall);
+                            commandResultOfSubCommandList = runTestStep(globalApplicationContext,testCaseContextCall,allCommandResultList);
                             List<ActionReport> actionReportCallList = CommandResultHelper.getActionReportList(commandResultOfSubCommandList);
                             commandResult.getActionReport().setResult(getResultOfTestCase(actionReportCallList));
                             isSubReport = true;
                         }
                         break;
                     default:
-                        commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, commandResultList);
+                        commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, allCommandResultList);
+                        firstParentCommandResultOnlyList.add(commandResult);
+                        allCommandResultList.add(commandResult);
                         if (commandData.isOptional() && CommandResultHelper.isResultExpected(commandResult, Result.PASSED) && CollectionUtils.isNotEmpty(treeNodeCommand.getChildren())) {
-                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, testCaseContext, treeNodeCommand);
+                            commandResultOfSubCommandList = runTestStep(globalApplicationContext, testCaseContext, treeNodeCommand,allCommandResultList);
                             isSubReport = true;
                         } else if (commandData.isOptional() && (CommandResultHelper.isResultExpected(commandResult, Result.IGNORED) || CommandResultHelper.isResultExpected(commandResult, Result.FAILED) || CommandResultHelper.isResultExpected(commandResult, Result.CRITICAL_ERROR))) {
                             commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
@@ -202,9 +216,9 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                         break;
                 }
 
-                commandResultList.add(commandResult);
                 if (isSubReport && CollectionUtils.isNotEmpty(commandResultOfSubCommandList)) {
-//                    commandResultList.addAll(commandResultOfSubCommandList);
+                    commandResult.setSubCommandResultList(new ArrayList<>());
+                    commandResult.getSubCommandResultList().addAll(commandResultOfSubCommandList);
                     commandResult.getActionReport().setSubActionReports(new ArrayOfActionReport());
                     commandResult.getActionReport().getSubActionReports().getActionReports().addAll(CommandResultHelper.getActionReportList(commandResultOfSubCommandList));
                 }
@@ -215,9 +229,9 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             loggerService.info("Fatal exception during command : " + commandName + " and test case name is : " + testCaseName + ". All commands are cancelled.");
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(ExceptionUtils.getStackTrace(e));
-            commandResultList.add(CommandResultHelper.getCommandResult(commandData, actionReport, ""));
+            firstParentCommandResultOnlyList.add(CommandResultHelper.getCommandResult(commandData, actionReport, ""));
         }
-        return commandResultList;
+        return firstParentCommandResultOnlyList;
     }
 
     protected List<CommandResult> ignoreCommand(TreeNode treeNodeCommand) {
