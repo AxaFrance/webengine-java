@@ -25,16 +25,16 @@ import java.util.stream.Collectors;
 
 public class EvaluateValueHelper {
 
-    public static String getValueBetweenRafter(String value){
-        return StringUtils.substringBetween(value, ConstantNoCode.TRIPLE_CHEVRON_PREFIX.getValue(), ConstantNoCode.TRIPLE_CHEVRON_SUFFIX.getValue());
+    public static String getInternalValue(String value){
+        return StringUtils.substringBetween(value, ConstantNoCode.INTERNAL_PREFIX.getValue(), ConstantNoCode.INTERNAL_SUFFIX.getValue());
     }
 
-    public static String getValueBetweenBrackets(String value){
-        return StringUtils.substringBetween(value, ConstantNoCode.BRACKETS_PREFIX.getValue(), ConstantNoCode.BRACKETS_SUFFIX.getValue());
+    public static String getExternalValue(String value){
+        return StringUtils.substringBetween(value, ConstantNoCode.EXTERNAL_PREFIX.getValue(), ConstantNoCode.EXTERNAL_SUFFIX.getValue());
     }
 
-    public static String getValueBetweenRafter(String value,String prefix, String suffix){
-        return StringUtils.substringBetween(value,prefix,suffix);
+    public static String getKeyboardValue(String value){
+        return StringUtils.substringBetween(value, ConstantNoCode.KEYBOARD_VALUE_PREFIX.getValue(), ConstantNoCode.KEYBOARD_VALUE_SUFFIX.getValue());
     }
 
     public static String getValue(AbstractGlobalApplicationContext globalApplicationContext, TestCaseNoCodeContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
@@ -48,39 +48,54 @@ public class EvaluateValueHelper {
     }
 
     public static String evaluateValue(AbstractSettings settings, String completeValue, List<CommandResult> commandResultList){
-        List<String> integrationRegexValueList = RegexUtil.match(RegexContante.INTEGRATION_REGEX_VALUE, completeValue);
-        List<String> referencedRegexValueList = RegexUtil.match(RegexContante.REFERENCED_REGEX_VALUE, completeValue);
+        List<String> externalRegexValueList = RegexUtil.match(RegexContante.EXTERNAL_REGEX_VALUE, completeValue);
+        List<String> internalRegexValueList = RegexUtil.match(RegexContante.INTERNAL_REGEX_VALUE, completeValue);
+        List<String> keyboardRegexValueList = RegexUtil.match(RegexContante.KEYBOARD_REGEX_VALUE, completeValue);
+
         String evaluateValue = completeValue;
-        if(CollectionUtils.isNotEmpty(integrationRegexValueList)){
-            evaluateValue = evaluateIntegrationRegexValue(completeValue, integrationRegexValueList, settings);
+        if(CollectionUtils.isNotEmpty(externalRegexValueList)){
+            evaluateValue = evaluateExternalRegexValue(completeValue, externalRegexValueList, settings);
         }
-        if(CollectionUtils.isNotEmpty(referencedRegexValueList)){
-            evaluateValue = evaluateReferencedRegexValue(evaluateValue, referencedRegexValueList, commandResultList );
+        if(CollectionUtils.isNotEmpty(internalRegexValueList)){
+            evaluateValue = evaluateInternalRegexValue(evaluateValue, internalRegexValueList, commandResultList);
+        }
+        if(CollectionUtils.isNotEmpty(keyboardRegexValueList)){
+            evaluateValue = evaluateKeyboardRegexValue(evaluateValue,keyboardRegexValueList);
         }
         return evaluateValue;
     }
 
-    public static String evaluateIntegrationRegexValue(String completeValue, List<String> integrationRegexValueList,AbstractSettings settings) {
+    public static String evaluateKeyboardRegexValue(String completeValue, List<String> keyBoardRegexValueList) {
         String resultValue = completeValue;
-        if (CollectionUtils.isNotEmpty(integrationRegexValueList)) {
-            for (String integrationRegexValue : integrationRegexValueList) {
-                String valueWithouBrackets = getValueBetweenBrackets(integrationRegexValue);
+        if (CollectionUtils.isNotEmpty(keyBoardRegexValueList)) {
+            for (String keyBoardValue : keyBoardRegexValueList) {
+                return getKeyboardValue(keyBoardValue);
+            }
+        }
+        return resultValue;
+    }
+
+    public static String evaluateExternalRegexValue(String completeValue, List<String> externalRegexValueList, AbstractSettings settings) {
+        String resultValue = completeValue;
+        if (CollectionUtils.isNotEmpty(externalRegexValueList)) {
+            for (String integrationRegexValue : externalRegexValueList) {
+                String valueWithouBrackets = getExternalValue(integrationRegexValue);
                 resultValue = resultValue.replace(integrationRegexValue, settings.getValues().get(valueWithouBrackets));
             }
         }
         return resultValue;
     }
 
-    private static String evaluateReferencedRegexValue(String completeValue, List<String> referencedRegexValueList, List<CommandResult> commandResultList ) {
+    private static String evaluateInternalRegexValue(String completeValue, List<String> internalRegexValueList, List<CommandResult> commandResultList ) {
         String resultValue = completeValue;
-        if(CollectionUtils.isNotEmpty(referencedRegexValueList)){
-            for (String referencedRegexValue: referencedRegexValueList) {
-                String valueWithouRafter = getValueBetweenRafter(referencedRegexValue);
+        if(CollectionUtils.isNotEmpty(internalRegexValueList)){
+            for (String referencedRegexValue: internalRegexValueList) {
+                String valueWithouRafter = getInternalValue(referencedRegexValue);
                 if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)) {
                     resultValue = resultValue.replace(referencedRegexValue,replaceTagDateValue(valueWithouRafter));
                 } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
                     resultValue = resultValue.replace(referencedRegexValue,PredefinedTagValue.valueOf(valueWithouRafter).getTagValue());
-                } else if (isContainsReferencedValue(valueWithouRafter, commandResultList)) {
+                } else if (isContainsInternalValue(valueWithouRafter, commandResultList)) {
                     String savedData = getSavedData(valueWithouRafter,commandResultList);
                     resultValue = resultValue.replace(referencedRegexValue,savedData);
                 }
@@ -89,7 +104,7 @@ public class EvaluateValueHelper {
         return resultValue;
     }
 
-    public static boolean isContainsReferencedValue(String value, List<CommandResult> commandResultList){
+    public static boolean isContainsInternalValue(String value, List<CommandResult> commandResultList){
         if(CollectionUtils.isNotEmpty(commandResultList)){
             List<CommandResult> commandResultFlatList = CommandResultHelper.flatCommandResult(commandResultList,new ArrayList<>());
             return commandResultFlatList.stream().anyMatch(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value));

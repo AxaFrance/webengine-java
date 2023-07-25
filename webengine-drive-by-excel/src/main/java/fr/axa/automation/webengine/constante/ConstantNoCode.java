@@ -9,10 +9,13 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 public enum ConstantNoCode {
-    BRACKETS_PREFIX("#{"),
-    BRACKETS_SUFFIX("}#"),
-    TRIPLE_CHEVRON_PREFIX("<<<"),
-    TRIPLE_CHEVRON_SUFFIX(">>>"),
+    EXTERNAL_PREFIX("#{"),
+    EXTERNAL_SUFFIX("}#"),
+    INTERNAL_PREFIX("<<<"),
+    INTERNAL_SUFFIX(">>>"),
+
+    KEYBOARD_VALUE_PREFIX("${"),
+    KEYBOARD_VALUE_SUFFIX("}"),
     SEMICOLON(";"),
     EXCLAMATION_MARK("!"),
     MINUS("-"),

@@ -19,6 +19,10 @@ public class SendKeysCommand extends AbstractDriverCommand{
     }
 
     protected void executeActionInElement(String value)throws Exception {
-        webElementDescription.focusAndsendKeys(value);
+        if(value.startsWith("KEY_")){
+            webElementDescription.focusAndsendKeyboard(value.split("_")[1]);
+        }else{
+            webElementDescription.focusAndsendKeys(value);
+        }
     }
 }

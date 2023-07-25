@@ -90,7 +90,7 @@ public final class TestCaseHelperNoCode {
             dataTestByColumn = commandDataList.stream().map(commandData -> commandData.getDataTestMap().get(dataTestNameColumn)).collect(Collectors.toList());
         }
 
-        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.REFERENCED_REGEX_VALUE,value)));
+        dataTestByColumn.stream().forEach(value -> filterDataTestList.addAll(RegexUtil.match(RegexContante.INTERNAL_REGEX_VALUE,value)));
         return filterDataTestList.stream().filter(value -> !PredefinedDateTagValue.isContainsPredefinedDateTagValue(value)).collect(Collectors.toList());
     }
 }

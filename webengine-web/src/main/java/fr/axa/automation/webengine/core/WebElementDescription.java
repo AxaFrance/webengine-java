@@ -20,6 +20,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -334,6 +335,18 @@ public class WebElementDescription extends AbstractElementDescription {
         };
         retry(fun,text);
     }
+
+    public void focusAndsendKeyboard(String text) throws Exception {
+        IFunction<String, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            webElement.sendKeys(Keys.valueOf(x));
+            return null;
+        };
+        retry(fun,text);
+    }
+
 
     public void highLight() throws Exception {
         IFunction<Void, Void> fun = (x) -> {

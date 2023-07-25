@@ -22,9 +22,9 @@ public class SaveDataCommand extends AbstractDriverCommand{
         String dataToSave = "";
         if(MapUtils.isEmpty(commandData.getTargetList())){
             String value = commandData.getDataTestMap().get(dataTestColumName);
-            List<String> integrationRegexValueList = RegexUtil.match(RegexContante.INTEGRATION_REGEX_VALUE, value);
-            if(CollectionUtils.isNotEmpty(integrationRegexValueList)){
-                dataToSave = EvaluateValueHelper.evaluateIntegrationRegexValue(value,integrationRegexValueList,globalApplicationContext.getSettings());
+            List<String> externalRegexValueList = RegexUtil.match(RegexContante.EXTERNAL_REGEX_VALUE, value);
+            if(CollectionUtils.isNotEmpty(externalRegexValueList)){
+                dataToSave = EvaluateValueHelper.evaluateExternalRegexValue(value,externalRegexValueList,globalApplicationContext.getSettings());
             }else{
                 dataToSave = value;
             }
