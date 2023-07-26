@@ -69,10 +69,18 @@ function displayImage(imgToDisplay){
     captionText.innerHTML = img.alt;
 
     let span = document.getElementsByClassName("close")[0];
-    span.onclick = function() {
+    span.onclick = function(event) {
         modal.style.display = "none";
-    }
+        event.stopPropagation();
+    };
+
+    modal.onclick = function(event){
+        if (modal.style.display='block' && (event.target.matches(".close") || !event.target.closest(".modal-content"))) {
+            modal.style.display = "none";
+        }
+    };
 }
+
 
 function expandAll() {
     let toggler = document.getElementsByClassName("caret");
