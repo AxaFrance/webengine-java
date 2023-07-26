@@ -323,9 +323,19 @@ public class WebElementDescription extends AbstractElementDescription {
         retry(fun,null);
     }
 
+    public void focusAndSendKeysWithClear(String text) throws Exception {
+        IFunction<String, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            sendKeysWithClear(x,webElement);
+            return null;
+        };
+        retry(fun,text);
+    }
 
 
-    public void focusAndsendKeys(String text) throws Exception {
+    public void focusAndSendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
             focus(webElement);

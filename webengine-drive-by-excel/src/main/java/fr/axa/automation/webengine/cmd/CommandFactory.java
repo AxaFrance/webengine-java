@@ -12,6 +12,8 @@ public class CommandFactory {
                 return new OpenInPrivateModeCommand();
             case SEND_KEYS:
                 return new SendKeysCommand();
+            case SEND_KEYS_WITH_CLEAR:
+                return new SendKeysWithClearCommand();
             case CLICK:
                 return new ClickCommand();
             case SAVE_DATA:

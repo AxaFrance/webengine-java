@@ -26,6 +26,11 @@ public enum CommandName {
     SEND_KEYS(ImmutableMap.of( Locale.ENGLISH, "send keys" ,Locale.FRENCH, "écrire" ),
             ImmutableMap.of( Locale.ENGLISH, "Send keys to the given text field" ,
                     Locale.FRENCH, "Ecriture dans le champ texte défini dans la colonne identification" )),
+
+    SEND_KEYS_WITH_CLEAR(ImmutableMap.of( Locale.ENGLISH, "send keys with clear" ,Locale.FRENCH, "écrire et effacer avant le champ" ),
+            ImmutableMap.of( Locale.ENGLISH, "Send keys to the given text field" ,
+                    Locale.FRENCH, "Ecriture dans le champ texte défini dans la colonne identification" )),
+
     CLICK(ImmutableMap.of( Locale.ENGLISH, "click" , Locale.FRENCH, "cliquer" ),
             ImmutableMap.of( Locale.ENGLISH, "Click on the given element" ,
                     Locale.FRENCH, "Clic sur l'élément indiqué" )),

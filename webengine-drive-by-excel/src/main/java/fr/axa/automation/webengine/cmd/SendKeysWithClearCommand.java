@@ -9,7 +9,7 @@ import fr.axa.automation.webengine.object.CommandResult;
 
 import java.util.List;
 
-public class SendKeysCommand extends AbstractDriverCommand{
+public class SendKeysWithClearCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
@@ -22,7 +22,7 @@ public class SendKeysCommand extends AbstractDriverCommand{
         if(value.startsWith("KEY_")){
             webElementDescription.focusAndsendKeyboard(value.split("_")[1]);
         }else{
-            webElementDescription.focusAndSendKeys(value);
+            webElementDescription.focusAndSendKeysWithClear(value);
         }
     }
 }
