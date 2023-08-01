@@ -1,5 +1,5 @@
 webengineConfiguration:
-    name: solaris-automation-gherkin
+    name: webengine-automation-gherkin
     platformName: WINDOWS
     browserName: CHROME
     browserOptionList:
