@@ -1,5 +1,5 @@
 webengineConfiguration:
-  name: spoolnet-automation
+  name: myproject-automation
   platformName: WINDOWS
   browserName: CHROME
   browserOptionList:
