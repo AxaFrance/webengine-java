@@ -16,7 +16,7 @@ public class ClickCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
         String value = EvaluateValueHelper.getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        executeActionInElement(value);
+        executeActionInElement(StringUtils.trimToEmpty(value));
     }
 
     protected void executeActionInElement(String value)throws Exception {
