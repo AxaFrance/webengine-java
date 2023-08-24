@@ -168,20 +168,20 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                         Map<CommandName, Result> map = nestedIfList.getLast();
                         if (canExecute(map)) {
                             commandResult = stepExecutor.run(globalApplicationContext, testCaseContext, commandData, allCommandResultList);
-                            firstParentCommandResultOnlyList.add(commandResult);
-                            allCommandResultList.add(commandResult);
                             if (CommandResultHelper.isResultExpected(commandResult, Result.PASSED)) {
                                 commandResultOfSubCommandList = runTestStep(globalApplicationContext, testCaseContext, treeNodeCommand,allCommandResultList);
-                                isSubReport = true;
+                            }else{
+                                commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
                             }
+                            isSubReport = true;
                             map.put(commandData.getCommand(), commandResult.getActionReport().getResult());
                         } else {
                             commandResult = CommandResultHelper.getCommandResult(commandData, ActionReportHelper.getActionReport(commandName, Result.IGNORED), "");
-                            firstParentCommandResultOnlyList.add(commandResult);
-                            allCommandResultList.add(commandResult);
                             commandResultOfSubCommandList = ignoreCommand(treeNodeCommand);
                             isSubReport = true;
                         }
+                        firstParentCommandResultOnlyList.add(commandResult);
+                        allCommandResultList.add(commandResult);
                         break;
                     case END_IF:
                         commandResult = CommandResultHelper.getCommandResult(commandData, ActionReportHelper.getActionReport(commandData.getName(), Result.PASSED), "");
