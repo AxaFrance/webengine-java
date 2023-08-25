@@ -6,6 +6,7 @@ import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class SendKeysCommand extends AbstractDriverCommand{
 
     protected void executeActionInElement(String value)throws Exception {
         if(value.startsWith("KEY_")){
-            webElementDescription.focusAndsendKeyboard(value.split("_")[1]);
+            webElementDescription.focusAndsendKeyboard(StringUtils.substringAfterLast(value,"KEY_"));
         }else{
             webElementDescription.focusAndSendKeys(value);
         }
