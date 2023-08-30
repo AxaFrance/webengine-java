@@ -163,7 +163,8 @@ public abstract class AbstractDriverCommand implements ICommand {
             actionReport.setLog(getLogReport().toString());
         } catch (Throwable e) {
             actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,"",commandResultList));
-            if (commandData.isOptional()) {
+            if (commandData.isOptional() || commandData.getCommand() != CommandName.IF || commandData.getCommand() != CommandName.ELSE_IF) {
+                actionReport.setName(actionReport.getName() + " - /!\\ Failed but ignored (Optional or If/else if/else)");
                 actionReport.setResult(Result.IGNORED);
                 getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
             }else{
@@ -182,6 +183,7 @@ public abstract class AbstractDriverCommand implements ICommand {
                 .webDriver(webDriver)
                 .savedData(savedData).build();
     }
+
 
     protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
         WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
