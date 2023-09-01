@@ -91,7 +91,7 @@ public abstract class AbstractElementDescription {
             try {
                 WebElement element = internalFindElement();
                 if(element!=null){
-                    log.debug(uuid+"-Element founded "+toString()+" at "+LocalDateTime.now());
+                    log.debug(uuid+"-Element founded at "+LocalDateTime.now());
                 }
                 return element;
             } catch (Exception e) {

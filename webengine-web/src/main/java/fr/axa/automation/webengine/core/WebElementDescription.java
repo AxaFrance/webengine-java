@@ -52,12 +52,14 @@ public class WebElementDescription extends AbstractElementDescription {
     public static final String OUTER_HTML = "outerHTML";
 
     String id;
+
     String name;
     String innerText;
     Map<String,String> attributeList;
     String xPath;
     String cssSelector;
     String className;
+
     String tagName;
     String linkText;
 
@@ -129,6 +131,49 @@ public class WebElementDescription extends AbstractElementDescription {
         throw new NoSuchElementException("No such WebElement found in the page");
     }
 
+    private Collection<WebElement> getInternalFindElementsById(String id) {
+        if(StringUtils.isNotEmpty(id)){
+            return useDriver.findElements(By.id(id));
+        }
+        return new ArrayList<>();
+    }
+
+    private Collection<WebElement> getInternalFindElementsByName(String name) {
+        if(StringUtils.isNotEmpty(name)) {
+            return useDriver.findElements(By.name(name));
+        }
+        return new ArrayList<>();
+    }
+
+    private Collection<WebElement> getInternalFindElementByClassName(String className) {
+        if(StringUtils.isNotEmpty(className)) {
+            String xPath = "//*[contains(@class,'" + className + "')]";
+            return useDriver.findElements(By.xpath(xPath));
+        }
+        return new ArrayList<>();
+    }
+
+    private List<WebElement> getInternalFindElementByLinkText(String linkText) {
+        if(StringUtils.isNotEmpty(linkText)) {
+            return useDriver.findElements(By.linkText(linkText));
+        }
+        return new ArrayList<>();
+    }
+
+    private List<WebElement> getInternalFindElementByTagName(String tagName) {
+        if(StringUtils.isNotEmpty(tagName)) {
+            return useDriver.findElements(By.tagName(tagName.toUpperCase()));
+        }
+        return new ArrayList<>();
+    }
+
+    private List<WebElement> getInternalFindElementByCssSelector(String cssSelector) {
+        if(StringUtils.isNotEmpty(cssSelector)) {
+            return useDriver.findElements(By.cssSelector(cssSelector));
+        }
+        return new ArrayList<>();
+    }
+
     private Collection<WebElement> getInternalFindElementByAttributeList(Map<String,String> attributeList) {
         if (MapUtils.isNotEmpty(attributeList)) {
             List<String> attributes = new ArrayList<>();
@@ -149,52 +194,9 @@ public class WebElementDescription extends AbstractElementDescription {
         return new ArrayList<>();
     }
 
-    private List<WebElement> getInternalFindElementByCssSelector(String cssSelector) {
-        if(StringUtils.isNotEmpty(cssSelector)) {
-            return useDriver.findElements(By.cssSelector(cssSelector));
-        }
-        return new ArrayList<>();
-    }
-
-    private List<WebElement> getInternalFindElementByTagName(String tagName) {
-        if(StringUtils.isNotEmpty(tagName)) {
-            return useDriver.findElements(By.tagName(tagName.toUpperCase()));
-        }
-        return new ArrayList<>();
-    }
-
-    private List<WebElement> getInternalFindElementByLinkText(String linkText) {
-        if(StringUtils.isNotEmpty(linkText)) {
-            return useDriver.findElements(By.linkText(linkText));
-        }
-        return new ArrayList<>();
-    }
-
-    private Collection<WebElement> getInternalFindElementByClassName(String className) {
-        if(StringUtils.isNotEmpty(className)) {
-            String xPath = "//*[contains(@class,'" + className + "')]";
-            return useDriver.findElements(By.xpath(xPath));
-        }
-        return new ArrayList<>();
-    }
-
     private Collection<WebElement> getInternalFindElementByXpath(String xPath) {
         if(StringUtils.isNotEmpty(xPath)) {
             return useDriver.findElements(By.xpath(xPath));
-        }
-        return new ArrayList<>();
-    }
-
-    private Collection<WebElement> getInternalFindElementsByName(String name) {
-        if(StringUtils.isNotEmpty(name)) {
-            return useDriver.findElements(By.name(name));
-        }
-        return new ArrayList<>();
-    }
-
-    private Collection<WebElement> getInternalFindElementsById(String id) {
-        if(StringUtils.isNotEmpty(id)){
-            return useDriver.findElements(By.id(id));
         }
         return new ArrayList<>();
     }
