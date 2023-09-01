@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Data
 @SuperBuilder
 @AllArgsConstructor
-public class WebElementDescription extends AbstractElementDescription {
+public class WebElementDescription extends AbstractWebElement{
 
     public static final String INNER_HTML = "innerHTML";
     public static final String OUTER_HTML = "outerHTML";
@@ -229,7 +229,7 @@ public class WebElementDescription extends AbstractElementDescription {
         actions.moveToElement(webElement).contextClick().build().perform();
     }
 
-    public void dragAndDropTo(AbstractElementDescription element) throws Exception {
+    public void dragAndDropTo(AbstractWebElement element) throws Exception {
         WebElement e1 = findElement();
         WebElement e2 = element.findElement();
         Actions act = new Actions(useDriver);

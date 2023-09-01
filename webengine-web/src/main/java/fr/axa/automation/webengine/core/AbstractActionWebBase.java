@@ -88,7 +88,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         }
     }
 
-    public void screenShot(AbstractElementDescription elementDescription) throws WebEngineException {
+    public void screenShot(AbstractWebElement elementDescription) throws WebEngineException {
         try {
             byte[] screenshot = elementDescription.getScreenshot();
             screenshot("", screenshot);

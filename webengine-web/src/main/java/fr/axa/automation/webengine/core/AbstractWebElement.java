@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.core;
 
+
 import fr.axa.automation.webengine.api.IFunction;
 import fr.axa.automation.webengine.global.SettingsWeb;
 import lombok.AccessLevel;
@@ -15,67 +16,24 @@ import org.openqa.selenium.WebElement;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
-import java.util.function.Function;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
 @Slf4j
 @SuperBuilder
-public abstract class AbstractElementDescription {
-    protected WebDriver useDriver;
+public abstract class AbstractWebElement extends AbstractElement{
 
-    public AbstractElementDescription() {
+    public AbstractWebElement() {
+        super();
     }
 
-    public AbstractElementDescription(WebDriver webDriver) {
-        this();
-        this.useDriver = webDriver;
+    public AbstractWebElement(WebDriver webDriver) {
+        super(webDriver);
     }
-
-    public AbstractElementDescription populateDriver(WebDriver webDriver) {
-        this.useDriver = webDriver;
-        return this;
-    }
-
 
     protected abstract WebElement internalFindElement() ;
 
     public abstract Collection<WebElement> internalFindElements() ;
-
-    public void waitInMillisecondes(Long milliseconds) throws InterruptedException {
-        Thread.sleep(milliseconds);
-    }
-
-    protected <T, R> R perform(Function<T, R> function) throws Exception {
-        return perform(function, null);
-    }
-
-    protected <T, R> R perform(Function<T, R> function, T param) throws Exception {
-        return function.apply(param);
-    }
-
-    protected <T, R> R retry(IFunction<T, R> function, T param, Integer timeOutInSeconds) throws Exception {
-        LocalDateTime timeOut = LocalDateTime.now().plusSeconds(timeOutInSeconds);
-        Exception exception = new Exception();
-        UUID uuid = UUID.randomUUID();
-
-        log.debug(uuid+"-retry started  "+function.toString()+" at "+LocalDateTime.now()+". Defined time out is :"+timeOut);
-        while (LocalDateTime.now().isBefore(timeOut)) {
-            try {
-                R r = function.call(param);
-                log.debug(uuid+"-retry succes "+function.toString()+" at "+LocalDateTime.now());
-                return r;
-            } catch (Exception e ) {
-                exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDS);
-            }
-            log.debug(uuid+"-retry timeout "+function.toString()+" at "+LocalDateTime.now());
-        }
-        throw exception;
-    }
-    protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
-        return retry(function,param,SettingsWeb.TIMEOUT_SECONDS);
-    }
 
     public WebElement findElement() throws Exception {
         return findElement(SettingsWeb.TIMEOUT_SECONDS);
@@ -96,7 +54,7 @@ public abstract class AbstractElementDescription {
                 return element;
             } catch (Exception e) {
                 exception = e;
-                waitInMillisecondes(SettingsWeb.WAIT_TIME_MILLISECONDS);
+                waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
             }
         }
         log.debug(uuid+"-Time out search "+LocalDateTime.now());
@@ -114,7 +72,7 @@ public abstract class AbstractElementDescription {
 
     public WebElement findElement(By by, int timeoutSecond) throws Exception {
         IFunction<By ,WebElement> fun = (x) -> getUseDriver().findElement(x);
-        return retry(fun,by);
+        return retry(fun,by,timeoutSecond);
     }
 
     public Collection<WebElement> findElements() throws Exception {
@@ -126,11 +84,15 @@ public abstract class AbstractElementDescription {
     }
 
     public Boolean exists() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> exists(SettingsWeb.TIMEOUT_SECONDS);
-        return retry(fun,null);
+        return exists(Integer.valueOf(SettingsWeb.TIMEOUT_SECONDS));
     }
 
-    public boolean exists(int timeoutSecond) {
+    public Boolean exists(Integer timeoutSecond) throws Exception {
+        IFunction<Integer, Boolean> fun = (x) -> existWithoutRetry(x.intValue());
+        return retry(fun,timeoutSecond);
+    }
+
+    protected boolean existWithoutRetry(int timeoutSecond) {
         try {
             WebElement webElement = findElement(timeoutSecond);
             return webElement != null;
@@ -162,7 +124,6 @@ public abstract class AbstractElementDescription {
         sendKeys(s);
     }
 
-
     public void sendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
@@ -180,12 +141,6 @@ public abstract class AbstractElementDescription {
         webElement.clear();
         webElement.sendKeys(x);
     }
-
-    public byte[] getScreenshot() throws Exception {
-        return perform(internalGetScreenshot());
-    }
-
-    protected abstract Function<Void, byte[]> internalGetScreenshot() throws Exception;
 
     public void setValue(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
