@@ -71,13 +71,13 @@ public abstract class AbstractBootProject implements IBootProject{
     protected List<String> getArgumentsForProject(List<ArgumentOption> argumentOptionList,String[] args) {
         //--We want to get only arguments for the project, arguments for spring boot not needed
         List<String> filterArguments = Arrays.stream(args).filter(arg ->  ArgumentParser.isOptionForProject(argumentOptionList,arg)).collect(Collectors.toList());
-        loggerService.info("Arguments after filter : "+filterArguments);
+        loggerService.info("Arguments after filter : "+ArgumentParser.removePassWordArgs(filterArguments.toArray(new String[0])));
         return filterArguments;
     }
 
     protected String[] getArgumentsSeparatedByOptionAndValue(List<String> filterArguments) {
         String[] argumentsForProject = ArgumentParser.splitArguments(filterArguments, IConstant.SEPARATOR_ARG, 2);
-        loggerService.info("Arguments after decomposition : "+Arrays.asList(argumentsForProject));
+        //loggerService.info("Arguments after decomposition : "+ArgumentParser.removePassWordAfterDecompositionArgs(argumentsForProject));
         return argumentsForProject;
     }
 

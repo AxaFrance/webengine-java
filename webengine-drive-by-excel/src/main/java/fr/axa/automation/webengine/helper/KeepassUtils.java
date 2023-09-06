@@ -14,6 +14,8 @@ import java.util.List;
 public class KeepassUtils {
     //get password from keepass
 
+    //explain: this method is used to get the password from keepass
+    //it is used in the SendKeysCommand class
     public static String getPassword(String key, String keepassPwd, String keepassPaths) {
         String password = "";
         if (key == null || key.isEmpty()) {

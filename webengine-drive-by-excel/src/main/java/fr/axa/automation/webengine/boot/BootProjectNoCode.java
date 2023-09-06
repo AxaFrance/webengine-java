@@ -12,6 +12,7 @@ import fr.axa.automation.webengine.helper.ExcelConverter;
 import fr.axa.automation.webengine.helper.TestSuiteHelperNoCode;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
+import fr.axa.automation.webengine.parser.ArgumentParser;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
@@ -34,7 +35,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProjectNoCode extends AbstractBootProject {
-    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR, ArgumentOption.SHOW_REPORT,ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO);
+    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR, ArgumentOption.SHOW_REPORT,ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO, ArgumentOption.KEEPASS_PASSWORD, ArgumentOption.KEEPASS_FILE);
 
     @Autowired
     public BootProjectNoCode(@Qualifier("testSuiteNoCodeExecutor") ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
@@ -52,7 +53,7 @@ public class BootProjectNoCode extends AbstractBootProject {
     }
 
     public void runFromFramework(String... args) throws Exception {
-        loggerService.info("Arguments : "+ Arrays.asList(args));
+        loggerService.info("Arguments : "+ ArgumentParser.removePassWordArgs(args));
         CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
         runTestSuite(commandLine);
     }

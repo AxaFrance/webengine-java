@@ -1,9 +1,7 @@
 package fr.axa.automation.webengine.global;
 
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -18,5 +16,6 @@ public class SettingsNoCode extends AbstractSettings {
     String dataTestFileName;
     Map<String, List<String>> testCaseAndDataTestColumName;
     String keePassDatabasePath;
+    @ToString.Exclude
     String keePassDatabasePassword;
 }

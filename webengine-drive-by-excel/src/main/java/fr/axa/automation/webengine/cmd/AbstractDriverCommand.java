@@ -193,6 +193,7 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
         List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
+
         if(CollectionUtils.isNotEmpty(webDriverList)){
             return ListUtil.getLastElement(webDriverList).get();
         }

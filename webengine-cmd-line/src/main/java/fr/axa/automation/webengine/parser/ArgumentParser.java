@@ -12,6 +12,8 @@ import org.apache.commons.cli.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class ArgumentParser {
 
@@ -52,5 +54,18 @@ public class ArgumentParser {
 
     public static boolean isOptionForProject(List<ArgumentOption> argumentOptionList,String option){
         return argumentOptionList.stream().anyMatch(argumentOption -> option.startsWith("-"+argumentOption.getOption()));
+    }
+
+    public static List<String> removePassWordAfterDecompositionArgs(String[] args){
+        //remove arg after AguementOption.KEEPASS_PASSWORD.getOption()
+        AtomicInteger index = new AtomicInteger();
+        List<String> argslist = Arrays.asList(args).stream().filter(arg -> index.getAndIncrement()>0 && !arg.contains(ArgumentOption.KEEPASS_PASSWORD.getOption())).collect(Collectors.toList());
+        argslist.remove(index);
+        return argslist;
+    }
+
+    public static List<String> removePassWordArgs(String[] args){
+        //remove arg after AguementOption.KEEPASS_PASSWORD.getOption()
+        return Arrays.asList(args).stream().filter(arg -> !arg.contains(ArgumentOption.KEEPASS_PASSWORD.getOption())).collect(Collectors.toList());
     }
 }

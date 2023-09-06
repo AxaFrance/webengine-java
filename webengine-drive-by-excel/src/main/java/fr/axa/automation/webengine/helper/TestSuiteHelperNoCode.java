@@ -40,19 +40,19 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
                 .outputDir(getOutputDir(cmd, globalConfiguration))
                 .showReport(getShowReport(cmd))
                 .closeBrowser(getCloseBrowser(cmd))
-                .keePassDatabasePath(getKeepassPath(cmd))
-                .keePassDatabasePassword(getKeepassPassword(cmd))
+                .keePassDatabasePassword(getKeePassDatabasePassword(cmd))
+                .keePassDatabasePath(getKeePassDatabasePath(cmd))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;
     }
 
-    private static String getKeepassPassword(CommandLine cmd) {
-        return cmd.getOptionValue(ArgumentOption.KEEPASS_PASSWORD.getOption());
+    private static String getKeePassDatabasePath(CommandLine cmd) {
+        return cmd.getOptionValue(ArgumentOption.KEEPASS_FILE.getOption());
     }
 
-    private static String getKeepassPath(CommandLine cmd) {
-        return cmd.getOptionValue(ArgumentOption.KEEPASS_FILE.getOption());
+    private static String getKeePassDatabasePassword(CommandLine cmd) {
+        return cmd.getOptionValue(ArgumentOption.KEEPASS_PASSWORD.getOption());
     }
 
     public static Boolean getShowReport(CommandLine cmd) {

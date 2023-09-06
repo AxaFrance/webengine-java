@@ -6,6 +6,7 @@ import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractSettings;
+import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
@@ -80,7 +81,13 @@ public class EvaluateValueHelper {
         if (CollectionUtils.isNotEmpty(externalRegexValueList)) {
             for (String integrationRegexValue : externalRegexValueList) {
                 String valueWithouBrackets = getExternalValue(integrationRegexValue);
-                resultValue = resultValue.replace(integrationRegexValue, settings.getValues().get(valueWithouBrackets));
+                String valueFromSetting = settings.getValues().get(valueWithouBrackets);
+                if (StringUtils.isEmpty(valueFromSetting)) {
+                    //Check the value in Keepass if the value is not found in the settings
+                    resultValue = KeepassUtils.getPassword(valueWithouBrackets, ((SettingsNoCode)settings).getKeePassDatabasePassword(), ((SettingsNoCode)settings).getKeePassDatabasePath());
+                }else {
+                    resultValue = resultValue.replace(integrationRegexValue, valueFromSetting);
+                }
             }
         }
         return resultValue;
