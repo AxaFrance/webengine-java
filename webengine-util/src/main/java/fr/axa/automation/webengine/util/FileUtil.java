@@ -180,6 +180,23 @@ public final class FileUtil {
             loggerService.error("Error during displaying content of file",e);
         }
     }
+
+    public static StringBuilder fileToText(String fileName) throws IOException {
+        StringBuilder text = new StringBuilder();
+        try (InputStream inputStream = getInputStreamByPathOrResource(fileName);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            if (reader != null) {
+                try {
+                    while (reader.ready()) {
+                        text.append(reader.readLine());
+                    }
+                } catch (IOException e) {
+                    throw new IOException("Erreur lors de la lecture du fichier :" + fileName);
+                }
+            }
+        }
+        return text;
+    }
 }
 
 

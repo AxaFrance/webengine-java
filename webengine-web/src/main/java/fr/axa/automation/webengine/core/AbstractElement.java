@@ -11,8 +11,6 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.function.Function;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
@@ -44,8 +42,6 @@ public abstract class AbstractElement {
     }
 
     protected abstract Function<Void, byte[]> internalGetScreenshot() throws Exception;
-
-
 
     protected <T, R> R retry(IFunction<T, R> function, T param) throws Exception {
         return retry(function,param,SettingsWeb.TIMEOUT_SECONDS);

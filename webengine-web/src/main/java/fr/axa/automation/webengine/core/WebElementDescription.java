@@ -8,6 +8,7 @@ import fr.axa.automation.webengine.constante.HtmlTag;
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
@@ -31,6 +32,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +65,19 @@ public class WebElementDescription extends AbstractWebElement{
     String tagName;
     String linkText;
 
-    public WebElementDescription() {
+    boolean shadowDom = false;
+
+    private final static String javascriptLibrary ;
+
+    static {
+        try {
+            javascriptLibrary = FileUtil.fileToText("querySelector.js").toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public WebElementDescription() throws IOException {
         super();
     }
 
@@ -95,7 +109,7 @@ public class WebElementDescription extends AbstractWebElement{
     }
 
     @Override
-    public WebElement internalFindElement() {
+    public WebElement internalFindElement() throws Exception {
         Collection<WebElement> elements = internalFindElements();
         if (CollectionUtils.isNotEmpty(elements) && elements.size() > 1) {
             throw new MultipleElementException("Multiple element has found with the given selection criteria for this web element : ");
@@ -104,7 +118,7 @@ public class WebElementDescription extends AbstractWebElement{
         }
     }
 
-    public Collection<WebElement> internalFindElements() {
+    public Collection<WebElement> internalFindElements() throws Exception {
         final List<WebElement> elements = new ArrayList<>();
         Map<String, Collection<WebElement>> findElementsMap = new HashMap<>();
         findElementsMap.put(LocatingBy.BY_ID.getValue(), getInternalFindElementsById(this.id));
@@ -131,50 +145,81 @@ public class WebElementDescription extends AbstractWebElement{
         throw new NoSuchElementException("No such WebElement found in the page");
     }
 
-    private Collection<WebElement> getInternalFindElementsById(String id) {
+    private Collection<WebElement> getInternalFindElementsById(String id) throws Exception {
         if(StringUtils.isNotEmpty(id)){
-            return useDriver.findElements(By.id(id));
+            String idTrimmed = StringUtils.trim(id);
+            if(shadowDom){
+                return Arrays.asList(getElementInShadowByXpath("//*[@id='"+idTrimmed+"']"));
+            }else{
+                return useDriver.findElements(By.id(idTrimmed));
+            }
         }
         return new ArrayList<>();
     }
 
-    private Collection<WebElement> getInternalFindElementsByName(String name) {
+    private Collection<WebElement> getInternalFindElementsByName(String name) throws Exception {
         if(StringUtils.isNotEmpty(name)) {
-            return useDriver.findElements(By.name(name));
+            String nameTrimmed = StringUtils.trim(name);
+            if(shadowDom){
+                return Arrays.asList(getElementInShadowByXpath("//*[@name='"+nameTrimmed+"']"));
+            }else {
+                return useDriver.findElements(By.name(nameTrimmed));
+            }
         }
         return new ArrayList<>();
     }
 
-    private Collection<WebElement> getInternalFindElementByClassName(String className) {
+    private Collection<WebElement> getInternalFindElementByClassName(String className) throws Exception {
         if(StringUtils.isNotEmpty(className)) {
-            String xPath = "//*[contains(@class,'" + className + "')]";
-            return useDriver.findElements(By.xpath(xPath));
+            String classNameTrimmed = StringUtils.trim(className);
+            String xPath = "//*[contains(@class,'" + classNameTrimmed + "')]";
+            if(shadowDom){
+                return Arrays.asList(getElementInShadowByXpath(xPath));
+            }else{
+                return useDriver.findElements(By.xpath(xPath));
+            }
         }
         return new ArrayList<>();
     }
 
-    private List<WebElement> getInternalFindElementByLinkText(String linkText) {
+    private List<WebElement> getInternalFindElementByLinkText(String linkText) throws Exception {
         if(StringUtils.isNotEmpty(linkText)) {
-            return useDriver.findElements(By.linkText(linkText));
+            String linkTextTrimmed = StringUtils.trim(linkText);
+            if(shadowDom){
+                String xpathLinkTextTrimmed = "//a[text()[normalize-space(.) = '"+linkTextTrimmed+"']]";
+                return Arrays.asList(getElementInShadowByXpath(xpathLinkTextTrimmed));
+            }else {
+                return useDriver.findElements(By.linkText(linkTextTrimmed));
+            }
         }
         return new ArrayList<>();
     }
 
-    private List<WebElement> getInternalFindElementByTagName(String tagName) {
+    private List<WebElement> getInternalFindElementByTagName(String tagName) throws Exception {
         if(StringUtils.isNotEmpty(tagName)) {
-            return useDriver.findElements(By.tagName(tagName.toUpperCase()));
+            String tagNameTrimmed = StringUtils.trim(tagName).toUpperCase();
+            if(shadowDom){
+                return Arrays.asList(getElementInShadowByXpath("//"+tagNameTrimmed));
+            }else{
+                return useDriver.findElements(By.tagName(tagNameTrimmed));
+            }
         }
         return new ArrayList<>();
     }
 
-    private List<WebElement> getInternalFindElementByCssSelector(String cssSelector) {
+    private List<WebElement> getInternalFindElementByCssSelector(String cssSelector) throws Exception {
         if(StringUtils.isNotEmpty(cssSelector)) {
-            return useDriver.findElements(By.cssSelector(cssSelector));
+            String cssSelectorTrimmed = StringUtils.trim(cssSelector);
+            if(shadowDom){
+                return Arrays.asList(getElementInShadowByCssSelector(cssSelectorTrimmed));
+            }else{
+                return useDriver.findElements(By.cssSelector(cssSelectorTrimmed));
+            }
         }
         return new ArrayList<>();
     }
 
-    private Collection<WebElement> getInternalFindElementByAttributeList(Map<String,String> attributeList) {
+    private Collection<WebElement> getInternalFindElementByAttributeList(Map<String,String> attributeList) throws Exception{
         if (MapUtils.isNotEmpty(attributeList)) {
             List<String> attributes = new ArrayList<>();
             attributeList.entrySet().stream().forEach(entry -> attributes.add("[" + entry.getKey() + "='" + entry.getValue() + "']"));
@@ -184,19 +229,25 @@ public class WebElementDescription extends AbstractWebElement{
         return new ArrayList<>();
     }
 
-    private Collection<WebElement> getInternalFindElementByInnerText(String innerText,Collection<WebElement> webElementList) {
+    private Collection<WebElement> getInternalFindElementByInnerText(String innerText,Collection<WebElement> webElementList) throws Exception {
         if (StringUtils.isNotEmpty(innerText)) {
             if (CollectionUtils.isNotEmpty(webElementList)) {
                 return webElementList.stream().filter(webElement -> innerText.equalsIgnoreCase(webElement.getText())).collect(Collectors.toList());
             }
-            return getInternalFindElementByXpath("//*[text()='" + innerText + "']");
+            String innerTextTrimmed = StringUtils.trim(innerText);
+            return getInternalFindElementByXpath("//*[text()='" + innerTextTrimmed + "']");
         }
         return new ArrayList<>();
     }
 
-    private Collection<WebElement> getInternalFindElementByXpath(String xPath) {
+    private Collection<WebElement> getInternalFindElementByXpath(String xPath) throws Exception {
         if(StringUtils.isNotEmpty(xPath)) {
-            return useDriver.findElements(By.xpath(xPath));
+            String xPathTrimmed = StringUtils.trim(xPath);
+            if(shadowDom){
+                return Arrays.asList(getElementInShadowByXpath(xPathTrimmed));
+            }else{
+                return useDriver.findElements(By.xpath(xPathTrimmed));
+            }
         }
         return new ArrayList<>();
     }
@@ -242,9 +293,14 @@ public class WebElementDescription extends AbstractWebElement{
         actions.dragAndDrop(findWebElement, element).build().perform();
     }
 
-    private void executeJavascript(String script, WebElement webElement) {
+    private Object executeJavascript(String script) {
         JavascriptExecutor js = (JavascriptExecutor) useDriver;
-        js.executeScript(script, webElement);
+        return js.executeScript(script);
+    }
+
+    private Object executeJavascript(String script, WebElement webElement) {
+        JavascriptExecutor js = (JavascriptExecutor) useDriver;
+        return js.executeScript(script, webElement);
     }
 
     /**
@@ -336,7 +392,6 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,text);
     }
 
-
     public void focusAndSendKeys(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
@@ -358,7 +413,6 @@ public class WebElementDescription extends AbstractWebElement{
         };
         retry(fun,text);
     }
-
 
     public void highLight() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
@@ -601,7 +655,6 @@ public class WebElementDescription extends AbstractWebElement{
         return contentSelecteMap;
     }
 
-
     private boolean assertContentInSelect(WebElement webElement,String expected){
         if(webElement!=null){
             Select select = new Select(webElement);
@@ -683,4 +736,31 @@ public class WebElementDescription extends AbstractWebElement{
         new Actions(getUseDriver()).moveToElement(webElement).click().build().perform();
     }
 
+    private Object executerGetObject(String script) {
+        return executerGetObject(script,null);
+    }
+
+    private Object executerGetObject(String script, WebElement element) {
+        String javascript = javascriptLibrary;
+        javascript += script;
+        if(element==null){
+            return executeJavascript(javascript);
+        }
+        return executeJavascript(javascript,element);
+    }
+
+    public WebElement getElementInShadowByXpath(String xPath) throws Exception {
+        IFunction<String, WebElement> fun = (x) -> {
+            return  (WebElement) executerGetObject(String.format("return getXPathObject(\"%s\");", x));
+        };
+        String xpathWithDoubleSlashes = xPath.replaceAll("(?<!/)/(?!/)","//");
+        return retry(fun,xpathWithDoubleSlashes);
+    }
+
+    public WebElement getElementInShadowByCssSelector(String xPath) throws Exception {
+        IFunction<String, WebElement> fun = (x) -> {
+            return  (WebElement) executerGetObject(String.format("return getObject(\"%s\");", cssSelector));
+        };
+        return retry(fun,xPath);
+    }
 }

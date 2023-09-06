@@ -31,9 +31,9 @@ public abstract class AbstractWebElement extends AbstractElement{
         super(webDriver);
     }
 
-    protected abstract WebElement internalFindElement() ;
+    protected abstract WebElement internalFindElement() throws Exception;
 
-    public abstract Collection<WebElement> internalFindElements() ;
+    public abstract Collection<WebElement> internalFindElements() throws Exception;
 
     public WebElement findElement() throws Exception {
         return findElement(SettingsWeb.TIMEOUT_SECONDS);
