@@ -27,7 +27,9 @@ public class AssertContentCommand extends AbstractDriverCommand {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         if (MapUtils.isEmpty(filterContentMap)) {
-            String errorMessage = "The expected value is : " + expected + " and the actual contentMap is : " + contentMap;
+            String errorMessage = "The expected value is : '" + expected + "'";
+            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
+            errorMessage = "The actual contentMap is : '" + contentMap +"'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }

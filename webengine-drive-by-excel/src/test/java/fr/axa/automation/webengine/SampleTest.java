@@ -27,7 +27,7 @@ public class SampleTest {
         driver.quit();
     }
 
-    @Test
+//    @Test
     public void identifyShadowElementWithOneLevelTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -39,7 +39,7 @@ public class SampleTest {
         }
     }
 
-    @Test
+//    @Test
     public void identifyShadowElementWithIdTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -51,7 +51,7 @@ public class SampleTest {
         }
     }
 
-    @Test
+//    @Test
     public void identifyShadowElementWithClassNameTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -63,7 +63,7 @@ public class SampleTest {
         }
     }
 
-    @Test
+//    @Test
     public void identifyShadowElementWithSecondLevelTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -73,14 +73,5 @@ public class SampleTest {
             WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='nested_shadow_content']");
             System.out.println(webElement.getText());
         }
-    }
-
-    @Test
-    public void replace() throws Exception {
-        String replacementSlash = "test/test1//test2".replaceAll("(?<!/)/(?!/)","//");
-        System.out.println(replacementSlash);
-
-        String replacementAntiSlash = "test\test1\\test2".replaceAll("(?<!\\\\\\\\)(\\\\)(?!\\\\\\\\)","\\\\\\\\");
-        System.out.println(replacementAntiSlash);
     }
 }

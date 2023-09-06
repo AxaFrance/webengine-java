@@ -751,16 +751,24 @@ public class WebElementDescription extends AbstractWebElement{
 
     public WebElement getElementInShadowByXpath(String xPath) throws Exception {
         IFunction<String, WebElement> fun = (x) -> {
-            return  (WebElement) executerGetObject(String.format("return getXPathObject(\"%s\");", x));
+            WebElement webElement =  (WebElement) executerGetObject(String.format("return getXPathObject(\"%s\");", x));
+            if(webElement==null){
+                throw new Exception("The element is null");
+            }
+            return webElement;
         };
         String xpathWithDoubleSlashes = xPath.replaceAll("(?<!/)/(?!/)","//");
         return retry(fun,xpathWithDoubleSlashes);
     }
 
-    public WebElement getElementInShadowByCssSelector(String xPath) throws Exception {
+    public WebElement getElementInShadowByCssSelector(String cssSelector) throws Exception {
         IFunction<String, WebElement> fun = (x) -> {
-            return  (WebElement) executerGetObject(String.format("return getObject(\"%s\");", cssSelector));
+            WebElement webElement =  (WebElement) executerGetObject(String.format("return getObject(\"%s\");", x));
+            if(webElement==null){
+                throw new Exception("The element is null");
+            }
+            return webElement;
         };
-        return retry(fun,xPath);
+        return retry(fun,cssSelector);
     }
 }
