@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class ArgumentParser {
 
-    public static CommandLine getOption(String[] args, Options options) {
+    public static CommandLine getOption(String[] args, Options options) throws ParseException {
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd = null;
@@ -25,8 +25,8 @@ public class ArgumentParser {
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
-            formatter.printHelp("utility-name", options);
-            System.exit(1);
+            formatter.printHelp("Webengine No code syntax", options);
+           throw  e;
         }
         return cmd;
     }

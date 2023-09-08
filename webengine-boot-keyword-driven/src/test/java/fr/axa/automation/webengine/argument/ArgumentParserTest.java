@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.parser.ArgumentParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ class ArgumentParserTest {
     private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST);
 
     @Test
-    void getOption() {
+    void getOption() throws ParseException {
         String []  argumentsListSeparatedByOptionAndValue = new String[]{"-data","data.xml","-env","env.xml"};
         CommandLine commandLine = ArgumentParser.getOption(argumentsListSeparatedByOptionAndValue, ArgumentParser.getOptionList(ARGUMENT_OPTION_PROJECT));
         Assertions.assertEquals("data.xml",commandLine.getOptionValue(ArgumentOption.TEST_DATA.getOption()));

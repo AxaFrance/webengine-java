@@ -5,6 +5,7 @@ import fr.axa.automation.webengine.core.WebElementDescription;
 import fr.axa.automation.webengine.util.BrowserFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -71,6 +72,16 @@ public class SampleTest {
             WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).build();
             WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='nested_shadow_content']");
             System.out.println(webElement.getText());
+        }
+    }
+
+    @Test
+    public void fileCabTest() throws Exception {
+        String baseUrl = "https://filecab-rec.axa-fr.intraxa/DocumentDesktop/login";
+        if(optionalWebdriver.isPresent()){
+            WebDriver driver = optionalWebdriver.get();
+            driver.get(baseUrl);
+            wait(1000L);
         }
     }
 }

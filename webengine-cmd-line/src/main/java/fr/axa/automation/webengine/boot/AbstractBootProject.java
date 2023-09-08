@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public abstract class AbstractBootProject implements IBootProject{
         loggerService.info("Loading project : " + projectPath + " is succeed");
     }
 
-    protected CommandLine getCommandLine(List<ArgumentOption> argumentOptionList, String[] args) {
+    protected CommandLine getCommandLine(List<ArgumentOption> argumentOptionList, String[] args) throws ParseException {
         List<String> argumentListForProject = getArgumentsForProject(argumentOptionList,args);
         String[] argumentsListSeparatedByOptionAndValue = getArgumentsSeparatedByOptionAndValue(argumentListForProject);
         return ArgumentParser.getOption(argumentsListSeparatedByOptionAndValue, ArgumentParser.getOptionList(argumentOptionList));

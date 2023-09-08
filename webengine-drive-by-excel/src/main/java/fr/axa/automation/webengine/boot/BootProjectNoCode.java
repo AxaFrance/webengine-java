@@ -35,7 +35,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProjectNoCode extends AbstractBootProject {
-    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR, ArgumentOption.SHOW_REPORT,ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO, ArgumentOption.KEEPASS_PASSWORD, ArgumentOption.KEEPASS_FILE);
+    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR, ArgumentOption.SHOW_REPORT,ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO, ArgumentOption.KEEPASS_PASSWORD, ArgumentOption.KEEPASS_FILE);
 
     @Autowired
     public BootProjectNoCode(@Qualifier("testSuiteNoCodeExecutor") ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
