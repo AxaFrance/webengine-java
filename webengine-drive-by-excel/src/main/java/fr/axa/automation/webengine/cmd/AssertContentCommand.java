@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class AssertContentCommand extends AbstractDriverCommand {
         if (MapUtils.isEmpty(filterContentMap)) {
             String errorMessage = "The expected value is : '" + expected + "'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
-            errorMessage = "The actual contentMap is : '" + contentMap +"'";
+            errorMessage = "The actual contentMap is : '" + StringUtils.substringBetween(contentMap.values().toString(), "[[", "]]")   +"'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }

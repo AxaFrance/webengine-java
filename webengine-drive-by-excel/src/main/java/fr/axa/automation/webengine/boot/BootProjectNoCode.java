@@ -11,11 +11,13 @@ import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.helper.ExcelConverter;
 import fr.axa.automation.webengine.helper.TestSuiteHelperNoCode;
 import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.logger.LoggerAppender;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.parser.ArgumentParser;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
+import fr.axa.automation.webengine.util.ApplicationDesktop;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -52,38 +54,43 @@ public class BootProjectNoCode extends AbstractBootProject {
         return null;
     }
 
+    @Override
     public void runFromFramework(String... args) throws Exception {
-        loggerService.info("Arguments : "+ ArgumentParser.removePassWordArgs(args));
-        CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
-        runTestSuite(commandLine);
+        loggerService.info("Arguments : "+ ArgumentParser.removeOptionFromArguments(args,ArgumentOption.KEEPASS_PASSWORD));
+        try{
+            CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
+            AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
+            TestSuiteDataNoCode testSuiteData = getTestSuiteData(globalApplicationContext);
+
+            loggerService.info("Start Phase initialize test suite ");
+            testSuiteExecutor.initialize(globalApplicationContext);
+            loggerService.info("End Phase initialize ");
+
+            loggerService.info("Start run test ");
+
+            TestSuiteReport testSuiteReport = ((ITestSuiteNoCodeExecutor) testSuiteExecutor).run(globalApplicationContext, testSuiteData);
+            loggerService.info("End run test ");
+
+            loggerService.info("Start clean ");
+            testSuiteExecutor.cleanUp(globalApplicationContext);
+            loggerService.info("End clean ");
+
+            loggerService.info("Start report ");
+            Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, "", globalApplicationContext.getSettings().getOutputDir());
+            loggerService.info("End report ");
+
+            if(globalApplicationContext.getSettings().isShowReport()) {
+                loggerService.info("Open report ");
+                reportHelper.openReport(reportsPath.get(ReportPathKey.HTML_REPORT_PATH_KEY) + File.separator + "index.html");
+                loggerService.info("End open report ");
+            }
+        }catch (Exception e){
+            loggerService.info("Error during execution of the automate. You can see more details in the file log");
+            ApplicationDesktop.openFile(LoggerAppender.getFileAppender());
+        }
     }
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
-        AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
-        TestSuiteDataNoCode testSuiteData = getTestSuiteData(globalApplicationContext);
-
-        loggerService.info("Start Phase initialize test suite ");
-        testSuiteExecutor.initialize(globalApplicationContext);
-        loggerService.info("End Phase initialize ");
-
-        loggerService.info("Start run test ");
-
-        TestSuiteReport testSuiteReport = ((ITestSuiteNoCodeExecutor) testSuiteExecutor).run(globalApplicationContext, testSuiteData);
-        loggerService.info("End run test ");
-
-        loggerService.info("Start clean ");
-        testSuiteExecutor.cleanUp(globalApplicationContext);
-        loggerService.info("End clean ");
-
-        loggerService.info("Start report ");
-        Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, "", globalApplicationContext.getSettings().getOutputDir());
-        loggerService.info("End report ");
-
-        if(globalApplicationContext.getSettings().isShowReport()) {
-            loggerService.info("Open report ");
-            reportHelper.openReport(reportsPath.get(ReportPathKey.HTML_REPORT_PATH_KEY) + File.separator + "index.html");
-            loggerService.info("End open report ");
-        }
     }
 
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine) throws WebEngineException {

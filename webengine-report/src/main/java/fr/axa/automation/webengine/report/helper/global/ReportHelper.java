@@ -8,7 +8,7 @@ import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineHtmlReportHelper;
 import fr.axa.automation.webengine.report.helper.frmk.IWebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.IJunitReportHelper;
-import fr.axa.automation.webengine.util.BrowserDesktop;
+import fr.axa.automation.webengine.util.ApplicationDesktop;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +67,6 @@ public class ReportHelper implements IReportHelper{
 
     public void openReport(String reportPath) throws WebEngineException {
         loggerService.info("Start Opening Report");
-        BrowserDesktop.openDefaultBrowser(reportPath);
+        ApplicationDesktop.openDefaultBrowser(reportPath);
     }
 }

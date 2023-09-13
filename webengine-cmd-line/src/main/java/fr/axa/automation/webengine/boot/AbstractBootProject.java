@@ -37,22 +37,15 @@ public abstract class AbstractBootProject implements IBootProject{
     }
 
     public void runFromFramework(String... args) throws Exception {
-        runAndLoadExternalProject(getArgumentOptionFramework(),  args);
+        loggerService.info("Arguments : "+ Arrays.asList(args));
+        CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
+        loadProject(commandLine);
+        runTestSuite(commandLine);
     }
 
     public void runFromProject(String... args) throws Exception {
         loggerService.info("Arguments : "+ Arrays.asList(args));
-        run(getArgumentOptionProjet(), args);
-    }
-
-    public void run(List<ArgumentOption> argumentOptionList,  String... args) throws Exception {
-        CommandLine commandLine = getCommandLine(argumentOptionList, args);
-        runTestSuite(commandLine);
-    }
-
-    public void runAndLoadExternalProject(List<ArgumentOption> argumentOptionList, String... args) throws Exception {
-        CommandLine commandLine = getCommandLine(argumentOptionList, args);
-        loadProject(commandLine);
+        CommandLine commandLine = getCommandLine(getArgumentOptionProjet(), args);
         runTestSuite(commandLine);
     }
 
@@ -72,7 +65,7 @@ public abstract class AbstractBootProject implements IBootProject{
     protected List<String> getArgumentsForProject(List<ArgumentOption> argumentOptionList,String[] args) {
         //--We want to get only arguments for the project, arguments for spring boot not needed
         List<String> filterArguments = Arrays.stream(args).filter(arg ->  ArgumentParser.isOptionForProject(argumentOptionList,arg)).collect(Collectors.toList());
-        loggerService.info("Arguments after filter : "+ArgumentParser.removePassWordArgs(filterArguments.toArray(new String[0])));
+        loggerService.info("Arguments after filter : "+ArgumentParser.removeOptionFromArguments(filterArguments.toArray(new String[0]),ArgumentOption.KEEPASS_PASSWORD));
         return filterArguments;
     }
 

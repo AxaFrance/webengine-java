@@ -6,7 +6,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class BrowserDesktop {
+public class ApplicationDesktop {
 
     static {
         System.setProperty("java.awt.headless", "false");
@@ -18,6 +18,15 @@ public class BrowserDesktop {
             Desktop.getDesktop().browse(htmlFile.toURI());
         } catch (IOException e) {
             throw new WebEngineException("Error during opening report", e);
+        }
+    }
+
+    public static void openFile(String path) throws WebEngineException {
+        try {
+            File htmlFile = new File(path);
+            Desktop.getDesktop().open(htmlFile);
+        } catch (IOException e) {
+            throw new WebEngineException("Error during opening file", e);
         }
     }
 }

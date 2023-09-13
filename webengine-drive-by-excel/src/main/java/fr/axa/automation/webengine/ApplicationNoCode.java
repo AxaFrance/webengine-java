@@ -32,6 +32,7 @@ public class ApplicationNoCode implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        loggerService.info("***************Start automation***************");
         loggerService.info("Temporary directory : "+System.getProperty("java.io.tmpdir"));
         //    java -jar drive-by-excel.jar "-data:file.xls"
         //    java -jar drive-by-excel.jar -Dspring.profiles.active=properties-chrome "-data:file.xls" "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto] ; testcase2[-dataColumName:jdd-rec-moto]" "-browser:Chrome" "-platform:Android"
@@ -41,5 +42,6 @@ public class ApplicationNoCode implements CommandLineRunner {
         //    "-data:C:\\work\\projet-git\\ExcelToJavaObjectConverter\\Test-1.xlsx" "-tc:devis-auto" "-platform:Windows" "-browser:ChromiumEdge"
 
         bootProject.runFromFramework(args);
+        loggerService.info("***************End automation***************");
     }
 }

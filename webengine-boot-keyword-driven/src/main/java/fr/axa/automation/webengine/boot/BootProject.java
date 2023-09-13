@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -78,6 +79,12 @@ public class BootProject extends AbstractBootProject{
         loggerService.info("Start report ");
         Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getOutputDir());
         loggerService.info("End report ");
+
+        if(globalApplicationContext.getSettings().isShowReport()) {
+            loggerService.info("Open report ");
+            reportHelper.openReport(reportsPath.get(ReportPathKey.HTML_REPORT_PATH_KEY) + File.separator + "index.html");
+            loggerService.info("End open report ");
+        }
     }
 
     public AbstractGlobalApplicationContext getGlobalApplicationContext(CommandLine commandLine, ITestSuite testSuite) throws WebEngineException, IOException {
