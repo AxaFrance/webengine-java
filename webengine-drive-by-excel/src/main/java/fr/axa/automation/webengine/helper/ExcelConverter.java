@@ -3,6 +3,8 @@ package fr.axa.automation.webengine.helper;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.global.ExcelColumn;
+import fr.axa.automation.webengine.logger.ILoggerService;
+import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
@@ -34,6 +36,8 @@ public class ExcelConverter {
 
     private static final Integer NUMBER_OF_EMPTY_LINE_FOR_ENDING_SCENARIO = 2;
 
+    protected static final ILoggerService loggerService = LoggerServiceProvider.getInstance();
+
     public static TestSuiteDataNoCode convert(String excelFileName, Map<String, List<String>> testCaseAndDataTestColumNameMap) {
         List<TestCaseDataNoCode> testCaseList = new LinkedList<>();
         Workbook workbook = ExcelReader.getWorkbook(excelFileName);
@@ -64,6 +68,7 @@ public class ExcelConverter {
             }
         }
         if(CollectionUtils.isNotEmpty(sheetNameDoesntExist)){
+            loggerService.error("This test case argument doesn't exist in the file"+ sheetNameDoesntExist );
             throw new IllegalArgumentException("These sheets doesn't exist :"+ sheetNameDoesntExist);
         }
     }

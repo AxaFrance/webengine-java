@@ -25,7 +25,7 @@ public final class ListUtil {
         return Arrays.asList(parameters).stream().map(o -> o.getClass()).collect(Collectors.toList());
     }
 
-    public static <T> Set<T> findDuplicateElements(List<T> list) {
+    public static <T> Set<T> findDuplicateElements(Collection<T> list) {
         Set<T> items = new HashSet<>();
         return list.stream()
                 .filter(n -> !items.add(n)) // Set.add() returns false if the element was already in the set.

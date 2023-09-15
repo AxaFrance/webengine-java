@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.TestCaseDataNoCode;
@@ -13,14 +14,14 @@ import java.util.Map;
 
 public class IfChecking extends AbstractChecking{
     @Override
-    public boolean check(TestSuiteDataNoCode testSuiteData) {
+    public boolean check(AbstractGlobalApplicationContext globalApplicationContext,TestSuiteDataNoCode testSuiteData) {
         List<TestCaseDataNoCode> testCaseDataList = testSuiteData.getTestCaseList();
         Map<String,Boolean> consistencyOfIfAndEndIfCommandMap = new HashMap<>();
         for(TestCaseDataNoCode testCaseData : testCaseDataList){
             consistencyOfIfAndEndIfCommandMap.put(testCaseData.getName(), checkConsistencyCommand(testCaseData));
         }
         assertCommand(consistencyOfIfAndEndIfCommandMap);
-        return checkNext(testSuiteData);
+        return checkNext(globalApplicationContext,testSuiteData);
     }
 
     private boolean checkConsistencyCommand(TestCaseDataNoCode testCaseData) {

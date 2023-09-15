@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.checking.chain.impl;
 
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
@@ -13,14 +14,14 @@ import java.util.List;
 
 public class OptionalChecking extends AbstractChecking{
     @Override
-    public boolean check(TestSuiteDataNoCode testSuiteData) {
+    public boolean check(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData) {
         List<TestCaseDataNoCode> testCaseDataList = testSuiteData.getTestCaseList();
         List<NumberOfOptionalByTestCase> numberOfOptionalList = new ArrayList<>();
         for(TestCaseDataNoCode testCaseData : testCaseDataList){
             numberOfOptionalList.add(getNumberOfOptional(testCaseData));
         }
         assertCommand(numberOfOptionalList);
-        return checkNext(testSuiteData);
+        return checkNext(globalApplicationContext,testSuiteData);
     }
 
     private NumberOfOptionalByTestCase getNumberOfOptional(TestCaseDataNoCode testCaseData) {

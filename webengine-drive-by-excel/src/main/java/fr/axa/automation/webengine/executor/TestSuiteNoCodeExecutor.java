@@ -2,13 +2,6 @@ package fr.axa.automation.webengine.executor;
 
 import fr.axa.automation.webengine.api.ITestCaseNoCodeExecutor;
 import fr.axa.automation.webengine.api.ITestSuiteNoCodeExecutor;
-import fr.axa.automation.webengine.checking.chain.IChecking;
-import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
-import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
-import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
-import fr.axa.automation.webengine.checking.chain.impl.OptionalChecking;
-import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
-import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.core.AbstractTestSuiteExecutor;
 import fr.axa.automation.webengine.core.ITestCaseExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -54,7 +47,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         TestSuiteReport testSuiteReport;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
         String systemError = "";
-        checkInput(testSuiteData);
+
         try {
             testCaseReportList.addAll(runTestCase(globalApplicationContext, testSuiteData));
         } catch (WebEngineException e) {
@@ -99,15 +92,5 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         return testCaseNodeList.stream().filter(testCaseNodeNoCode -> nameOfTestCaseToRun.contains(testCaseNodeNoCode.getName())).collect(Collectors.toList());
     }
 
-    public void checkInput(TestSuiteDataNoCode testSuiteData) {
-        IChecking checking = AbstractChecking.link(
-                new IfChecking(),
-                new OptionalChecking(),
-                new CallScenariiChecking()
-//                new ReferencedValueChecking()
-        );
-        ICheckingRunner checkingRunner = new CheckingRunner();
-        checkingRunner.setChecking(checking);
-        checkingRunner.runChecking(testSuiteData);
-    }
+
 }

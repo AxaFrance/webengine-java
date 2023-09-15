@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.TargetKey;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.TestCaseDataNoCode;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class CallScenariiChecking extends AbstractChecking{
     @Override
-    public boolean check(TestSuiteDataNoCode testSuiteData) {
+    public boolean check(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData) {
         Map<String,List<CommandDataNoCode>> callCommandByTestCaseMap = new HashMap<>();
         List<TestCaseDataNoCode> testCaseDataList = testSuiteData.getTestCaseList();
         List<String> testCaseNameList = getTestCaseNameList(testCaseDataList);
@@ -34,7 +35,7 @@ public class CallScenariiChecking extends AbstractChecking{
             assertCommand(callCommandWhichDoesntExist);
         }
 
-        return checkNext(testSuiteData);
+        return checkNext(globalApplicationContext,testSuiteData);
     }
 
     private Map<String,Set<CommandDataNoCode>> getCallCommandWhichDoesntExist(Map<String,List<CommandDataNoCode>> callCommandDataMap, List<String> testCaseNameList) {

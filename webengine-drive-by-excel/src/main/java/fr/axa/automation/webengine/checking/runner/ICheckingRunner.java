@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.checking.runner;
 
 import fr.axa.automation.webengine.checking.chain.IChecking;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 
 public interface ICheckingRunner {
@@ -9,5 +10,5 @@ public interface ICheckingRunner {
 
     void setChecking(IChecking checking);
 
-    boolean runChecking(TestSuiteDataNoCode testSuiteData);
+    boolean runChecking(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData);
 }

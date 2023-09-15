@@ -2,6 +2,14 @@ package fr.axa.automation.webengine.boot;
 
 import fr.axa.automation.webengine.api.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.argument.ArgumentOption;
+import fr.axa.automation.webengine.checking.chain.IChecking;
+import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
+import fr.axa.automation.webengine.checking.chain.impl.CallScenariiChecking;
+import fr.axa.automation.webengine.checking.chain.impl.IfChecking;
+import fr.axa.automation.webengine.checking.chain.impl.OptionalChecking;
+import fr.axa.automation.webengine.checking.chain.impl.TestCaseArgChecking;
+import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
+import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
@@ -61,6 +69,7 @@ public class BootProjectNoCode extends AbstractBootProject {
             CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
             AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
             TestSuiteDataNoCode testSuiteData = getTestSuiteData(globalApplicationContext);
+            checkInput(globalApplicationContext,testSuiteData);
 
             loggerService.info("Start Phase initialize test suite ");
             testSuiteExecutor.initialize(globalApplicationContext);
@@ -101,5 +110,17 @@ public class BootProjectNoCode extends AbstractBootProject {
     protected TestSuiteDataNoCode getTestSuiteData(AbstractGlobalApplicationContext globalApplicationContext) {
         SettingsNoCode settingsNoCode = (SettingsNoCode) globalApplicationContext.getSettings();
         return ExcelConverter.convert(settingsNoCode.getDataTestFileName(), settingsNoCode.getTestCaseAndDataTestColumName());
+    }
+
+    public void checkInput(AbstractGlobalApplicationContext globalApplicationContext,TestSuiteDataNoCode testSuiteData) {
+        IChecking checking = AbstractChecking.link(
+                new IfChecking(),
+                new OptionalChecking(),
+                new CallScenariiChecking(),
+                new TestCaseArgChecking()
+        );
+        ICheckingRunner checkingRunner = new CheckingRunner();
+        checkingRunner.setChecking(checking);
+        checkingRunner.runChecking(globalApplicationContext,testSuiteData);
     }
 }

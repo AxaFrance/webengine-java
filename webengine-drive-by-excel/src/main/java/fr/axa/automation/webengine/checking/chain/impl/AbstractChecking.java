@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.checking.chain.impl;
 
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.constante.OptionalConstante;
+import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
@@ -40,13 +41,13 @@ public abstract class AbstractChecking implements IChecking {
         return commandDataSet.stream().filter(commandData -> StringUtil.equalsIgnoreCase(optionalConstante.getValue(),commandData.getOptional())).collect(Collectors.toList());
     }
 
-    public abstract boolean check(TestSuiteDataNoCode testSuiteData);
+    public abstract boolean check(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData);
 
-    protected boolean checkNext(TestSuiteDataNoCode testSuiteData) {
+    protected boolean checkNext(AbstractGlobalApplicationContext globalApplicationContext,TestSuiteDataNoCode testSuiteData) {
         if (next == null) {
             return true;
         }
-        return next.check(testSuiteData);
+        return next.check(globalApplicationContext,testSuiteData);
     }
 
     protected List<String> getTestCaseNameList(List<TestCaseDataNoCode> testCaseDataList) {
