@@ -42,9 +42,16 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
                 .closeBrowser(getCloseBrowser(cmd))
                 .keePassDatabasePassword(getKeePassDatabasePassword(cmd))
                 .keePassDatabasePath(getKeePassDatabasePath(cmd))
+                .deleteTempFile(getDeleteTempFile(cmd))
                 .build();
         loggerService.info("Loading settings running is succeed : " + settings.toString());
         return settings;
+    }
+
+    private static boolean getDeleteTempFile(CommandLine cmd) {
+        return Optional.ofNullable(cmd.getOptionValue(ArgumentOption.DELETE_TEMP_FILE.getOption()))
+                .map(Boolean::parseBoolean)
+                .orElse(false);
     }
 
     private static String getKeePassDatabasePath(CommandLine cmd) {

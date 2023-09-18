@@ -21,4 +21,5 @@ public class SettingsNoCode extends AbstractSettings {
     String keePassDatabasePath;
     @ToString.Exclude
     String keePassDatabasePassword;
+    boolean deleteTempFile;
 }

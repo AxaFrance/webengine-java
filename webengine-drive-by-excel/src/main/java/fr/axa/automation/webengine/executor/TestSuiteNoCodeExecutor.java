@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -93,4 +95,11 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
     }
 
 
+    public void deleteTempFile(String dataTestFileName) {
+        try {
+            Files.deleteIfExists(Paths.get(dataTestFileName));
+        } catch (Exception e) {
+            loggerService.error("Error when deleting temp file : " + dataTestFileName, e);
+        }
+    }
 }

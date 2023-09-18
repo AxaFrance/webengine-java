@@ -25,7 +25,8 @@ public enum ArgumentOption {
 
     KEEPASS_FILE            ("keepassFile", true,false, "Keepass file"),
     KEEPASS_PASSWORD             ("keepassPassword",  true,false, "Keepass Password"),
-    CLOSE_BROWSER_AFTER_EACH_SCENARIO ("closeBrowser",  true,false, "Close browser after each scenario");
+    CLOSE_BROWSER_AFTER_EACH_SCENARIO ("closeBrowser",  true,false, "Close browser after each scenario"),
+    DELETE_TEMP_FILE        ("deleteTempFile",  true,false, "Delete temp file after execution");
 
     final String option;
     final Boolean hasArg;
