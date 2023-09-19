@@ -68,8 +68,9 @@ public class ExcelConverter {
             }
         }
         if(CollectionUtils.isNotEmpty(sheetNameDoesntExist)){
-            loggerService.error("This test case argument doesn't exist in the file"+ sheetNameDoesntExist );
-            throw new IllegalArgumentException("These sheets doesn't exist :"+ sheetNameDoesntExist);
+            String messageError = "This test case argument doesn't exist in the excel file";
+            loggerService.error(messageError + sheetNameDoesntExist );
+            throw new IllegalArgumentException(messageError + sheetNameDoesntExist);
         }
     }
 
