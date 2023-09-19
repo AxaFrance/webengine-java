@@ -12,6 +12,7 @@ import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.executor.TestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContextNoCode;
@@ -45,7 +46,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProjectNoCode extends AbstractBootProject {
-    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_AND_DATA_TEST_COLUMN_NAME, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR, ArgumentOption.SHOW_REPORT,ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO, ArgumentOption.KEEPASS_PASSWORD, ArgumentOption.KEEPASS_FILE);
+    static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR, ArgumentOption.SHOW_REPORT,ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO, ArgumentOption.KEEPASS_PASSWORD, ArgumentOption.KEEPASS_FILE, ArgumentOption.DELETE_TEMP_FILE);
 
     @Autowired
     public BootProjectNoCode(@Qualifier("testSuiteNoCodeExecutor") ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
@@ -85,6 +86,7 @@ public class BootProjectNoCode extends AbstractBootProject {
             loggerService.info("End clean ");
 
             loggerService.info("Start report ");
+            testSuiteReport.getTestResults().get(0).setLog("Arguments : "+ArgumentParser.removeOptionFromArguments(args,ArgumentOption.KEEPASS_PASSWORD));
             Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, "", globalApplicationContext.getSettings().getOutputDir());
             loggerService.info("End report ");
 
@@ -92,6 +94,11 @@ public class BootProjectNoCode extends AbstractBootProject {
                 loggerService.info("Open report ");
                 reportHelper.openReport(reportsPath.get(ReportPathKey.HTML_REPORT_PATH_KEY) + File.separator + "index.html");
                 loggerService.info("End open report ");
+            }
+            if (((SettingsNoCode)globalApplicationContext.getSettings()).isDeleteTempFile()){
+                loggerService.info("Delete temp file ");
+                ((TestSuiteNoCodeExecutor) testSuiteExecutor).deleteTempFile(((SettingsNoCode) globalApplicationContext.getSettings()).getDataTestFileName());
+                loggerService.info("End delete temp file ");
             }
         }catch (Exception e){
             loggerService.info("Error during execution of the automate. You can see more details in the file log");
