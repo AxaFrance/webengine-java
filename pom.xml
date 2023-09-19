@@ -8,6 +8,31 @@
     <packaging>pom</packaging>
     <name>webengine-parent</name>
 
+<licenses>
+        <license>
+            <name>MIT Licence</name>
+            <url></url>
+        </license>
+    </licenses>
+    <developers>
+	<developer>
+            <id>DSJP</id>
+            <name>DOTOU-SEGLA Jean-Prince</name>
+            <email>jeanprince.dotousegla@axa.fr</email>
+        </developer>
+        <developer>
+            <id>JARUL</id>
+            <name>Joseph ARUL</name>
+            <email>joseph.arul@axa.fr</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/AxaFrance/webengine-java.git</connection>
+        <developerConnection>scm:git:https://github.com/AxaFrance/webengine-java.git</developerConnection>
+        <url>https://github.com/AxaFrance/webengine-java</url>
+        <tag>HEAD</tag>
+    </scm>
+	
 	<!--
     <parent>
         <groupId>fr.axa.socle.axafr</groupId>
@@ -70,6 +95,18 @@
 
 
     </properties>
+
+	<distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
 
     <modules>
         <module>webengine-util</module>
@@ -390,6 +427,38 @@
 
         </dependencies>
     </dependencyManagement>
+
+	<profiles>
+        <profile>
+            <id>ci-cd</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Prevent gpg from using pinentry programs. Fixes:
+                                         gpg: signing failed: Inappropriate ioctl for device -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
