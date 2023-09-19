@@ -43,10 +43,10 @@ pom.xml :
 	<parent>
 		<groupId>fr.axa.automation.webengine</groupId>
 		<artifactId>webengine-parent</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.0</version>
 	</parent>
 	<artifactId>webengine-testpage-linear</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.0</version>
 	<packaging>jar</packaging>
 	<name>webengine-testpage-linear</name>
 	<properties>
@@ -121,7 +121,7 @@ pom.xml :
 		<java-target.version>1.8</java-target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<webengine-boot-gherkin.version>2.0.0-SNAPSHOT</webengine-boot-gherkin.version>
+		<webengine-boot-gherkin.version>2.0.0</webengine-boot-gherkin.version>
 	</properties>
 	<dependencies>
 		<dependency>

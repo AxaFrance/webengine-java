@@ -53,7 +53,7 @@ class FileUtilTest {
 
     @Test
     public void testCreateDirectoryInTmpDirectory() {
-        File file = FileUtil.createDirectoryInTmpDirectory("test-create-directory-in-tmp");
+        File file = FileUtilForTest.createDirectoryInTmpDirectory("test-create-directory-in-tmp");
         logger.info("Create directory in temp directory : "+file.getAbsolutePath());
         Assertions.assertTrue(Files.exists(Paths.get(file.getAbsolutePath())));
     }
