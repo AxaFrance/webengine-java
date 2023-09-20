@@ -100,7 +100,7 @@
 	    <repository>
 	      <id>github</id>
 	      <name>GitHub Packages</name>
-	      <url>https://maven.pkg.github.com/fr/axa/automation/webengine</url>
+	      <url>https://maven.pkg.github.com</url>
 	    </repository>
 	</distributionManagement>
 
