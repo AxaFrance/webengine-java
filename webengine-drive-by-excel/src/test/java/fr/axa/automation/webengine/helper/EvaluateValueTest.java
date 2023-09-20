@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
+import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.object.CommandResult;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import java.util.List;
 class EvaluateValueTest {
 
     @Test
-    void todayTest() {
+    void todayTest() throws WebEngineException {
         String value = "<<<TODAY>>>";
         List<CommandResult> commandResultList = null;
         String result = EvaluateValueHelper.evaluateValue(null,value,commandResultList);
@@ -16,7 +17,7 @@ class EvaluateValueTest {
     }
 
     @Test
-    void todayPlusDayTest() {
+    void todayPlusDayTest() throws WebEngineException {
         String value = "<<<TODAY+10>>>";
         List<CommandResult> commandResultList = null;
         String result = EvaluateValueHelper.evaluateValue(null,value,commandResultList);
@@ -24,7 +25,7 @@ class EvaluateValueTest {
     }
 
     @Test
-    void todayHourTest() {
+    void todayHourTest() throws WebEngineException {
         String value = "<<<today_hour>>>";
         List<CommandResult> commandResultList = null;
         String result = EvaluateValueHelper.evaluateValue(null,value,commandResultList);

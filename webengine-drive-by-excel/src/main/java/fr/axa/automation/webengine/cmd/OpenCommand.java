@@ -5,7 +5,6 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.CommandResultHelper;
-import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.util.StringUtil;
@@ -19,7 +18,7 @@ public class OpenCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
-        String url = EvaluateValueHelper.getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+        String url = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         WebDriver webDriver = null;
 
         List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);

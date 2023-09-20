@@ -4,24 +4,20 @@ import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
-import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
+import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractSettings;
 import fr.axa.automation.webengine.global.SettingsNoCode;
-import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
-import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FormatDate;
 import fr.axa.automation.webengine.util.RegexUtil;
 import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EvaluateValueHelper {
@@ -38,17 +34,9 @@ public class EvaluateValueHelper {
         return StringUtils.substringBetween(value, ConstantNoCode.KEYBOARD_VALUE_PREFIX.getValue(), ConstantNoCode.KEYBOARD_VALUE_SUFFIX.getValue());
     }
 
-    public static String getValue(AbstractGlobalApplicationContext globalApplicationContext, TestCaseNoCodeContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
-        String dataTestColumName = testCaseContext.getDataTestColumnName();
-        Map<String, String> dataTestMap = commandData.getDataTestMap();
-        if (MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))) {
-            String originalValue = dataTestMap.get(dataTestColumName);
-            return EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), originalValue, commandResultList);
-        }
-        return null;
-    }
 
-    public static String evaluateValue(AbstractSettings settings, String completeValue, List<CommandResult> commandResultList){
+
+    public static String evaluateValue(AbstractSettings settings, String completeValue, List<CommandResult> commandResultList) throws WebEngineException{
         List<String> externalRegexValueList = RegexUtil.match(RegexContante.EXTERNAL_REGEX_VALUE, completeValue);
         List<String> internalRegexValueList = RegexUtil.match(RegexContante.INTERNAL_REGEX_VALUE, completeValue);
         List<String> keyboardRegexValueList = RegexUtil.match(RegexContante.KEYBOARD_REGEX_VALUE, completeValue);
@@ -76,7 +64,7 @@ public class EvaluateValueHelper {
         return resultValue;
     }
 
-    public static String evaluateExternalRegexValue(String completeValue, List<String> externalRegexValueList, AbstractSettings settings) {
+    public static String evaluateExternalRegexValue(String completeValue, List<String> externalRegexValueList, AbstractSettings settings) throws WebEngineException {
         String resultValue = completeValue;
         if (CollectionUtils.isNotEmpty(externalRegexValueList)) {
             for (String integrationRegexValue : externalRegexValueList) {
@@ -85,6 +73,9 @@ public class EvaluateValueHelper {
                 if (StringUtils.isEmpty(valueFromSetting)) {
                     //Check the value in Keepass if the value is not found in the settings
                     resultValue = KeepassUtils.getPassword(valueWithouBrackets, ((SettingsNoCode)settings).getKeePassDatabasePassword(), ((SettingsNoCode)settings).getKeePassDatabasePath());
+                    if(StringUtils.isEmpty(resultValue)){
+                        throw  new WebEngineException("The keepass password can' be empty");
+                    }
                 }else {
                     resultValue = resultValue.replace(integrationRegexValue, valueFromSetting);
                 }

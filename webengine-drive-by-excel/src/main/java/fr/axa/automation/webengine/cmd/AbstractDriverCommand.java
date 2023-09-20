@@ -122,7 +122,7 @@ public abstract class AbstractDriverCommand implements ICommand {
         }
     }
 
-    protected Map.Entry<TargetKey,String> getTargetValue(AbstractGlobalApplicationContext globalApplicationContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) {
+    protected Map.Entry<TargetKey,String> getTargetValue(AbstractGlobalApplicationContext globalApplicationContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         String value;
         Set<TargetKey> targetKeyList = commandData.getTargetList().keySet();
         if (MapUtils.isNotEmpty(commandData.getTargetList()) && targetKeyList.size() == 1) {
@@ -196,6 +196,16 @@ public abstract class AbstractDriverCommand implements ICommand {
 
         if(CollectionUtils.isNotEmpty(webDriverList)){
             return ListUtil.getLastElement(webDriverList).get();
+        }
+        return null;
+    }
+
+    protected String getValue(AbstractGlobalApplicationContext globalApplicationContext, TestCaseNoCodeContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
+        String dataTestColumName = testCaseContext.getDataTestColumnName();
+        Map<String, String> dataTestMap = commandData.getDataTestMap();
+        if (MapUtils.isNotEmpty(dataTestMap) && StringUtils.isNotEmpty(dataTestMap.get(dataTestColumName))) {
+            String originalValue = dataTestMap.get(dataTestColumName);
+            return EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), originalValue, commandResultList);
         }
         return null;
     }

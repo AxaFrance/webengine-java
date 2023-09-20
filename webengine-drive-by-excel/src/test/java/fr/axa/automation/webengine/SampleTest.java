@@ -4,6 +4,7 @@ package fr.axa.automation.webengine;
 import fr.axa.automation.webengine.core.WebElementDescription;
 import fr.axa.automation.webengine.util.BrowserFactory;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -27,7 +28,7 @@ public class SampleTest {
         driver.quit();
     }
 
-//    @Test
+    @Test
     public void identifyShadowElementWithOneLevelTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -35,11 +36,11 @@ public class SampleTest {
             driver.get(baseUrl);
             WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).build();
             WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='shadow_content']");
-            System.out.println(webElement.getText());
+            Assertions.assertNotNull(webElement);
         }
     }
 
-//    @Test
+    @Test
     public void identifyShadowElementWithIdTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -47,11 +48,11 @@ public class SampleTest {
             driver.get(baseUrl);
             WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).id("shadow_content").shadowDom(true).build();
             WebElement webElement = webElementDescription.findElement();
-            System.out.println(webElement.getText());
+            Assertions.assertNotNull(webElement);
         }
     }
 
-//    @Test
+    @Test
     public void identifyShadowElementWithClassNameTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -59,11 +60,11 @@ public class SampleTest {
             driver.get(baseUrl);
             WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).className("wrapper").shadowDom(true).build();
             WebElement webElement = webElementDescription.findElement();
-            System.out.println(webElement.getText());
+            Assertions.assertNotNull(webElement);
         }
     }
 
-//    @Test
+    @Test
     public void identifyShadowElementWithSecondLevelTest() throws Exception {
         String baseUrl = "http://watir.com/examples/shadow_dom.html";
         if(optionalWebdriver.isPresent()){
@@ -71,17 +72,8 @@ public class SampleTest {
             driver.get(baseUrl);
             WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).build();
             WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='nested_shadow_content']");
-            System.out.println(webElement.getText());
+            Assertions.assertNotNull(webElement);
         }
     }
 
-    @Test
-    public void fileCabTest() throws Exception {
-        String baseUrl = "https://filecab-rec.axa-fr.intraxa/DocumentDesktop/login";
-        if(optionalWebdriver.isPresent()){
-            WebDriver driver = optionalWebdriver.get();
-            driver.get(baseUrl);
-            wait(1000L);
-        }
-    }
 }

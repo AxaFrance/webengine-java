@@ -4,7 +4,6 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
-import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 
@@ -23,7 +22,7 @@ public class UploadFileCommand extends AbstractDriverCommand {
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
-        String value = EvaluateValueHelper.getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+        String value = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         webElementDescription.focusAndClickFromActions();
         Thread.sleep(1000);
         uploadLikeImatatingMouse(globalApplicationContext, value);

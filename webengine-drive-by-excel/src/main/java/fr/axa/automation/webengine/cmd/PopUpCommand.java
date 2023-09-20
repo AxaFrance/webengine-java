@@ -4,7 +4,6 @@ import fr.axa.automation.webengine.constante.Constant;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
-import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.util.StringUtil;
@@ -16,7 +15,7 @@ public class PopUpCommand extends AbstractDriverCommand {
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
         WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
-        String value = EvaluateValueHelper.getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+        String value = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         if (webDriver != null) {
             if(StringUtil.equalsIgnoreCase(value, Constant.OUI.getValue()) || StringUtil.equalsIgnoreCase(value, Constant.OK.getValue())){
                 webDriver.switchTo().alert().accept();
