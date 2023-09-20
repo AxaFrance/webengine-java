@@ -67,17 +67,17 @@ public class EvaluateValueHelper {
     public static String evaluateExternalRegexValue(String completeValue, List<String> externalRegexValueList, AbstractSettings settings) throws WebEngineException {
         String resultValue = completeValue;
         if (CollectionUtils.isNotEmpty(externalRegexValueList)) {
-            for (String integrationRegexValue : externalRegexValueList) {
-                String valueWithouBrackets = getExternalValue(integrationRegexValue);
+            for (String externalRegexValue : externalRegexValueList) {
+                String valueWithouBrackets = getExternalValue(externalRegexValue);
                 String valueFromSetting = settings.getValues().get(valueWithouBrackets);
                 if (StringUtils.isEmpty(valueFromSetting)) {
                     //Check the value in Keepass if the value is not found in the settings
                     resultValue = KeepassUtils.getPassword(valueWithouBrackets, ((SettingsNoCode)settings).getKeePassDatabasePassword(), ((SettingsNoCode)settings).getKeePassDatabasePath());
                     if(StringUtils.isEmpty(resultValue)){
-                        throw  new WebEngineException("The keepass password can' be empty");
+                        throw  new WebEngineException("The keepass password can't be empty");
                     }
                 }else {
-                    resultValue = resultValue.replace(integrationRegexValue, valueFromSetting);
+                    resultValue = resultValue.replace(externalRegexValue, valueFromSetting);
                 }
             }
         }
