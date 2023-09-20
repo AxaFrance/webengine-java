@@ -11,4 +11,13 @@ public class FileUtilForTest {
         String path = FileUtil.createDirectoryInTarget(subDirectory);
         return path + File.separator + fileName;
     }
+
+    public static File createDirectoryInTmpDirectory(String directoryName){
+        final String dir = System.getProperty("java.io.tmpdir");
+        File directory = new File(dir + File.separator + directoryName);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return directory;
+    }
 }
