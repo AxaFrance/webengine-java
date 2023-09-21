@@ -8,6 +8,14 @@
     <packaging>pom</packaging>
     <name>webengine-parent</name>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/AxaFrance/webengine-java</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <java-source.version>1.8</java-source.version>
         <java-target.version>1.8</java-target.version>
