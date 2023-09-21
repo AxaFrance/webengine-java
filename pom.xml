@@ -8,12 +8,6 @@
     <packaging>pom</packaging>
     <name>webengine-parent</name>
 
-    <parent>
-        <groupId>fr.axa.socle.axafr</groupId>
-        <artifactId>axafr-corporate-parent</artifactId>
-        <version>2.0.3</version>
-    </parent>
-
     <properties>
         <java-source.version>1.8</java-source.version>
         <java-target.version>1.8</java-target.version>
