@@ -1,28 +1,29 @@
-application:
-    name: solaris-automation-gherkin
+webengineConfiguration:
+    name: webengine-automation-gherkin
     platformName: WINDOWS
     browserName: CHROME
     browserOptionList:
         - --incognito
-appiumSettings:
-    gridConnection: https://hub-cloud.browserstack.com/wd/hub
-    userName: XXXXXXX
-    password: XXXXXXX
-    localTesting:
-        activate: false
-        arguments:
-            force: true
-            forcelocal: true
-            binarypath: C:\\BrowserStack\\BrowserStackLocal.exe
-            localIdentifier: XXXXYYYY
-    capabilities:
-        desiredCapabilitiesMap:
-            geoLocation: FR
-            deviceName: Samsung Galaxy S20 Ultra
-            osVersion: 10.0
-            projectName: solaris-automation
-            buildName: solaris-automation-mobile
-            sessionName: Samsung
-            local: true
-            networkLogs: true
-            localIdentifier: XXXXYYYY
+        - --remote-allow-origins=*
+    appiumConfiguration:
+        gridConnection: https://hub-cloud.browserstack.com/wd/hub
+        userName: XXXXXXX
+        password: XXXXXXX
+        localTesting:
+            activate: false
+            arguments:
+                force: true
+                forcelocal: true
+                binarypath: C:\\BrowserStack\\BrowserStackLocal.exe
+                localIdentifier: XXXXYYYY
+        capabilities:
+            desiredCapabilitiesMap:
+                geoLocation: FR
+                deviceName: Samsung Galaxy S20 Ultra
+                osVersion: 10.0
+                projectName: solaris-automation
+                buildName: solaris-automation-mobile
+                sessionName: Samsung
+                local: true
+                networkLogs: true
+                localIdentifier: XXXXYYYY

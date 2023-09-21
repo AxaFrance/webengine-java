@@ -5,11 +5,11 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>2.3.0</version>
+        <version>3.0.3</version>
     </parent>
 
     <artifactId>webengine-core</artifactId>
-    <version>2.3.0</version>
+    <version>3.0.3</version>
     <packaging>jar</packaging>
     <name>webengine-core</name>
 
@@ -61,31 +61,6 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/classes/</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/resources/fr</directory>
-                                    <includes>
-                                        <include>**/*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
@@ -94,7 +69,7 @@
                     </additionalClasspathElements>
                     <excludes>
                         <exclude>fr.axa.automation.webengine.context.*</exclude>
-                        <exclude>fr.axa.automation.webengine.general.*</exclude>
+                        <exclude>fr.axa.automation.webengine.global.*</exclude>
                         <exclude>fr.axa.automation.webengine.localtesting.*</exclude>
                         <exclude>fr.axa.automation.webengine.properties.*</exclude>
                     </excludes>

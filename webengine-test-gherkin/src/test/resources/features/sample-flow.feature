@@ -1,7 +1,7 @@
 Feature: Test du parcours
 
   Background:
-    Given I visit the test page "http://webengine-test.azurewebsites.net/" for running journey
+    Given I visit the test page "https://axafrance.github.io/webengine-dotnet/demo/Test.html" for running journey
     When I click on the link Start step 1
 
   @flow

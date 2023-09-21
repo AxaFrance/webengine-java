@@ -17,6 +17,13 @@ public class LoggerService implements ILoggerService{
         log.info(joiner.toString());
     }
 
+    @Override
+    public void error(String message) {
+        StringJoiner joiner = new StringJoiner("", PREFIX, SUFFIX);
+        joiner.add(message);
+        log.error(joiner.toString());
+    }
+
     public void error(String message,Throwable e) {
         StringJoiner joiner = new StringJoiner("", PREFIX, SUFFIX);
         joiner.add(message);

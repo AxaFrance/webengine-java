@@ -21,6 +21,15 @@ class ListUtilTest {
     }
 
     @Test
+    void testGetLastElement() {
+        List<String> list = Arrays.asList("One","Two","Three");
+        Optional<String> firstOptional = ListUtil.getLastElement(list);
+        if(firstOptional.isPresent()){
+            Assertions.assertEquals("Three",firstOptional.get());
+        }
+    }
+
+    @Test
     void testFindDuplicateElements() {
         // 3, 4, 9
         List<Integer> list = Arrays.asList(5, 3, 4, 1, 3, 7, 2, 9, 9, 4);

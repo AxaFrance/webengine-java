@@ -5,11 +5,11 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>2.3.0</version>
+        <version>3.0.3</version>
     </parent>
 
     <artifactId>webengine-web</artifactId>
-    <version>2.3.0</version>
+    <version>3.0.3</version>
     <packaging>jar</packaging>
     <name>webengine-web</name>
 
@@ -55,7 +55,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>fr.axa.automation.webengine.general.*</exclude>
+                        <exclude>fr.axa.automation.webengine.global.*</exclude>
                         <exclude>fr.axa.automation.webengine.exception.*</exclude>
                     </excludes>
                 </configuration>

@@ -103,6 +103,7 @@
     <xs:complexType name="ScreenshotReport">
         <xs:sequence>
             <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="Id" type="xs:string"/>
             <xs:element minOccurs="0" maxOccurs="1" name="Data" type="xs:base64Binary"/>
         </xs:sequence>
     </xs:complexType>

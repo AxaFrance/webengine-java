@@ -1,0 +1,28 @@
+/.project
+# Compiled class file
+##############################
+## Java
+##############################
+.mtj.tmp/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+src/main/resources/html-report/*
+src/test/resources/html-report/*
+src/main/resources/command.yaml
+
+
+##############################
+## Maven
+##############################
+target/
+
+##############################
+## Intellij
+##############################
+*.iml
+.idea/*
+.run/*

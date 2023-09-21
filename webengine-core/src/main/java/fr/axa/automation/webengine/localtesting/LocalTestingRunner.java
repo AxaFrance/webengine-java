@@ -5,8 +5,8 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
-import fr.axa.automation.webengine.properties.LocalTesting;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
+import fr.axa.automation.webengine.properties.LocalTestingConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +21,12 @@ public class LocalTestingRunner implements ILocalTestingRunner{
 
     private final ILoggerService loggerService;
 
-    private final GlobalConfigProperties globalConfigProperties;
+    private final GlobalConfiguration globalConfiguration;
 
     @Autowired
-    public LocalTestingRunner(ILoggerService loggerService, GlobalConfigProperties globalConfigProperties) {
+    public LocalTestingRunner(ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
         this.loggerService = loggerService;
-        this.globalConfigProperties = globalConfigProperties;
+        this.globalConfiguration = globalConfiguration;
     }
 
     public LocalTestingRunner() {
@@ -34,29 +34,29 @@ public class LocalTestingRunner implements ILocalTestingRunner{
     }
 
     public void startLocalTesting() {
-        if(globalConfigProperties!=null && isLocalTestingActivate(Optional.of(globalConfigProperties))) {
-            startLocalTesting(globalConfigProperties);
+        if(globalConfiguration !=null && isLocalTestingActivate(Optional.of(globalConfiguration))) {
+            startLocalTesting(globalConfiguration);
         }
     }
 
     public void startLocalTesting(String resourceNameOrPathAndFileName) {
-        Optional<GlobalConfigProperties> globalConfigProperties = getGlobalConfigProperties(resourceNameOrPathAndFileName);
+        Optional<GlobalConfiguration> globalConfigProperties = getGlobalConfigProperties(resourceNameOrPathAndFileName);
         if(globalConfigProperties.isPresent() && isLocalTestingActivate(globalConfigProperties)) {
             startLocalTesting(globalConfigProperties.get());
         }
     }
 
-    private void startLocalTesting(GlobalConfigProperties globalConfigProperties) {
+    private void startLocalTesting(GlobalConfiguration globalConfiguration) {
         try {
             local = new Local();
-            local.start(getLocalTestingArguments(globalConfigProperties));
+            local.start(getLocalTestingArguments(globalConfiguration));
             loggerService.info("Start action - Check if local testing is running : " + local.isRunning());
         } catch (Exception e) {
             loggerService.error("Error when start local testing", e);
         }
     }
 
-    private Optional<GlobalConfigProperties> getGlobalConfigProperties(String resourceNameOrPathAndFileName) {
+    private Optional<GlobalConfiguration> getGlobalConfigProperties(String resourceNameOrPathAndFileName) {
         try {
             return PropertiesHelperProvider.getInstance().getGlobalConfigurationByName(resourceNameOrPathAndFileName);
         }catch(WebEngineException e){
@@ -65,10 +65,10 @@ public class LocalTestingRunner implements ILocalTestingRunner{
         return Optional.empty();
     }
 
-    private HashMap<String,String> getLocalTestingArguments(GlobalConfigProperties globalConfigProperties ){
+    private HashMap<String,String> getLocalTestingArguments(GlobalConfiguration globalConfiguration){
         HashMap<String,String> localTestingArguments = new HashMap<>();
-        localTestingArguments.put(KEY, globalConfigProperties.getAppiumSettings().getPassword());
-        localTestingArguments.putAll(globalConfigProperties.getAppiumSettings().getLocalTesting().getArguments());
+        localTestingArguments.put(KEY, globalConfiguration.getWebengineConfiguration().getAppiumConfiguration().getPassword());
+        localTestingArguments.putAll(globalConfiguration.getWebengineConfiguration().getAppiumConfiguration().getLocalTesting().getArguments());
         loggerService.info("Local testing arguments : "+localTestingArguments);
         return localTestingArguments;
     }
@@ -84,10 +84,10 @@ public class LocalTestingRunner implements ILocalTestingRunner{
         }
     }
 
-    private boolean isLocalTestingActivate(Optional<GlobalConfigProperties> globalConfigProperties) {
+    private boolean isLocalTestingActivate(Optional<GlobalConfiguration> globalConfigProperties) {
         if(globalConfigProperties.isPresent() && globalConfigProperties.get().isLocalTestingConfExist()) {
-            LocalTesting localTesting = globalConfigProperties.get().getAppiumSettings().getLocalTesting();
-            if (localTesting.isActivate()) {
+            LocalTestingConfiguration localTestingConfiguration = globalConfigProperties.get().getWebengineConfiguration().getAppiumConfiguration().getLocalTesting();
+            if (localTestingConfiguration.isActivate()) {
                 return true;
             }else{
                 loggerService.info("Local testing flag is not activate if you run your testing app in mobile");

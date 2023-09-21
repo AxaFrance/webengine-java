@@ -5,11 +5,11 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>2.3.0</version>
+        <version>3.0.3</version>
     </parent>
 
     <artifactId>webengine-boot-keyword-driven</artifactId>
-    <version>2.3.0</version>
+    <version>3.0.3</version>
     <packaging>jar</packaging>
     <name>webengine-boot-keyword-driven</name>
 
@@ -17,7 +17,7 @@
 
         <dependency>
             <groupId>fr.axa.automation.webengine</groupId>
-            <artifactId>webengine-web</artifactId>
+            <artifactId>webengine-cmd-line</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.report.helper.junit;
 
 import fr.axa.automation.junit.generated.ObjectFactory;
 import fr.axa.automation.junit.generated.Testsuite;
+import fr.axa.automation.webengine.constant.FileExtensionConstant;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.Result;
@@ -42,7 +43,7 @@ public class JunitReportHelper implements IJunitReportHelper {
     public String generateJUnitReport(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws WebEngineException {
         Testsuite testsuite = createJUnitTestSuite(testSuiteReport,testSuiteName);
         Path directoryPath = FileUtil.createDirectories(outputPath);
-        String fileName = ReportFileNameHelper.getFileName(JUNIT_REPORT_NAME);
+        String fileName = ReportFileNameHelper.getFileName(JUNIT_REPORT_NAME, FileExtensionConstant.XML);
         Path completePath = Paths.get(directoryPath.toString(),fileName);
         InputMarshallDTO inputMarshallDTO = getInputMarshallDTO(testsuite, completePath);
         String junitReportPath = FileUtil.saveAsXml(inputMarshallDTO);

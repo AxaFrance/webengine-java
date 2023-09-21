@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.generated.Variable;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

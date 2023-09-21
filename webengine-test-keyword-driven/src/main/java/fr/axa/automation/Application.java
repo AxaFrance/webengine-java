@@ -29,7 +29,9 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        loggerService.info("***************Start automation***************");
         loggerService.info("Temporary directory application: "+System.getProperty("java.io.tmpdir"));
         bootProject.runFromProject(args);
+        loggerService.info("***************End automation***************");
     }
 }

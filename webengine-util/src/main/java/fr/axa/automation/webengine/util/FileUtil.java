@@ -4,21 +4,28 @@ import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -28,7 +35,6 @@ public final class FileUtil {
     }
 
     public static final String TARGET_DIRECTORY = "target";
-    public static final String RUN_RESULT_DIRECTORY = "report-test-result";
 
     public static final ILoggerService loggerService = LoggerServiceProvider.getInstance();
 
@@ -40,11 +46,50 @@ public final class FileUtil {
         }
     }
 
+    public static void copyFileFromResource(String source, String target) throws IOException {
+        Path pathTarget = Paths.get(target);
+        if(Files.exists(pathTarget)){
+            Files.delete(pathTarget);
+        }
+        Files.copy(getInputStreamFromResource(source), pathTarget);
+    }
+
+    public static void copyFileFromResource(InputStream source, String target) throws IOException {
+        Path pathTarget = Paths.get(target);
+        if(Files.exists(pathTarget)){
+            Files.delete(pathTarget);
+        }
+        Files.copy(source, pathTarget);
+    }
+
+    public static void copyDirectory(String sourceDirectoryLocation, String destinationDirectoryLocation) throws IOException {
+        File sourceDirectory = new File(sourceDirectoryLocation);
+        File destinationDirectory = new File(destinationDirectoryLocation);
+        FileUtils.copyDirectory(sourceDirectory, destinationDirectory);
+    }
+
+
     public static String saveAsXml(InputMarshallDTO inputMarshallDTO) throws WebEngineException {
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
     }
 
+    public static void saveAsImage(Path path,byte[] base64Data) throws WebEngineException {
+        File file = new File(path.toAbsolutePath().toString());
+        try (OutputStream outputStream = new BufferedOutputStream((new FileOutputStream(file)))){
+            outputStream.write(base64Data);
+        }catch (IOException e){
+            throw new WebEngineException("Error during creating image report : " + path,e);
+        }
+    }
 
+    public static File createDirectoryInTmpDirectory(String directoryName){
+        final String dir = System.getProperty("java.io.tmpdir");
+        File directory = new File(dir + File.separator + directoryName);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return directory;
+    }
 
     public static String createDirectoryInTarget(String subDirectory) throws WebEngineException {
         return FileUtil.createDirectories(FileUtil.getPathInTargetDirectory(subDirectory)).toAbsolutePath().toString();
@@ -75,6 +120,29 @@ public final class FileUtil {
         }
     }
 
+    public static List<String> getResourceFiles(String path) throws IOException {
+        List<String> filenames = new ArrayList<>();
+        try (InputStream in = getInputStreamFromResource(path);
+             BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+
+            String resource;
+            while ((resource = br.readLine()) != null) {
+                filenames.add(resource);
+            }
+        }
+        return filenames;
+    }
+
+
+    public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(resourceName);
+        if(inputStream==null){
+            throw new FileNotFoundException("The resource file "+resourceName+" not found in resource directory ");
+        }
+        return inputStream;
+    }
+
     public static boolean assertContent(File fileContentExpected, File fileContentResult) throws IOException {
         try(Reader reader1 = new BufferedReader(new FileReader(fileContentExpected));
             Reader reader2 = new BufferedReader(new FileReader(fileContentResult))){
@@ -99,15 +167,6 @@ public final class FileUtil {
         }
     }
 
-    public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(resourceName);
-        if(inputStream==null){
-            throw new FileNotFoundException("The resource file "+resourceName+" not found in resource directory ");
-        }
-        return inputStream;
-    }
-
     public static String getCurrentPath() throws IOException {
         File currentDirFile = new File(".");
         String path = currentDirFile.getAbsolutePath();
@@ -120,6 +179,23 @@ public final class FileUtil {
         } catch (IOException e) {
             loggerService.error("Error during displaying content of file",e);
         }
+    }
+
+    public static StringBuilder fileToText(String fileName) throws IOException {
+        StringBuilder text = new StringBuilder();
+        try (InputStream inputStream = getInputStreamByPathOrResource(fileName);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            if (reader != null) {
+                try {
+                    while (reader.ready()) {
+                        text.append(reader.readLine());
+                    }
+                } catch (IOException e) {
+                    throw new IOException("Erreur lors de la lecture du fichier :" + fileName);
+                }
+            }
+        }
+        return text;
     }
 }
 

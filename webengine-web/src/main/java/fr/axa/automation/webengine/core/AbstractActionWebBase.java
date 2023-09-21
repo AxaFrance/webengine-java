@@ -2,16 +2,16 @@ package fr.axa.automation.webengine.core;
 
 import fr.axa.automation.webengine.context.SharedContext;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.ActionContext;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.generated.Variable;
+import fr.axa.automation.webengine.global.ActionContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.EnvironmentVariablesHelper;
-import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.helper.TestCaseDataHelper;
 import fr.axa.automation.webengine.report.builder.ActionReportBuilder;
+import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +23,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -42,6 +43,7 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         String className = getClass().getSimpleName();
         String errorMessage = "Error during execution of this action : " + className;
         ActionReport actionReport = ActionReportHelper.getActionReport(className);
+        actionReport.setId(UUID.randomUUID().toString());
         try {
             doAction();
             actionReport.setResult(Result.PASSED);
@@ -77,20 +79,27 @@ public abstract class AbstractActionWebBase extends AbstractActionBase {
         screenShot("");
     }
 
-    public void screenShot(String name) {
-        byte[] screenshot = ((TakesScreenshot) actionDetailContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
-        ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
-        screenShotList.add(screenshotReport);
+    public void screenShot(String name) throws WebEngineException{
+        try {
+            byte[] screenshot = ((TakesScreenshot) actionDetailContext.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+            screenshot(name, screenshot);
+        } catch (Exception e) {
+            throw new WebEngineException("Erreur lors du screenshot",e);
+        }
     }
 
-    public void screenShot(AbstractElementDescription elementDescription) throws WebEngineException {
+    public void screenShot(AbstractWebElement elementDescription) throws WebEngineException {
         try {
             byte[] screenshot = elementDescription.getScreenshot();
-            ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport("Error message", screenshot);
-            screenShotList.add(screenshotReport);
+            screenshot("", screenshot);
         } catch (Exception e) {
-           throw new WebEngineException("Erreur lors du screenshot",e);
+            throw new WebEngineException("Erreur lors du screenshot",e);
         }
+    }
+
+    private void screenshot(String name, byte[] screenshot) {
+        ScreenshotReport screenshotReport = ScreenshotHelper.getScreenshotReport(name, screenshot);
+        screenShotList.add(screenshotReport);
     }
 
     protected Optional<String> getEnvironnementValue(String name) {

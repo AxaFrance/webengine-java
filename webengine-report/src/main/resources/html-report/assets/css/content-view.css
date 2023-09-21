@@ -1,0 +1,13 @@
+.content-header-container {
+    width: 100%;
+    height: 8%;
+    margin-bottom: 1em;
+}
+
+.content-container{
+    width: 100%;
+    height: 90%;
+    overflow: auto;
+    background-color: #ffffff;
+}
+

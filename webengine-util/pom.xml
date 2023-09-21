@@ -5,11 +5,11 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>2.3.0</version>
+        <version>3.0.3</version>
     </parent>
 
     <artifactId>webengine-util</artifactId>
-    <version>2.3.0</version>
+    <version>3.0.3</version>
     <packaging>jar</packaging>
     <name>webengine-util</name>
 
@@ -53,6 +53,16 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
         </dependency>
 
     </dependencies>

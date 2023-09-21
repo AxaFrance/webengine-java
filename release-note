@@ -1,0 +1,120 @@
+================================================
+webengine 3.0.0
+================================================
+What's new :
+
+1-Drive by excel
+Add module Drive by exel
+
+2- Rename GlobalConfigProperties
+Rename GlobalConfigProperties to GlobalConfiguration
+
+3- Rename ApplicationProperties
+Rename ApplicationProperties to WebengineConfiguration
+Don't forget to change the application.yml file.
+Example :
+webengineConfiguration:
+  name: spoolnet-automation
+  platformName: WINDOWS
+  browserName: CHROME
+  browserOptionList:
+
+4-AppiumSettings
+Move AppiumSettings class to WebengineConfiguration class
+Don't forget to change the application.yml file.
+Example :
+webengineConfiguration:
+  name: spoolnet-automation
+  platformName: WINDOWS
+  browserName: CHROME
+  browserOptionList:
+    - --incognito
+    - --remote-allow-origins=*
+  appiumSettings:
+    gridConnection: https://hub-cloud.browserstack.com/wd/hub
+    userName: XXXXXXX
+    password: XXXXXXX
+
+5-Rename LocalTesting
+Rename LocalTesting to LocalTestingConfiguration
+
+6-Rename CapabilitiesProperties
+Rename CapabilitiesProperties to AppiumCapabilities
+
+7-Rename AppiumSettingsProperties to AppiumConfiguration
+webengineConfiguration:
+  name: spoolnet-automation
+  platformName: WINDOWS
+  browserName: CHROME
+  browserOptionList:
+    - --incognito
+    - --remote-allow-origins=*
+  testCaseList:
+	- 	axa.fr
+	-	airfrance.fr
+  testCaseAndDataTestList:
+	axa-fr:jdd1;jdd2
+	airFrance-fr:jdd1;jdd2
+  appiumConfiguration:
+    gridConnection: https://hub-cloud.browserstack.com/wd/hub
+    userName: XXXXXXX
+    password: XXXXXXX
+    localTesting:
+      activate: false
+
+================================================
+webengine 2.2.0
+================================================
+
+What's new :
+
+1-Selenium version
+4.4.0 to 4.8.3
+
+2-webdrivermanager version
+5.2.3 to 5.3.2
+
+
+================================================
+webengine 2.1.1
+================================================
+What's new :
+
+1-Spring profiles
+Use spring profiles for application.yml. Example, "application-properties.yml" to "application-profile.yml". The profile is mentionned for spring boot.
+For instance, "application-properties.yml" to "application-recette-desktop.yml" and use this option in parameter : -Dspring.profiles.active=-recette-desktop
+Example : java -jar project-name-1.0-SNAPSHOT-exec.jar -Dspring.profiles.active=-recette-desktop "-data:C:\work\projet-git\spoolnet-automation-keyword-driven\src\main\resources\data.xml" "-env:C:\work\projet-git\spoolnet-automation-keyword-driven\src\main\resources\env.xml"
+
+If you want to pass the properties in parameter, you should use this option : --spring.config.location
+Example : java -jar project-name-1.0-SNAPSHOT-exec.jar --spring.config.location=file:///E:/partage/application-prod.yml "-data:C:\work\projet-git\spoolnet-automation-keyword-driven\src\main\resources\data.xml" "-env:C:\work\projet-git\spoolnet-automation-keyword-driven\src\main\resources\env.xml"
+
+
+2-VariableHelper class
+Change the package
+
+3-PropertiesUtilV2 Class
+Rename to PropertiesHelperProvider
+
+4-Rename report directory and files:
+run-result-SpoolnetTestSuite folder to report-test-result
+DataDrivenTestSuite-SpoolnetTestSuite file to
+Junit-SpoolnetTestSuite file to junit-report-date.xml file
+
+5-For adding logback file
+<?xml version="1.0" encoding="UTF-8"?>
+	<configuration>
+		<include resource="fr/axa/automation/webengine/logging/base.xml"/>
+		<logger name="fr.axa.automation.webengine" level="DEBUG" />
+	</configuration>
+
+6-ReportHelper class
+Change the signature of the method generateAllReport
+
+7-Parameter for for browser or environment
+You can specify the enum or the value of enum
+
+8-Gherkin project
+You should rename application-properties.yml to application.yml
+
+9-Junit
+Junit 4 to Junit 5

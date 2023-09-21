@@ -21,9 +21,9 @@ WebEngine Framework resolves some common problems every test automation project 
 -   Graphical test report.
 -   **Open Source**, free usage and let’s improve it together!
 
-## Prerequisites
+## Prerequisites 
 
-Java 8 or higher
+Java 8 or higher 
 
 Maven
 
@@ -86,7 +86,7 @@ pom.xml :
 ```
 linearExample.java :
 ```
-String baseUrl = "http://webengine-test.azurewebsites.net/";  
+String baseUrl = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";  
 Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver(Platform.WINDOWS, Browser.CHROME);  
 if(optionalWebdriver.isPresent()){  
   WebDriver driver = optionalWebdriver.get();  
@@ -172,7 +172,7 @@ sample.feature :
 Feature: Test du formulaire dans la page d'accueil  
   
   Scenario: Test du bouton OK  
-    Given I visit the test page "http://webengine-test.azurewebsites.net/"  
+    Given I visit the test page "https://axafrance.github.io/webengine-dotnet/demo/Test.html"  
     When I press on the OK button  
     And I see a pop up  
     And I click on the OK button in the pop up
@@ -290,7 +290,7 @@ For executing the project, you can run this command :
 **java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml"**
 
 With filter test case
-**java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml" "-tc:TEST_CASE_1"**
+**java -jar project-name-1.0.0-exec.jar -Dspring.profiles.active=properties-chrome "-data:C:\work\project\src\main\resources\data.xml" "-env:C:\work\project\src\main\resources\env.xml" "-testcase:TEST_CASE_1"**
 
 
 If you want run the project from addin excel, you can run this command 
@@ -310,11 +310,11 @@ env.xml
   </Variable>
   <Variable>
     <Name>URL</Name>
-    <Value>http://webengine-test.azurewebsites.net/</Value>
+    <Value>https://axafrance.github.io/webengine-dotnet/demo/Test.html</Value>
   </Variable>
   <Variable>
     <Name>URL_PROD</Name>
-    <Value>http://webengine-test.azurewebsites.net/</Value>
+    <Value>https://axafrance.github.io/webengine-dotnet/demo/Test.html</Value>
   </Variable>
 </EnvironmentVariables>
 ```
@@ -372,7 +372,7 @@ appiumSettings:
     gridConnection: https://hub-cloud.browserstack.com/wd/hub
     userName: $(userName)
     password: $(password)
-    localTesting:
+    localTestingConfiguration:
         activate: true
         arguments:
             force: true

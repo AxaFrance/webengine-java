@@ -8,13 +8,14 @@ import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
-import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.LoggerService;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
+import fr.axa.automation.webengine.report.constante.ReportPathConstant;
+import fr.axa.automation.webengine.report.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.report.helper.TestCaseMetricHelper;
 import fr.axa.automation.webengine.report.helper.TestCaseReportHelper;
-import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
-import fr.axa.automation.webengine.report.helper.frmk.WebengineReportHelper;
+import fr.axa.automation.webengine.report.helper.frmk.WebengineHtmlReportHelper;
+import fr.axa.automation.webengine.report.helper.frmk.WebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.global.ReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
 import fr.axa.automation.webengine.report.object.TestCaseMetric;
@@ -110,11 +111,10 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
 
     public void closeReport() throws  WebEngineException {
         String applicationName = "application";
-        Optional<GlobalConfigProperties> globalConfigProperties = PropertiesHelperProvider.getInstance().getDefaultGlobalConfiguration();
+        Optional<GlobalConfiguration> globalConfigProperties = PropertiesHelperProvider.getInstance().getDefaultGlobalConfiguration();
         if(globalConfigProperties.isPresent()){
-            applicationName = globalConfigProperties.get().getApplication().getName();
+            applicationName = globalConfigProperties.get().getWebengineConfiguration().getName();
         }
-
 
         TestCaseMetric testCaseMetric = TestCaseMetricHelper.getMetrics(testCaseReportMap.values());
         testSuiteReport.setEndTime(Calendar.getInstance());
@@ -124,7 +124,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         testSuiteReport.setFailed(testCaseMetric.getNumberOfTestCaseFailed());
         testSuiteReport.setIgnored(testCaseMetric.getNumberOfTestCaseIgnored());
 
-        ReportHelper reportHelper =  new ReportHelper(new WebengineReportHelper(new LoggerService()),new JunitReportHelper(new LoggerService()),new LoggerService());
-        reportHelper.generateAllReport(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(FileUtil.RUN_RESULT_DIRECTORY));
+        ReportHelper reportHelper =  new ReportHelper(new WebengineXmlReportHelper(new LoggerService()), new WebengineHtmlReportHelper(new LoggerService()), new JunitReportHelper(new LoggerService()),new LoggerService());
+        reportHelper.generateReports(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(ReportPathConstant.REPORT_DIRECTORY_NAME.getValue()));
     }
 }

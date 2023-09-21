@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.util;
 
-import fr.axa.automation.webengine.exception.WebEngineException;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.collections4.CollectionUtils;
 import org.openqa.selenium.WebDriver;

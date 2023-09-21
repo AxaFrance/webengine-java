@@ -13,5 +13,5 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WebengineTestProperties {
-    ApplicationTestProperties application;
+    WebengineConfigurationTestProperties webengineConfiguration;
 }

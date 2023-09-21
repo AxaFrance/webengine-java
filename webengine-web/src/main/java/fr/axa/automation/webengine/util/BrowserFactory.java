@@ -1,13 +1,14 @@
 package fr.axa.automation.webengine.util;
 
+import fr.axa.automation.webengine.constante.IncognitoBrowserOption;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.Browser;
-import fr.axa.automation.webengine.general.Platform;
+import fr.axa.automation.webengine.global.Browser;
+import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.helper.BrowserTypeHelper;
 import fr.axa.automation.webengine.helper.PlatformTypeHelper;
-import fr.axa.automation.webengine.properties.AppiumSettingsProperties;
-import fr.axa.automation.webengine.properties.CapabilitiesProperties;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.properties.AppiumCapabilities;
+import fr.axa.automation.webengine.properties.AppiumConfiguration;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -29,24 +30,39 @@ public final class BrowserFactory {
     private BrowserFactory() {
     }
 
-    public static Optional<WebDriver> getDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
+    public static Optional<WebDriver> getDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         if (platform == Platform.WINDOWS) {
-            return getDesktopDriver(globalConfigProperties);
+            return getDesktopDriver(globalConfiguration);
         } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
-            return getAppiumDriver(globalConfigProperties);
+            return getAppiumDriver(globalConfiguration);
         } else {
             throw new WebEngineException("Not recognized the 'platform' parameter.");
         }
     }
 
-    public static Optional<WebDriver> getDesktopDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
-        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getApplication().getBrowserName());
-        if(CollectionUtils.isEmpty(globalConfigProperties.getApplication().getBrowserOptionList())){
+    public static Optional<WebDriver> getIncognitoDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
+        Optional<WebDriver> optional = null;
+        if (platform == Platform.WINDOWS) {
+            return BrowserFactory.getWebDriver(platform, browser, IncognitoBrowserOption.getIncognitoBrowserOption(browser).getOptions());
+        } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
+           return BrowserFactory.getDriver(globalConfiguration);
+        } else {
+            throw new WebEngineException("Not recognized the 'platform' parameter.");
+        }
+    }
+
+
+
+    public static Optional<WebDriver> getDesktopDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
+        if(CollectionUtils.isEmpty(globalConfiguration.getWebengineConfiguration().getBrowserOptionList())){
             return getWebDriver(platform, browser);
         }else{
-            return getWebDriver(platform, browser,globalConfigProperties.getApplication().getBrowserOptionList());
+            return getWebDriver(platform, browser, globalConfiguration.getWebengineConfiguration().getBrowserOptionList());
         }
     }
 
@@ -80,15 +96,15 @@ public final class BrowserFactory {
     }
 
 
-    public static <T extends WebDriver> Optional<T> getAppiumDriver(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Platform platform = PlatformTypeHelper.getPlatform(globalConfigProperties.getApplication().getPlatformName());
+    public static <T extends WebDriver> Optional<T> getAppiumDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         try {
-            AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
+            AppiumConfiguration appiumSettings = globalConfiguration.getWebengineConfiguration().getAppiumConfiguration();
             if (appiumSettings != null) {
                 if (platform == Platform.ANDROID) {
-                    return (Optional<T>) Optional.of(new AndroidDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfigProperties)));
+                    return (Optional<T>) Optional.of(new AndroidDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfiguration)));
                 } else if (platform == Platform.IOS) {
-                    return (Optional<T>) Optional.of(new IOSDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfigProperties)));
+                    return (Optional<T>) Optional.of(new IOSDriver(new URL(getURLBrowserStack(appiumSettings)), getAppiumOption(globalConfiguration)));
                 } else {
                     throw new WebEngineException("Platform not recognized for getting Appium driver");
                 }
@@ -100,15 +116,15 @@ public final class BrowserFactory {
         }
     }
 
-    private static DesiredCapabilities getAppiumOption(GlobalConfigProperties globalConfigProperties) throws WebEngineException {
-        Browser browser = BrowserTypeHelper.getBrowser(globalConfigProperties.getApplication().getBrowserName());
+    private static DesiredCapabilities getAppiumOption(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME, browser.getValue());
 
         Map<String, Object> browserStackOptions = new HashMap<>();
-        AppiumSettingsProperties appiumSettings = globalConfigProperties.getAppiumSettings();
+        AppiumConfiguration appiumSettings = globalConfiguration.getWebengineConfiguration().getAppiumConfiguration();
         if (appiumSettings != null) {
-            CapabilitiesProperties capabilitiesProperties = appiumSettings.getCapabilities();
+            AppiumCapabilities capabilitiesProperties = appiumSettings.getCapabilities();
             if (MapUtils.isNotEmpty(capabilitiesProperties.getDesiredCapabilitiesMap())) {
                 browserStackOptions.putAll(capabilitiesProperties.getDesiredCapabilitiesMap());
             }
@@ -117,7 +133,7 @@ public final class BrowserFactory {
         return desiredCapabilities;
     }
 
-    private static String getURLBrowserStack(AppiumSettingsProperties appiumSettings) throws WebEngineException {
+    private static String getURLBrowserStack(AppiumConfiguration appiumSettings) throws WebEngineException {
         if (appiumSettings != null) {
             if (appiumSettings.getGridConnection().contains("browserstack.com")) {
                 return "https://" + appiumSettings.getUserName() + ":" + appiumSettings.getPassword() + "@" +appiumSettings.getGridConnection().split("(?i)https://")[1];

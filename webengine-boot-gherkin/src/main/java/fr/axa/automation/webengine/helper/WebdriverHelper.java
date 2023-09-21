@@ -1,9 +1,9 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.general.Browser;
-import fr.axa.automation.webengine.general.Platform;
-import fr.axa.automation.webengine.properties.GlobalConfigProperties;
+import fr.axa.automation.webengine.global.Browser;
+import fr.axa.automation.webengine.global.Platform;
+import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.BrowserFactory;
 import org.openqa.selenium.WebDriver;
 
@@ -24,7 +24,7 @@ public final class WebdriverHelper {
     }
 
     public static Optional<WebDriver> getDriver() throws Exception {
-        Optional<GlobalConfigProperties> optionalGlobalConfigProperties = getConfig();
+        Optional<GlobalConfiguration> optionalGlobalConfigProperties = getConfig();
         Optional<WebDriver> driver;
         if(optionalGlobalConfigProperties.isPresent()){
             driver = BrowserFactory.getDriver(optionalGlobalConfigProperties.get());
@@ -34,7 +34,7 @@ public final class WebdriverHelper {
         return driver;
     }
 
-    private static Optional<GlobalConfigProperties> getConfig() throws Exception {
+    private static Optional<GlobalConfiguration> getConfig() throws Exception {
         return PropertiesHelperProvider.getInstance().getDefaultGlobalConfiguration();
     }
 
