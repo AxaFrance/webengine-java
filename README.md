@@ -35,66 +35,78 @@ Below an example of file`pom.xml`` with the code
 pom.xml :
 ```
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>fr.axa.automation.webengine</groupId>
-		<artifactId>webengine-parent</artifactId>
-		<version>2.0.0</version>
-	</parent>
-	<artifactId>webengine-testpage-linear</artifactId>
-	<version>2.0.0</version>
-	<packaging>jar</packaging>
-	<name>webengine-testpage-linear</name>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>fr.axa.automation.webengine</groupId>
-			<artifactId>webengine-web</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-	</dependencies>
-	<dependencyManagement>
-		<dependencies></dependencies>
-	</dependencyManagement>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M7</version>
-				<configuration>
-					<useSystemClassLoader>false</useSystemClassLoader>
-				</configuration>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins></plugins>
-		</pluginManagement>
-	</build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fr.axa.automation.webengine</groupId>
+        <artifactId>webengine-parent</artifactId>
+        <version>3.0.6</version>
+    </parent>
+
+    <artifactId>webengine-test-linear</artifactId>
+    <version>3.0.6</version>
+    <packaging>jar</packaging>
+    <name>webengine-test-linear</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-web</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+        <pluginManagement>
+            <plugins />
+        </pluginManagement>
+    </build>
 </project>
 ```
 linearExample.java :
 ```
-String baseUrl = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";  
-Optional<WebDriver> optionalWebdriver =  BrowserFactory.getWebDriver(Platform.WINDOWS, Browser.CHROME);  
-if(optionalWebdriver.isPresent()){  
-  WebDriver driver = optionalWebdriver.get();  
-    driver.get(baseUrl);  
-    driver.findElement(By.id("btnButtonOk")).click();  
-    driver.switchTo().alert().getText();  
-    driver.switchTo().alert().accept();  
-    driver.quit();  
+@Test
+public void linearApproachTest() throws WebEngineException {
+    String baseUrl = "https://axafrance.github.io/webengine-dotnet/demo/Test.html";
+    if(optionalWebdriver.isPresent()){
+        WebDriver driver = optionalWebdriver.get();
+        driver.get(baseUrl);
+        driver.findElement(By.id("btnButtonOk")).click();
+        driver.switchTo().alert().getText();
+        driver.switchTo().alert().accept();
+    }
 }
 ```
 
@@ -106,160 +118,166 @@ Below an example of file`pom.xml`` with code
 pom.xml :
 ```
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>fr.axa.automation</groupId>
-	<artifactId>sample-automation-gherkin</artifactId>
-	<version>1.1.0</version>
-	<packaging>jar</packaging>
-	<name>sample-automation-gherkin</name>
-	<properties>
-		<java-source.version>1.8</java-source.version>
-		<java-target.version>1.8</java-target.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<webengine-boot-gherkin.version>2.0.0</webengine-boot-gherkin.version>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>fr.axa.automation.webengine</groupId>
-			<artifactId>webengine-boot-gherkin</artifactId>
-			<version>${webengine-boot-gherkin.version}</version>
-		</dependency>
-	</dependencies>
-	<build>
-		<resources>
-			<resource>
-				<directory>src/test/resources/config</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M7</version>
-				<configuration>
-					<includes>
-						<include>
-                            **/*RunnerTest.java
-                        </include>
-					</includes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>${java-source.version}</source>
-					<target>${java-target.version}</target>
-				</configuration>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins/>
-		</pluginManagement>
-	</build>
-	<profiles></profiles>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>fr.axa.automation.webengine</groupId>
+  <artifactId>sample-gherkin-webengine-java</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>sample-gherkin-webengine-java</name>
+
+  <properties>
+    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+    <webengine-boot-gherkin.version>3.0.6</webengine-boot-gherkin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>fr.axa.automation.webengine</groupId>
+      <artifactId>webengine-boot-gherkin</artifactId>
+      <version>${webengine-boot-gherkin.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+      </plugin>
+
+    </plugins>
+  </build>
 </project>
+
 ```
 sample.feature :
 ```
-Feature: Test du formulaire dans la page d'accueil  
-  
-  Scenario: Test du bouton OK  
-    Given I visit the test page "https://axafrance.github.io/webengine-dotnet/demo/Test.html"  
-    When I press on the OK button  
-    And I see a pop up  
-    And I click on the OK button in the pop up
+Feature: Test du parcours
+
+  Background:
+    Given I visit the test page "https://axafrance.github.io/webengine-dotnet/demo/Test.html" for running journey
+    When I click on the link Start step 1
+
+  @flow
+  Scenario: Step1
+    And I choose the language with text "Français"
+    And I want to buy a coffee
+    And I click on the first next button
 ```
 
 WebEngineHomeTestPage.java :
 ```
+package fr.axa.automation.feature.model;
+
 import fr.axa.automation.webengine.core.AbstractPageModel;
 import fr.axa.automation.webengine.core.WebElementDescription;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.openqa.selenium.WebDriver;
+
 
 @FieldDefaults(level = AccessLevel.PUBLIC)
 public class WebEngineHomeTestPage extends AbstractPageModel {
 
-  @Getter
-  WebElementDescription okButton = WebElementDescription.builder().tagName("input").id("btnButtonOk").build();
+    WebElementDescription okButton = WebElementDescription.builder().tagName("input").id("btnButtonOk").build();
 
-  @Getter
-  WebElementDescription confirmButton = WebElementDescription.builder().tagName("input").id("btnButtonConfirm").build();
+    WebElementDescription confirmButton = WebElementDescription.builder().tagName("input").id("btnButtonConfirm").build();
 
-  @Getter
-  WebElementDescription inputButton = WebElementDescription.builder().tagName("input").id("btnButtonInput").build();
+    WebElementDescription inputButton = WebElementDescription.builder().tagName("input").id("btnButtonInput").build();
 
-  @Getter
-  WebElementDescription textInput = WebElementDescription.builder().tagName("input").id("inputValue").build();
+    WebElementDescription textInput = WebElementDescription.builder().tagName("input").id("inputValue").build();
 
-  @Getter
-  WebElementDescription passwordInput = WebElementDescription.builder().tagName("password").id("password").build();
+    WebElementDescription passwordInput = WebElementDescription.builder().tagName("password").id("password").build();
 
-  @Getter
-  WebElementDescription startStep1Link = WebElementDescription.builder().tagName("a").linkText("Step1.html").build();
+    WebElementDescription startStep1Link = WebElementDescription.builder().tagName("a").linkText("Step1.html").build();
 
-  public WebEngineHomeTestPage(WebDriver webDriver) throws Exception {
-    populateDriver(webDriver);
-  }
+    public WebEngineHomeTestPage(WebDriver webDriver) throws Exception {
+        populateDriver(webDriver);
+    }
 }
+
 ```
 
 SampleFormStep.java :
 ```
+package fr.axa.automation.feature.step;
+
+
+import fr.axa.automation.feature.model.WebEngineFirstStepPage;
+import fr.axa.automation.feature.model.WebEngineFourthStepPage;
 import fr.axa.automation.feature.model.WebEngineHomeTestPage;
+import fr.axa.automation.feature.model.WebEngineSecondStepPage;
+import fr.axa.automation.feature.model.WebEngineThirdStepPage;
 import fr.axa.automation.webengine.step.AbstractStep;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
+
 @Getter
 @FieldDefaults(level = AccessLevel.PROTECTED)
-public class SampleFormStep extends AbstractStep {
+public class SampleFlowStep extends AbstractStep {
 
-  WebDriver driver;
-  WebEngineHomeTestPage pageModel;
+    WebDriver driver;
+    
+    WebEngineHomeTestPage webEngineHomeTestPage;
 
-  public SampleFormStep() throws Exception {
-    driver = Hook.webDriver;
-    pageModel = new WebEngineHomeTestPage(driver);
-  }
+    WebEngineFirstStepPage webEngineFirstStepPage;
+    
 
-  @Given("^I visit the test page \"([^\"]*)\"$")
-  public void visitTheTestPage(String url) {
-    driver.get(url);
-  }
+    public SampleFlowStep() throws Exception {
+        driver = Hook.webDriver;
+        webEngineHomeTestPage = new WebEngineHomeTestPage(driver);
+        webEngineFirstStepPage = new  WebEngineFirstStepPage(driver);       
+    }
 
-  @When("^I press on the OK button$")
-  public void pressOKButton() throws Exception {
-    getPageModel().getOkButton().click();
-  }
+    @Given("^I visit the test page \"([^\"]*)\" for running journey$")
+    public void visitTheTestPage(String url) throws InterruptedException {
+        addInformation("Open WebEngine test page");
+        driver.get(url);
+        getWebEngineHomeTestPage().sync(3); 
+        getWebEngineHomeTestPage().maximize(); 
+    }
 
-  @And("^I see a pop up$")
-  public void seePopUpAndEnterText() throws Exception {
-    String textInAlert = driver.switchTo().alert().getText();
-    Assertions.assertEquals("hello world!", textInAlert);
-  }
+    @And("^I click on the link Start step 1$")
+    public void chooseTheLanguage() throws Exception {
+        addInformation("Click on the link start step 1");
+        getWebEngineHomeTestPage().startStep1Link.click();
+    }
 
-  @And("^I click on the OK button in the pop up$")
-  public void clickButtonOKInThePopup() throws Exception {
-    driver.switchTo().alert().accept();
-  }
+    @And("^I choose the language with text \"([^\"]*)\"$")
+    public void chooseTheLanguage(String language) throws Exception {
+        addInformation("Choose the language");
+        getWebEngineFirstStepPage().language.selectByText(language);
+    }
+
+    @And("^I want to buy a coffee$")
+    public void seePopUpAndEnterText() throws Exception {
+        getWebEngineFirstStepPage().coffeeRadio.click();
+    }
+
+    @And("^I click on the first next button$")
+    public void clickFirstButtonOKInThePopup() throws Exception {
+        getWebEngineFirstStepPage().nextStep.click();
+    }    
 }
+
 ```
 
 CucumberRunnerTest.java :
@@ -431,26 +449,24 @@ public class Application implements CommandLineRunner {
 
 WebengineTestSuite.java (You have to extend AbstractTestSuite)
 ```
+package fr.axa.automation.testsuite;
 
+import com.google.common.collect.ImmutableMap;
 import fr.axa.automation.testcase.FlowTestCase;
+import fr.axa.automation.testcase.SimpleTestCase;
 import fr.axa.automation.webengine.core.AbstractTestSuite;
 import fr.axa.automation.webengine.core.ITestCase;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class WebengineTestSuite extends AbstractTestSuite {
+    public static final String TEST_CASE_1 = "TEST_CASE_1";    
 
-    public static final String TEST_CASE_1 = "TEST_CASE_1";
-
-    @Override
-    public List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> getTestCaseList() {
-        List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList = new ArrayList<>();
-        testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_1,new FlowTestCase()));
-        return testCaseList;
+    public Map<String, ? extends ITestCase> getTestCaseList() {
+        return ImmutableMap.of( TEST_CASE_1, new FlowTestCase());
     }
 }
+
 ```
 
 FlowTestCase.java (you have to implements ITestCase)
@@ -526,7 +542,7 @@ public class HomeAction extends AbstractActionWebBase {
         webEngineHomeTestPage = new WebEngineHomeTestPage(getWebDriver());
         String url = getEnvironnementValueWithException(IParameter.URL);
         getWebDriver().get(url);
-        webEngineHomeTestPage.getStartStep1Link().click();
+        webEngineHomeTestPage.startStep1Link.click();
         screenShot();
         addInformation("Home page");
         setContextValue(VariableHelper.getVariable("HOME_PAGE","SUCCESS"));
@@ -556,9 +572,9 @@ public FirstStepAction() {
     public void doAction() throws Exception {
         String language = getParameterWithException(IParameter.LANGUAGE);
         webEngineFirstStepPage = new WebEngineFirstStepPage(getWebDriver());
-        webEngineFirstStepPage.getLanguage().selectByValue(language);
-        webEngineFirstStepPage.getCoffeeRadio().click();
-        webEngineFirstStepPage.getNextStep().click();
+        webEngineFirstStepPage.language.selectByValue(language);
+        webEngineFirstStepPage.coffeeRadio.click();
+        webEngineFirstStepPage.nextStep.click();
         screenShot();
         addInformation("First step succeed");
     }
