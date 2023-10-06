@@ -21,9 +21,9 @@ public class ThirdStepAction extends AbstractActionWebBase {
         String date = getParameterWithException(IParameter.DATE);
         String password = getParameterWithException(IParameter.PASSWORD);
         webEngineThirdStepPage = new WebEngineThirdStepPage(getWebDriver());
-        webEngineThirdStepPage.getDateInput().setValue(date);
-        webEngineThirdStepPage.getPasswordInput().setValue(password);
-        webEngineThirdStepPage.getNextStep().click();
+        webEngineThirdStepPage.dateInput.setValue(date);
+        webEngineThirdStepPage.passwordInput.setValue(password);
+        webEngineThirdStepPage.nextStep.click();
         getWebDriver().switchTo().alert().accept();
         screenShot();
         addInformation("Second step succeed");

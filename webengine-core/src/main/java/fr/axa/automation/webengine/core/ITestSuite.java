@@ -1,8 +1,7 @@
 package fr.axa.automation.webengine.core;
 
-import java.util.AbstractMap;
-import java.util.List;
+import java.util.Map;
 
 public interface ITestSuite {
-   List<AbstractMap.SimpleEntry<String,? extends ITestCase>> getTestCaseList();
+   Map<String,? extends ITestCase> getTestCaseList();
 }

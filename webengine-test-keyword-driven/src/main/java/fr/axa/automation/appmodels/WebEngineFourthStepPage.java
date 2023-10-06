@@ -12,8 +12,6 @@ import org.openqa.selenium.WebDriver;
 @FieldDefaults(level = AccessLevel.PUBLIC)
 public class WebEngineFourthStepPage extends AbstractPageModel {
 
-    @Getter
-    @Setter
     WebElementDescription doneTitle = WebElementDescription.builder().tagName("h1").xPath(".//h1[contains(text(),\"DONE\")]").build();
 
     public WebEngineFourthStepPage(WebDriver webDriver) throws Exception {

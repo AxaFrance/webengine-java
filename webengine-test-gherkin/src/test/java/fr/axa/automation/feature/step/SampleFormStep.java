@@ -34,7 +34,7 @@ public class SampleFormStep extends AbstractStep {
     @When("^I press on the OK button$")
     public void pressOKButton() throws Exception {
         addInformation("I press the OK button");
-        getPageModel().getOkButton().click();
+        getPageModel().okButton.click();
     }
 
     @And("^I see a pop up$")

@@ -19,7 +19,7 @@ public class FourthStepAction extends AbstractActionWebBase {
     @Override
     public void doAction() throws Exception {
         webEngineFourthStepPage = new WebEngineFourthStepPage(getWebDriver());
-        Assertions.assertEquals("DONE", webEngineFourthStepPage.getDoneTitle().getText());
+        Assertions.assertEquals("DONE", webEngineFourthStepPage.doneTitle.getText());
         screenShot();
         addInformation("Fourth step succeed");
     }

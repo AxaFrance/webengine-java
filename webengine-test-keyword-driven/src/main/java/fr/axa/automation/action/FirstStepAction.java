@@ -19,11 +19,11 @@ public class FirstStepAction extends AbstractActionWebBase {
         String language = getParameterWithException(IParameter.LANGUAGE);
         webEngineFirstStepPage = new WebEngineFirstStepPage(getWebDriver());
         screenShot("begin");
-        webEngineFirstStepPage.getLanguage().highLight();
-        webEngineFirstStepPage.getLanguage().selectByValue(language);
-        webEngineFirstStepPage.getCoffeeRadio().scrollIntoViewAndclick();
-        webEngineFirstStepPage.getNextStep().click();
-        screenShot(webEngineFirstStepPage.getLanguage());
+        webEngineFirstStepPage.language.highLight();
+        webEngineFirstStepPage.language.selectByValue(language);
+        webEngineFirstStepPage.coffeeRadio.scrollIntoViewAndclick();
+        webEngineFirstStepPage.nextStep.click();
+        screenShot(webEngineFirstStepPage.language);
         screenShot("end");
         screenShot("end");
         screenShot("end");

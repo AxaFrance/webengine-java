@@ -1,26 +1,21 @@
 package fr.axa.automation.testsuite;
 
+import com.google.common.collect.ImmutableMap;
 import fr.axa.automation.testcase.FlowTestCase;
 import fr.axa.automation.testcase.SimpleTestCase;
 import fr.axa.automation.webengine.core.AbstractTestSuite;
 import fr.axa.automation.webengine.core.ITestCase;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class WebengineTestSuite extends AbstractTestSuite {
-
     public static final String TEST_CASE_1 = "TEST_CASE_1";
     public static final String TEST_CASE_2 = "TEST_CASE_2";
     public static final String TEST_CASE_3 = "TEST_CASE_3";
 
-    @Override
-    public List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> getTestCaseList() {
-        List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList = new ArrayList<>();
-        testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_1,new FlowTestCase()));
-        testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_2,new SimpleTestCase())); //--Doesn't run because it's not present in testData file
-        testCaseList.add(new AbstractMap.SimpleEntry<String, ITestCase>(TEST_CASE_3,new SimpleTestCase())); //--Doesn't run because it's not present in Argument line, cf Class ApplicationTest
-        return testCaseList;
+    public Map<String, ? extends ITestCase> getTestCaseList() {
+        return ImmutableMap.of( TEST_CASE_1, new FlowTestCase(),
+                                TEST_CASE_2, new SimpleTestCase(),
+                                TEST_CASE_3, new SimpleTestCase());
     }
 }

@@ -20,9 +20,9 @@ public class SecondStepAction extends AbstractActionWebBase {
     public void doAction() throws Exception {
         String comment = getParameterWithException(IParameter.COMMENT);
         webEngineSecondStepPage = new WebEngineSecondStepPage(getWebDriver());
-        webEngineSecondStepPage.getResultTextarea().setValue(comment);
-        webEngineSecondStepPage.getHornsCheckbox().click();
-        webEngineSecondStepPage.getNextStep().click();
+        webEngineSecondStepPage.resultTextarea.setValue(comment);
+        webEngineSecondStepPage.hornsCheckbox.click();
+        webEngineSecondStepPage.nextStep.click();
         screenShot();
         addInformation("Second step succeed");
     }
