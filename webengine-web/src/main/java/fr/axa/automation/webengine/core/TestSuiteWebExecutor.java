@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.net.UnknownHostException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -46,7 +45,7 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
 
         try {
             if (testSuite != null) {
-                List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList = testSuite.getTestCaseList();
+                Map<String, ? extends ITestCase> testCaseList = testSuite.getTestCaseList();
                 testCaseReportList.addAll(runTestCase(globalApplicationContext, testCaseList));
             }
         } catch (WebEngineException e) {
@@ -59,13 +58,13 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
         return testSuiteReport;
     }
 
-    protected List<TestCaseReport> runTestCase(AbstractGlobalApplicationContext globalAppContext, List<AbstractMap.SimpleEntry<String, ? extends ITestCase>> testCaseList) throws WebEngineException {
+    protected List<TestCaseReport> runTestCase(AbstractGlobalApplicationContext globalAppContext, Map<String, ? extends ITestCase> testCaseList) throws WebEngineException {
         GlobalApplicationContext globalApplicationContext = (GlobalApplicationContext) globalAppContext;
-        if (CollectionUtils.isEmpty(testCaseList)) {
+        if (MapUtils.isEmpty(testCaseList)) {
             throw new WebEngineException("No Test case found in the project");
         }
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
-        for (AbstractMap.SimpleEntry<String, ? extends ITestCase> entry : testCaseList) {
+        for (Map.Entry<String, ? extends ITestCase> entry : testCaseList.entrySet()) {
             String testCaseName = entry.getKey();
             ITestCase testCase = entry.getValue();
             if (isCanRunTestCase(testCaseName, globalApplicationContext) && isTestCaseExistInTestData(testCaseName, globalApplicationContext) && isTestCaseDefineInCommandLine(testCaseName,globalApplicationContext)) {

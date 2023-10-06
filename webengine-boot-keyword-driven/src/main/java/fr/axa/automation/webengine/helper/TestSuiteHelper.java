@@ -19,7 +19,6 @@ import fr.axa.automation.webengine.util.XmlUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +98,7 @@ public final class TestSuiteHelper extends AbstractTestSuiteHelper {
     public static Map<String, TestCaseAdditionalInformation> getTestCaseAdditionalInformation(ITestSuite testSuite, TestSuiteData testSuiteData) throws WebEngineException {
         Map<String, TestCaseAdditionalInformation> map = new HashMap<>();
         if (testSuite != null) {
-            for (AbstractMap.SimpleEntry<String, ? extends ITestCase> entry : testSuite.getTestCaseList()) {
+            for (Map.Entry<String, ? extends ITestCase> entry : testSuite.getTestCaseList().entrySet()) {
                 String testCaseName = entry.getKey();
                 List<? extends ITestStep> testStepList = entry.getValue().getTestStepList();
                 for (ITestStep testStep : testStepList) {

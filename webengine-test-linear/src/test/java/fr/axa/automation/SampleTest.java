@@ -59,9 +59,9 @@ public class SampleTest {
             WebDriver driver = optionalWebdriver.get();
             driver.get(baseUrl);
             Page page = new Page(driver);
-            page.getLanguage().selectByText("Français");
-            page.getCoffeeRadio().click();
-            page.getNextStep().click();
+            page.language.selectByText("Français");
+            page.coffeeRadio.click();
+            page.nextStep.click();
         }
     }
 }
