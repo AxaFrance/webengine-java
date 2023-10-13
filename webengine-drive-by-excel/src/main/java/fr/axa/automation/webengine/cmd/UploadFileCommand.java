@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -28,9 +29,13 @@ public class UploadFileCommand extends AbstractDriverCommand {
         uploadLikeImatatingMouse(globalApplicationContext, value);
     }
 
-    private String getFilePath(AbstractGlobalApplicationContext globalApplicationContext, String value) throws AWTException {
-        String filepath =  ((SettingsNoCode) globalApplicationContext.getSettings()).getDataTestFileName();
-        return Paths.get(filepath).getParent().toString() + File.separator + "Upload" + File.separator + value ;
+    private String getFilePath(AbstractGlobalApplicationContext globalApplicationContext, String value) {
+        if (Files.exists(Paths.get(value))){
+            return value;
+        }else {
+            String filepath = ((SettingsNoCode) globalApplicationContext.getSettings()).getDataTestFileName();
+            return Paths.get(filepath).getParent().toString() + File.separator + "Upload" + File.separator + value;
+        }
     }
 
 
