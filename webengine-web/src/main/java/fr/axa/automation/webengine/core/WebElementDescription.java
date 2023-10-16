@@ -18,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -234,7 +235,7 @@ public class WebElementDescription extends AbstractWebElement{
             if (CollectionUtils.isNotEmpty(webElementList)) {
                 return webElementList.stream().filter(webElement -> innerText.equalsIgnoreCase(webElement.getText())).collect(Collectors.toList());
             }
-            String innerTextTrimmed = StringUtils.trim(innerText);
+            String innerTextTrimmed = StringEscapeUtils.escapeJava(StringUtils.trim(innerText));
             return getInternalFindElementByXpath("//*[text()='" + innerTextTrimmed + "']");
         }
         return new ArrayList<>();
