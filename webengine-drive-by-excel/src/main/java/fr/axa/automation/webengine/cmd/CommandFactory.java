@@ -10,6 +10,8 @@ public class CommandFactory {
                 return new OpenCommand();
             case OPEN_PRIVATE:
                 return new OpenInPrivateModeCommand();
+            case CLEAR:
+                return new ClearCommand();
             case SEND_KEYS:
                 return new SendKeysCommand();
             case SEND_KEYS_WITH_CLEAR:
