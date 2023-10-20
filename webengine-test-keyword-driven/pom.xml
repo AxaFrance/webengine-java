@@ -5,11 +5,11 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>3.0.7</version>
+        <version>3.0.10</version>
     </parent>
     
     <artifactId>webengine-test-keyword-driven</artifactId>
-    <version>3.0.7</version>
+    <version>3.0.10</version>
     <packaging>jar</packaging>
     <name>webengine-test-keyword-driven</name>
 
