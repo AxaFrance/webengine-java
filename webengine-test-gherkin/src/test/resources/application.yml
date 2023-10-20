@@ -2,6 +2,7 @@ webengineConfiguration:
     name: webengine-automation-gherkin
     platformName: WINDOWS
     browserName: CHROME
+    browserVersion:  118.0.5993.71
     browserOptionList:
         - --incognito
         - --remote-allow-origins=*
