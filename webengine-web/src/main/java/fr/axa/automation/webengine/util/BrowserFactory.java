@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.constante.IncognitoBrowserOption;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.Browser;
+import fr.axa.automation.webengine.global.BrowserDetail;
 import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.helper.BrowserTypeHelper;
 import fr.axa.automation.webengine.helper.PlatformTypeHelper;
@@ -44,26 +45,24 @@ public final class BrowserFactory {
     public static Optional<WebDriver> getIncognitoDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
-        Optional<WebDriver> optional = null;
         if (platform == Platform.WINDOWS) {
-            return BrowserFactory.getWebDriver(platform, browser, IncognitoBrowserOption.getIncognitoBrowserOption(browser).getOptions());
+            return getWebDriver(platform, browser, IncognitoBrowserOption.getIncognitoBrowserOption(browser).getOptions());
         } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
-           return BrowserFactory.getDriver(globalConfiguration);
+            return getAppiumDriver(globalConfiguration);
         } else {
             throw new WebEngineException("Not recognized the 'platform' parameter.");
         }
     }
 
-
-
     public static Optional<WebDriver> getDesktopDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
+        String browserVersion = globalConfiguration.getWebengineConfiguration().getBrowserVersion();
+        List<String> browserOptionList = globalConfiguration.getWebengineConfiguration().getBrowserOptionList();
         if(CollectionUtils.isEmpty(globalConfiguration.getWebengineConfiguration().getBrowserOptionList())){
-            return getWebDriver(platform, browser);
-        }else{
-            return getWebDriver(platform, browser, globalConfiguration.getWebengineConfiguration().getBrowserOptionList());
+            browserOptionList = Collections.emptyList();
         }
+        return getWebDriver(platform, browser, browserVersion, browserOptionList);
     }
 
     public static Optional<WebDriver> getWebDriver(String platform, String browser) throws WebEngineException {
@@ -79,14 +78,38 @@ public final class BrowserFactory {
     }
 
     public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, List<String> browserOptionList) throws WebEngineException {
+        BrowserDetail browserDetail = BrowserDetail.builder()
+                .platform(platform)
+                .browser(browser)
+                .browserOptionList(browserOptionList).build();
+        return getWebDriver(browserDetail);
+    }
+
+    public static Optional<WebDriver> getWebDriver(String platform, String browser, String browserVersion, List<String> browserOptionList) throws WebEngineException {
+        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser), browserVersion, browserOptionList);
+    }
+
+    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, String browserVersion, List<String> browserOptionList) throws WebEngineException {
+        BrowserDetail browserDetail = BrowserDetail.builder()
+                .platform(platform)
+                .browser(browser)
+                .browserVersion(browserVersion)
+                .browserOptionList(browserOptionList).build();
+        return getWebDriver(browserDetail);
+    }
+
+    public static Optional<WebDriver> getWebDriver(BrowserDetail browserDetail) throws WebEngineException {
         WebDriver webDriver = null;
-        if (platform == Platform.WINDOWS) {
+        Browser browser = browserDetail.getBrowser();
+        String browserVersion = browserDetail.getBrowserVersion();
+        List<String> browserOptionList = browserDetail.getBrowserOptionList();
+        if (browserDetail.getPlatform() == Platform.WINDOWS) {
             if (browser == Browser.CHROME) {
-                webDriver = ChromeDriverUtil.getChromeDriver(browserOptionList);
+                webDriver = ChromeDriverUtil.getChromeDriver(browserVersion,browserOptionList);
             } else if (browser == Browser.CHROMIUM_EDGE) {
-                webDriver = EdgeDriverUtil.getEdgeDriver(browserOptionList);
+                webDriver = EdgeDriverUtil.getEdgeDriver(browserVersion,browserOptionList);
             } else if (browser == Browser.FIREFOX) {
-                webDriver = FirefoxDriverUtil.getFirefoxDriver(browserOptionList);
+                webDriver = FirefoxDriverUtil.getFirefoxDriver(browserVersion,browserOptionList);
             }else{
                 throw new WebEngineException("Browser not recognized");
             }

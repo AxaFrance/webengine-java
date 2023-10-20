@@ -16,9 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class WebengineConfiguration {
     String name;
-    String platformName;
-    String browserName;
+    String platformName = null;
+    String browserName = null;
+    String browserVersion = null;
     List<String> browserOptionList;
     String outputDir;
     AppiumConfiguration appiumConfiguration;
 }
+
