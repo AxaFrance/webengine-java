@@ -23,6 +23,10 @@ public enum CommandName {
     OPEN_PRIVATE(ImmutableMap.of( Locale.ENGLISH, "open private" , Locale.FRENCH, "ouvrir en mode privé" ),
             ImmutableMap.of( Locale.ENGLISH, "Open browser in private mode with the given url" ,
                     Locale.FRENCH, "Ouverture du navigateur en mode privé avec l'url indiqué" )),
+    CLEAR(ImmutableMap.of( Locale.ENGLISH, "Clear" ,Locale.FRENCH, "Effacer" ),
+            ImmutableMap.of( Locale.ENGLISH, "Clear the given text field" ,
+                    Locale.FRENCH, "Effacer le champ texte défini dans la colonne identification" )),
+
     SEND_KEYS(ImmutableMap.of( Locale.ENGLISH, "send keys" ,Locale.FRENCH, "écrire" ),
             ImmutableMap.of( Locale.ENGLISH, "Send keys to the given text field" ,
                     Locale.FRENCH, "Ecriture dans le champ texte défini dans la colonne identification" )),
