@@ -8,6 +8,8 @@ import fr.axa.automation.webengine.constante.HtmlTag;
 import fr.axa.automation.webengine.constante.LocatingBy;
 import fr.axa.automation.webengine.exception.MultipleElementException;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.global.ElementContent;
+import fr.axa.automation.webengine.global.ElementContentForInputSelect;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.StringUtil;
@@ -502,13 +504,30 @@ public class WebElementDescription extends AbstractWebElement{
         return retry(fun,null);
     }
 
+    public ElementContent getContentByElementType() throws Exception {
+        IFunction<String, ElementContent> fun = (value) ->{
+            Map<String,List<String>> contentList = new HashMap<>();
+            WebElement webElement = this.findElement();
+            focus(webElement);
+            if(isInputSelect(webElement)){
+                return getTextAndValueContentInSelect(webElement);
+            }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
+                return ElementContent.builder().value(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue())).build();
+            }else{
+                return ElementContent.builder().value(webElement.getText()).build();
+            }
+        };
+        return retry(fun,null);
+    }
+
+
     public void selectByValueOrText(String text) throws Exception {
         IFunction<String, Void> fun = (value) -> {
             WebElement webElement = this.findElement();
             focus(webElement);
             click(webElement);
             Select select = new Select(webElement);
-            List<WebElement> elementListInSelect = getElementExistInSelect(select,value);
+            List<WebElement> elementListInSelect = getElementByTextInSelect(select,value);
             if(CollectionUtils.isNotEmpty(elementListInSelect) && elementListInSelect.size()==1){
                 select.selectByVisibleText(elementListInSelect.get(0).getText());
             }else if(isValueExistInSelect(select,value)){
@@ -521,31 +540,24 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,text);
     }
 
-    private boolean isTextExistInSelect(Select select, String expected) {
-        List<String> optionTextList = getOptionTextListInSelect(select);
-        return optionTextList.stream().anyMatch(optionText -> StringUtil.equalsIgnoreCase(optionText,expected) || StringUtil.contains(optionText,expected.split("\\*{4}")[0].trim()));
-    }
-
-    private List<String> getOptionTextListInSelect(Select select) {
-        return select.getOptions().stream().map(webElement ->  webElement.getText()).collect(Collectors.toList());
-    }
-
-    private List<WebElement> getElementExistInSelect(Select select, String expected) {
-        List<WebElement> elementListInSelect = getElementListInSelect(select);
-        return elementListInSelect.stream().filter(webElement -> StringUtil.equalsIgnoreCase(webElement.getText(),expected) || StringUtil.contains(webElement.getText(),expected.split("\\*{4}")[0].trim())).collect(Collectors.toList());
-    }
-
-    private List<WebElement> getElementListInSelect(Select select) {
-        return select.getOptions().stream().map(webElement ->  webElement).collect(Collectors.toList());
-    }
-
     private boolean isValueExistInSelect(Select select, String expected) {
-        List<String> optionValueList = getOptionValueListInSelect(select);
+        List<String> optionValueList = new ArrayList<>(getValueAndTextInInputSelect(select).keySet());
         return optionValueList.stream().anyMatch(optionValue -> StringUtil.equalsIgnoreCase(optionValue,expected));
     }
 
-    private List<String> getOptionValueListInSelect(Select select) {
-        return select.getOptions().stream().map(webElement ->  webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue())).collect(Collectors.toList());
+    private boolean isTextExistInSelect(Select select, String expected) {
+        List<String> optionTextList = (List<String>) getValueAndTextInInputSelect(select).values();
+        return optionTextList.stream().anyMatch(optionText -> StringUtil.equalsIgnoreCase(optionText,expected) || StringUtil.contains(optionText,expected.split("\\*{4}")[0].trim()));
+    }
+
+    private List<WebElement> getElementByTextInSelect(Select select, String text) {
+        return select.getOptions().stream().filter(webElement -> StringUtil.equalsIgnoreCase(webElement.getText(),text) || StringUtil.contains(webElement.getText(),text.split("\\*{4}")[0].trim())).collect(Collectors.toList());
+    }
+
+    public Map<String,String> getValueAndTextInInputSelect(Select select) {
+        Map<String,String> valueAndText = new HashMap<>();
+        select.getOptions().stream().forEach(webElement -> valueAndText.put(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue()),webElement.getText()));
+        return valueAndText;
     }
 
     public String getTextByElement() throws Exception {
@@ -553,7 +565,7 @@ public class WebElementDescription extends AbstractWebElement{
             WebElement webElement = this.findElement();
             focus(webElement);
             if(isInputSelect(webElement)){
-                return getSelectedOption(webElement);
+                return getSelectedOption(webElement).getValueAndTextMap().entrySet().stream().findFirst().get().getValue();
             }else if(isTypeElementByAttribute(webElement, HtmlAttributeValueConstant.ATTRIBUTE_TYPE_TEXT) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
                 return webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
             }else{
@@ -563,8 +575,8 @@ public class WebElementDescription extends AbstractWebElement{
         return retry(fun,null);
     }
 
-    public String getSelectedOption() throws Exception {
-        IFunction<String, String> fun = (value) ->{
+    public ElementContent getSelectedOption() throws Exception {
+        IFunction<String, ElementContent> fun = (value) ->{
             WebElement webElement = this.findElement();
             focus(webElement);
             if(isInputSelect(webElement)){
@@ -574,24 +586,6 @@ public class WebElementDescription extends AbstractWebElement{
             }
         };
         return retry(fun,null);
-    }
-
-    public Map<String,List<String>> getContentByElementType(String expected) throws Exception {
-        IFunction<String, Map<String,List<String>>> fun = (value) ->{
-            Map<String,List<String>> contentList = new HashMap<>();
-            WebElement webElement = this.findElement();
-            focus(webElement);
-            if(isInputSelect(webElement)){
-                contentList = getTextAndValueContentInSelect(webElement);
-            }else if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue()) || StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.TEXTAREA.getValue())){
-                contentList.put(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue())));
-            }else{
-                contentList.put(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue(), Arrays.asList(webElement.getText()));
-
-            }
-            return contentList;
-        };
-        return retry(fun,expected);
     }
 
     public boolean assertContentByElementType(String text) throws Exception {
@@ -626,34 +620,34 @@ public class WebElementDescription extends AbstractWebElement{
         return retry(fun,null);
     }
 
-    private String getSelectedOption(WebElement webElement) throws Exception{
+    private ElementContentForInputSelect getSelectedOption(WebElement webElement) throws Exception{
         if(webElement!=null){
             Select select = new Select(webElement);
             if (!webElement.isEnabled()){
                 throw new Exception("Select WebElement is not enabled for the while...");
             }
-            List<WebElement> webElementList = select.getOptions().stream().filter(we -> we.isSelected()).collect(Collectors.toList());
+            List<WebElement> webElementList = select.getOptions().stream().filter(webElementOption -> webElementOption.isSelected()).collect(Collectors.toList());
             if(CollectionUtils.isNotEmpty(webElementList)){
                 if(webElementList.size()>1){
-                    throw new Exception("Impossible case, many options are selected, not only one");
+                    throw new Exception("Impossible case, many options are selected, only one element can be selected");
                 }
                 Optional<WebElement> webElementSelected = webElementList.stream().findFirst();
                 if(webElementSelected.isPresent()){
-                    return webElementSelected.get().getText();
+                    Map<String, String> valueAndTextMap = new HashMap<>();
+                    valueAndTextMap.put(webElementSelected.get().getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue()), webElementSelected.get().getText());
+                    return ElementContentForInputSelect.builder().valueAndTextMap(valueAndTextMap).build();
                 }
             }
         }
-        return StringUtils.EMPTY;
+        return null;
     }
 
-    private Map<String,List<String>> getTextAndValueContentInSelect(WebElement webElement){
-        Map<String,List<String>> contentSelecteMap = new HashMap<>();
+    private ElementContentForInputSelect getTextAndValueContentInSelect(WebElement webElement){
         if(webElement!=null){
             Select select = new Select(webElement);
-            contentSelecteMap.put("text",getOptionTextListInSelect(select));
-            contentSelecteMap.put(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue(),getOptionValueListInSelect(select));
+            return ElementContentForInputSelect.builder().valueAndTextMap(getValueAndTextInInputSelect(select)).build();
         }
-        return contentSelecteMap;
+        return null;
     }
 
     private boolean assertContentInSelect(WebElement webElement,String expected){

@@ -10,12 +10,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public enum FormatDate {
     DDMMYYYY("dd/MM/yyyy"),
-
-    DDMMYYYYHHMM("ddMMyyyyhhmm"),
-
+    DDMMYYYYHHMMSS("dd/MM/yyyy HH:mm:ss"),
     YYYYMMDD_HH("yyyyMMdd-HH"),
     YYYYMMDD_HHMMSS("yyyyMMdd-HHMMSS"),
-
     YYYYMMDD_T_HHMMSS("yyyy-MM-dd'T'HH:mm:ss");
 
     final String format;

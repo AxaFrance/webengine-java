@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.util;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -93,5 +94,7 @@ public final class DateUtil {
         return addMonth(formatDate,month*(-1));
     }
 
-
+    public static Long getCurrentTimestamp(){
+        return new Timestamp(System.currentTimeMillis()).getTime();
+    }
 }

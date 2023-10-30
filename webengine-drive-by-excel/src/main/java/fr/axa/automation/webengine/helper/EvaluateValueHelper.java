@@ -126,14 +126,16 @@ public class EvaluateValueHelper {
 
     private static String replaceTagDateValue(String value){
         String onlyTagValue = getOnlyTagValue(value);
-        if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstantNoCode.MINUS.getValue())) {
+        if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TIMESTAMP.getTagValue())) {
+            return DateUtil.getCurrentTimestamp().toString();
+        }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstantNoCode.MINUS.getValue())) {
             return DateUtil.minusDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstantNoCode.PLUS.getValue())) {
             return DateUtil.addDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue())) {
             return DateUtil.getDateTime(FormatDate.DDMMYYYY);
         }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY_HOUR.getTagValue())) {
-            return DateUtil.getDateTime(FormatDate.DDMMYYYYHHMM);
+            return DateUtil.getDateTime(FormatDate.DDMMYYYYHHMMSS);
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_ANTERIOR_DAY.getTagValue()) && StringUtil.contains(value, PredefinedDateTagValue.TAG_YESTERDAY.getTagValue())) {
             return DateUtil.minusDay(FormatDate.DDMMYYYY,1);
         }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_NEXT_DAY.getTagValue()) && StringUtil.contains(value, PredefinedDateTagValue.TAG_PAST_DAY.getTagValue())) {

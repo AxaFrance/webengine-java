@@ -4,9 +4,12 @@ import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.ElementContent;
+import fr.axa.automation.webengine.global.ElementContentForInputSelect;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
+import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,17 +22,29 @@ public class AssertContentCommand extends AbstractDriverCommand {
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
         webElementDescription = populateWebElement(globalApplicationContext, testCaseContext, commandData, commandResultList);
-        String expected = getValue(globalApplicationContext, (TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        Map<String, List<String>> contentMap = webElementDescription.getContentByElementType(expected);
+        String expectedValue = getValue(globalApplicationContext, (TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+        ElementContent elementContent = webElementDescription.getContentByElementType();
+        String result = null;
 
-        Map<String, List<String>> filterContentMap = contentMap.entrySet().stream()
-                .filter(entry -> entry.getValue().contains(expected) || entry.getKey().contains(expected))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        if(elementContent instanceof ElementContentForInputSelect){
+            Map<String, String> actualValueMap = ((ElementContentForInputSelect)elementContent).getValueAndTextMap()
+                    .entrySet().stream()
+                    .filter(entry -> StringUtil.equalsIgnoreCase(expectedValue,entry.getValue()) || StringUtil.equalsIgnoreCase(expectedValue,entry.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            if (MapUtils.isEmpty(actualValueMap)) {
+                result = ((ElementContentForInputSelect)elementContent).getValueAndTextMap().toString();
+            }
+        }else{
+            String actualValue = elementContent.getValue();
+            if(!StringUtil.equalsIgnoreCase(expectedValue,actualValue)){
+                result = actualValue;
+            }
+        }
 
-        if (MapUtils.isEmpty(filterContentMap)) {
-            String errorMessage = "The expected value is : '" + expected + "'";
+        if(StringUtils.isNotEmpty(result)){
+            String errorMessage = "The expected value is : '" + expectedValue + "'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
-            errorMessage = "The actual contentMap is : '" + StringUtils.substringBetween(contentMap.values().toString(), "[[", "]]")   +"'";
+            errorMessage = "The actual value is : '" + result + "'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }
