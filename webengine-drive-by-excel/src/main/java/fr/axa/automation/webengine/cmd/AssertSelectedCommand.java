@@ -4,7 +4,7 @@ import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.ElementContentForInputSelect;
+import fr.axa.automation.webengine.global.ElementContentSelect;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
@@ -19,23 +19,23 @@ public class AssertSelectedCommand extends AbstractDriverCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
         String expectedValue = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        ElementContentForInputSelect elementContentForInputSelect = (ElementContentForInputSelect)webElementDescription.getSelectedOption();
-        if(!assertion(elementContentForInputSelect,expectedValue)){
+        ElementContentSelect elementContentSelect = (ElementContentSelect)webElementDescription.getSelectedOption();
+        if(!assertion(elementContentSelect,expectedValue)){
             String errorMessage = "The expected value is : '" + expectedValue + "'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
-            errorMessage = "The actual selected option is : '" + elementContentForInputSelect.getValueAndTextMap().entrySet().stream().findFirst().get() + "'";
+            errorMessage = "The actual selected option is : '" + elementContentSelect.getValueAndTextMap().entrySet().stream().findFirst().get() + "'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }
     }
 
-    protected boolean assertion(ElementContentForInputSelect elementContentForInputSelect, String expected){
-        if(elementContentForInputSelect != null && MapUtils.isNotEmpty(elementContentForInputSelect.getValueAndTextMap())){
-            String actualValue = elementContentForInputSelect.getValueAndTextMap().entrySet().stream().findFirst().get().getKey();
+    protected boolean assertion(ElementContentSelect elementContentSelect, String expected){
+        if(elementContentSelect != null && MapUtils.isNotEmpty(elementContentSelect.getValueAndTextMap())){
+            String actualValue = elementContentSelect.getValueAndTextMap().entrySet().stream().findFirst().get().getKey();
             if(StringUtil.equalsIgnoreCase(expected, actualValue)){
                 return true;
             }
-            String actualText = elementContentForInputSelect.getValueAndTextMap().entrySet().stream().findFirst().get().getValue();
+            String actualText = elementContentSelect.getValueAndTextMap().entrySet().stream().findFirst().get().getValue();
             if(actualText.contains(expected)){
                 return true;
             }

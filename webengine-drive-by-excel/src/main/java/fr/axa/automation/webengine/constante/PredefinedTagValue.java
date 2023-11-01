@@ -16,11 +16,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public enum PredefinedTagValue {
     EXISTS ("exist"),
-
     NOT_EXISTS ("notExist"),
-
     EMPTY ("empty"),
-
     NOT_EMPTY ("notEmpty"),
     CHECKED ("checked"),
     NOT_CHECKED("notChecked"),

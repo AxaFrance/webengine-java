@@ -4,7 +4,7 @@ import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.ElementContentForInputSelect;
+import fr.axa.automation.webengine.global.ElementContentSelect;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
@@ -17,11 +17,11 @@ public class AssertNotSelectedCommand extends AssertSelectedCommand{
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
         String expectedValue = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        ElementContentForInputSelect elementContentForInputSelect = (ElementContentForInputSelect)webElementDescription.getSelectedOption();
-        if(assertion(elementContentForInputSelect,expectedValue)){
+        ElementContentSelect elementContentSelect = (ElementContentSelect)webElementDescription.getSelectedOption();
+        if(assertion(elementContentSelect,expectedValue)){
             String errorMessage = "The expected value is : '" + expectedValue + "'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
-            errorMessage = "The actual selected option is : '" + elementContentForInputSelect.getValueAndTextMap().entrySet().stream().findFirst().get() + "'";
+            errorMessage = "The actual selected option is : '" + elementContentSelect.getValueAndTextMap().entrySet().stream().findFirst().get() + "'";
             getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }

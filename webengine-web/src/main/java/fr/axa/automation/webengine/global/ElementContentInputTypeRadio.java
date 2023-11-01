@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Map;
-
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @SuperBuilder
-public class ElementContentForInputSelect extends ElementContent{
-    Map<String,String> valueAndTextMap;
+public class ElementContentInputTypeRadio extends ElementContent{
+    String attributeChecked;
 }
