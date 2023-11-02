@@ -388,26 +388,31 @@ public class WebElementDescription extends AbstractWebElement{
     }
 
     public void focusAndSendKeysWithClear(String text) throws Exception {
-        IFunction<String, Void> fun = (x) -> {
+        IFunction<String, Void> fun = (sendKeysValue) -> {
             WebElement webElement = findElement();
             focus(webElement);
             highLight(webElement);
-            sendKeysWithClear(x,webElement);
+            sendKeysWithClear(sendKeysValue,webElement);
+            waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
+            String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
+            if(!StringUtil.equalsIgnoreCase(sendKeysValue,actualValue)){
+                throw new Exception("The send keys value is :'" + sendKeysValue +"' and the actual value is :'" + actualValue + "'");
+            }
             return null;
         };
         retry(fun,text);
     }
 
     public void focusAndSendKeys(String text) throws Exception {
-        IFunction<String, Void> fun = (x) -> {
+        IFunction<String, Void> fun = (sendKeysValue) -> {
             WebElement webElement = findElement();
             focus(webElement);
             highLight(webElement);
-            sendKeys(x,webElement);
+            sendKeys(sendKeysValue,webElement);
             waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
-            String value = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
-            if(!StringUtil.equalsIgnoreCase(x,value)){
-                throw new Exception("Not the same value");
+            String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
+            if(!StringUtil.equalsIgnoreCase(sendKeysValue,actualValue)){
+                throw new Exception("The send keys value is :'" + sendKeysValue +"' and the actual value is :'" + actualValue + "'");
             }
             return null;
         };
