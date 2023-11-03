@@ -43,7 +43,7 @@ public final class FunctionUtil {
         throw exception;
     }
 
-    private static  void waitInMillisecondes(Long milliseconds) throws InterruptedException {
+    private static void waitInMillisecondes(Long milliseconds) throws InterruptedException {
         Thread.sleep(milliseconds);
     }
 }

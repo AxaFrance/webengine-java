@@ -392,15 +392,21 @@ public class WebElementDescription extends AbstractWebElement{
             WebElement webElement = findElement();
             focus(webElement);
             highLight(webElement);
-            sendKeysWithClear(sendKeysValue,webElement);
+            webElement.clear();
+            assertInputValue(webElement, StringUtils.EMPTY);
+            webElement.sendKeys(sendKeysValue);
             waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
-            String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
-            if(!StringUtil.equalsIgnoreCase(sendKeysValue,actualValue)){
-                throw new Exception("The send keys value is :'" + sendKeysValue +"' and the actual value is :'" + actualValue + "'");
-            }
+            assertInputValue(webElement, sendKeysValue);
             return null;
         };
         retry(fun,text);
+    }
+
+    private static void assertInputValue(WebElement webElement, String expectedValue) throws Exception {
+        String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
+        if(!StringUtil.equalsIgnoreCase(expectedValue,actualValue)){
+            throw new Exception("The expected value is :'" + expectedValue +"' and the actual value is :'" + actualValue + "'");
+        }
     }
 
     public void focusAndSendKeys(String text) throws Exception {
@@ -410,10 +416,7 @@ public class WebElementDescription extends AbstractWebElement{
             highLight(webElement);
             sendKeys(sendKeysValue,webElement);
             waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
-            String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
-            if(!StringUtil.equalsIgnoreCase(sendKeysValue,actualValue)){
-                throw new Exception("The send keys value is :'" + sendKeysValue +"' and the actual value is :'" + actualValue + "'");
-            }
+            assertInputValue(webElement, sendKeysValue);
             return null;
         };
         retry(fun,text);
@@ -512,9 +515,11 @@ public class WebElementDescription extends AbstractWebElement{
     public Boolean isInput(WebElement webElement){
         return StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue());
     }
+
     public Boolean isTextarea(WebElement webElement) {
         return StringUtil.equalsIgnoreCase(webElement.getTagName(), HtmlTag.TEXTAREA.getValue());
     }
+
     private Boolean isInputTypeByAttribute(InputType inputType) throws Exception {
         IFunction<InputType, Boolean> fun = (attributeValueConstante) -> {
             WebElement webElement = findElement();
