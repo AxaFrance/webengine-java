@@ -6,9 +6,9 @@ public class SendKeysWithClearCommand extends SendKeysCommand{
 
     protected void executeActionInElement(String value)throws Exception {
         if(value.startsWith("KEY_")){
-            webElementDescription.focusAndsendKeyboard(StringUtils.substringAfterLast(value,"KEY_"));
+            webElementDescription.sendKeyboard(StringUtils.substringAfterLast(value,"KEY_"));
         }else{
-            webElementDescription.focusAndSendKeysWithClear(value);
+            webElementDescription.sendKeysWithClearBefore(value);
         }
     }
 }

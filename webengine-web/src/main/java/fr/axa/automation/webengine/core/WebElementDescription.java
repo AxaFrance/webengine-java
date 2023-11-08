@@ -387,13 +387,43 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,null);
     }
 
-    public void focusAndSendKeysWithClear(String text) throws Exception {
+    private static void assertInputValue(WebElement webElement, String expectedValue) throws Exception {
+        String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
+        if(!StringUtil.equalsIgnoreCase(expectedValue,actualValue)){
+            throw new Exception("The expected value is :'" + expectedValue +"' and the actual value is :'" + actualValue + "'");
+        }
+    }
+
+    private static void containsInputValue(WebElement webElement, String expectedValue) throws Exception {
+        String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
+        if(!StringUtil.contains(actualValue,expectedValue)){
+            throw new Exception("The expected value is :'" + expectedValue +"' and the actual value is :'" + actualValue + "'");
+        }
+    }
+
+    public void sendKeysWithAssertion(String text) throws Exception {
         IFunction<String, Void> fun = (sendKeysValue) -> {
             WebElement webElement = findElement();
             focus(webElement);
             highLight(webElement);
-            webElement.clear();
-            assertInputValue(webElement, StringUtils.EMPTY);
+            sendKeys(sendKeysValue,webElement);
+            waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
+            containsInputValue(webElement, sendKeysValue);
+            return null;
+        };
+        retry(fun,text);
+    }
+
+    public void sendKeysWithClearBefore(String text) throws Exception {
+        IFunction<String, Void> fun = (sendKeysValue) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+
+            String st = Keys.chord(Keys.CONTROL, "a");
+            webElement.sendKeys(st);
+            webElement.sendKeys(Keys.DELETE);
+
             webElement.sendKeys(sendKeysValue);
             waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
             assertInputValue(webElement, sendKeysValue);
@@ -402,27 +432,7 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,text);
     }
 
-    private static void assertInputValue(WebElement webElement, String expectedValue) throws Exception {
-        String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
-        if(!StringUtil.equalsIgnoreCase(expectedValue,actualValue)){
-            throw new Exception("The expected value is :'" + expectedValue +"' and the actual value is :'" + actualValue + "'");
-        }
-    }
-
-    public void focusAndSendKeys(String text) throws Exception {
-        IFunction<String, Void> fun = (sendKeysValue) -> {
-            WebElement webElement = findElement();
-            focus(webElement);
-            highLight(webElement);
-            sendKeys(sendKeysValue,webElement);
-            waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
-            assertInputValue(webElement, sendKeysValue);
-            return null;
-        };
-        retry(fun,text);
-    }
-
-    public void focusAndsendKeyboard(String text) throws Exception {
+    public void sendKeyboard(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
             focus(webElement);

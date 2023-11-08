@@ -62,7 +62,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Collection<WebElement> findElements(By by) throws Exception {
-        IFunction<By ,Collection<WebElement>> fun = (x) -> getUseDriver().findElements(x);
+        IFunction<By ,Collection<WebElement>> fun = (param) -> getUseDriver().findElements(param);
         return retry(fun,by);
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public WebElement findElement(By by, int timeoutSecond) throws Exception {
-        IFunction<By ,WebElement> fun = (x) -> getUseDriver().findElement(x);
+        IFunction<By ,WebElement> fun = (param) -> getUseDriver().findElement(param);
         return retry(fun,by,timeoutSecond);
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean exists(Integer timeoutSecond) throws Exception {
-        IFunction<Integer, Boolean> fun = (x) -> existWithoutRetry(x.intValue());
+        IFunction<Integer, Boolean> fun = (param) -> existWithoutRetry(param.intValue());
         return retry(fun,timeoutSecond);
     }
 
@@ -102,7 +102,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public void click() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
+        IFunction<Void, Void> fun = (param) -> {
             WebElement webElement = findElement();
             click(webElement);
             return null;
@@ -125,35 +125,35 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public void sendKeys(String text) throws Exception {
-        IFunction<String, Void> fun = (x) -> {
+        IFunction<String, Void> fun = (sendKeysValue) -> {
             WebElement webElement = findElement();
-            sendKeys(x, webElement);
+            sendKeys(sendKeysValue, webElement);
             return null;
         };
         retry(fun,text);
     }
 
-    protected void sendKeys(String x, WebElement webElement) {
-        webElement.sendKeys(x);
+    protected void sendKeys(String sendKeysValue, WebElement webElement) {
+        webElement.sendKeys(sendKeysValue);
     }
 
-    protected void sendKeysWithClear(String x, WebElement webElement) {
+    protected void sendKeysWithClear(String sendKeysValue, WebElement webElement) {
         webElement.clear();
-        webElement.sendKeys(x);
+        webElement.sendKeys(sendKeysValue);
     }
 
     public void setValue(String text) throws Exception {
-        IFunction<String, Void> fun = (x) -> {
+        IFunction<String, Void> fun = (param) -> {
             WebElement element = findElement();
             element.clear();
-            sendKeys(x, element);
+            sendKeys(param, element);
             return null;
         };
         retry(fun,text);
     }
 
     public String getText() throws Exception {
-        IFunction<Void, String> fun = (x) -> {
+        IFunction<Void, String> fun = (param) -> {
             WebElement element = findElement();
             return element.getText();
         };
@@ -165,7 +165,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean isSelected() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
+        IFunction<Void, Boolean> fun = (param) -> {
             WebElement webElement = findElement();
             if(webElement.isEnabled() && webElement.isDisplayed()){
                 return webElement.isSelected();
@@ -176,7 +176,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean isEnabled() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
+        IFunction<Void, Boolean> fun = (param) -> {
             WebElement webElement = findElement();
             return webElement.isEnabled();
         };
@@ -188,7 +188,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean isDisplayed() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
+        IFunction<Void, Boolean> fun = (param) -> {
             WebElement webElement = findElement();
             return webElement.isDisplayed();
         };
@@ -196,7 +196,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public void clear() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
+        IFunction<Void, Void> fun = (param) -> {
             WebElement webElement = findElement();
             webElement.clear();
             return null;
@@ -204,10 +204,21 @@ public abstract class AbstractWebElement extends AbstractElement{
         retry(fun,null);
     }
 
-    public String getAttribute(String attributeName) throws Exception {
-        IFunction<String, String> fun = (x) -> {
+    public void clearWithKey() throws Exception {
+        IFunction<Void, Void> fun = (param) -> {
             WebElement webElement = findElement();
-            return webElement.getAttribute(x);
+            String st = Keys.chord(Keys.CONTROL, "a");
+            webElement.sendKeys(st);
+            webElement.sendKeys(Keys.DELETE);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+    public String getAttribute(String attributeName) throws Exception {
+        IFunction<String, String> fun = (param) -> {
+            WebElement webElement = findElement();
+            return webElement.getAttribute(param);
         };
         return retry(fun,attributeName);
     }
