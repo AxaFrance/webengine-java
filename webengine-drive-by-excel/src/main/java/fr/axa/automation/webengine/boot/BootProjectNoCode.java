@@ -101,7 +101,7 @@ public class BootProjectNoCode extends AbstractBootProject {
                 loggerService.info("End delete temp file ");
             }
         }catch (Exception e){
-            loggerService.info("Error during execution of the automate. You can see more details in the file log");
+            loggerService.error("Error during execution of the automate. You can see more details in the file log",e);
             ApplicationDesktop.openFile(LoggerAppender.getFileAppender());
         }
     }

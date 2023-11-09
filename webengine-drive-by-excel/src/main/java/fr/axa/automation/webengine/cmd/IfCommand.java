@@ -27,39 +27,38 @@ public class IfCommand extends AbstractDriverCommand {
         } else {
             AssertContentResult assertContentResult;
             String errorMessage;
-            if(webElementDescription.isSelect()){
-                assertContentResult = webElementDescription.assertContentSelect(expectedValue);
-                errorMessage = "The element is not selected";
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.CHECKED.getTagValue(), expectedValue) && webElementDescription.isInputTypeRadio()){
-                assertContentResult = webElementDescription.assertRadioChecked();
-                errorMessage = "The input radio is not checked";
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_CHECKED.getTagValue(), expectedValue) && webElementDescription.isInputTypeRadio()){
-                assertContentResult = webElementDescription.assertRadioNotChecked();
-                errorMessage = "The input radio is checked";
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.EXISTS.getTagValue(), expectedValue) && webElementDescription.isNotExists()) {
-                throw new WebEngineException("The element doesn't exist");
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_EXISTS.getTagValue(), expectedValue) && webElementDescription.exists()) {
-                throw new WebEngineException("The element exist");
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.EMPTY.getTagValue(), expectedValue)) {
-                assertContentResult = webElementDescription.assertContentEmpty();
-                errorMessage = "The content of the element is not empty";
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_EMPTY.getTagValue(), expectedValue)) {
-                assertContentResult = webElementDescription.assertContentNotEmpty();
-                errorMessage = "The content of the element is empty";
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.DISPLAYED.getTagValue(), expectedValue) && webElementDescription.isNotDisplayed()) {
-                throw new WebEngineException("The element is not displayed");
-            } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_DISPLAYED.getTagValue(), expectedValue) && webElementDescription.isDisplayed()) {
-                throw new WebEngineException("The element is displayed");
-            } else{
-                assertContentResult = webElementDescription.assertContentByElementType(expectedValue);
-                errorMessage = "The value are not the same";
+            try{
+                if(webElementDescription.isSelect()){
+                    assertContentResult = webElementDescription.assertContentSelect(expectedValue);
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.CHECKED.getTagValue(), expectedValue) && webElementDescription.isInputTypeRadio()){
+                    assertContentResult = webElementDescription.assertRadioChecked();
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_CHECKED.getTagValue(), expectedValue) && webElementDescription.isInputTypeRadio()){
+                    assertContentResult = webElementDescription.assertRadioNotChecked();
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.EXISTS.getTagValue(), expectedValue) && webElementDescription.isNotExists()) {
+                    throw new WebEngineException("The element doesn't exist");
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_EXISTS.getTagValue(), expectedValue) && webElementDescription.exists()) {
+                    throw new WebEngineException("The element exist");
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.EMPTY.getTagValue(), expectedValue)) {
+                    assertContentResult = webElementDescription.assertContentEmpty();
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_EMPTY.getTagValue(), expectedValue)) {
+                    assertContentResult = webElementDescription.assertContentNotEmpty();
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.DISPLAYED.getTagValue(), expectedValue) && webElementDescription.isNotDisplayed()) {
+                    throw new WebEngineException("The element is not displayed");
+                } else if (StringUtil.equalsIgnoreCase(PredefinedTagValue.NOT_DISPLAYED.getTagValue(), expectedValue) && webElementDescription.isDisplayed()) {
+                    throw new WebEngineException("The element is displayed");
+                } else{
+                    assertContentResult = webElementDescription.assertContentByElementType(expectedValue);
+                }
+            }catch (Exception e){
+                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(e.getMessage());
+                throw new WebEngineException(e.getMessage());
             }
-            if(!assertContentResult.isResult()){
+
+            if(assertContentResult!=null && assertContentResult.isResult()){
                 String expectedSentence = "The expected value is : '" + expectedValue + "'";
                 getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(expectedSentence);
                 String actualSentence = "The actual value is : '" + assertContentResult.getActualValue() + "'";
                 getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(actualSentence);
-                throw new WebEngineException(errorMessage);
             }
 
         }

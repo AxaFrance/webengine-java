@@ -595,60 +595,119 @@ public class WebElementDescription extends AbstractWebElement{
     }
 
     public AssertContentResult assertContentSelect(String expectedValue) throws Exception {
-        ElementContentSelect elementContent = (ElementContentSelect) getContentSelect();
-        Map<String, String> actualValueMap = ((ElementContentSelect) elementContent).getValueAndTextMap()
-                .entrySet().stream()
-                .filter(entry -> StringUtil.equalsIgnoreCase(expectedValue, entry.getKey()) ||
-                        (expectedValue.endsWith("****") && StringUtil.contains(entry.getKey(), expectedValue.split("\\*{4}")[0].trim())) ||
-                        StringUtil.equalsIgnoreCase(expectedValue, entry.getValue()) ||
-                        (expectedValue.endsWith("****") && StringUtil.contains(entry.getValue(), expectedValue.split("\\*{4}")[0].trim())))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        IFunction<String, AssertContentResult> fun = (expectedValueParam) -> {
+            ElementContentSelect elementContent = (ElementContentSelect) getContentSelect();
+            Map<String, String> actualValueMap = elementContent.getValueAndTextMap()
+                    .entrySet().stream()
+                    .filter(entry -> StringUtil.equalsIgnoreCase(expectedValueParam, entry.getKey()) ||
+                            (expectedValueParam.endsWith("****") && StringUtil.contains(entry.getKey(), expectedValueParam.split("\\*{4}")[0].trim())) ||
+                            StringUtil.equalsIgnoreCase(expectedValueParam, entry.getValue()) ||
+                            (expectedValueParam.endsWith("****") && StringUtil.contains(entry.getValue(), expectedValueParam.split("\\*{4}")[0].trim())))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        String actualValue = elementContent.getValueAndTextMap().toString();
-        boolean resultAssert = true;
-        if (MapUtils.isEmpty(actualValueMap)) {
-            resultAssert = false;
-        }
-        return AssertContentResult.builder().expectedValue(expectedValue).actualValue(actualValue).result(resultAssert).build();
+            String actualValue = elementContent.getValueAndTextMap().toString();
+            boolean resultAssert;
+            if (MapUtils.isEmpty(actualValueMap)) {
+                throw new WebEngineException("The element is not selected. The expected value is : '" + expectedValueParam + "' and the actual value is : '" + actualValue + "'." );
+            }else{
+                resultAssert = true;
+            }
+            return AssertContentResult.builder().expectedValue(expectedValueParam).actualValue(actualValue).result(resultAssert).build();
+        };
+        return retry(fun, expectedValue);
     }
 
     public AssertContentResult assertRadioChecked() throws Exception {
-        ElementContentInputTypeRadio elementContent = (ElementContentInputTypeRadio) getContentInputRadio();
-        String actualValue = ((ElementContentInputTypeRadio) elementContent).getAttributeChecked();
-        boolean resultAssert = false;
-        if (actualValue.equalsIgnoreCase("true")){
-            resultAssert = true;
-        }
-        return AssertContentResult.builder().expectedValue("true").actualValue(actualValue).result(resultAssert).build();
+        IFunction<String, AssertContentResult> fun = (expectedValueParam) -> {
+            ElementContentInputTypeRadio elementContent = (ElementContentInputTypeRadio) getContentInputRadio();
+            String actualValue = elementContent.getAttributeChecked();
+            boolean resultAssert;
+            if (actualValue.equalsIgnoreCase("false")) {
+                throw new WebEngineException("The input radio is not checked. The expected value is : '" + expectedValueParam + "' and the actual value is : '" + actualValue + "'");
+            } else {
+                resultAssert = true;
+            }
+            return AssertContentResult.builder().expectedValue(expectedValueParam).actualValue(actualValue).result(resultAssert).build();
+        };
+        return retry(fun, "true");
     }
 
     public AssertContentResult assertRadioNotChecked() throws Exception {
-        ElementContentInputTypeRadio elementContent = (ElementContentInputTypeRadio) getContentInputRadio();
-        String actualValue = ((ElementContentInputTypeRadio) elementContent).getAttributeChecked();
-        boolean resultAssert = false;
-        if (actualValue.equalsIgnoreCase("false")){
-            resultAssert = true;
-        }
-        return AssertContentResult.builder().expectedValue("true").actualValue(actualValue).result(resultAssert).build();
+        IFunction<String, AssertContentResult> fun = (expectedValueParam) -> {
+            ElementContentInputTypeRadio elementContent = (ElementContentInputTypeRadio) getContentInputRadio();
+            String actualValue = elementContent.getAttributeChecked();
+            boolean resultAssert;
+            if (actualValue.equalsIgnoreCase("true")) {
+                throw new WebEngineException("The input radio is checked. The expected value is : '" + expectedValueParam + "' and the actual value is : '" + actualValue + "'");
+            } else {
+                resultAssert = true;
+            }
+            return AssertContentResult.builder().expectedValue(expectedValueParam).actualValue(actualValue).result(resultAssert).build();
+        };
+        return retry(fun, "false");
     }
 
     public AssertContentResult assertContentInput(String expectedValue) throws Exception {
-        ElementContent elementContent = getContentInput();
-        String actualValue = elementContent.getValue();
-        boolean resultAssert = StringUtil.equalsIgnoreCase(actualValue, expectedValue) || (expectedValue.endsWith("****") && StringUtil.contains(actualValue, expectedValue.split("\\*{4}")[0].trim()));
-        return AssertContentResult.builder().expectedValue(expectedValue).actualValue(actualValue).result(resultAssert).build();
+        IFunction<String, AssertContentResult> fun = (expectedValueParam) -> {
+            ElementContent elementContent = getContentInput();
+            String actualValue = elementContent.getValue();
+            boolean resultAssert = StringUtil.equalsIgnoreCase(actualValue, expectedValueParam) || (expectedValueParam.endsWith("****") && StringUtil.contains(actualValue, expectedValueParam.split("\\*{4}")[0].trim()));
+            if (!resultAssert) {
+                throw new WebEngineException("The expected value is : '" + expectedValueParam + "' and the actual value is : '" + actualValue + "'");
+            }
+            return AssertContentResult.builder().expectedValue(expectedValueParam).actualValue(actualValue).result(resultAssert).build();
+        };
+        return retry(fun, expectedValue);
     }
+
+    public AssertContentResult assertNotEmptyContentInput() throws Exception {
+        IFunction<String, AssertContentResult> fun = (param) -> {
+            ElementContent elementContent = getContentInput();
+            String actualValue = elementContent.getValue();
+            boolean resultAssert = StringUtils.isEmpty(actualValue) ;
+            if (resultAssert) {
+                throw new WebEngineException("The content is empty. The actual value is : '" + actualValue + "'");
+            }
+            return AssertContentResult.builder().expectedValue(param).actualValue(actualValue).result(resultAssert).build();
+        };
+        return retry(fun, null);
+    }
+
 
     public AssertContentResult assertContentTextarea(String expectedValue) throws Exception {
         return assertContentInput(expectedValue);
     }
 
-    public AssertContentResult assertContentText(String expectedValue) throws Exception {
-        ElementContent elementContent = getContentText();
-        String actualValue = elementContent.getValue();
-        boolean resultAssert = StringUtil.equalsIgnoreCase(actualValue, expectedValue) || (expectedValue.endsWith("****") && StringUtil.contains(actualValue, expectedValue.split("\\*{4}")[0].trim()));
-        return AssertContentResult.builder().expectedValue(expectedValue).actualValue(actualValue).result(resultAssert).build();
+    public AssertContentResult assertNotEmptyContentTextarea() throws Exception {
+        return assertNotEmptyContentInput();
     }
+
+    public AssertContentResult assertContentText(String expectedValue) throws Exception {
+        IFunction<String, AssertContentResult> fun = (expectedValueParam) -> {
+            ElementContent elementContent = getContentText();
+            String actualValue = elementContent.getValue();
+            boolean resultAssert = StringUtil.equalsIgnoreCase(actualValue, expectedValueParam) || (expectedValueParam.endsWith("****") && StringUtil.contains(actualValue, expectedValueParam.split("\\*{4}")[0].trim()));
+            if (!resultAssert) {
+                throw new WebEngineException("The expected value is : '" + expectedValueParam + "' and the actual value is : '" + actualValue + "'");
+            }
+            return AssertContentResult.builder().expectedValue(expectedValueParam).actualValue(actualValue).result(resultAssert).build();
+        };
+        return retry(fun, expectedValue);
+    }
+
+    public AssertContentResult assertNotEmptyContentText() throws Exception {
+        IFunction<String, AssertContentResult> fun = (param) -> {
+            ElementContent elementContent = getContentText();
+            String actualValue = elementContent.getValue();
+            boolean resultAssert = StringUtils.isEmpty(actualValue) ;
+            if (resultAssert) {
+                throw new WebEngineException("The text is empty. The actual value is : '" + actualValue + "'");
+            }
+            return AssertContentResult.builder().expectedValue(param).actualValue(actualValue).result(resultAssert).build();
+        };
+        return retry(fun, null);
+    }
+
 
     public AssertContentResult assertContentByElementType(String expectedValue) throws Exception {
         if(isSelect()){
@@ -664,17 +723,22 @@ public class WebElementDescription extends AbstractWebElement{
 
     public AssertContentResult assertContentEmpty() throws Exception {
         if (isInput() ) {
-            return assertContentInput("");
+            return assertContentInput(StringUtils.EMPTY);
         } else if (isTextarea()) {
-            return assertContentTextarea("");
+            return assertContentTextarea(StringUtils.EMPTY);
         }else{
-            return assertContentText("");
+            return assertContentText(StringUtils.EMPTY);
         }
     }
 
     public AssertContentResult assertContentNotEmpty() throws Exception {
-        AssertContentResult assertContentResult = assertContentEmpty();
-        return AssertContentResult.builder().actualValue(assertContentResult.getActualValue()).result(!assertContentResult.isResult()).build();
+        if (isInput() ) {
+            return assertNotEmptyContentInput();
+        } else if (isTextarea()) {
+            return assertNotEmptyContentTextarea();
+        }else{
+            return assertNotEmptyContentText();
+        }
     }
 
     public void selectByValueOrText(String text) throws Exception {
