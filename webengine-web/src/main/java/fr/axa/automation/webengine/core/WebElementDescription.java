@@ -387,12 +387,7 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,null);
     }
 
-    private static void assertInputValue(WebElement webElement, String expectedValue) throws Exception {
-        String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
-        if(!StringUtil.equalsIgnoreCase(expectedValue,actualValue)){
-            throw new Exception("The expected value is :'" + expectedValue +"' and the actual value is :'" + actualValue + "'");
-        }
-    }
+
 
     private static void containsInputValue(WebElement webElement, String expectedValue) throws Exception {
         String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
@@ -419,14 +414,10 @@ public class WebElementDescription extends AbstractWebElement{
             WebElement webElement = findElement();
             focus(webElement);
             highLight(webElement);
-
-            String st = Keys.chord(Keys.CONTROL, "a");
-            webElement.sendKeys(st);
-            webElement.sendKeys(Keys.DELETE);
-
+            clear();
             webElement.sendKeys(sendKeysValue);
             waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
-            assertInputValue(webElement, sendKeysValue);
+            containsInputValue(webElement, sendKeysValue);
             return null;
         };
         retry(fun,text);

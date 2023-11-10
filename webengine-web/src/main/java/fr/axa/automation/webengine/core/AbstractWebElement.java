@@ -2,16 +2,20 @@ package fr.axa.automation.webengine.core;
 
 
 import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.constante.HtmlAttributeConstant;
 import fr.axa.automation.webengine.global.SettingsWeb;
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -195,10 +199,28 @@ public abstract class AbstractWebElement extends AbstractElement{
         return retry(fun,null);
     }
 
+    protected static void assertInputValue(WebElement webElement, String expectedValue) throws Exception {
+        String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
+        if(!StringUtil.equalsIgnoreCase(expectedValue,actualValue)){
+            throw new Exception("The expected value is :'" + expectedValue +"' and the actual value is :'" + actualValue + "'");
+        }
+    }
+
     public void clear() throws Exception {
         IFunction<Void, Void> fun = (param) -> {
             WebElement webElement = findElement();
+
             webElement.clear();
+
+            String st = Keys.chord(Keys.CONTROL, "a");
+            webElement.sendKeys(st);
+            webElement.sendKeys(Keys.DELETE);
+
+            Actions actions = new Actions(useDriver);
+            actions.doubleClick(webElement).perform();
+            webElement.sendKeys(Keys.BACK_SPACE);
+
+            assertInputValue(webElement, StringUtils.EMPTY);
             return null;
         };
         retry(fun,null);
