@@ -24,7 +24,8 @@ public class OpenCommand extends AbstractDriverCommand{
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         String url = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        WebDriver webDriver = null;
+        WebDriver webDriver ;
+        boolean navigateToUrl = true;
 
         DriverContext currentDriverContext = getWebDriverFromUrl(commandResultList, url);
         if(currentDriverContext==null) {
@@ -35,6 +36,8 @@ public class OpenCommand extends AbstractDriverCommand{
                 sessionIdAndUrlMap.put(webDriver.getWindowHandle(), url);
                 currentDriverContext = DriverContext.builder().currentUrl(url).webDriver(webDriver).sessionIdAndUrlMap(sessionIdAndUrlMap).build();
             }
+        }else{
+            navigateToUrl = false;
         }
 
         setDriverContext(currentDriverContext);
@@ -42,7 +45,9 @@ public class OpenCommand extends AbstractDriverCommand{
         String originalWindow = currentDriverContext.getWindowHandle();
         webDriver.switchTo().window(originalWindow);
         webDriver.manage().window().maximize();
-        webDriver.navigate().to(url);
+        if(navigateToUrl){
+            webDriver.navigate().to(url);
+        }
     }
 
     protected WebDriver instantiateWebDrive(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
@@ -53,7 +58,8 @@ public class OpenCommand extends AbstractDriverCommand{
         List<DriverContext> driverContextList = CommandResultHelper.getWebDriverList(commandResultList);
         if (CollectionUtils.isNotEmpty(driverContextList)) { //Dans le cas ou l'application a déjà été ouverte, on réutilise le même driver
             for (DriverContext driverContext : driverContextList) {
-                if (StringUtil.equalsIgnoreCase(driverContext.getWebDriver().getCurrentUrl(), "data:,") || StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(driverContext.getCurrentUrl()), UriUtil.getHostFromURI(url))) {
+                //if (StringUtil.equalsIgnoreCase(driverContext.getWebDriver().getCurrentUrl(), "data:,") || StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(driverContext.getCurrentUrl()), UriUtil.getHostFromURI(url))) {
+                if (StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(driverContext.getCurrentUrl()), UriUtil.getHostFromURI(url))) {
                     return driverContext;
                 }
             }
