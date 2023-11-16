@@ -3,10 +3,10 @@ package fr.axa.automation.webengine.helper;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.Result;
+import fr.axa.automation.webengine.global.DriverContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import org.apache.commons.collections4.CollectionUtils;
-import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +33,12 @@ public class CommandResultHelper {
                 .collect(Collectors.toList());
     }
 
-    public static List<WebDriver>  getWebDriverList(List<CommandResult> commandResultList){
+    public static List<DriverContext>  getWebDriverList(List<CommandResult> commandResultList){
         List<CommandResult> commandResultFlatList = flatCommandResult(commandResultList, new ArrayList<>());
         return commandResultFlatList
                 .stream()
-                .filter(commandResult -> commandResult.getWebDriver()!=null)
-                .map(commandResult -> commandResult.getWebDriver())
+                .filter(commandResult -> commandResult.getDriverContext()!=null)
+                .map(commandResult -> commandResult.getDriverContext())
                 .collect(Collectors.toList());
     }
 

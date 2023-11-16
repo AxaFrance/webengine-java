@@ -11,6 +11,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.DriverContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
@@ -43,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -50,7 +52,7 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
-    WebDriver webDriver;
+    DriverContext driverContext;
     String savedData;
 
 
@@ -87,7 +89,7 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
         Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
-        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
+        WebDriver webDriver = getWebDriverToUse(commandResultList);
         if(entry==null){
             return WebElementDescription.builder()
                     .useDriver(webDriver)
@@ -180,22 +182,21 @@ public abstract class AbstractDriverCommand implements ICommand {
         return CommandResult.builder()
                 .commandData(commandData)
                 .actionReport(actionReport)
-                .webDriver(webDriver)
+                .driverContext(driverContext)
                 .savedData(savedData).build();
     }
 
 
     protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
-        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
+        WebDriver webDriver = getWebDriverToUse(commandResultList);
         byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 
-    protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
-        List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
-
-        if(CollectionUtils.isNotEmpty(webDriverList)){
-            return ListUtil.getLastElement(webDriverList).get();
+    protected WebDriver getWebDriverToUse(List<CommandResult> commandResultList) throws WebEngineException {
+        List<DriverContext> driverContextList = CommandResultHelper.getWebDriverList(commandResultList);
+        if(CollectionUtils.isNotEmpty(driverContextList)){
+            return ListUtil.getLastElement(driverContextList.stream().collect(Collectors.toList())).get().getWebDriver();
         }
         return null;
     }
