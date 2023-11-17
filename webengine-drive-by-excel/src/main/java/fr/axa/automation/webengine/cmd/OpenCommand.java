@@ -35,6 +35,8 @@ public class OpenCommand extends AbstractDriverCommand{
                 Map<String, String> sessionIdAndUrlMap = new HashMap<>();
                 sessionIdAndUrlMap.put(webDriver.getWindowHandle(), url);
                 currentDriverContext = DriverContext.builder().currentUrl(url).webDriver(webDriver).sessionIdAndUrlMap(sessionIdAndUrlMap).build();
+            }else{
+                navigateToUrl = false;
             }
         }else{
             navigateToUrl = false;
