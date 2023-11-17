@@ -32,8 +32,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommandDataNoCode {
-    @JsonProperty("uid")
-    private String uid;
+
     @JsonProperty("name")
     private String name;
     @JsonProperty("command")
@@ -46,6 +45,8 @@ public class CommandDataNoCode {
     private String dataTestReference;
     @JsonProperty("dataTestList")
     private Map<String,String> dataTestMap;
+    @JsonProperty("uid")
+    private String uid;
 
     public boolean isOptional(){
         if(this!=null && StringUtils.isNotEmpty(this.getOptional()) && this.getOptional().equalsIgnoreCase(OptionalConstante.OPTIONAL.getValue())){

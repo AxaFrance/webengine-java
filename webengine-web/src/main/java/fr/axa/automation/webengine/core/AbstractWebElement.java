@@ -48,20 +48,21 @@ public abstract class AbstractWebElement extends AbstractElement{
         Exception exception = new Exception();
         UUID uuid = UUID.randomUUID();
 
-        log.debug(uuid+"-Element search at "+LocalDateTime.now()+". Defined time out is :"+timeOutSecond);
+        log.debug("Search element : "+toString());
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
                 WebElement element = internalFindElement();
                 if(element!=null){
-                    log.debug(uuid+"-Element founded at "+LocalDateTime.now());
+                    log.debug("Found element : "+toString());
                 }
                 return element;
             } catch (Exception e) {
                 exception = e;
+                log.debug("Retry to search element : "+toString());
                 waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
             }
         }
-        log.debug(uuid+"-Time out search "+LocalDateTime.now());
+        log.debug("Timeout for element : "+toString());
         throw exception;
     }
 

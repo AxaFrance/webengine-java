@@ -152,6 +152,8 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
+        loggerService.info("--------------------------------------------------------------------------------------------------------------------------------");
+        loggerService.info("Executed command : " + commandData);
         getLogReport().append("Executed command : ").append(commandData);
         try {
             String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
@@ -180,7 +182,8 @@ public abstract class AbstractDriverCommand implements ICommand {
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
-        loggerService.info(getLogReport().toString());
+
+        loggerService.info("Status command : "+actionReport.getResult());
         return CommandResult.builder()
                 .commandData(commandData)
                 .actionReport(actionReport)
