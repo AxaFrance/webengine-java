@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.cmd;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.TargetKey;
@@ -109,6 +110,7 @@ public abstract class AbstractDriverCommand implements ICommand {
                         .build();
             case COMBINAISON_OF_LOCATOR:
                 ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
                 try {
                     WebElementDescription webElementDescription = mapper.readValue(entry.getValue(), WebElementDescription.class);
                     webElementDescription.setUseDriver(webDriver);
