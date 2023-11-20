@@ -43,12 +43,14 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -118,7 +120,7 @@ public class WebElementDescription extends AbstractWebElement{
     public WebElement internalFindElement() throws Exception {
         Collection<WebElement> elements = internalFindElements();
         if (CollectionUtils.isNotEmpty(elements) && elements.size() > 1) {
-            throw new MultipleElementException("Multiple element has found with the given selection criteria for this web element : ");
+            throw new MultipleElementException("Multiple element has found with the given selection criteria for this web element ");
         } else {
             return elements.iterator().next();
         }
@@ -145,7 +147,13 @@ public class WebElementDescription extends AbstractWebElement{
             if(elements.size()==1){
                 return elements;
             }else {
-                return ListUtil.findDuplicateElements(elements);
+                Map<WebElement,Integer> duplicateElementMap = ListUtil.findNumberOfElements(elements);
+                if(duplicateElementMap.size()>1 && duplicateElementMap.values().stream().distinct().count()==1){
+                    throw new MultipleElementException("Multiple element has found with the given selection criteria for this web element ");
+                }else{
+                    Stream<Map.Entry<WebElement,Integer>> sorted = duplicateElementMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+                    return Arrays.asList(sorted.findFirst().get().getKey());
+                }
             }
         }
         throw new NoSuchElementException("No such WebElement found in the page");
@@ -230,7 +238,7 @@ public class WebElementDescription extends AbstractWebElement{
             List<String> attributes = new ArrayList<>();
             attributeList.entrySet().stream().forEach(entry -> attributes.add("[" + entry.getKey() + "='" + entry.getValue() + "']"));
             String cssSelector = String.join("", attributes);
-            return getInternalFindElementByCssSelector(getTagName() + cssSelector);
+            return getInternalFindElementByCssSelector("*" + cssSelector);
         }
         return new ArrayList<>();
     }
