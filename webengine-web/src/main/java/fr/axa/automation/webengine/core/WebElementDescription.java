@@ -74,6 +74,7 @@ public class WebElementDescription extends AbstractWebElement{
     String linkText;
 
     boolean shadowDom = false;
+    String pseudoElement;
 
     private final static String javascriptLibrary ;
 

@@ -20,6 +20,8 @@ public class CommandFactory {
                 return new ClickCommand();
             case SAVE_DATA:
                 return new SaveDataCommand();
+            case CHECK_BY_VALUE:
+                return new CheckByValueCommand();
             case CALL:
                 return new CallCommand();
             case SELECT:
