@@ -78,11 +78,7 @@ public final class BrowserFactory {
     }
 
     public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, List<String> browserOptionList) throws WebEngineException {
-        BrowserDetail browserDetail = BrowserDetail.builder()
-                                                        .platform(platform)
-                                                        .browser(browser)
-                                                        .browserOptionList(browserOptionList).build();
-        return getWebDriver(browserDetail);
+        return getWebDriver(platform,browser,null,browserOptionList);
     }
 
     public static Optional<WebDriver> getWebDriver(String platform, String browser, String browserVersion, List<String> browserOptionList) throws WebEngineException {
