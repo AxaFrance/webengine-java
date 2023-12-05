@@ -13,6 +13,6 @@ import java.util.List;
 public class BrowserDetail {
     Platform platform;
     Browser browser;
-    String browserVersion;
+    boolean deleteCookie;
     List<String> browserOptionList;
 }

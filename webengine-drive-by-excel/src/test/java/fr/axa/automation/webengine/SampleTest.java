@@ -19,7 +19,7 @@ public class SampleTest {
 
     @BeforeEach // setup()
     public void setup() throws Exception {
-        optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome", Arrays.asList("--remote-allow-origins=*"));
+        optionalWebdriver =  BrowserFactory.getWebDriver("Windows", "Chrome",true, Arrays.asList("--remote-allow-origins=*"));
     }
 
     @AfterEach

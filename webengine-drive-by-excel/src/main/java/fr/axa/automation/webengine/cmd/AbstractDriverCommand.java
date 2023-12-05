@@ -63,21 +63,25 @@ public abstract class AbstractDriverCommand implements ICommand {
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception;
 
     public WebDriver initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
-       return getDriver(globalApplicationContext,false);
+       return initializeWebDriver(globalApplicationContext, true);
+    }
+
+    public WebDriver initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext, boolean deleteCookie) throws WebEngineException {
+        return getDriver(globalApplicationContext,false, true);
     }
 
     public WebDriver initializeIncognitoWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
-        return getDriver(globalApplicationContext,true);
+        return getDriver(globalApplicationContext,true, true);
     }
 
-    public WebDriver getDriver(AbstractGlobalApplicationContext globalApplicationContext,boolean incognito) throws WebEngineException {
+    public WebDriver getDriver(AbstractGlobalApplicationContext globalApplicationContext,boolean incognito, boolean deleteCookie) throws WebEngineException {
         try {
             GlobalConfiguration globalConfiguration = GlobalConfigPropertiesHelper.getGlobalConfigProperties(globalApplicationContext.getSettings());
-            Optional<WebDriver> optional = null;
+            Optional<WebDriver> optional ;
             if(incognito){
                  optional = BrowserFactory.getIncognitoDriver(globalConfiguration);
             }else {
-                optional = BrowserFactory.getDriver(globalConfiguration);
+                optional = BrowserFactory.getDriver(globalConfiguration,deleteCookie);
             }
             if(optional.isPresent()){
                 return optional.get();
