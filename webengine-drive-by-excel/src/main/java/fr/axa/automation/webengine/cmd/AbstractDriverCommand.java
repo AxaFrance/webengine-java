@@ -67,7 +67,7 @@ public abstract class AbstractDriverCommand implements ICommand {
     }
 
     public WebDriver initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext, boolean deleteCookie) throws WebEngineException {
-        return getDriver(globalApplicationContext,false, true);
+        return getDriver(globalApplicationContext,false, deleteCookie);
     }
 
     public WebDriver initializeIncognitoWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
