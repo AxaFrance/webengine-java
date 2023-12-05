@@ -57,12 +57,11 @@ public final class BrowserFactory {
     public static Optional<WebDriver> getDesktopDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
-        String browserVersion = globalConfiguration.getWebengineConfiguration().getBrowserVersion();
         List<String> browserOptionList = globalConfiguration.getWebengineConfiguration().getBrowserOptionList();
         if(CollectionUtils.isEmpty(globalConfiguration.getWebengineConfiguration().getBrowserOptionList())){
             browserOptionList = Collections.emptyList();
         }
-        return getWebDriver(platform, browser, browserVersion, browserOptionList);
+        return getWebDriver(platform, browser, browserOptionList);
     }
 
     public static Optional<WebDriver> getWebDriver(String platform, String browser) throws WebEngineException {
@@ -74,22 +73,13 @@ public final class BrowserFactory {
     }
 
     public static Optional<WebDriver> getWebDriver(String platform, String browser, List<String> browserOptionList) throws WebEngineException {
-        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser),browserOptionList);
+        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser), browserOptionList);
     }
 
     public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, List<String> browserOptionList) throws WebEngineException {
-        return getWebDriver(platform,browser,null,browserOptionList);
-    }
-
-    public static Optional<WebDriver> getWebDriver(String platform, String browser, String browserVersion, List<String> browserOptionList) throws WebEngineException {
-        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser), browserVersion, browserOptionList);
-    }
-
-    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, String browserVersion, List<String> browserOptionList) throws WebEngineException {
         BrowserDetail browserDetail = BrowserDetail.builder()
                                                     .platform(platform)
                                                     .browser(browser)
-                                                    .browserVersion(browserVersion)
                                                     .browserOptionList(browserOptionList).build();
         return getWebDriver(browserDetail);
     }
