@@ -1,7 +1,5 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestCaseNoCodeExecutor;
-import fr.axa.automation.webengine.api.ITestStepNoCodeExecutor;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.core.AbstractTestCaseWebExecutor;

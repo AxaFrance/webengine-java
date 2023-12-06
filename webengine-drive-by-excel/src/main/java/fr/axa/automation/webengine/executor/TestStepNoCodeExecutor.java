@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestStepNoCodeExecutor;
 import fr.axa.automation.webengine.cmd.AbstractDriverCommand;
 import fr.axa.automation.webengine.cmd.CommandFactory;
 import fr.axa.automation.webengine.cmd.ScrenshotCommand;

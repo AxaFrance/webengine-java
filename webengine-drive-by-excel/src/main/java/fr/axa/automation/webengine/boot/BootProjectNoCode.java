@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.boot;
 
-import fr.axa.automation.webengine.api.ITestSuiteNoCodeExecutor;
+import fr.axa.automation.webengine.executor.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;

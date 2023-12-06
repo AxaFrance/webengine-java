@@ -10,6 +10,10 @@ public class CommandFactory {
                 return new OpenCommand();
             case OPEN_PRIVATE:
                 return new OpenInPrivateModeCommand();
+            case OPEN_KEEP_COOKIE:
+                return new OpenKeepCookieCommand();
+            case SWITCH_TO:
+                return new SwitchToCommand();
             case CLEAR:
                 return new ClearCommand();
             case SEND_KEYS:

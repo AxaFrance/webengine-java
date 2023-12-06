@@ -1,4 +1,4 @@
-package fr.axa.automation.webengine.api;
+package fr.axa.automation.webengine.executor;
 
 import fr.axa.automation.webengine.core.ITestCaseExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
