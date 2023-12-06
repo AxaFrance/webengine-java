@@ -12,24 +12,23 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-public class SendKeysCommand extends AbstractDriverCommand{
-
+public class SendKeysCommand extends AbstractDriverCommand {
+    static {
+        System.setProperty("java.awt.headless", "false");
+    }
     @Override
-    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
-        String value = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
+        webElementDescription = populateWebElement(globalApplicationContext, testCaseContext, commandData, commandResultList);
+        String value = getValue(globalApplicationContext, (TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         executeActionInElement(value, commandData);
     }
 
-    protected void executeActionInElement(String value, CommandDataNoCode cmdData)throws Exception {
-        if (cmdData.getTargetList().isEmpty()){
-            System.setProperty("java.awt.headless", "false");
+    protected void executeActionInElement(String value, CommandDataNoCode cmdData) throws Exception {
+        if (cmdData.getTargetList().isEmpty()) {
             Robot robot = new Robot();
             if (value.startsWith("KEY_")) {
-                robot.keyPress((Integer) KeyEvent.class.getField("VK_"+value.substring(4)).get(null));
-            }
-            else
-            {
+                robot.keyPress((Integer) KeyEvent.class.getField("VK_" + value.substring(4)).get(null));
+            } else {
                 StringSelection owner = new StringSelection(value);
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(owner, owner);
 
@@ -40,8 +39,7 @@ public class SendKeysCommand extends AbstractDriverCommand{
                 robot.keyRelease(KeyEvent.VK_V);
                 robot.keyRelease(KeyEvent.VK_CONTROL);
             }
-        }
-        else {
+        } else {
             if (value.startsWith("Keys.")) {
                 webElementDescription.sendKeyboard(StringUtils.substringAfterLast(value, "KEY_"));
             } else {
