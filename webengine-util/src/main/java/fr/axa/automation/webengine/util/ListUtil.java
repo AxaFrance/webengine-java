@@ -46,6 +46,4 @@ public final class ListUtil {
         }
         return resultMap;
     }
-
-
 }

@@ -53,7 +53,7 @@ public class OpenCommand extends AbstractDriverCommand{
     }
 
     protected WebDriver instantiateWebDrive(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
-        return initializeWebDriver(globalApplicationContext);
+        return initializeWebDriver(globalApplicationContext,false);
     }
 
     protected DriverContext getWebDriverFromUrl(List<CommandResult> commandResultList, String url) throws WebEngineException {
