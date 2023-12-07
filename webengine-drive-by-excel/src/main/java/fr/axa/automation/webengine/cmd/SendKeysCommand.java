@@ -13,6 +13,9 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class SendKeysCommand extends AbstractDriverCommand {
+
+    public static final String KEY_ = "KEY_";
+
     static {
         System.setProperty("java.awt.headless", "false");
     }
@@ -26,7 +29,7 @@ public class SendKeysCommand extends AbstractDriverCommand {
     protected void executeActionInElement(String value, CommandDataNoCode cmdData) throws Exception {
         if (cmdData.getTargetList().isEmpty()) {
             Robot robot = new Robot();
-            if (value.startsWith("KEY_")) {
+            if (value.startsWith(KEY_)) {
                 robot.keyPress((Integer) KeyEvent.class.getField("VK_" + value.substring(4)).get(null));
             } else {
                 StringSelection owner = new StringSelection(value);
@@ -40,8 +43,8 @@ public class SendKeysCommand extends AbstractDriverCommand {
                 robot.keyRelease(KeyEvent.VK_CONTROL);
             }
         } else {
-            if (value.startsWith("Keys.")) {
-                webElementDescription.sendKeyboard(StringUtils.substringAfterLast(value, "KEY_"));
+            if (value.startsWith(KEY_)) {
+                webElementDescription.sendKeyboard(StringUtils.substringAfterLast(value, KEY_));
             } else {
                 webElementDescription.sendKeysWithAssertion(value);
             }
