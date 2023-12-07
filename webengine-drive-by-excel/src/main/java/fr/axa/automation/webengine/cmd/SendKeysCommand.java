@@ -31,16 +31,18 @@ public class SendKeysCommand extends AbstractDriverCommand {
             Robot robot = new Robot();
             if (value.startsWith(KEY_)) {
                 robot.keyPress((Integer) KeyEvent.class.getField("VK_" + value.substring(4)).get(null));
+                robot.delay(500);
             } else {
                 StringSelection owner = new StringSelection(value);
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(owner, owner);
 
                 //imitate mouse events like ENTER, CTRL+C, CTRL+VRobot robot = new Robot();
-                robot.delay(1000);
+                robot.delay(500);
                 robot.keyPress(KeyEvent.VK_CONTROL);
                 robot.keyPress(KeyEvent.VK_V);
                 robot.keyRelease(KeyEvent.VK_V);
                 robot.keyRelease(KeyEvent.VK_CONTROL);
+                robot.delay(500);
             }
         } else {
             if (value.startsWith(KEY_)) {
