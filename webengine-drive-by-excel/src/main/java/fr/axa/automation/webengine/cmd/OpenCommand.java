@@ -13,6 +13,7 @@ import fr.axa.automation.webengine.util.StringUtil;
 import fr.axa.automation.webengine.util.UriUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WindowType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ public class OpenCommand extends AbstractDriverCommand{
         if(currentDriverContext==null) {
             currentDriverContext = getWindowHandlesInDriver(commandResultList, urlOrId);
             if(currentDriverContext==null) {
-                webDriver = instantiateWebDrive(globalApplicationContext);
+                webDriver = instantiateWebDriver(globalApplicationContext);
                 Map<String, String> sessionIdAndUrlMap = new HashMap<>();
                 sessionIdAndUrlMap.put(webDriver.getWindowHandle(), urlOrId);
                 currentDriverContext = DriverContext.builder().currentUrl(urlOrId).webDriver(webDriver).sessionIdAndUrlMap(sessionIdAndUrlMap).build();
@@ -45,6 +46,7 @@ public class OpenCommand extends AbstractDriverCommand{
         setDriverContext(currentDriverContext);
         webDriver = currentDriverContext.getWebDriver();
         String originalWindow = currentDriverContext.getWindowHandle();
+        webDriver.switchTo().newWindow(getWindowType());
         webDriver.switchTo().window(originalWindow);
         webDriver.manage().window().maximize();
         if(navigateToUrl){
@@ -52,7 +54,11 @@ public class OpenCommand extends AbstractDriverCommand{
         }
     }
 
-    protected WebDriver instantiateWebDrive(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
+    protected WindowType getWindowType() {
+        return WindowType.WINDOW;
+    }
+
+    protected WebDriver instantiateWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
         return initializeWebDriver(globalApplicationContext,false);
     }
 
@@ -68,15 +74,15 @@ public class OpenCommand extends AbstractDriverCommand{
         return null;
     }
 
-    protected DriverContext getWindowHandlesInDriver(List<CommandResult> commandResultList, String url) throws WebEngineException {
+    protected DriverContext getWindowHandlesInDriver(List<CommandResult> commandResultList, String urlOrId) throws WebEngineException {
         List<DriverContext> driverContextList = CommandResultHelper.getWebDriverList(commandResultList);
         if (CollectionUtils.isNotEmpty(driverContextList)) {
             List<DriverContext> driverContextListFilter = driverContextList.stream().filter(currentDriverContext -> currentDriverContext.getWebDriver().getWindowHandles().size() != currentDriverContext.getSessionIdAndUrlMap().size()).collect(Collectors.toList());
             if(CollectionUtils.isEmpty(driverContextListFilter)){
                 for (DriverContext currentDriverContext : driverContextList) {
                     for (Map.Entry<String,String> entry : currentDriverContext.getSessionIdAndUrlMap().entrySet()) {
-                        if(StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(entry.getValue()),UriUtil.getHostFromURI(url))){
-                            return DriverContext.builder().currentUrl(url).webDriver(currentDriverContext.getWebDriver()).sessionIdAndUrlMap(currentDriverContext.getSessionIdAndUrlMap()).build();
+                        if(StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(entry.getValue()),UriUtil.getHostFromURI(urlOrId))){
+                            return DriverContext.builder().currentUrl(urlOrId).webDriver(currentDriverContext.getWebDriver()).sessionIdAndUrlMap(currentDriverContext.getSessionIdAndUrlMap()).build();
                         }
                     }
                 }
@@ -87,8 +93,8 @@ public class OpenCommand extends AbstractDriverCommand{
 
                 DriverContext driverContextFound = driverContextListFilter.get(0);
                 Map<String, String> sessionIdAndUrlMap = driverContextFound.getSessionIdAndUrlMap();
-                sessionIdAndUrlMap.put(ListUtil.getLastElement(driverContextFound.getWebDriver().getWindowHandles()).get(),url );
-                return DriverContext.builder().currentUrl(url).webDriver(driverContextFound.getWebDriver()).sessionIdAndUrlMap(sessionIdAndUrlMap).build();
+                sessionIdAndUrlMap.put(ListUtil.getLastElement(driverContextFound.getWebDriver().getWindowHandles()).get(),urlOrId );
+                return DriverContext.builder().currentUrl(urlOrId).webDriver(driverContextFound.getWebDriver()).sessionIdAndUrlMap(sessionIdAndUrlMap).build();
             }
         }
         return null;

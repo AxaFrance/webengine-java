@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 public class OpenInPrivateModeCommand extends OpenCommand{
 
     @Override
-    protected WebDriver instantiateWebDrive(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
+    protected WebDriver instantiateWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
         return initializeIncognitoWebDriver(globalApplicationContext);
     }
 }

@@ -12,6 +12,8 @@ public class CommandFactory {
                 return new OpenInPrivateModeCommand();
             case SWITCH_TO:
                 return new SwitchToCommand();
+            case OPEN_TAB:
+                return new OpenTabCommand();
             case CLEAR:
                 return new ClearCommand();
             case SEND_KEYS:
