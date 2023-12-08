@@ -453,7 +453,7 @@ public class WebElementDescription extends AbstractWebElement{
     }
 
     private void highLight(WebElement webElement) {
-        executeJavascript("arguments[0].style.border='3px solid red'", webElement);
+        executeJavascript("arguments[0].style.border='1px solid red'", webElement);
     }
 
     public Boolean isSelect() throws Exception {
