@@ -21,6 +21,7 @@ public enum ConstantNoCode {
     MINUS("-"),
     PLUS("+"),
     DASH("-"),
-    CR_LF ("\r\n \r\n");
+    CR_LF("\r\n"),
+    DOUBLE_CR_LF("\r\n \r\n");
     final String value;
 }

@@ -156,35 +156,39 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
+        String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
         loggerService.info("--------------------------------------------------------------------------------------------------------------------------------");
         loggerService.info("Executed command : " + commandData);
-        getLogReport().append("Executed command : ").append(commandData);
+        getLogReport().append("Executed command : ").append(commandData.getCommand().name());
+        Map.Entry<TargetKey,String> targetEntry = getTargetValue(globalApplicationContext, commandData, commandResultList);
+        getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Target : ").append(targetEntry == null ? "" : targetEntry.getValue());
+        String evaluateValue = getValue(globalApplicationContext, (TestCaseNoCodeContext)testCaseContext, commandData, commandResultList);
+        getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Data : ").append( evaluateValue == null ? "" : evaluateValue);
         try {
-            String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
                 actionReport.setResult(Result.PASSED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status : ").append(Result.PASSED.value());
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Status : ").append(Result.PASSED.value());
             } else {
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command ignored because the colum data-test-ref not contains '" + dataTestColumName + "' column ");
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(" Command ignored because the colum data-test-ref not contains '" + dataTestColumName + "' column ");
             }
             actionReport.setLog(getLogReport().toString());
         } catch (Throwable e) {
             if(getWebDriverToUse(commandResultList)!=null){
                 actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,"",commandResultList));
             }
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Cause : ").append(ConstantNoCode.CR_LF.getValue()).append(e.getMessage());
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Cause : ").append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(e.getMessage());
             if (commandData.isOptional() || commandData.getCommand() == CommandName.IF || commandData.getCommand() == CommandName.ELSE_IF) {
                 actionReport.setName(actionReport.getName() + " - /!\\ Failed but ignored (Optional or If/else if/else)");
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
             }else{
                 actionReport.setResult(Result.FAILED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status : ").append(Result.FAILED.value());
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Status : ").append(Result.FAILED.value());
             }
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Exception : ").append(ConstantNoCode.CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Exception : ").append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
             actionReport.setLog(getLogReport().toString());
         } finally {
             actionReport.setEndTime(Calendar.getInstance());

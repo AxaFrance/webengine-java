@@ -50,15 +50,15 @@ public class IfCommand extends AbstractDriverCommand {
                     assertContentResult = webElementDescription.assertContentByElementType(expectedValue);
                 }
             }catch (Exception e){
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(e.getMessage());
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(e.getMessage());
                 throw new WebEngineException(e.getMessage());
             }
 
             if(assertContentResult!=null && assertContentResult.isResult()){
                 String expectedSentence = "The expected value is : '" + expectedValue + "'";
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(expectedSentence);
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(expectedSentence);
                 String actualSentence = "The actual value is : '" + assertContentResult.getActualValue() + "'";
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(actualSentence);
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(actualSentence);
             }
 
         }

@@ -20,9 +20,9 @@ public class AssertNotSelectedCommand extends AssertSelectedCommand{
         ElementContentSelect elementContentSelect = (ElementContentSelect)webElementDescription.getSelectedOption();
         if(assertion(elementContentSelect,expectedValue)){
             String errorMessage = "The expected value is : '" + expectedValue + "'";
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(errorMessage);
             errorMessage = "The actual selected option is : '" + elementContentSelect.getValueAndTextMap().entrySet().stream().findFirst().get() + "'";
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }
     }

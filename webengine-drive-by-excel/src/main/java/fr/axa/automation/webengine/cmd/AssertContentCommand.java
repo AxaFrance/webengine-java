@@ -20,9 +20,9 @@ public class AssertContentCommand extends AbstractDriverCommand {
         AssertContentResult assertContentResult = webElementDescription.assertContentByElementType(expectedValue);
         if(!assertContentResult.isResult()){
             String errorMessage = "The expected value is : '" + expectedValue + "'";
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(errorMessage);
             errorMessage = "The actual value is : '" + assertContentResult.getActualValue() + "'";
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(errorMessage);
             throw new WebEngineException(errorMessage);
         }
     }
