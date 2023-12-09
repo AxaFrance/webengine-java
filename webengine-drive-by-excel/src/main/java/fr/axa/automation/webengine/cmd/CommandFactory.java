@@ -14,6 +14,8 @@ public class CommandFactory {
                 return new SwitchToCommand();
             case OPEN_TAB:
                 return new OpenTabCommand();
+            case DELETE_COOKIE:
+                return new DeleteCookieCommand();
             case CLEAR:
                 return new ClearCommand();
             case SEND_KEYS:

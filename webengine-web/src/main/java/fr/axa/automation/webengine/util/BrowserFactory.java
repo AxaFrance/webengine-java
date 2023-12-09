@@ -103,8 +103,9 @@ public final class BrowserFactory {
             }else{
                 throw new WebEngineException("Browser not recognized");
             }
-
-            webDriver.manage().deleteAllCookies();
+            if(browserDetail.isDeleteCookie()) {
+                webDriver.manage().deleteAllCookies();
+            }
         }
         return Optional.ofNullable(webDriver);
     }
