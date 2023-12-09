@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.boot;
 
-import fr.axa.automation.webengine.executor.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.argument.ArgumentOption;
 import fr.axa.automation.webengine.checking.chain.IChecking;
 import fr.axa.automation.webengine.checking.chain.impl.AbstractChecking;
@@ -12,6 +11,7 @@ import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import fr.axa.automation.webengine.executor.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.executor.TestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;

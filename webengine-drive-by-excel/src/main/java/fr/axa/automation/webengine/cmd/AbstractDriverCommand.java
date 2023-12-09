@@ -179,16 +179,16 @@ public abstract class AbstractDriverCommand implements ICommand {
             if(getWebDriverToUse(commandResultList)!=null){
                 actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,"",commandResultList));
             }
-            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Cause : ").append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(e.getMessage());
             if (commandData.isOptional() || commandData.getCommand() == CommandName.IF || commandData.getCommand() == CommandName.ELSE_IF) {
                 actionReport.setName(actionReport.getName() + " - /!\\ Failed but ignored (Optional or If/else if/else)");
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
+                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
             }else{
                 actionReport.setResult(Result.FAILED);
                 getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Status : ").append(Result.FAILED.value());
             }
-            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Exception : ").append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Cause : ").append(ConstantNoCode.CR_LF.getValue()).append(e.getMessage());
+            getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append("Exception : ").append(ConstantNoCode.CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
             actionReport.setLog(getLogReport().toString());
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
