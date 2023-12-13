@@ -3,22 +3,20 @@ package fr.axa.automation.webengine.cmd;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
+import fr.axa.automation.webengine.helper.RobotHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class SendKeysCommand extends AbstractDriverCommand {
 
     public static final String KEY_ = "KEY_";
 
-    static {
-        System.setProperty("java.awt.headless", "false");
-    }
+    private final RobotHelper robotHelper = new RobotHelper();
+
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
         webElementDescription = populateWebElement(globalApplicationContext, testCaseContext, commandData, commandResultList);
@@ -28,22 +26,7 @@ public class SendKeysCommand extends AbstractDriverCommand {
 
     protected void executeActionInElement(String value, CommandDataNoCode cmdData) throws Exception {
         if (cmdData.getTargetList().isEmpty()) {
-            Robot robot = new Robot();
-            if (value.startsWith(KEY_)) {
-                robot.keyPress((Integer) KeyEvent.class.getField("VK_" + value.substring(4)).get(null));
-                robot.delay(500);
-            } else {
-                StringSelection owner = new StringSelection(value);
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(owner, owner);
-
-                //imitate mouse events like ENTER, CTRL+C, CTRL+VRobot robot = new Robot();
-                robot.delay(500);
-                robot.keyPress(KeyEvent.VK_CONTROL);
-                robot.keyPress(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_CONTROL);
-                robot.delay(500);
-            }
+            robotHelper.sendKeys(value);
         } else {
             if (value.startsWith(KEY_)) {
                 webElementDescription.sendKeyboard(StringUtils.substringAfterLast(value, KEY_));
@@ -51,21 +34,5 @@ public class SendKeysCommand extends AbstractDriverCommand {
                 webElementDescription.sendKeysWithAssertion(value);
             }
         }
-    }
-
-    private void writeString(Robot robot, String s) {
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (Character.isUpperCase(c)) {
-                robot.keyPress(KeyEvent.VK_SHIFT);
-            }
-            robot.keyPress(Character.toUpperCase(c));
-            robot.keyRelease(Character.toUpperCase(c));
-
-            if (Character.isUpperCase(c)) {
-                robot.keyRelease(KeyEvent.VK_SHIFT);
-            }
-        }
-        robot.delay(500);
     }
 }
