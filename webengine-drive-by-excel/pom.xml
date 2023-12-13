@@ -5,11 +5,10 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>3.1.0-SNAPSHOT</version>
+        <version>3.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>webengine-drive-by-excel</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>webengine-drive-by-excel</name>
 
