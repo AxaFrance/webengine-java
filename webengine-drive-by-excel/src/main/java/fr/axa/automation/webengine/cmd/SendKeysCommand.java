@@ -8,7 +8,6 @@ import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.*;
 import java.util.List;
 
 public class SendKeysCommand extends AbstractDriverCommand {
