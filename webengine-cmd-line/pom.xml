@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>webengine-cmd-line</artifactId>
