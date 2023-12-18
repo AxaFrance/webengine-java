@@ -383,13 +383,8 @@ public class WebElementDescription extends AbstractWebElement{
             WebElement webElement = findElement();
             focus(webElement);
             highLight(webElement);
-            String script = String.format("return finderCssSelector();");
-
-
-//            Object cssSelector = (Object)executerGetObject(cssSelectorGeneratorScript,"return finder(arguments[0]);",webElement);
-            Object cssSelector = (Object)executerGetObject(shadowDomScript,script);
-            script = "return window.getComputedStyle(document.querySelector('"+cssSelector+"'),':"+pseudoElement+"').click()";
-            executeJavascript(script);
+            Object cssSelector = (Object)executerGetObject(cssSelectorGeneratorScript," return finder(arguments[0]);",webElement);
+            ((JavascriptExecutor)getUseDriver()).executeScript("document.querySelector(arguments[0],':"+pseudoElement+"').click();",cssSelector);
             return null;
         };
         retry(fun,null);
