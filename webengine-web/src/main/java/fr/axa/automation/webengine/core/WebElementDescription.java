@@ -76,11 +76,13 @@ public class WebElementDescription extends AbstractWebElement{
     boolean shadowDom = false;
     String pseudoElement;
 
-    private final static String javascriptLibrary ;
+    private final static String shadowDomScript;
+    private final static String cssSelectorGeneratorScript;
 
     static {
         try {
-            javascriptLibrary = FileUtil.fileToText("js/querySelector.js").toString();
+            shadowDomScript = FileUtil.fileToText("js/shadow-dom-query-selector.js").toString();
+            cssSelectorGeneratorScript = FileUtil.fileToText("js/css-selector-generator.js").toString();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -375,6 +377,24 @@ public class WebElementDescription extends AbstractWebElement{
         };
         retry(fun,null);
     }
+
+    public void clickOnPseudoElement() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            String script = String.format("return finderCssSelector();");
+
+
+//            Object cssSelector = (Object)executerGetObject(cssSelectorGeneratorScript,"return finder(arguments[0]);",webElement);
+            Object cssSelector = (Object)executerGetObject(shadowDomScript,script);
+            script = "return window.getComputedStyle(document.querySelector('"+cssSelector+"'),':"+pseudoElement+"').click()";
+            executeJavascript(script);
+            return null;
+        };
+        retry(fun,null);
+    }
+
 
     public void focusAndClickFromActions() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
@@ -954,12 +974,12 @@ public class WebElementDescription extends AbstractWebElement{
         new Actions(getUseDriver()).moveToElement(webElement).click().build().perform();
     }
 
-    private Object executerGetObject(String script) {
-        return executerGetObject(script,null);
+    private Object executerGetObject(String libraryScript, String script) {
+        return executerGetObject(libraryScript, script,null);
     }
 
-    private Object executerGetObject(String script, WebElement element) {
-        String javascript = javascriptLibrary;
+    private Object executerGetObject(String libraryScript, String script, WebElement element) {
+        String javascript = libraryScript;
         javascript += script;
         if(element==null){
             return executeJavascript(javascript);
@@ -969,7 +989,7 @@ public class WebElementDescription extends AbstractWebElement{
 
     public WebElement getElementInShadowByXpath(String xPath) throws Exception {
         IFunction<String, WebElement> fun = (x) -> {
-            WebElement webElement =  (WebElement) executerGetObject(String.format("return getXPathObject(\"%s\");", x));
+            WebElement webElement =  (WebElement) executerGetObject(shadowDomScript,String.format("return getXPathObject(\"%s\");", x));
             if(webElement==null){
                 throw new Exception("The element is null");
             }
@@ -981,7 +1001,7 @@ public class WebElementDescription extends AbstractWebElement{
 
     public WebElement getElementInShadowByCssSelector(String cssSelector) throws Exception {
         IFunction<String, WebElement> fun = (x) -> {
-            WebElement webElement =  (WebElement) executerGetObject(String.format("return getObject(\"%s\");", x));
+            WebElement webElement =  (WebElement) executerGetObject(shadowDomScript,String.format("return getObject(\"%s\");", x));
             if(webElement==null){
                 throw new Exception("The element is null");
             }
