@@ -80,7 +80,7 @@ public class WebElementDescription extends AbstractWebElement{
 
     static {
         try {
-            javascriptLibrary = FileUtil.fileToText("querySelector.js").toString();
+            javascriptLibrary = FileUtil.fileToText("js/querySelector.js").toString();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

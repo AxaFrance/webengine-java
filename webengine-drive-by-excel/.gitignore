@@ -26,3 +26,4 @@ target/
 *.iml
 .idea/*
 .run/*
+/src/main/resources/js/querySelector.js
