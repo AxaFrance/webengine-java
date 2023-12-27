@@ -811,6 +811,9 @@ public class WebElementDescription extends AbstractWebElement{
 
 
     public boolean isChecked() throws Exception {
+        Boolean object = isCheckedByScript();
+        if (object != null) return object;
+
         IFunction<Void, Boolean> fun = (value) ->{
             WebElement webElement = this.findElement();
             focus(webElement);
@@ -821,6 +824,23 @@ public class WebElementDescription extends AbstractWebElement{
             }
         };
         return retry(fun,null);
+    }
+
+    public Boolean isCheckedByScript() throws Exception {
+        if (id != null) {
+            String script = " return (document.getElementById('" + id + "').type == 'radio' || document.getElementById('" + id + "').type == 'checkbox') ";
+            Boolean isRadioOrCheckbox = (Boolean) executeJavascript(script);
+            if (isRadioOrCheckbox != null && !isRadioOrCheckbox) {
+                throw new Exception("It's not a radio or checkbox element");
+            }
+
+            script = " return document.getElementById('" + id + "').checked; ";
+            Boolean object = (Boolean) executeJavascript(script);
+            if (object != null) {
+                return object;
+            }
+        }
+        return null;
     }
 
     private ElementContentSelect getSelectedOption(WebElement webElement) throws Exception{
