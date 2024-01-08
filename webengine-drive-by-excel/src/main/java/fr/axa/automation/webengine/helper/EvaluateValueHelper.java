@@ -92,7 +92,7 @@ public class EvaluateValueHelper {
                 if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)) {
                     resultValue = resultValue.replace(referencedRegexValue,replaceTagDateValue(valueWithouRafter));
                 } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
-                    resultValue = resultValue.replace(referencedRegexValue,PredefinedTagValue.valueOf(valueWithouRafter).getTagValue());
+                    resultValue = resultValue.replace(referencedRegexValue,PredefinedTagValue.fromTagValue(valueWithouRafter).getTagValue());
                 } else if (isContainsInternalValue(valueWithouRafter, commandResultList)) {
                     String savedData = getSavedData(valueWithouRafter,commandResultList);
                     resultValue = resultValue.replace(referencedRegexValue,savedData);
