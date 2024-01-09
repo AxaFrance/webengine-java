@@ -74,7 +74,7 @@ public class WebElementDescription extends AbstractWebElement{
     String linkText;
 
     boolean shadowDom = false;
-    String pseudoElement;
+//    String pseudoElement;
 
     private final static String globalFunctionScript;
     private final static String shadowDomScript;
@@ -118,7 +118,7 @@ public class WebElementDescription extends AbstractWebElement{
                 ", className='" + className + '\'' +
                 ", tagName='" + tagName + '\'' +
                 ", linkText='" + linkText + '\'' +
-                ", pseudoElement='" + pseudoElement + '\'' +
+//                ", pseudoElement='" + pseudoElement + '\'' +
                 '}';
     }
 
@@ -381,17 +381,17 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,null);
     }
 
-    public void clickOnPseudoElement() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
-            WebElement webElement = findElement();
-            focus(webElement);
-            highLight(webElement);
-            Object cssSelector = (Object)executerGetObject(cssSelectorGeneratorScript," return finder(arguments[0]);",webElement);
-            ((JavascriptExecutor)getUseDriver()).executeScript("document.querySelector(arguments[0],':"+pseudoElement+"').click();",cssSelector);
-            return null;
-        };
-        retry(fun,null);
-    }
+//    public void clickOnPseudoElement() throws Exception {
+//        IFunction<Void, Void> fun = (x) -> {
+//            WebElement webElement = findElement();
+//            focus(webElement);
+//            highLight(webElement);
+//            Object cssSelector = (Object)executerGetObject(cssSelectorGeneratorScript," return finder(arguments[0]);",webElement);
+//            ((JavascriptExecutor)getUseDriver()).executeScript("document.querySelector(arguments[0],':"+pseudoElement+"').click();",cssSelector);
+//            return null;
+//        };
+//        retry(fun,null);
+//    }
 
 
     public void focusAndClickFromActions() throws Exception {

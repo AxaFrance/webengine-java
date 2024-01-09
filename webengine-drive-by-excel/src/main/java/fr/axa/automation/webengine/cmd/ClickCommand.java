@@ -17,9 +17,9 @@ public class ClickCommand extends AbstractDriverCommand {
     }
 
     protected void executeActionInElement() throws Exception {
-        if(StringUtils.isNotEmpty(webElementDescription.getPseudoElement())){
-            webElementDescription.clickOnPseudoElement();
-        }
+//        if(StringUtils.isNotEmpty(webElementDescription.getPseudoElement())){
+//            webElementDescription.clickOnPseudoElement();
+//        }
         try {
             webElementDescription.focusAndClick();
         } catch (Exception e) {
