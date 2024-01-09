@@ -76,11 +76,13 @@ public class WebElementDescription extends AbstractWebElement{
     boolean shadowDom = false;
     String pseudoElement;
 
+    private final static String globalFunctionScript;
     private final static String shadowDomScript;
     private final static String cssSelectorGeneratorScript;
 
     static {
         try {
+            globalFunctionScript = FileUtil.fileToText("js/global-function.js").toString();
             shadowDomScript = FileUtil.fileToText("js/shadow-dom-query-selector.js").toString();
             cssSelectorGeneratorScript = FileUtil.fileToText("js/css-selector-generator.js").toString();
         } catch (IOException e) {
@@ -116,6 +118,7 @@ public class WebElementDescription extends AbstractWebElement{
                 ", className='" + className + '\'' +
                 ", tagName='" + tagName + '\'' +
                 ", linkText='" + linkText + '\'' +
+                ", pseudoElement='" + pseudoElement + '\'' +
                 '}';
     }
 
