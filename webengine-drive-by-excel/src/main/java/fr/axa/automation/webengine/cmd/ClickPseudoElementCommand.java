@@ -1,14 +1,14 @@
 package fr.axa.automation.webengine.cmd;
 
+import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-public class ClickCommand extends AbstractDriverCommand {
+public class ClickPseudoElementCommand extends ClickCommand {
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
@@ -16,11 +16,13 @@ public class ClickCommand extends AbstractDriverCommand {
         executeActionInElement();
     }
 
+    @Override
     protected void executeActionInElement() throws Exception {
-        try {
-            webElementDescription.focusAndClick();
-        } catch (Exception e) {
-            webElementDescription.focusAndClickWithJS();
+        if(webElementDescription.getPseudoElement() != null){
+            webElementDescription.focusAndClickOnPseudoElement();
+        }else {
+            throw new WebEngineException("Pseudo element is null");
         }
+
     }
 }

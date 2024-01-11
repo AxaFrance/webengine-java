@@ -24,6 +24,8 @@ public class CommandFactory {
                 return new SendKeysWithClearCommand();
             case CLICK:
                 return new ClickCommand();
+            case CLICK_ON_PSEUDO_ELEMENT:
+                return new ClickPseudoElementCommand();
             case SAVE_DATA:
                 return new SaveDataCommand();
             case CHECK_BY_VALUE:

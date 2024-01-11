@@ -30,6 +30,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -74,7 +75,7 @@ public class WebElementDescription extends AbstractWebElement{
     String linkText;
 
     boolean shadowDom = false;
-//    String pseudoElement;
+    PseudoElement pseudoElement;
 
     private final static String globalFunctionScript;
     private final static String shadowDomScript;
@@ -118,7 +119,7 @@ public class WebElementDescription extends AbstractWebElement{
                 ", className='" + className + '\'' +
                 ", tagName='" + tagName + '\'' +
                 ", linkText='" + linkText + '\'' +
-//                ", pseudoElement='" + pseudoElement + '\'' +
+                ", pseudoElement='" + pseudoElement + '\'' +
                 '}';
     }
 
@@ -313,12 +314,19 @@ public class WebElementDescription extends AbstractWebElement{
         actions.dragAndDrop(findWebElement, element).build().perform();
     }
 
-    private Object executeJavascript(String script) {
+    public Object executeJavascriptWithRetry(String script) throws Exception {
+        IFunction<String, Object> fun = (scriptToExecute) -> {
+            return executeJavascript(scriptToExecute);
+        };
+        return retry(fun,script);
+    }
+
+    public Object executeJavascript(String script) {
         JavascriptExecutor js = (JavascriptExecutor) useDriver;
         return js.executeScript(script);
     }
 
-    private Object executeJavascript(String script, WebElement webElement) {
+    public Object executeJavascript(String script, WebElement webElement) {
         JavascriptExecutor js = (JavascriptExecutor) useDriver;
         return js.executeScript(script, webElement);
     }
@@ -381,22 +389,21 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,null);
     }
 
-//    public void clickOnPseudoElement() throws Exception {
-//        IFunction<Void, Void> fun = (x) -> {
-//            WebElement webElement = findElement();
-//            focus(webElement);
-//            highLight(webElement);
-//            Object cssSelector = (Object)executerGetObject(cssSelectorGeneratorScript," return finder(arguments[0]);",webElement);
-//            ((JavascriptExecutor)getUseDriver()).executeScript("document.querySelector(arguments[0],':"+pseudoElement+"').click();",cssSelector);
-//            return null;
-//        };
-//        retry(fun,null);
-//    }
-
+    public void focusAndClickOnPseudoElement() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            clickOnPseudoElement(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
 
     public void focusAndClickFromActions() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
+            focus(webElement);
             highLight(webElement);
             clickFromActions(webElement);
             return null;
@@ -407,6 +414,7 @@ public class WebElementDescription extends AbstractWebElement{
     public void focusAndClickWithJS() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
+            focus(webElement);
             highLight(webElement);
             executeJavascript("arguments[0].click();", webElement);
             return null;
@@ -970,6 +978,18 @@ public class WebElementDescription extends AbstractWebElement{
 
     private void clickFromActions(WebElement webElement) {
         new Actions(getUseDriver()).moveToElement(webElement).click().build().perform();
+    }
+
+    private void clickOnPseudoElement(WebElement webElement) {
+        Rectangle rectangle = webElement.getRect();
+        int width = rectangle.getWidth();
+        int x = getPseudoElement().getX()!=null ? getPseudoElement().getX() : 2;
+        int offset = width/2 - x;
+        if(getPseudoElement().getValue() == "before"){
+            offset = offset * (-1);
+
+        }
+        new Actions(getUseDriver()).moveToElement(webElement).moveByOffset(offset,0).click().build().perform();
     }
 
     private Object executerGetObject(String libraryScript, String script) {
