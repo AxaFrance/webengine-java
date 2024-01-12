@@ -41,8 +41,8 @@
                     <h1>Test cases</h1>
                 </div>
                 <div class="tree-action-container">
-                    <div class="tree-one-action-container" onclick="expandAll()"><i class="fa fa-plus icon-action-tree"></i></div>
-                    <div class="tree-one-action-container" onclick="collapseAll()"><i class="fa fa-minus icon-action-tree"></i></div>
+                    <div class="tree-one-action-container dot" onclick="expandAll()"><i class="fa fa-plus icon-action-tree"></i></div>
+                    <div class="tree-one-action-container dot" onclick="collapseAll()"><i class="fa fa-minus icon-action-tree"></i></div>
                 </div>
             </div>
             <div id='id-tree-container' class="tree-container">

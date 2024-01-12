@@ -39,9 +39,11 @@
                         <div class="information-sub-header">
                             <xsl:call-template name="sub-header-template"/>
                         </div>
+                        <!--
                         <div class="chart-header">
                             <xsl:call-template name="chart-header-template"/>
                         </div>
+                        -->
                     </div>
 
                     <div class="body-content-container">

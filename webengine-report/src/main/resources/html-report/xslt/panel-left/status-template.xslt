@@ -5,13 +5,13 @@
         <xsl:param name="label" />
         <xsl:param name="id" />
         <xsl:if test="$status='Passed'">
-            <i class="fa fa-check badge-action-green" aria-hidden="true"></i>
+            <i class="fa fa-check icon-green" aria-hidden="true"></i>
         </xsl:if>
         <xsl:if test="$status='Failed'">
-            <i class="fa fa-times badge-action-red" aria-hidden="true"></i>
+            <i class="fa fa-times icon-red" aria-hidden="true"></i>
         </xsl:if>
         <xsl:if test="$status='Ignored'">
-            <i class="fa fa-circle badge-action-gray" aria-hidden="true"></i>
+            <i class="fa fa-circle icon-gray" aria-hidden="true"></i>
         </xsl:if>
         <xsl:text> </xsl:text>
         <a href="#" onclick=";openTestResultContent(event,'{$id}');"><xsl:value-of select="$label" /></a>

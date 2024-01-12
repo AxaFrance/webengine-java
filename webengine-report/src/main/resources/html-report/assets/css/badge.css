@@ -7,34 +7,46 @@
     transition: 200ms all ease-in-out;
 }
 
-.badge-action {
+.badge-action,
+.badge-action-azur-mist,
+.badge-action-white-ecru,
+.badge-action-pink,
+.badge-action-gray,
+.badge-action-green,
+.badge-action-red,
+.badge-action-violet{
     display: inline-block;
     background-color: #00008f !important;
-    color: white;
+    color: black !important;
     font-weight: 350 !important;
     font-size: 16px !important;
     padding: 0.8em 1.5em !important;
-    border-radius: 30px !important;
 }
 
-.badge-action-green {
-    color: #27ae60 !important;
+.badge-action-azur-mist {
+    background-color: #F0FFFF !important;
 }
 
-.badge-action-red {
-    color: #e74c3c !important;
+.badge-action-white-ecru {
+    background-color: #FEFEE0 !important;
 }
 
-.badge-action-blue {
-    color: #3498db !important;
+.badge-action-pink {
+    background-color: #FEE7F0 !important;
 }
 
 .badge-action-gray {
-    color: #ccd1d1 !important;
+    background-color: #EFEFEF !important;
 }
 
-.badge-action-hover:hover {
-    cursor: pointer;
-    background-color: white !important;
-    color: gray !important;
+.badge-action-green {
+    background-color: #c8f4d5 !important;
+}
+
+.badge-action-red {
+    background-color: #f7cecb !important;
+}
+
+.badge-action-violet {
+    background-color: #e5e5fd !important;
 }

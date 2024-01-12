@@ -2,7 +2,7 @@
     <xsl:template name="content-tab-information-template">
         <xsl:param name="id"/>
         <div id="content-id-information-{$id}" class="tab-content-container class-container-tab" style="display:none">
-            <div class="border-div">
+            <div>
                 <h6>Information :</h6>
                 <p>Start time :
                     <xsl:value-of select="we:StartTime"/>
@@ -12,7 +12,7 @@
                 </p>
             </div>
 
-            <div class="border-div">
+            <div>
                 <h6>Screenshot :</h6>
                 <div class="container-img">
                     <xsl:choose>

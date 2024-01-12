@@ -1,36 +1,33 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:we="http://www.axa.fr/WebEngine/2022">
 
     <xsl:template name="sub-header-template">
+
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action"><i class="fa fa-bars" aria-hidden="true"></i> Test suite</span>
+            <span class="badge badge-secondary badge-action-azur-mist"><i class="fa fa-hourglass-start" aria-hidden="true"></i> Start time : <xsl:value-of select="we:StartTime"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action"><i class="fa fa-hourglass-start" aria-hidden="true"></i> Start time : <xsl:value-of select="we:StartTime"/></span>
+            <span class="badge badge-secondary badge-action-white-ecru"><i class="fa fa-hourglass-end" aria-hidden="true"></i> End time : <xsl:value-of select="we:EndTime"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action"><i class="fa fa-hourglass-end" aria-hidden="true"></i> End time : <xsl:value-of select="we:EndTime"/></span>
+            <span class="badge badge-secondary badge-action-pink"><i class="fa fa-desktop" aria-hidden="true"></i> Hostname : <xsl:value-of select="we:HostName"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action"><i class="fa fa-desktop" aria-hidden="true"></i> Hostname : <xsl:value-of select="we:HostName"/></span>
+            <span class="badge badge-secondary badge-action-violet"><i class="fa fa-square" aria-hidden="true"></i> Number of test case : <xsl:value-of select="we:NumberOfTestcase"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action"><i class="fa fa-square" aria-hidden="true"></i> Number of test case : <xsl:value-of select="we:NumberOfTestcase"/></span>
+            <span class="badge badge-secondary badge-action-green"><i class="fa fa-check icon-green" aria-hidden="true"></i> Passed tests : <xsl:value-of select="we:Passed"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-check badge-action-green" aria-hidden="true"></i> Passed tests : <xsl:value-of select="we:Passed"/></span>
+            <span class="badge badge-secondary badge-action-red"><i class="fa fa-times icon-red" aria-hidden="true"></i> Failed tests : <xsl:value-of select="we:Failed"/></span>
         </div>
 
         <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-times badge-action-red" aria-hidden="true"></i> Failed tests : <xsl:value-of select="we:Failed"/></span>
-        </div>
-
-        <div class="badge-container">
-            <span class="badge badge-secondary badge-action "><i class="fa fa-circle badge-action-gray" aria-hidden="true"></i> Ignored tests : <xsl:value-of select="we:Ignored"/></span>
+            <span class="badge badge-secondary badge-action-gray "><i class="fa fa-circle icon-gray" aria-hidden="true"></i> Ignored tests : <xsl:value-of select="we:Ignored"/></span>
         </div>
     </xsl:template>
 
