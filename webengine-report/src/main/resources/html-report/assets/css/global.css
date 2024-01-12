@@ -65,7 +65,10 @@ a {
     background-color: transparent !important;
 }
 
-.dot {
+.dot,.dot-stat,
+.dot-stat-green,
+.dot-stat-red,
+.dot-stat-gray{
     height: 25px;
     width: 25px;
     background-color: #bbb;
@@ -75,6 +78,28 @@ a {
     padding-top: 2px;
     display: flex;
 }
+
+.dot-stat,.dot-stat-green,
+.dot-stat-red,
+.dot-stat-gray{
+    height: 40px;
+    width: 40px;
+}
+
+.dot-stat-green {
+    background-color: #c8f4d5;
+    margin-right: 5px;
+}
+
+.dot-stat-red{
+    background-color: rgb(247, 206, 203);
+    margin-right: 5px;
+}
+
+.dot-stat-gray{
+    background-color: #e6e6e6;
+}
+
 
 /* ***********************scrollbar*********************** */
 /* width */

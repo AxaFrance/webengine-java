@@ -58,3 +58,9 @@
     flex-grow: 1;
     margin: 5px;
 }
+
+.stat-header{
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+}
