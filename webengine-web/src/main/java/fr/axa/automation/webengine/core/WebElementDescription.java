@@ -982,14 +982,15 @@ public class WebElementDescription extends AbstractWebElement{
 
     private void clickOnPseudoElement(WebElement webElement) {
         Rectangle rectangle = webElement.getRect();
-        int width = rectangle.getWidth();
-        int x = getPseudoElement().getX()!=null ? getPseudoElement().getX() : 2;
-        int offset = width/2 - x;
+        int x = getPseudoElement().getX() != null ? getPseudoElement().getX() : 2;
+        int xOffset = rectangle.getWidth()/2 - x;
         if(getPseudoElement().getValue() == "before"){
-            offset = offset * (-1);
-
+            xOffset = xOffset * (-1);
         }
-        new Actions(getUseDriver()).moveToElement(webElement).moveByOffset(offset,0).click().build().perform();
+
+        int yOffset = getPseudoElement().getY() != null ? getPseudoElement().getY() : 0;
+
+        new Actions(getUseDriver()).moveToElement(webElement).moveByOffset(xOffset,yOffset).click().build().perform();
     }
 
     private Object executerGetObject(String libraryScript, String script) {
