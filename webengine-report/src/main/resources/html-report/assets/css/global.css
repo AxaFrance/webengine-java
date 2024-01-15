@@ -36,9 +36,7 @@ section {
 }
 
 .common-font {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: Arial, sans-serif;
     font-weight: 600;
     line-height: 2;
     color: #515a5a;
