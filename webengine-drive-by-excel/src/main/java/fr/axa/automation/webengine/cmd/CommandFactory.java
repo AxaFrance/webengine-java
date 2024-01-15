@@ -28,6 +28,8 @@ public class CommandFactory {
                 return new ClickPseudoElementCommand();
             case SAVE_DATA:
                 return new SaveDataCommand();
+            case SAVE_DATA_AND_APPLY_REGEX:
+                return new SaveDataAndApplyRegexCommand();
             case CHECK_BY_VALUE:
                 return new CheckByValueCommand();
             case CALL:
