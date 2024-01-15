@@ -17,6 +17,7 @@ public class SaveDataCommand extends AbstractDriverCommand{
         String dataToSave = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         if(MapUtils.isNotEmpty(commandData.getTargetList())){
             dataToSave = webElementDescription.getTextByElement();
+            getLogReport().append("\n").append("Value in element : ").append(dataToSave).append("\n");
         }
         setSavedData(dataToSave);
     }

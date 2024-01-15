@@ -21,7 +21,10 @@ public class SaveDataAndApplyRegexCommand extends AbstractDriverCommand{
         webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
         String regex = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
         String textInElement = webElementDescription.getTextByElement();
+        getLogReport().append("\n").append("Value in element : ").append(textInElement).append("\n");
         Optional textInElementWithRegexOptional = RegexUtil.findFirst(regex,textInElement);
-        setSavedData(textInElementWithRegexOptional.isPresent() ? textInElementWithRegexOptional.get().toString() : "");
+        String textInElementAfterApplyRegex = textInElementWithRegexOptional.isPresent() ? textInElementWithRegexOptional.get().toString() : "";
+        getLogReport().append("Value in element after apply regex : ").append(textInElementAfterApplyRegex).append("\n");
+        setSavedData(textInElementAfterApplyRegex);
     }
 }
