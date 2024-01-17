@@ -2,14 +2,27 @@
     <xsl:template name="content-tab-information-template">
         <xsl:param name="id"/>
         <div id="content-id-information-{$id}" class="tab-content-container class-container-tab" style="display:none">
-            <div>
+            <div class="container-info">
                 <h6>Information :</h6>
-                <p>Start time :
-                    <xsl:value-of select="we:StartTime"/>
-                </p>
-                <p>End time :
-                    <xsl:value-of select="we:EndTime"/>
-                </p>
+
+                <table id="table-common">
+                    <tr>
+                        <td class="name">
+                            Start time
+                        </td>
+                        <td class="value">
+                            <xsl:value-of select="we:StartTime"/>
+                        </td>
+                    </tr>
+
+                    <td class="name">
+                        End time
+                    </td>
+                    <td class="value">
+                        <xsl:value-of select="we:EndTime"/>
+                    </td>
+                </table>
+
             </div>
 
             <div>

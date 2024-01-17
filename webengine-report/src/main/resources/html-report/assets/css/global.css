@@ -16,7 +16,7 @@ body {
     background: #fff;
     /* font-family: Source Sans Pro, sans-serif; */
     font-family: "Raleway";
-    font-size: 14px !important;
+    font-size: 15px !important;
     height: 100%;
     width: 100%;
 }
@@ -45,12 +45,6 @@ section {
 .title {
     color: #f1948a;
 }
-
-/*.shadow {*/
-/*    -webkit-box-shadow: 10px 11px 5px 0px rgba(0, 0, 0, 0.1);*/
-/*    -moz-box-shadow: 10px 11px 5px 0px rgba(0, 0, 0, 0.1);*/
-/*    box-shadow: 10px 11px 5px 0px rgba(0, 0, 0, 0.1);*/
-/*}*/
 
 .selected-line {
     color: black !important;
@@ -99,26 +93,13 @@ a {
 }
 
 
-/* ***********************scrollbar*********************** */
-/* width */
-/*::-webkit-scrollbar {*/
-/*    width: 10px;*/
-/*}*/
+.container-info{
+    margin-bottom: 30px;
+}
 
-/*!* Track *!*/
-/*::-webkit-scrollbar-track {*/
-/*    box-shadow: inset 0 0 5px grey;*/
-/*}*/
-
-/*!* Handle *!*/
-/*::-webkit-scrollbar-thumb {*/
-/*    background: #00008f;*/
-/*}*/
-
-/*!* Handle on hover *!*/
-/*::-webkit-scrollbar-thumb:hover {*/
-/*    background: #00008f;*/
-/*}*/
+h6{
+    margin-bottom: 30px!important;
+}
 
 /* ***********************footer*********************** */
 footer {
@@ -161,4 +142,9 @@ footer {
 
 .icon-gray{
     color:gray;
+}
+
+.icon-around{
+    margin-left: 5px;
+    margin-right: 5px;
 }

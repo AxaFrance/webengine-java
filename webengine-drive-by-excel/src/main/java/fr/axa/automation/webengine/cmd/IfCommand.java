@@ -1,16 +1,17 @@
 package fr.axa.automation.webengine.cmd;
 
-import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.AssertContentResult;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
+import fr.axa.automation.webengine.helper.VariableHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class IfCommand extends AbstractDriverCommand {
             }
         } else {
             AssertContentResult assertContentResult;
-            String errorMessage;
             try{
                 if(webElementDescription.isSelect()){
                     assertContentResult = webElementDescription.assertContentSelect(expectedValue);
@@ -50,15 +50,14 @@ public class IfCommand extends AbstractDriverCommand {
                     assertContentResult = webElementDescription.assertContentByElementType(expectedValue);
                 }
             }catch (Exception e){
-                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(e.getMessage());
+                getLogReport().getVariables().add(VariableHelper.getVariable("Cause", e.getMessage()));
+                getLogReport().getVariables().add(VariableHelper.getVariable("Exception", ExceptionUtils.getStackTrace(e)));
                 throw new WebEngineException(e.getMessage());
             }
 
             if(assertContentResult!=null && assertContentResult.isResult()){
-                String expectedSentence = "The expected value is : '" + expectedValue + "'";
-                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(expectedSentence);
-                String actualSentence = "The actual value is : '" + assertContentResult.getActualValue() + "'";
-                getLogReport().append(ConstantNoCode.DOUBLE_CR_LF.getValue()).append(actualSentence);
+                getLogReport().getVariables().add(VariableHelper.getVariable("Expected value", expectedValue));
+                getLogReport().getVariables().add(VariableHelper.getVariable("Actual value", assertContentResult.getActualValue()));
             }
 
         }

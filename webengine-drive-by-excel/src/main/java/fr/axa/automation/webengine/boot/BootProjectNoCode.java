@@ -86,7 +86,12 @@ public class BootProjectNoCode extends AbstractBootProject {
             loggerService.info("End clean ");
 
             loggerService.info("Start report ");
-            testSuiteReport.getTestResults().get(0).setLog("Arguments : "+ArgumentParser.removeOptionFromArguments(args,ArgumentOption.KEEPASS_PASSWORD));
+
+//            String argumentsLogs = ArgumentParser.removeOptionFromArguments(args,ArgumentOption.KEEPASS_PASSWORD).toString();
+//            ArrayOfVariable arrayOfVariable = new ArrayOfVariable();
+//            arrayOfVariable.getVariables().add(VariableHelper.getVariable("Arguments",argumentsLogs));
+//            testSuiteReport.getTestResults().get(0).setLogMap(arrayOfVariable);
+
             Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, "", globalApplicationContext.getSettings().getOutputDir());
             loggerService.info("End report ");
 

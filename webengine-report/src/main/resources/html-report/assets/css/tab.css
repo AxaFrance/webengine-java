@@ -31,7 +31,7 @@
 }
 
 .tab-content-log-container {
-    white-space: pre-line;
+    white-space: normal;
 }
 
 .container-img {
@@ -54,7 +54,6 @@
     color: black;
 }
 .tab-content-container.class-container-tab h6 {
-    /*color: #00008f !important;*/
     font-weight: 700 !important;
 }
 .border-div {

@@ -2,7 +2,7 @@
 
     <xsl:template name="array-view-template">
         <xsl:param name="parentTag"/>
-        <table class="table-common">
+        <table id="table-common">
             <tr>
                 <th>Key</th>
                 <th>Value</th>
@@ -11,10 +11,10 @@
                 <xsl:when test="$parentTag">
                     <xsl:for-each select="$parentTag/we:Variable">
                         <tr>
-                            <td>
+                            <td class="name">
                                 <xsl:value-of select="we:Name"/>
                             </td>
-                            <td>
+                            <td class="value">
                                 <xsl:value-of select="we:Value"/>
                             </td>
                         </tr>
