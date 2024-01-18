@@ -51,8 +51,8 @@ ul.tree{
 .tree {
     --spacing: 1.5rem;
     --radius: 10px;
-    --marker-bg-default: #000000;
-    --marker-bg-haschild: #000000;
+    --marker-bg-default: #eaeaea;
+    --marker-bg-haschild: #eaeaea;
     line-height: 2rem;
 }
 .tree li {
@@ -83,7 +83,7 @@ ul.tree{
     left: -2px;
     width: calc(var(--spacing) + 2px);
     height: calc(var(--spacing) + 1px);
-    border: solid #ddd;
+    border: solid #eaeaea;
     border-width: 0 0 2px 2px;
 }
 
@@ -119,7 +119,7 @@ ul.tree{
     content: '+';
     z-index: 1;
     background: var(--marker-bg-haschild);
-    color: #fff;
+    color: black;
     line-height: calc(2 * var(--radius));
     text-align: center;
 }
