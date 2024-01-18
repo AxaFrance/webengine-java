@@ -90,6 +90,7 @@ ul.tree{
 .tree summary {
     display: block;
     cursor: pointer;
+    color: black;
 }
 .tree summary::marker,
 .tree summary::-webkit-details-marker {
