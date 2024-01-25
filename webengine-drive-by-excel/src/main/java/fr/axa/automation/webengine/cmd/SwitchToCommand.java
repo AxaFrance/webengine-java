@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SwitchToCommand extends OpenCommand{
+public class SwitchToCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
@@ -68,7 +68,8 @@ public class SwitchToCommand extends OpenCommand{
                     }
                 }
             }else{
-                if (driverContextListFilter.size() > 1) {
+                List<WebDriver> webDrivers = driverContextListFilter.stream().map(currentDriverContext -> currentDriverContext.getWebDriver()).distinct().collect(Collectors.toList());
+                if (webDrivers.size() > 1) {
                     throw new WebEngineException("too many drivers context have found");
                 }
 
