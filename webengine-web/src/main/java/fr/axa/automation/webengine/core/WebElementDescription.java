@@ -389,7 +389,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void focusAndClick() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            scrollToElement(webElement);
             focus(webElement);
             highLight(webElement);
             click(webElement);
@@ -401,7 +400,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void focusAndClickOnPseudoElement() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            scrollToElement(webElement);
             focus(webElement);
             highLight(webElement);
             clickOnPseudoElement(webElement);
@@ -413,7 +411,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void focusAndClickFromActions() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            scrollToElement(webElement);
             focus(webElement);
             highLight(webElement);
             clickFromActions(webElement);
@@ -425,7 +422,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void focusAndClickWithJS() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            scrollToElement(webElement);
             focus(webElement);
             highLight(webElement);
             executeJavascript("arguments[0].click();", webElement);
@@ -446,7 +442,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void sendKeysWithAssertion(String text) throws Exception {
         IFunction<String, Void> fun = (sendKeysValue) -> {
             WebElement webElement = findElement();
-            scrollToElement(webElement);
             focus(webElement);
             highLight(webElement);
             sendKeys(sendKeysValue,webElement);
@@ -460,7 +455,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void sendKeysWithClearBefore(String text) throws Exception {
         IFunction<String, Void> fun = (sendKeysValue) -> {
             WebElement webElement = findElement();
-            scrollToElement(webElement);
             focus(webElement);
             highLight(webElement);
             clear();
@@ -475,7 +469,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void sendKeyboard(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            scrollToElement(webElement);
             focus(webElement);
             highLight(webElement);
             webElement.sendKeys(Keys.valueOf(x));
@@ -531,7 +524,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void focus() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             return null;
         };
@@ -599,7 +591,6 @@ public class WebElementDescription extends AbstractWebElement{
     public ElementContent getContentSelect() throws Exception {
         IFunction<String, ElementContent> fun = (param) ->{
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             return getTextAndValueContentInSelect(webElement);
         };
@@ -609,7 +600,6 @@ public class WebElementDescription extends AbstractWebElement{
     public ElementContent getContentInputRadio() throws Exception {
         IFunction<String, ElementContent> fun = (param) -> {
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             return ElementContentInputTypeRadio.builder().attributeChecked(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_CHECKED.getValue())).build();
         };
@@ -619,7 +609,6 @@ public class WebElementDescription extends AbstractWebElement{
     public ElementContent getContentInput() throws Exception {
         IFunction<String, ElementContent> fun = (param) -> {
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             return ElementContent.builder().value(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue())).build();
         };
@@ -633,7 +622,6 @@ public class WebElementDescription extends AbstractWebElement{
     public ElementContent getContentText() throws Exception {
         IFunction<String, ElementContent> fun = (param) -> {
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             return ElementContent.builder().value(webElement.getText()).build();
         };
@@ -790,7 +778,6 @@ public class WebElementDescription extends AbstractWebElement{
     public void selectByValueOrText(String text) throws Exception {
         IFunction<String, Void> fun = (value) -> {
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             click(webElement);
             Select select = new Select(webElement);
@@ -830,7 +817,6 @@ public class WebElementDescription extends AbstractWebElement{
     public String getTextByElement() throws Exception {
         IFunction<Void, String> fun = (value) ->{
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             if(isSelect(webElement)){
                 return getSelectedOption(webElement).getValueAndTextMap().entrySet().stream().findFirst().get().getValue();
@@ -846,7 +832,6 @@ public class WebElementDescription extends AbstractWebElement{
     public ElementContent getSelectedOption() throws Exception {
         IFunction<String, ElementContent> fun = (value) ->{
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             if(isSelect(webElement)){
                 return getSelectedOption(webElement);
@@ -865,7 +850,6 @@ public class WebElementDescription extends AbstractWebElement{
 
         IFunction<Void, Boolean> fun = (value) ->{
             WebElement webElement = this.findElement();
-            scrollToElement(webElement);
             focus(webElement);
             if(isInputTypeRadio(webElement) || isInputTypeCheckbox(webElement)) {
                 return StringUtil.equalsIgnoreCase(Constant.TRUE.getValue(), webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_CHECKED.getValue()));
@@ -972,7 +956,6 @@ public class WebElementDescription extends AbstractWebElement{
             if (CollectionUtils.isNotEmpty(elementCollection)) {
                 WebElement webElementFilter = elementCollection.stream().filter(webElt-> webElt.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue()).equalsIgnoreCase(x)).findFirst().orElse(null);
                 if(webElementFilter!=null) {
-                    scrollToElement(webElementFilter);
                     focus(webElementFilter);
                     click(webElementFilter);
                 }else{
