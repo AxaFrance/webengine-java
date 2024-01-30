@@ -70,6 +70,8 @@ public class CommandFactory {
                 return new SwitchFrameCommand();
             case EXIT_FRAME:
                 return new ExitFrameCommand();
+            case SCROLL_TO_ELEMENT:
+                return new ScrollToElementCommand();
             case REFRESH:
                 return new RefreshCommand();
             default:

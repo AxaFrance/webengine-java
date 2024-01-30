@@ -7,7 +7,7 @@ import fr.axa.automation.webengine.object.CommandResult;
 
 import java.util.List;
 
-public class ClickCommand extends AbstractDriverCommand {
+public class ScrollToElementCommand extends AbstractDriverCommand {
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
@@ -16,10 +16,6 @@ public class ClickCommand extends AbstractDriverCommand {
     }
 
     protected void executeActionInElement() throws Exception {
-        try {
-            webElementDescription.focusAndClick();
-        } catch (Exception e) {
-            webElementDescription.focusAndClickWithJS();
-        }
+        webElementDescription.scrollToElement();
     }
 }

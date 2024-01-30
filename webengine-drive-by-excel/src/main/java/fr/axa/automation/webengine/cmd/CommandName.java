@@ -119,6 +119,9 @@ public enum CommandName {
     END_SCENARIO(ImmutableMap.of(Locale.ENGLISH, "end scenario", Locale.FRENCH, "fin scenario"),
             ImmutableMap.of(Locale.FRENCH, "Indique la fin du scénario courant",
                     Locale.ENGLISH, "Indicates the end of the current scenario")),
+    SCROLL_TO_ELEMENT(ImmutableMap.of(Locale.ENGLISH, "scroll to element", Locale.FRENCH, "défiler vers l'élément"),
+            ImmutableMap.of(Locale.FRENCH, "Permet de défiler vers l'élément indiqué",
+                    Locale.ENGLISH, "Scroll to the indicated element")),
     REFRESH(ImmutableMap.of(Locale.ENGLISH, "refresh", Locale.FRENCH, "rafraichir"),
             ImmutableMap.of(Locale.FRENCH, "Permet de rafraichir la page courante",
                     Locale.ENGLISH, "Refresh the current page"));

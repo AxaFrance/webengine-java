@@ -353,7 +353,7 @@ public class WebElementDescription extends AbstractWebElement{
     public void scrollToElement() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
-            executeJavascript("arguments[0].scrollIntoView(true);", webElement);
+            scrollToElement(webElement);
             return null;
         };
         retry(fun,null);
