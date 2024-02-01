@@ -354,6 +354,7 @@ public class WebElementDescription extends AbstractWebElement{
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
             scrollToElement(webElement);
+            waitInMillisecondes(500L);
             return null;
         };
         retry(fun,null);
