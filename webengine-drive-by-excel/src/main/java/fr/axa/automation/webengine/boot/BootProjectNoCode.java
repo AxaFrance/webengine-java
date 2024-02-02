@@ -66,48 +66,33 @@ public class BootProjectNoCode extends AbstractBootProject {
     @Override
     public void runFromFramework(String... args) throws Exception {
         loggerService.info("Arguments : "+ ArgumentParser.removeOptionFromArguments(args,ArgumentOption.KEEPASS_PASSWORD));
+        TestSuiteReport testSuiteReport = null;
         try{
             CommandLine commandLine = getCommandLine(getArgumentOptionFramework(), args);
             AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine);
             TestSuiteDataNoCode testSuiteData = getTestSuiteData(globalApplicationContext);
             checkInput(globalApplicationContext,testSuiteData);
 
-            loggerService.info("Start Phase initialize test suite ");
             testSuiteExecutor.initialize(globalApplicationContext);
-            loggerService.info("End Phase initialize ");
-
-            loggerService.info("Start run test ");
-
-            TestSuiteReport testSuiteReport = ((ITestSuiteNoCodeExecutor) testSuiteExecutor).run(globalApplicationContext, testSuiteData);
-            loggerService.info("End run test ");
-
-            loggerService.info("Start clean ");
+            testSuiteReport = ((ITestSuiteNoCodeExecutor) testSuiteExecutor).run(globalApplicationContext, testSuiteData);
             testSuiteExecutor.cleanUp(globalApplicationContext);
-            loggerService.info("End clean ");
-
-            loggerService.info("Start report ");
-
-//            String argumentsLogs = ArgumentParser.removeOptionFromArguments(args,ArgumentOption.KEEPASS_PASSWORD).toString();
-//            ArrayOfVariable arrayOfVariable = new ArrayOfVariable();
-//            arrayOfVariable.getVariables().add(VariableHelper.getVariable("Arguments",argumentsLogs));
-//            testSuiteReport.getTestResults().get(0).setLogMap(arrayOfVariable);
-
             Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, "", globalApplicationContext.getSettings().getOutputDir());
-            loggerService.info("End report ");
 
             if(globalApplicationContext.getSettings().isShowReport()) {
-                loggerService.info("Open report ");
                 reportHelper.openReport(reportsPath.get(ReportPathKey.HTML_REPORT_PATH_KEY) + File.separator + "index.html");
-                loggerService.info("End open report ");
             }
             if (((SettingsNoCode)globalApplicationContext.getSettings()).isDeleteTempFile()){
-                loggerService.info("Delete temp file ");
                 ((TestSuiteNoCodeExecutor) testSuiteExecutor).deleteTempFile(((SettingsNoCode) globalApplicationContext.getSettings()).getDataTestFileName());
-                loggerService.info("End delete temp file ");
             }
         }catch (Exception e){
             loggerService.error("Error during execution of the automate. You can see more details in the file log",e);
             ApplicationDesktop.openFile(LoggerAppender.getFileAppender());
+        }
+        if(testSuiteReport!=null && testSuiteReport.getFailed()>0){
+            String errorMsg = "Test suite failed. Total number of test case :" + testSuiteReport.getNumberOfTestcase() +". Number of failed test : "+testSuiteReport.getFailed();
+            loggerService.error(errorMsg);
+            ApplicationDesktop.openFile(LoggerAppender.getFileAppender());
+            throw new Exception(errorMsg);
         }
     }
 
