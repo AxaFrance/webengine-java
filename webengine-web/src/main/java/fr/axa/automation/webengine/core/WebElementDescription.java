@@ -462,12 +462,15 @@ public class WebElementDescription extends AbstractWebElement{
 
     public void sendKeysWithAssertion(String text) throws Exception {
         IFunction<String, Void> fun = (sendKeysValue) -> {
-            WebElement webElement = findElement();
-            focus(webElement);
-            highLight(webElement);
-            sendKeys(sendKeysValue,webElement);
-            waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
-            containsInputValue(webElement, sendKeysValue);
+            sendKeysWithOption(false,true,sendKeysValue);
+            return null;
+        };
+        retry(fun,text);
+    }
+
+    public void sendKeysWithoutAssertion(String text) throws Exception {
+        IFunction<String, Void> fun = (sendKeysValue) -> {
+            sendKeysWithOption(false,false,sendKeysValue);
             return null;
         };
         retry(fun,text);
@@ -475,17 +478,28 @@ public class WebElementDescription extends AbstractWebElement{
 
     public void sendKeysWithClearBefore(String text) throws Exception {
         IFunction<String, Void> fun = (sendKeysValue) -> {
-            WebElement webElement = findElement();
-            focus(webElement);
-            highLight(webElement);
-            clear();
-            webElement.sendKeys(sendKeysValue);
-            waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
-            containsInputValue(webElement, sendKeysValue);
+            sendKeysWithOption(true,true,sendKeysValue);
             return null;
         };
         retry(fun,text);
     }
+
+    public void sendKeysWithOption(boolean clearField, boolean assertion,String sendKeysValue)throws Exception {
+        WebElement webElement = findElement();
+        focus(webElement);
+        highLight(webElement);
+        if(clearField){
+            clear();
+        }
+        webElement.sendKeys(sendKeysValue);
+        waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
+        if(assertion){
+            containsInputValue(webElement, sendKeysValue);
+        }
+    }
+
+
+
 
     public void sendKeyboard(String text) throws Exception {
         IFunction<String, Void> fun = (x) -> {

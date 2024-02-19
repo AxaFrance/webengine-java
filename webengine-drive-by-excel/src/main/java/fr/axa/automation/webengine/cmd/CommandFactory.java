@@ -20,6 +20,8 @@ public class CommandFactory {
                 return new ClearCommand();
             case SEND_KEYS:
                 return new SendKeysCommand();
+            case SEND_KEYS_WITHOUT_ASSERTION:
+                return new SendKeysWithoutAssertionCommand();
             case SEND_KEYS_WITH_CLEAR:
                 return new SendKeysWithClearCommand();
             case CLICK:
