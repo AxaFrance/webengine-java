@@ -398,6 +398,28 @@ public class WebElementDescription extends AbstractWebElement{
         retry(fun,null);
     }
 
+    public void focusAndDoubleClick() throws Exception {
+        IFunction<Void, Void> fun = (x) -> {
+            WebElement webElement = findElement();
+            focus(webElement);
+            highLight(webElement);
+            doubleClick(webElement);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+    public void doubleClick(WebElement we) throws Exception {
+        WebElement webElement = we;
+        if(webElement==null){
+            webElement = findElement();
+        }
+        Actions actions = new Actions(useDriver);
+        actions.moveToElement(webElement).doubleClick(webElement).build().perform();
+    }
+
+
+
     public void focusAndClickOnPseudoElement() throws Exception {
         IFunction<Void, Void> fun = (x) -> {
             WebElement webElement = findElement();
@@ -430,8 +452,6 @@ public class WebElementDescription extends AbstractWebElement{
         };
         retry(fun,null);
     }
-
-
 
     private static void containsInputValue(WebElement webElement, String expectedValue) throws Exception {
         String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());

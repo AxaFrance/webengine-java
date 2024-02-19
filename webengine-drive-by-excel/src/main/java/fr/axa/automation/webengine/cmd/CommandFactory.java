@@ -26,6 +26,8 @@ public class CommandFactory {
                 return new ClickCommand();
             case CLICK_ON_PSEUDO_ELEMENT:
                 return new ClickPseudoElementCommand();
+            case DOUBLE_CLICK:
+                return new DoubleClickCommand();
             case SAVE_DATA:
                 return new SaveDataCommand();
             case SAVE_DATA_AND_APPLY_REGEX:
