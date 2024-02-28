@@ -165,8 +165,10 @@ public class EvaluateValueHelper {
 
     private static String getFormatForTagValue(String value) {
         if(StringUtils.isNotEmpty(value) && value.contains(":")){
-            return value.split(":")[1];
+            return value.substring(value.indexOf(":")+1);
         }
         return "";
     }
+    //create unit test code for getFormatForTagValue method
+
 }

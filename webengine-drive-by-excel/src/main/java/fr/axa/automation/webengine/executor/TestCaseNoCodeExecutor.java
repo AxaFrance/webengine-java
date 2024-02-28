@@ -224,7 +224,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                 ignoredAllNextCmd = isIgnoredAllOtherAction(commandResult);
             }
         } catch (Throwable e) {
-            loggerService.info("Fatal exception during command : " + commandName + " and test case name is : " + testCaseName + ". All commands are cancelled.");
+            loggerService.error("Fatal exception during command : " + commandName + " and test case name is : " + testCaseName + ". All commands are cancelled.",e);
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(ExceptionUtils.getStackTrace(e));
             firstParentCommandResultOnlyList.add(CommandResultHelper.getCommandResult(commandData, actionReport, ""));
