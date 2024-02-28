@@ -54,6 +54,8 @@ public class CommandFactory {
                 return new AssertNotCheckedCommand();
             case SCREENSHOT:
                 return new ScrenshotCommand();
+            case FULLSCREENSHOT:
+                return new FullScrenshotCommand();
             case ASSERT_CONTENT:
                 return new AssertContentCommand();
             case ASSERT_NOT_CONTENT:

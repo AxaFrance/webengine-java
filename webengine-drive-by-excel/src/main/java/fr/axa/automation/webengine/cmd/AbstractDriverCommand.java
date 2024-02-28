@@ -39,6 +39,12 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -208,6 +214,41 @@ public abstract class AbstractDriverCommand implements ICommand {
         WebDriver webDriver = getWebDriverToUse(commandResultList);
         byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
+    }
+
+    protected ScreenshotReport fullScreenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
+        try {
+            RenderedImage img = getGeneratedCurrentDesktopImage();
+            byte[] screenshot = getImgByteArray(img);
+            return ScreenshotHelper.getScreenshotReport(name, screenshot);
+        } catch (Exception e) {
+            loggerService.warn("Error during full screenshot", e);
+            loggerService.info("Try to take a screenshot with the driver");
+            return screenShot(globalApplicationContext,testCaseContext,name,commandResultList);
+        }
+    }
+
+    private RenderedImage getGeneratedCurrentDesktopImage() {
+        Robot robot = null;
+        try {
+            robot = new Robot();
+            BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            return screenShot;
+        } catch (AWTException e) {
+            loggerService.warn("Error during get generated current desktop image", e);
+        }
+
+        return new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height,Image.SCALE_DEFAULT);
+    }
+
+    private byte[] getImgByteArray(RenderedImage img) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(img, "png", baos);
+        } catch (IOException e) {
+            loggerService.warn("Error during get image byte array", e);
+        }
+        return baos.toByteArray();
     }
 
     protected WebDriver getWebDriverToUse(List<CommandResult> commandResultList) throws WebEngineException {
