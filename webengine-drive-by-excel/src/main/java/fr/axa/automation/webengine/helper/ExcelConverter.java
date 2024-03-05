@@ -43,6 +43,9 @@ public class ExcelConverter {
         Workbook workbook = ExcelReader.getWorkbook(excelFileName);
         List<String> sheetNameList = ExcelReader.getAllSheetName(workbook);
         assertSheetName(sheetNameList,testCaseAndDataTestColumNameMap);
+        for (String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
+            assertColumnName(ExcelReader.getAllColumnName(testCaseToRun, workbook),testCaseAndDataTestColumNameMap);
+        }
         if (MapUtils.isEmpty(testCaseAndDataTestColumNameMap)) {
             testCaseList.addAll(getTestCaseList(workbook, getTestCaseNameAndDataTestColumnName(sheetNameList)));
         } else {
@@ -71,6 +74,22 @@ public class ExcelConverter {
             String messageError = "This test case argument doesn't exist in the excel file";
             loggerService.error(messageError + sheetNameDoesntExist );
             throw new IllegalArgumentException(messageError + sheetNameDoesntExist);
+        }
+    }
+
+    private static void assertColumnName(List<String> columnNameList, Map<String, List<String>> testCaseAndDataTestColumNameMap){
+        for ( String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
+            List<String> columnNameDoesntExist = new ArrayList<>();
+            for (String columnName : testCaseAndDataTestColumNameMap.get(testCaseToRun)) {
+                if(!columnNameList.contains(columnName)){
+                    columnNameDoesntExist.add(columnName);
+                }
+            }
+            if(CollectionUtils.isNotEmpty(columnNameDoesntExist)){
+                String messageError = "This column name argument doesn't exist in the excel file sheet ";
+                loggerService.error(messageError + columnNameDoesntExist + " for the sheet " + testCaseToRun);
+                throw new IllegalArgumentException(messageError + testCaseToRun + columnNameDoesntExist );
+            }
         }
     }
 

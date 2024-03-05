@@ -35,9 +35,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -57,6 +59,9 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
 public abstract class AbstractDriverCommand implements ICommand {
+    static {
+        System.setProperty("java.awt.headless", "false");
+    }
 
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
@@ -212,20 +217,35 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
         WebDriver webDriver = getWebDriverToUse(commandResultList);
-        byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
+        if(webDriver==null){
+            loggerService.warn("No driver found to take a screenshot. Try to take a screenshot with the desktop image.");
+            return fullScreenShot(globalApplicationContext,testCaseContext,name,commandResultList);
+        }
+        byte[] screenshot = new byte[0];
+        try {
+            screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
+        } catch (WebDriverException e) {
+            loggerService.warn("Error during screenshot, will use fullscreenshot", e);
+            screenshot = getFullScreenShotBytes();
+        }
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 
     protected ScreenshotReport fullScreenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
         try {
-            RenderedImage img = getGeneratedCurrentDesktopImage();
-            byte[] screenshot = getImgByteArray(img);
+            byte[] screenshot = getFullScreenShotBytes();
             return ScreenshotHelper.getScreenshotReport(name, screenshot);
         } catch (Exception e) {
             loggerService.warn("Error during full screenshot", e);
-            loggerService.info("Try to take a screenshot with the driver");
-            return screenShot(globalApplicationContext,testCaseContext,name,commandResultList);
+                throw new WebEngineException("Error during full screenshot", e);
+            }
         }
+
+    @NotNull
+    private byte[] getFullScreenShotBytes() {
+        RenderedImage img = getGeneratedCurrentDesktopImage();
+        byte[] screenshot = getImgByteArray(img);
+        return screenshot;
     }
 
     private RenderedImage getGeneratedCurrentDesktopImage() {

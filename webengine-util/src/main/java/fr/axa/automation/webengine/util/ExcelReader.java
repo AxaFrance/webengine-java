@@ -54,6 +54,16 @@ public final class ExcelReader {
         return sheetNameList;
     }
 
+    public static List<String> getAllColumnName(String sheetName, Workbook workbook){
+        Sheet currentSheet = workbook.getSheet(sheetName);
+        Row row = currentSheet.getRow(0);
+        List<String> columnNameList = new ArrayList();
+        for (int i = 0; i < row.getLastCellNum(); i++){
+            columnNameList.add(getCellValue(row,i));
+        }
+        return columnNameList;
+    }
+
 
     public static String getCellValue(Sheet currentSheet, Integer rowIndex,int colIndex) {
         return getCellValue(currentSheet.getRow(rowIndex),colIndex);
