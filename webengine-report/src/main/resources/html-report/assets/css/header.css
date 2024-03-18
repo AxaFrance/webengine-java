@@ -1,16 +1,15 @@
 .site-header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-grow: 1;
-    height: 10%;
-    padding: 20px;
-    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
-    background-color: #00008f;
+    height: 100px;
+    padding: 0 32px;
+    background-color: #000;
 }
 
 .site-header .fa-registered {
-    color: white;
+    color: #f32222;
 }
 
 .site-header-section {
@@ -45,15 +44,23 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .information-sub-header, .chart-header {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     height: auto;
     padding: 0px;
-    color: gray;
     background-color: white;
     flex-grow: 1;
+    margin: 5px;
+}
+
+.stat-header{
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
 }

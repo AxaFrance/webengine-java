@@ -2,8 +2,10 @@ package fr.axa.automation.webengine.util;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,5 +35,15 @@ public final class ListUtil {
 
     }
 
-
+    public static <T> Map<T,Integer> findNumberOfElements(Collection<T> list) {
+        Map<T,Integer> resultMap = new HashMap<>();
+        for (T element : list) {
+            if (resultMap.containsKey(element)) {
+                resultMap.put(element, resultMap.get(element) + 1);
+            } else {
+                resultMap.put(element, 1);
+            }
+        }
+        return resultMap;
+    }
 }

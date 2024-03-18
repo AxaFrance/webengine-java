@@ -16,11 +16,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public enum PredefinedTagValue {
     EXISTS ("exist"),
-
     NOT_EXISTS ("notExist"),
-
     EMPTY ("empty"),
-
     NOT_EMPTY ("notEmpty"),
     CHECKED ("checked"),
     NOT_CHECKED("notChecked"),
@@ -28,6 +25,15 @@ public enum PredefinedTagValue {
     NOT_DISPLAYED("notDisplayed");
 
     final String tagValue;
+
+    public static PredefinedTagValue fromTagValue(String tagValue) {
+        for (PredefinedTagValue predefinedTagValue : PredefinedTagValue.values()) {
+            if (predefinedTagValue.getTagValue().equalsIgnoreCase(tagValue)) {
+                return predefinedTagValue;
+            }
+        }
+        throw new IllegalArgumentException(tagValue);
+    }
 
     public static List<String> getTagValueList() {
         return Arrays.asList(PredefinedTagValue.values()).stream().map(predefinedTagValue -> predefinedTagValue.getTagValue()).collect(Collectors.toList());

@@ -15,24 +15,25 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public enum PredefinedDateTagValue implements IPredefinedTag{
+    TIMESTAMP("timestamp"),
     TAG_TODAY ("today"),
     TAG_TODAY_HOUR ("today_hour"),
     TAG_YESTERDAY("yesterday"),
-    TAG_PAST_DAY("pastday"),
-    TAG_ANTERIOR_DAY("anteriorday"),
-    TAG_NEXT_DAY("nextday"),
-    TAG_NEXT_MONTH("nextmonth"),
-    TAG_ANTERIOR_MONTH("anteriormonth");
+    TAG_PAST_DAY("past_day"),
+    TAG_ANTERIOR_DAY("anterior_day"),
+    TAG_NEXT_DAY("next_day"),
+    TAG_NEXT_MONTH("next_month"),
+    TAG_ANTERIOR_MONTH("anterior_month");
 
     final String tagValue;
 
-    public static PredefinedDateTagValue fromTagValue(String v) {
+    public static PredefinedDateTagValue fromTagValue(String tagValue) {
         for (PredefinedDateTagValue predefinedDateTagValue : PredefinedDateTagValue.values()) {
-            if (predefinedDateTagValue.getTagValue().equalsIgnoreCase(v)) {
+            if (predefinedDateTagValue.getTagValue().equalsIgnoreCase(tagValue)) {
                 return predefinedDateTagValue;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(tagValue);
     }
 
     public static List<String> getDateTagValueList() {

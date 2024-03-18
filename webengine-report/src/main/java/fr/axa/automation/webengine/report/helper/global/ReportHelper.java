@@ -39,11 +39,13 @@ public class ReportHelper implements IReportHelper{
     }
 
     public Map<ReportPathKey,String> generateReports(TestSuiteReport testSuiteReport, String testSuiteName, String outputPath) throws  WebEngineException {
+        loggerService.info("Start report ");
         TestSuiteReport testSuiteReportCopy = TestSuiteReportHelper.clone(testSuiteReport);
         Map<ReportPathKey,String> path = new HashMap<>();
         path.put(ReportPathKey.XML_REPORT_PATH_KEY,generateWebengineXmlReport(testSuiteReportCopy, outputPath));
         path.put(ReportPathKey.HTML_REPORT_PATH_KEY,generateWebengineHtmlReport(testSuiteReportCopy, outputPath,path.get(ReportPathKey.XML_REPORT_PATH_KEY)));
         path.put(ReportPathKey.JUNIT_REPORT_PATH_KEY,generateJunitReport(testSuiteReportCopy, testSuiteName, outputPath));
+        loggerService.info("End report ");
         return path;
     }
 
@@ -66,7 +68,8 @@ public class ReportHelper implements IReportHelper{
     }
 
     public void openReport(String reportPath) throws WebEngineException {
-        loggerService.info("Start Opening Report");
+        loggerService.info("Start opening report");
         ApplicationDesktop.openDefaultBrowser(reportPath);
+        loggerService.info("End opening report ");
     }
 }

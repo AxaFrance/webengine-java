@@ -1,22 +1,25 @@
 package fr.axa.automation.webengine.cmd;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.core.WebElementDescription;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
+import fr.axa.automation.webengine.generated.ArrayOfVariable;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.DriverContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandDataHelper;
 import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.helper.EvaluateValueHelper;
 import fr.axa.automation.webengine.helper.GlobalConfigPropertiesHelper;
+import fr.axa.automation.webengine.helper.VariableHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
@@ -36,6 +39,12 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Data
@@ -50,31 +60,35 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     WebElementDescription webElementDescription;
     List<ScreenshotReport> screenshotReportList = new ArrayList<>();
-    WebDriver webDriver;
+    DriverContext driverContext;
     String savedData;
 
 
     ILoggerService loggerService = LoggerServiceProvider.getInstance();
-    StringBuffer logReport = new StringBuffer();
+    ArrayOfVariable logReport = new ArrayOfVariable();
 
     public abstract void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception;
 
     public WebDriver initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
-       return getDriver(globalApplicationContext,false);
+       return initializeWebDriver(globalApplicationContext, true);
+    }
+
+    public WebDriver initializeWebDriver(AbstractGlobalApplicationContext globalApplicationContext, boolean deleteCookie) throws WebEngineException {
+        return getDriver(globalApplicationContext,false, deleteCookie);
     }
 
     public WebDriver initializeIncognitoWebDriver(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
-        return getDriver(globalApplicationContext,true);
+        return getDriver(globalApplicationContext,true, true);
     }
 
-    public WebDriver getDriver(AbstractGlobalApplicationContext globalApplicationContext,boolean incognito) throws WebEngineException {
+    public WebDriver getDriver(AbstractGlobalApplicationContext globalApplicationContext,boolean incognito, boolean deleteCookie) throws WebEngineException {
         try {
             GlobalConfiguration globalConfiguration = GlobalConfigPropertiesHelper.getGlobalConfigProperties(globalApplicationContext.getSettings());
-            Optional<WebDriver> optional = null;
+            Optional<WebDriver> optional ;
             if(incognito){
                  optional = BrowserFactory.getIncognitoDriver(globalConfiguration);
             }else {
-                optional = BrowserFactory.getDriver(globalConfiguration);
+                optional = BrowserFactory.getDriver(globalConfiguration,deleteCookie);
             }
             if(optional.isPresent()){
                 return optional.get();
@@ -87,7 +101,7 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     protected WebElementDescription populateWebElement(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws  WebEngineException{
         Map.Entry<TargetKey,String> entry = getTargetValue(globalApplicationContext, commandData, commandResultList);
-        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
+        WebDriver webDriver = getWebDriverToUse(commandResultList);
         if(entry==null){
             return WebElementDescription.builder()
                     .useDriver(webDriver)
@@ -107,6 +121,7 @@ public abstract class AbstractDriverCommand implements ICommand {
                         .build();
             case COMBINAISON_OF_LOCATOR:
                 ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
                 try {
                     WebElementDescription webElementDescription = mapper.readValue(entry.getValue(), WebElementDescription.class);
                     webElementDescription.setUseDriver(webDriver);
@@ -148,54 +163,98 @@ public abstract class AbstractDriverCommand implements ICommand {
 
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
-        getLogReport().append("Executed command : ").append(commandData);
+        String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
+        loggerService.info("--------------------------------------------------------------------------------------------------------------------------------");
+        loggerService.info("Executed command : " + commandData);
+        getLogReport().getVariables().add(VariableHelper.getVariable("Executed command", commandData.getCommand().name()));
+        Map.Entry<TargetKey,String> targetEntry = getTargetValue(globalApplicationContext, commandData, commandResultList);
+        getLogReport().getVariables().add(VariableHelper.getVariable("Target", targetEntry == null ? "" : targetEntry.getValue()));
+        String evaluateValue = getValue(globalApplicationContext, (TestCaseNoCodeContext)testCaseContext, commandData, commandResultList);
+        getLogReport().getVariables().add(VariableHelper.getVariable("Data", evaluateValue == null ? "" : evaluateValue));
         try {
-            String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
                 actionReport.setResult(Result.PASSED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status : ").append(Result.PASSED.value());
+                getLogReport().getVariables().add(VariableHelper.getVariable("Status", Result.PASSED.value()));
             } else {
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command ignored because the colum data-test-ref not contains '" + dataTestColumName + "' column ");
+                getLogReport().getVariables().add(VariableHelper.getVariable("Warning", "Command ignored because the colum data-test-ref not contains '" + dataTestColumName + "' column "));
             }
-            actionReport.setLog(getLogReport().toString());
+            actionReport.setLogMap(getLogReport());
         } catch (Throwable e) {
-            actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,"",commandResultList));
+            if(getWebDriverToUse(commandResultList)!=null){
+                actionReport.getScreenshots().getScreenshotReports().add(screenShot(globalApplicationContext,testCaseContext,"",commandResultList));
+            }
             if (commandData.isOptional() || commandData.getCommand() == CommandName.IF || commandData.getCommand() == CommandName.ELSE_IF) {
                 actionReport.setName(actionReport.getName() + " - /!\\ Failed but ignored (Optional or If/else if/else)");
                 actionReport.setResult(Result.IGNORED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Warning : ").append(ConstantNoCode.CR_LF.getValue()).append(" Command failed but ignored because this command is optional ");
+                getLogReport().getVariables().add(VariableHelper.getVariable("Warning", "Command failed but ignored because this command is optional"));
             }else{
                 actionReport.setResult(Result.FAILED);
-                getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Status : ").append(Result.FAILED.value());
+                getLogReport().getVariables().add(VariableHelper.getVariable("Status", Result.FAILED.value()));
             }
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append("Exception : ").append(ConstantNoCode.CR_LF.getValue()).append(ExceptionUtils.getStackTrace(e));
-            actionReport.setLog(getLogReport().toString());
+            getLogReport().getVariables().add(VariableHelper.getVariable("Cause", e.getMessage()));
+            getLogReport().getVariables().add(VariableHelper.getVariable("Exception", ExceptionUtils.getStackTrace(e)));
+            actionReport.setLogMap(getLogReport());
         } finally {
             actionReport.setEndTime(Calendar.getInstance());
         }
-        loggerService.info(getLogReport().toString());
+
+        loggerService.info("Status command : "+actionReport.getResult());
         return CommandResult.builder()
                 .commandData(commandData)
                 .actionReport(actionReport)
-                .webDriver(webDriver)
+                .driverContext(driverContext)
                 .savedData(savedData).build();
     }
 
 
     protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
-        WebDriver webDriver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
+        WebDriver webDriver = getWebDriverToUse(commandResultList);
         byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 
-    protected WebDriver getWebDriverToUse(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext, List<CommandResult> commandResultList) throws WebEngineException {
-        List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
+    protected ScreenshotReport fullScreenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
+        try {
+            RenderedImage img = getGeneratedCurrentDesktopImage();
+            byte[] screenshot = getImgByteArray(img);
+            return ScreenshotHelper.getScreenshotReport(name, screenshot);
+        } catch (Exception e) {
+            loggerService.warn("Error during full screenshot", e);
+            loggerService.info("Try to take a screenshot with the driver");
+            return screenShot(globalApplicationContext,testCaseContext,name,commandResultList);
+        }
+    }
 
-        if(CollectionUtils.isNotEmpty(webDriverList)){
-            return ListUtil.getLastElement(webDriverList).get();
+    private RenderedImage getGeneratedCurrentDesktopImage() {
+        Robot robot = null;
+        try {
+            robot = new Robot();
+            BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            return screenShot;
+        } catch (AWTException e) {
+            loggerService.warn("Error during get generated current desktop image", e);
+        }
+
+        return new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height,Image.SCALE_DEFAULT);
+    }
+
+    private byte[] getImgByteArray(RenderedImage img) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(img, "png", baos);
+        } catch (IOException e) {
+            loggerService.warn("Error during get image byte array", e);
+        }
+        return baos.toByteArray();
+    }
+
+    protected WebDriver getWebDriverToUse(List<CommandResult> commandResultList) throws WebEngineException {
+        List<DriverContext> driverContextList = CommandResultHelper.getWebDriverList(commandResultList);
+        if(CollectionUtils.isNotEmpty(driverContextList)){
+            return ListUtil.getLastElement(driverContextList.stream().collect(Collectors.toList())).get().getWebDriver();
         }
         return null;
     }

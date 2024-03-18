@@ -39,7 +39,7 @@ public final class WebdriverHelper {
     }
 
     public static Optional<WebDriver> getDefaultDriver() throws WebEngineException {
-        return BrowserFactory.getWebDriver(Platform.WINDOWS, Browser.CHROMIUM_EDGE);
+        return BrowserFactory.getWebDriver(Platform.WINDOWS, Browser.CHROMIUM_EDGE,true);
     }
 
     public static void quiDriver(WebDriver webDriver) throws WebEngineException {

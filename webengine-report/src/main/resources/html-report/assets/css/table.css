@@ -1,31 +1,30 @@
-.table-common {
-    width: 100%!important;
-    border: 1px solid #E5E7E9;
+#table-common {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
 
-.table-common  th{
+#table-common td, #table-common th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#table-common td.name {
+    width: 30%;
+}
+
+#table-common td.value {
+    width: 70%;
+}
+
+#table-common tr:nth-child(even){background-color: #f2f2f2;}
+
+#table-common tr:hover {background-color: #ddd;}
+
+#table-common th {
+    padding-top: 12px;
+    padding-bottom: 12px;
     text-align: left;
-    vertical-align: middle;
-    /*border-bottom: 1px solid #E5E7E9;*/
-    color:#273746!important;
-    border: 1px solid #E5E7E9;
-    padding-left: 5px!important;
-}
-
-.table-common tr{
-    height: 50px;
-}
-
-th{
-    text-align: start;
-    padding-left: 0px!important;
-    padding-right: 0px!important;
-}
-
-td{
-    vertical-align: middle!important;
-    padding-left: 5px!important;
-    padding-right: 5px!important;
-    word-break: break-all;
-    border: 1px solid #E5E7E9;
+    background-color: #eaeaea;
+    color: black;
 }

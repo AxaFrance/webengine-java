@@ -1,7 +1,5 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestCaseNoCodeExecutor;
-import fr.axa.automation.webengine.api.ITestSuiteNoCodeExecutor;
 import fr.axa.automation.webengine.core.AbstractTestSuiteExecutor;
 import fr.axa.automation.webengine.core.ITestCaseExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -44,6 +42,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
 
     @Override
     public TestSuiteReport run(AbstractGlobalApplicationContext globalAppContext, TestSuiteDataNoCode testSuiteData) throws WebEngineException, UnknownHostException {
+        loggerService.info("Start run test suite ");
         GlobalApplicationContextNoCode globalApplicationContext = (GlobalApplicationContextNoCode) globalAppContext;
         Calendar startTime = Calendar.getInstance();
         TestSuiteReport testSuiteReport;
@@ -58,6 +57,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
             TestSuiteReportInformation testSuiteReportInformation = TestSuiteReportInformation.builder().environmentVariables(null).testCaseReportList(testCaseReportList).startTime(startTime).systemError(systemError).build();
             testSuiteReport = TestSuiteReportHelper.getTestSuiteReport(testSuiteReportInformation);
         }
+        loggerService.info("End run test suite");
         return testSuiteReport;
     }
 
@@ -96,10 +96,12 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
 
 
     public void deleteTempFile(String dataTestFileName) {
+        loggerService.info("Start deleting temp file ");
         try {
             Files.deleteIfExists(Paths.get(dataTestFileName));
         } catch (Exception e) {
             loggerService.error("Error when deleting temp file : " + dataTestFileName, e);
         }
+        loggerService.info("End deleting temp file ");
     }
 }

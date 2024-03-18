@@ -1,7 +1,5 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestCaseNoCodeExecutor;
-import fr.axa.automation.webengine.api.ITestStepNoCodeExecutor;
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.TargetKey;
 import fr.axa.automation.webengine.core.AbstractTestCaseWebExecutor;
@@ -13,6 +11,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.DriverContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.CommandNameHelper;
@@ -31,7 +30,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.NoSuchSessionException;
-import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -67,10 +65,10 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
     public void cleanUp(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext,List<CommandResult> commandResultList) {
         try {
             if(globalApplicationContext.getSettings().isCloseBrowser()){
-                List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
-                webDriverList.stream().forEach(webDriver -> {
-                    if (webDriver != null) {
-                        webDriver.quit();
+                List<DriverContext> driverContextList = CommandResultHelper.getWebDriverList(commandResultList);
+                driverContextList.stream().forEach(driverContext -> {
+                    if (driverContext.getWebDriver() != null) {
+                        driverContext.getWebDriver().quit();
                     }
                 });
                 loggerService.info("Browser close properly");
@@ -226,7 +224,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                 ignoredAllNextCmd = isIgnoredAllOtherAction(commandResult);
             }
         } catch (Throwable e) {
-            loggerService.info("Fatal exception during command : " + commandName + " and test case name is : " + testCaseName + ". All commands are cancelled.");
+            loggerService.error("Fatal exception during command : " + commandName + " and test case name is : " + testCaseName + ". All commands are cancelled.",e);
             actionReport.setResult(Result.CRITICAL_ERROR);
             actionReport.setLog(ExceptionUtils.getStackTrace(e));
             firstParentCommandResultOnlyList.add(CommandResultHelper.getCommandResult(commandData, actionReport, ""));

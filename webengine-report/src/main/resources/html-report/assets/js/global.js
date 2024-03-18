@@ -81,19 +81,16 @@ function displayImage(imgToDisplay){
     };
 }
 
-
 function expandAll() {
-    let toggler = document.getElementsByClassName("caret");
+    let toggler = document.getElementsByTagName("details");
     for (const togglerElement of toggler) {
-        togglerElement.parentElement.querySelector(".nested").classList.add("active");
-        togglerElement.classList.add("caret-down");
+        togglerElement.setAttribute("open", "");
     }
 }
 
 function collapseAll() {
-    let toggler = document.getElementsByClassName("caret");
+    let toggler = document.getElementsByTagName("details");
     for (const togglerElement of toggler) {
-        togglerElement.parentElement.querySelector(".nested").classList.remove("active");
-        togglerElement.classList.remove("caret-down");
+        togglerElement.removeAttribute("open");
     }
 }

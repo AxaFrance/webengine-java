@@ -32,9 +32,13 @@ public final class BrowserFactory {
     }
 
     public static Optional<WebDriver> getDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        return getDriver(globalConfiguration,true);
+    }
+
+    public static Optional<WebDriver> getDriver(GlobalConfiguration globalConfiguration, boolean deleteCookie) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         if (platform == Platform.WINDOWS) {
-            return getDesktopDriver(globalConfiguration);
+            return getDesktopDriver(globalConfiguration, deleteCookie);
         } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
             return getAppiumDriver(globalConfiguration);
         } else {
@@ -46,74 +50,62 @@ public final class BrowserFactory {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
         if (platform == Platform.WINDOWS) {
-            return getWebDriver(platform, browser, IncognitoBrowserOption.getIncognitoBrowserOption(browser).getOptions());
+            return getWebDriver(platform, browser, true, IncognitoBrowserOption.getIncognitoBrowserOption(browser).getOptions());
         } else if (platform == Platform.ANDROID || platform == Platform.IOS) {
-            return getAppiumDriver(globalConfiguration);
+           return getAppiumDriver(globalConfiguration);
         } else {
             throw new WebEngineException("Not recognized the 'platform' parameter.");
         }
     }
 
-    public static Optional<WebDriver> getDesktopDriver(GlobalConfiguration globalConfiguration) throws WebEngineException {
+    public static Optional<WebDriver> getDesktopDriver(GlobalConfiguration globalConfiguration, boolean deleteCookie) throws WebEngineException {
         Platform platform = PlatformTypeHelper.getPlatform(globalConfiguration.getWebengineConfiguration().getPlatformName());
         Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
-        String browserVersion = globalConfiguration.getWebengineConfiguration().getBrowserVersion();
         List<String> browserOptionList = globalConfiguration.getWebengineConfiguration().getBrowserOptionList();
         if(CollectionUtils.isEmpty(globalConfiguration.getWebengineConfiguration().getBrowserOptionList())){
             browserOptionList = Collections.emptyList();
         }
-        return getWebDriver(platform, browser, browserVersion, browserOptionList);
+        return getWebDriver(platform, browser, deleteCookie, browserOptionList);
     }
 
-    public static Optional<WebDriver> getWebDriver(String platform, String browser) throws WebEngineException {
-        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser));
+    public static Optional<WebDriver> getWebDriver(String platform, String browser, boolean deleteCookie) throws WebEngineException {
+        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser),deleteCookie);
     }
 
-    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser) throws WebEngineException {
-        return getWebDriver(platform,browser, Collections.emptyList());
+    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser,boolean deleteCookie) throws WebEngineException {
+        return getWebDriver(platform,browser, deleteCookie, Collections.emptyList());
     }
 
-    public static Optional<WebDriver> getWebDriver(String platform, String browser, List<String> browserOptionList) throws WebEngineException {
-        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser),browserOptionList);
+    public static Optional<WebDriver> getWebDriver(String platform, String browser, boolean deleteCookie, List<String> browserOptionList) throws WebEngineException {
+        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser), deleteCookie, browserOptionList);
     }
 
-    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, List<String> browserOptionList) throws WebEngineException {
+    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, boolean deleteCookie, List<String> browserOptionList) throws WebEngineException {
         BrowserDetail browserDetail = BrowserDetail.builder()
-                .platform(platform)
-                .browser(browser)
-                .browserOptionList(browserOptionList).build();
-        return getWebDriver(browserDetail);
-    }
-
-    public static Optional<WebDriver> getWebDriver(String platform, String browser, String browserVersion, List<String> browserOptionList) throws WebEngineException {
-        return getWebDriver(PlatformTypeHelper.getPlatform(platform), BrowserTypeHelper.getBrowser(browser), browserVersion, browserOptionList);
-    }
-
-    public static Optional<WebDriver> getWebDriver(Platform platform, Browser browser, String browserVersion, List<String> browserOptionList) throws WebEngineException {
-        BrowserDetail browserDetail = BrowserDetail.builder()
-                .platform(platform)
-                .browser(browser)
-                .browserVersion(browserVersion)
-                .browserOptionList(browserOptionList).build();
+                                                    .platform(platform)
+                                                    .browser(browser)
+                                                    .deleteCookie(deleteCookie)
+                                                    .browserOptionList(browserOptionList).build();
         return getWebDriver(browserDetail);
     }
 
     public static Optional<WebDriver> getWebDriver(BrowserDetail browserDetail) throws WebEngineException {
         WebDriver webDriver = null;
         Browser browser = browserDetail.getBrowser();
-        String browserVersion = browserDetail.getBrowserVersion();
         List<String> browserOptionList = browserDetail.getBrowserOptionList();
         if (browserDetail.getPlatform() == Platform.WINDOWS) {
             if (browser == Browser.CHROME) {
-                webDriver = ChromeDriverUtil.getChromeDriver(browserVersion,browserOptionList);
+                webDriver = ChromeDriverUtil.getChromeDriver(browserOptionList);
             } else if (browser == Browser.CHROMIUM_EDGE) {
-                webDriver = EdgeDriverUtil.getEdgeDriver(browserVersion,browserOptionList);
+                webDriver = EdgeDriverUtil.getEdgeDriver(browserOptionList);
             } else if (browser == Browser.FIREFOX) {
-                webDriver = FirefoxDriverUtil.getFirefoxDriver(browserVersion,browserOptionList);
+                webDriver = FirefoxDriverUtil.getFirefoxDriver(browserOptionList);
             }else{
                 throw new WebEngineException("Browser not recognized");
             }
-            webDriver.manage().deleteAllCookies();
+            if(browserDetail.isDeleteCookie()) {
+                webDriver.manage().deleteAllCookies();
+            }
         }
         return Optional.ofNullable(webDriver);
     }

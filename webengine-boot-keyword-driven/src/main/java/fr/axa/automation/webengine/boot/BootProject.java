@@ -61,29 +61,21 @@ public class BootProject extends AbstractBootProject{
         ITestSuite testSuite = TestSuiteHelper.getTestSuite();
         AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine, testSuite);
 
-        loggerService.info("Start Phase initialize test suite ");
         testSuiteExecutor.initialize(globalApplicationContext);
-        loggerService.info("End Phase initialize ");
-
-        loggerService.info("Start run test ");
         if (testSuite instanceof AbstractTestSuite) {
             ((AbstractTestSuite) testSuite).setGlobalApplicationContext(globalApplicationContext);
         }
         TestSuiteReport testSuiteReport = ((ITestSuiteWebExecutor)testSuiteExecutor).run(globalApplicationContext, testSuite);
-        loggerService.info("End run test ");
-
-        loggerService.info("Start clean ");
         testSuiteExecutor.cleanUp(globalApplicationContext);
-        loggerService.info("End clean ");
-
-        loggerService.info("Start report ");
         Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getOutputDir());
-        loggerService.info("End report ");
 
         if(globalApplicationContext.getSettings().isShowReport()) {
-            loggerService.info("Open report ");
             reportHelper.openReport(reportsPath.get(ReportPathKey.HTML_REPORT_PATH_KEY) + File.separator + "index.html");
-            loggerService.info("End open report ");
+        }
+        if(testSuiteReport!=null && testSuiteReport.getFailed()>0){
+            String errorMsg = "Test suite failed. Total number of test case :" + testSuiteReport.getNumberOfTestcase() +". Number of failed test : "+testSuiteReport.getFailed();
+            loggerService.error(errorMsg);
+            throw new WebEngineException(errorMsg);
         }
     }
 

@@ -27,6 +27,7 @@ public final class FirefoxDriverUtil {
             return new FirefoxDriver(firefoxOptions);
         }
         return new FirefoxDriver();
+
     }
 
     public static WebDriver getFirefoxDriver(String browserVersion, List<String> firefoxOptionList)  {

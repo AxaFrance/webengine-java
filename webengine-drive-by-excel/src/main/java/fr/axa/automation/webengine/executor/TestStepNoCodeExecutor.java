@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.api.ITestStepNoCodeExecutor;
 import fr.axa.automation.webengine.cmd.AbstractDriverCommand;
 import fr.axa.automation.webengine.cmd.CommandFactory;
 import fr.axa.automation.webengine.cmd.ScrenshotCommand;
@@ -50,7 +49,7 @@ public class TestStepNoCodeExecutor extends AbstractTestStepExecutor implements 
         }
         return CommandResult.builder().commandData(commandData)
                                         .actionReport(commandResult !=null ? commandResult.getActionReport() : actionReport)
-                                        .webDriver(commandResult !=null ? commandResult.getWebDriver() : null)
+                                        .driverContext(commandResult !=null ? commandResult.getDriverContext() : null)
                                         .savedData(commandResult !=null ? commandResult.getSavedData() : "")
                                         .build();
     }

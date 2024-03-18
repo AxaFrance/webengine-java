@@ -15,7 +15,7 @@ public class WebengineTestSuite extends AbstractTestSuite {
 
     public Map<String, ? extends ITestCase> getTestCaseList() {
         return ImmutableMap.of( TEST_CASE_1, new FlowTestCase(),
-                                TEST_CASE_2, new SimpleTestCase(),
-                                TEST_CASE_3, new SimpleTestCase());
+                TEST_CASE_2, new SimpleTestCase(),
+                TEST_CASE_3, new SimpleTestCase());
     }
 }

@@ -12,7 +12,7 @@ public class ExitFrameCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws Exception {
-        WebDriver driver = getWebDriverToUse(globalApplicationContext,testCaseContext,commandResultList);
+        WebDriver driver = getWebDriverToUse(commandResultList);
         if (driver != null) {
             driver.switchTo().parentFrame();
         }

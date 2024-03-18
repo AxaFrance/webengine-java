@@ -3,43 +3,38 @@ package fr.axa.automation.webengine.cmd;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.DriverContext;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
-import fr.axa.automation.webengine.helper.CommandResultHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
-import fr.axa.automation.webengine.util.StringUtil;
-import fr.axa.automation.webengine.util.UriUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.openqa.selenium.WebDriver;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OpenCommand extends AbstractDriverCommand{
-
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         String url = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        WebDriver webDriver = null;
+        WebDriver webDriver = instantiateWebDriver(globalApplicationContext, commandResultList);
 
-        List<WebDriver> webDriverList = CommandResultHelper.getWebDriverList(commandResultList);
-        if(CollectionUtils.isNotEmpty(webDriverList)){//Dans le cas ou l'application a déjà été ouvert, on reutilise le même driver
-            for ( WebDriver webDriverStored : webDriverList ) {
-                if(StringUtil.equalsIgnoreCase(webDriverStored.getCurrentUrl(),"data:,") || StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(webDriverStored.getCurrentUrl()),UriUtil.getHostFromURI(url))){
-                    webDriver = webDriverStored;
-                }
-            }
-        }
-        if(webDriver==null) {
-            webDriver = instantiateWebDrive(globalApplicationContext);
-        }
-        setWebDriver(webDriver);
-        String originalWindow = webDriver.getWindowHandle();
-        webDriver.switchTo().window(originalWindow);
+        DriverContext currentDriverContext = getDriverContext(webDriver, url);
+
+        setDriverContext(currentDriverContext);
+        webDriver = currentDriverContext.getWebDriver();
+        webDriver.switchTo().window(currentDriverContext.getWindowHandle());
         webDriver.manage().window().maximize();
         webDriver.navigate().to(url);
     }
 
-    protected WebDriver instantiateWebDrive(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
-        return initializeWebDriver(globalApplicationContext);
+    protected DriverContext getDriverContext(WebDriver webDriver, String url) {
+        Map<String, String> sessionIdAndUrlMap = new HashMap<>();
+        sessionIdAndUrlMap.put(webDriver.getWindowHandle(), url);
+        return DriverContext.builder().currentUrl(url).webDriver(webDriver).sessionIdAndUrlMap(sessionIdAndUrlMap).build();
+    }
+
+    protected WebDriver instantiateWebDriver(AbstractGlobalApplicationContext globalApplicationContext,List<CommandResult> commandResultList) throws WebEngineException {
+        return initializeWebDriver(globalApplicationContext,false);
     }
 }

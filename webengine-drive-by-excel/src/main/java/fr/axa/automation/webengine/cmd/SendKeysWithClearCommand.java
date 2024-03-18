@@ -1,27 +1,17 @@
 package fr.axa.automation.webengine.cmd;
 
-import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
-import fr.axa.automation.webengine.global.AbstractTestCaseContext;
-import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
-import fr.axa.automation.webengine.object.CommandResult;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+public class SendKeysWithClearCommand extends SendKeysCommand{
 
-public class SendKeysWithClearCommand extends AbstractDriverCommand{
 
     @Override
-    public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
-        String value = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        executeActionInElement(value);
-    }
-
-    protected void executeActionInElement(String value)throws Exception {
+    protected void executeActionInElement(String value, CommandDataNoCode cmdData)throws Exception {
         if(value.startsWith("KEY_")){
-            webElementDescription.focusAndsendKeyboard(value.split("_")[1]);
+            webElementDescription.sendKeyboard(StringUtils.substringAfterLast(value,"KEY_"));
         }else{
-            webElementDescription.focusAndSendKeysWithClear(value);
+            webElementDescription.sendKeysWithClearBefore(value);
         }
     }
 }

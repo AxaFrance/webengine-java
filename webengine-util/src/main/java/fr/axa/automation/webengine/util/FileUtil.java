@@ -42,13 +42,13 @@ public final class FileUtil {
         try {
             return Files.createDirectories(Paths.get(path));
         } catch (IOException e) {
-            throw new WebEngineException("Error during creating directory : " + path,e);
+            throw new WebEngineException("Error during creating directory : " + path, e);
         }
     }
 
     public static void copyFileFromResource(String source, String target) throws IOException {
         Path pathTarget = Paths.get(target);
-        if(Files.exists(pathTarget)){
+        if (Files.exists(pathTarget)) {
             Files.delete(pathTarget);
         }
         Files.copy(getInputStreamFromResource(source), pathTarget);
@@ -56,7 +56,7 @@ public final class FileUtil {
 
     public static void copyFileFromResource(InputStream source, String target) throws IOException {
         Path pathTarget = Paths.get(target);
-        if(Files.exists(pathTarget)){
+        if (Files.exists(pathTarget)) {
             Files.delete(pathTarget);
         }
         Files.copy(source, pathTarget);
@@ -73,16 +73,16 @@ public final class FileUtil {
         return XmlUtil.marshall(inputMarshallDTO).getAbsolutePath();
     }
 
-    public static void saveAsImage(Path path,byte[] base64Data) throws WebEngineException {
+    public static void saveAsImage(Path path, byte[] base64Data) throws WebEngineException {
         File file = new File(path.toAbsolutePath().toString());
-        try (OutputStream outputStream = new BufferedOutputStream((new FileOutputStream(file)))){
+        try (OutputStream outputStream = new BufferedOutputStream((new FileOutputStream(file)))) {
             outputStream.write(base64Data);
-        }catch (IOException e){
-            throw new WebEngineException("Error during creating image report : " + path,e);
+        } catch (IOException e) {
+            throw new WebEngineException("Error during creating image report : " + path, e);
         }
     }
 
-    public static File createDirectoryInTmpDirectory(String directoryName){
+    public static File createDirectoryInTmpDirectory(String directoryName) {
         final String dir = System.getProperty("java.io.tmpdir");
         File directory = new File(dir + File.separator + directoryName);
         if (!directory.exists()) {
@@ -95,7 +95,7 @@ public final class FileUtil {
         return FileUtil.createDirectories(FileUtil.getPathInTargetDirectory(subDirectory)).toAbsolutePath().toString();
     }
 
-    public static String getPathInTargetDirectory(String directoryToCreate){
+    public static String getPathInTargetDirectory(String directoryToCreate) {
         StringJoiner directory = new StringJoiner(File.separator);
         Path currentAbsolutePath = Paths.get("").toAbsolutePath();
         directory.add(currentAbsolutePath.toString()).add(getPathTargetDirectory(currentAbsolutePath)).add(directoryToCreate);
@@ -114,7 +114,7 @@ public final class FileUtil {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
-            throw new IllegalArgumentException("The file "+fileName+" not found in resource directory ");
+            throw new IllegalArgumentException("The file " + fileName + " not found in resource directory ");
         } else {
             return new File(resource.toURI());
         }
@@ -137,15 +137,15 @@ public final class FileUtil {
     public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(resourceName);
-        if(inputStream==null){
-            throw new FileNotFoundException("The resource file "+resourceName+" not found in resource directory ");
+        if (inputStream == null) {
+            throw new FileNotFoundException("The resource file " + resourceName + " not found in resource directory ");
         }
         return inputStream;
     }
 
     public static boolean assertContent(File fileContentExpected, File fileContentResult) throws IOException {
-        try(Reader reader1 = new BufferedReader(new FileReader(fileContentExpected));
-            Reader reader2 = new BufferedReader(new FileReader(fileContentResult))){
+        try (Reader reader1 = new BufferedReader(new FileReader(fileContentExpected));
+             Reader reader2 = new BufferedReader(new FileReader(fileContentResult))) {
             return IOUtils.contentEqualsIgnoreEOL(reader1, reader2);
         }
     }
@@ -162,7 +162,7 @@ public final class FileUtil {
         try {
             URL url = Thread.currentThread().getContextClassLoader().getResource(fileOrResource);
             return url != null ? new File(url.toURI()) : new File(fileOrResource);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new File(fileOrResource);
         }
     }
@@ -173,11 +173,11 @@ public final class FileUtil {
         return path.substring(0, path.length() - 1);
     }
 
-    public static void displayContent(String fileName){
+    public static void displayContent(String fileName) {
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
             stream.forEach(loggerService::info);
         } catch (IOException e) {
-            loggerService.error("Error during displaying content of file",e);
+            loggerService.error("Error during displaying content of file", e);
         }
     }
 
@@ -197,6 +197,7 @@ public final class FileUtil {
         }
         return text;
     }
+
 }
 
 

@@ -1,33 +1,26 @@
 package fr.axa.automation.webengine.cmd;
 
-import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
+import fr.axa.automation.webengine.global.AssertContentResult;
 import fr.axa.automation.webengine.global.TestCaseNoCodeContext;
+import fr.axa.automation.webengine.helper.VariableHelper;
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
-import org.apache.commons.collections4.MapUtils;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AssertNotContentCommand extends AbstractDriverCommand{
-
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
-        webElementDescription = populateWebElement(globalApplicationContext,testCaseContext,commandData,commandResultList);
-        String expected = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        Map<String, List<String>> contentMap = webElementDescription.getContentByElementType(expected);
-
-        Map<String, List<String>> filterContentMap = contentMap.entrySet().stream()
-                .filter(entry -> entry.getValue().contains(expected) || entry.getKey().contains(expected))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        if (MapUtils.isNotEmpty(filterContentMap)) {
-            String errorMessage = "The expected value is : " + expected + " and the actual contentMap is : " + contentMap;
-            getLogReport().append(ConstantNoCode.CR_LF.getValue()).append(errorMessage);
+        webElementDescription = populateWebElement(globalApplicationContext, testCaseContext, commandData, commandResultList);
+        String expectedValue = getValue(globalApplicationContext, (TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+        AssertContentResult assertContentResult = webElementDescription.assertContentByElementType(expectedValue);
+        if(assertContentResult.isResult()){
+            String errorMessage = "The expected value is : '" + expectedValue + "' and the actual value is : '" + assertContentResult.getActualValue() + "'";
+            getLogReport().getVariables().add(VariableHelper.getVariable("Expected value", expectedValue));
+            getLogReport().getVariables().add(VariableHelper.getVariable("Actual value", assertContentResult.getActualValue()));
             throw new WebEngineException(errorMessage);
         }
     }

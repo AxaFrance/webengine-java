@@ -1,31 +1,33 @@
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:we="http://www.axa.fr/WebEngine/2022">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:we="http://www.axa.fr/WebEngine/2022">
 
     <xsl:import href="status-template.xslt"/>
 
     <xsl:template name="sub-tree-view-template">
         <xsl:param name="firstNode"/>
-        <ul class="nested">
+        <ul>
             <xsl:for-each select="$firstNode">
                 <li>
                     <xsl:choose>
                         <xsl:when test="we:SubActionReports">
-                            <span class="caret">
+                            <details>
                                 <xsl:call-template name="status-template">
                                     <xsl:with-param name="status" select="we:Result"/>
                                     <xsl:with-param name="label" select="we:Name"/>
                                     <xsl:with-param name="id" select="we:Id"/>
+                                    <xsl:with-param name="summary" select="'active'"/>
                                 </xsl:call-template>
-                            </span>
-
-                            <xsl:call-template name="sub-tree-view-template">
-                                <xsl:with-param name="firstNode" select="we:SubActionReports/we:ActionReport"/>
-                            </xsl:call-template>
+                                <xsl:call-template name="sub-tree-view-template">
+                                    <xsl:with-param name="firstNode" select="we:SubActionReports/we:ActionReport"/>
+                                </xsl:call-template>
+                            </details>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="status-template">
                                 <xsl:with-param name="status" select="we:Result"/>
                                 <xsl:with-param name="label" select="we:Name"/>
                                 <xsl:with-param name="id" select="we:Id"/>
+                                <xsl:with-param name="summary" select="'not-active'"/>
                             </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -41,25 +43,30 @@
                     <h1>Test cases</h1>
                 </div>
                 <div class="tree-action-container">
-                    <div class="tree-one-action-container" onclick="expandAll()"><i class="fa fa-plus icon-action-tree"></i></div>
-                    <div class="tree-one-action-container" onclick="collapseAll()"><i class="fa fa-minus icon-action-tree"></i></div>
+                    <div class="tree-one-action-container dot" onclick="expandAll()">
+                        <i class="fa fa-plus icon-action-tree"></i>
+                    </div>
+                    <div class="tree-one-action-container dot" onclick="collapseAll()">
+                        <i class="fa fa-minus icon-action-tree"></i>
+                    </div>
                 </div>
             </div>
             <div id='id-tree-container' class="tree-container">
-                <ul id="idTree">
+                <ul class="tree">
                     <xsl:for-each select="we:TestResult">
                         <li>
-                            <span class="caret">
+                            <details>
                                 <xsl:call-template name="status-template">
                                     <xsl:with-param name="status" select="we:Result"/>
                                     <xsl:with-param name="label" select="we:TestName"/>
                                     <xsl:with-param name="id" select="we:Id"/>
+                                    <xsl:with-param name="summary" select="'active'"/>
                                 </xsl:call-template>
-                            </span>
 
-                            <xsl:call-template name="sub-tree-view-template">
-                                <xsl:with-param name="firstNode" select="we:ActionReports/we:ActionReport"/>
-                            </xsl:call-template>
+                                <xsl:call-template name="sub-tree-view-template">
+                                    <xsl:with-param name="firstNode" select="we:ActionReports/we:ActionReport"/>
+                                </xsl:call-template>
+                            </details>
                         </li>
                     </xsl:for-each>
                 </ul>

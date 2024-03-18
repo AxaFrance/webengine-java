@@ -2,16 +2,17 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    background-color: #00008f;
+    /*background-color: #000;*/
     padding: 1em;
-    margin-bottom: 1em;
+    /*margin-bottom: 1em;*/
     width: 100%;
-    height: 8%;
+    height: 50px;
+    border-bottom: 2px solid #e7e9eb
 }
 
 .tree-header-container h1 {
     font-size: 1.3em;
-    color: white;
+    color: black;
     margin-bottom: 0;
 }
 
@@ -26,76 +27,103 @@
 }
 
 .tree-one-action-container {
-    align-content: center;
-    align-items: center;
-    display: flex;
     margin-right: 8px;
 }
 
 .icon-action-tree{
-    color: white;
+    color: black;
     cursor: pointer;
 }
 
 .tree-container{
     width: 100%;
-    height: 90%;
+    height: 95%;
     overflow: auto;
     background-color: #ffffff;
 }
 
-ul, #idTree {
-    list-style-type: none;
+
+ul.tree{
+    padding-left: 0px;
+    padding-top: 5px;
 }
 
-#idTree {
-    margin: 10px;
-    padding: 0;
-    width: 100%;
+.tree {
+    --spacing: 1.5rem;
+    --radius: 10px;
+    --marker-bg-default: #eaeaea;
+    --marker-bg-haschild: #eaeaea;
+    line-height: 2rem;
 }
-#idTree li {
-    transition: 200ms all ease-in-out;
-    font-family: 'Poppins' !important;
-    font-size: 1em !important;
+.tree li {
+    display: block;
+    position: relative;
+    padding-left: calc(2 * var(--spacing) - var(--radius) - 2px);
 }
-
-#idTree li:hover {
-    transform: scale(1.02);
+.tree ul {
+    margin-left: calc(var(--radius) - var(--spacing));
+    padding-left: 0;
 }
-
-.caret {
+.tree a{
     cursor: pointer;
-    -webkit-user-select: none; /* Safari 3.1+ */
-    -moz-user-select: none; /* Firefox 2+ */
-    -ms-user-select: none; /* IE 10+ */
-    user-select: none;
-    font-size: 1.1em!important;
 }
 
-#idTree .badge-action-red,
-#idTree .badge-action-green {
-    font-size: 1.5em;
+.tree ul li {
+    border-left: 2px solid #ddd;
+}
+.tree ul li:last-child {
+    border-color: transparent;
 }
 
+.tree ul li::before{
+    content: '';
+    display: block;
+    position: absolute;
+    top: calc(var(--spacing) / -2);
+    left: -2px;
+    width: calc(var(--spacing) + 2px);
+    height: calc(var(--spacing) + 1px);
+    border: solid #eaeaea;
+    border-width: 0 0 2px 2px;
+}
 
-
-.caret::before {
-    content: "\25B7";
+.tree summary {
+    display: block;
+    cursor: pointer;
     color: black;
-    display: inline-block;
-    margin-right: 6px;
 }
-
-.caret-down::before {
-    -ms-transform: rotate(90deg); /* IE 9 */
-    -webkit-transform: rotate(90deg); /* Safari */'
-transform: rotate(90deg);
-}
-
-.nested {
+.tree summary::marker,
+.tree summary::-webkit-details-marker {
     display: none;
 }
+.tree summary:focus {
+    outline: none;
+}
+.tree summary:focus-visible {
+    outline: 1px dotted #000;
+}
 
-.active {
+.tree li::after,
+.tree summary::before {
+    content: '';
     display: block;
+    position: absolute;
+    top: calc(var(--spacing) / 2 - var(--radius) + 2px);
+    left: calc(var(--spacing) - var(--radius) - 2px);
+    width: calc(2 * var(--radius));
+    height: calc(2 * var(--radius));
+    border-radius: 50%;
+    background: var(--marker-bg-default);
+}
+
+.tree summary::before {
+    content: '+';
+    z-index: 1;
+    background: var(--marker-bg-haschild);
+    color: black;
+    line-height: calc(2 * var(--radius));
+    text-align: center;
+}
+.tree details[open] > summary::before {
+    content: '−';
 }

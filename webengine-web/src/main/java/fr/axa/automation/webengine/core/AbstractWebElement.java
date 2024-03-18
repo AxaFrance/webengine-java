@@ -2,16 +2,20 @@ package fr.axa.automation.webengine.core;
 
 
 import fr.axa.automation.webengine.api.IFunction;
+import fr.axa.automation.webengine.constante.HtmlAttributeConstant;
 import fr.axa.automation.webengine.global.SettingsWeb;
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -44,25 +48,26 @@ public abstract class AbstractWebElement extends AbstractElement{
         Exception exception = new Exception();
         UUID uuid = UUID.randomUUID();
 
-        log.debug(uuid+"-Element search at "+LocalDateTime.now()+". Defined time out is :"+timeOutSecond);
+        log.debug("Search element : "+toString());
         while (LocalDateTime.now().isBefore(timeOut)) {
             try {
                 WebElement element = internalFindElement();
                 if(element!=null){
-                    log.debug(uuid+"-Element founded at "+LocalDateTime.now());
+                    log.debug("Found element : "+toString());
                 }
                 return element;
             } catch (Exception e) {
                 exception = e;
+                log.debug("Retry to search element : "+toString());
                 waitInMillisecondes(SettingsWeb.RETRY_MILLISECONDS);
             }
         }
-        log.debug(uuid+"-Time out search "+LocalDateTime.now());
+        log.debug("Timeout for element : "+toString());
         throw exception;
     }
 
     public Collection<WebElement> findElements(By by) throws Exception {
-        IFunction<By ,Collection<WebElement>> fun = (x) -> getUseDriver().findElements(x);
+        IFunction<By ,Collection<WebElement>> fun = (param) -> getUseDriver().findElements(param);
         return retry(fun,by);
     }
 
@@ -71,7 +76,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public WebElement findElement(By by, int timeoutSecond) throws Exception {
-        IFunction<By ,WebElement> fun = (x) -> getUseDriver().findElement(x);
+        IFunction<By ,WebElement> fun = (param) -> getUseDriver().findElement(param);
         return retry(fun,by,timeoutSecond);
     }
 
@@ -88,7 +93,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean exists(Integer timeoutSecond) throws Exception {
-        IFunction<Integer, Boolean> fun = (x) -> existWithoutRetry(x.intValue());
+        IFunction<Integer, Boolean> fun = (param) -> existWithoutRetry(param.intValue());
         return retry(fun,timeoutSecond);
     }
 
@@ -102,7 +107,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public void click() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
+        IFunction<Void, Void> fun = (param) -> {
             WebElement webElement = findElement();
             click(webElement);
             return null;
@@ -125,35 +130,35 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public void sendKeys(String text) throws Exception {
-        IFunction<String, Void> fun = (x) -> {
+        IFunction<String, Void> fun = (sendKeysValue) -> {
             WebElement webElement = findElement();
-            sendKeys(x, webElement);
+            sendKeys(sendKeysValue, webElement);
             return null;
         };
         retry(fun,text);
     }
 
-    protected void sendKeys(String x, WebElement webElement) {
-        webElement.sendKeys(x);
+    protected void sendKeys(String sendKeysValue, WebElement webElement) {
+        webElement.sendKeys(sendKeysValue);
     }
 
-    protected void sendKeysWithClear(String x, WebElement webElement) {
+    protected void sendKeysWithClear(String sendKeysValue, WebElement webElement) {
         webElement.clear();
-        webElement.sendKeys(x);
+        webElement.sendKeys(sendKeysValue);
     }
 
     public void setValue(String text) throws Exception {
-        IFunction<String, Void> fun = (x) -> {
+        IFunction<String, Void> fun = (param) -> {
             WebElement element = findElement();
             element.clear();
-            sendKeys(x, element);
+            sendKeys(param, element);
             return null;
         };
         retry(fun,text);
     }
 
     public String getText() throws Exception {
-        IFunction<Void, String> fun = (x) -> {
+        IFunction<Void, String> fun = (param) -> {
             WebElement element = findElement();
             return element.getText();
         };
@@ -165,7 +170,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean isSelected() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
+        IFunction<Void, Boolean> fun = (param) -> {
             WebElement webElement = findElement();
             if(webElement.isEnabled() && webElement.isDisplayed()){
                 return webElement.isSelected();
@@ -176,7 +181,7 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean isEnabled() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
+        IFunction<Void, Boolean> fun = (param) -> {
             WebElement webElement = findElement();
             return webElement.isEnabled();
         };
@@ -188,26 +193,55 @@ public abstract class AbstractWebElement extends AbstractElement{
     }
 
     public Boolean isDisplayed() throws Exception {
-        IFunction<Void, Boolean> fun = (x) -> {
+        IFunction<Void, Boolean> fun = (param) -> {
             WebElement webElement = findElement();
             return webElement.isDisplayed();
         };
         return retry(fun,null);
     }
 
+    protected static void assertInputValue(WebElement webElement, String expectedValue) throws Exception {
+        String actualValue = webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_VALUE.getValue());
+        if(!StringUtil.equalsIgnoreCase(expectedValue,actualValue)){
+            throw new Exception("The expected value is :'" + expectedValue +"' and the actual value is :'" + actualValue + "'");
+        }
+    }
+
     public void clear() throws Exception {
-        IFunction<Void, Void> fun = (x) -> {
+        IFunction<Void, Void> fun = (param) -> {
             WebElement webElement = findElement();
+
             webElement.clear();
+
+            String st = Keys.chord(Keys.CONTROL, "a");
+            webElement.sendKeys(st);
+            webElement.sendKeys(Keys.DELETE);
+
+            Actions actions = new Actions(useDriver);
+            actions.doubleClick(webElement).perform();
+            webElement.sendKeys(Keys.BACK_SPACE);
+
+            assertInputValue(webElement, StringUtils.EMPTY);
+            return null;
+        };
+        retry(fun,null);
+    }
+
+    public void clearWithKey() throws Exception {
+        IFunction<Void, Void> fun = (param) -> {
+            WebElement webElement = findElement();
+            String st = Keys.chord(Keys.CONTROL, "a");
+            webElement.sendKeys(st);
+            webElement.sendKeys(Keys.DELETE);
             return null;
         };
         retry(fun,null);
     }
 
     public String getAttribute(String attributeName) throws Exception {
-        IFunction<String, String> fun = (x) -> {
+        IFunction<String, String> fun = (param) -> {
             WebElement webElement = findElement();
-            return webElement.getAttribute(x);
+            return webElement.getAttribute(param);
         };
         return retry(fun,attributeName);
     }

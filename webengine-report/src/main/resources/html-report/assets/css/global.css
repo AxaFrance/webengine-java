@@ -15,8 +15,8 @@ body {
     margin: 0;
     background: #fff;
     /* font-family: Source Sans Pro, sans-serif; */
-    font-family: "Raleway";
-    font-size: 14px !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 15px !important;
     height: 100%;
     width: 100%;
 }
@@ -36,9 +36,7 @@ section {
 }
 
 .common-font {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: Arial, Helvetica, sans-serif !important;
     font-weight: 600;
     line-height: 2;
     color: #515a5a;
@@ -48,14 +46,8 @@ section {
     color: #f1948a;
 }
 
-.shadow {
-    -webkit-box-shadow: 10px 11px 5px 0px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 10px 11px 5px 0px rgba(0, 0, 0, 0.1);
-    box-shadow: 10px 11px 5px 0px rgba(0, 0, 0, 0.1);
-}
-
 .selected-line {
-    color: #00008f !important;
+    color: black !important;
     font-weight: bold;
 }
 
@@ -65,25 +57,48 @@ a {
     background-color: transparent !important;
 }
 
-/* ***********************scrollbar*********************** */
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
+.dot,.dot-stat,
+.dot-stat-green,
+.dot-stat-red,
+.dot-stat-gray{
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2px;
+    display: flex;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey;
+.dot-stat,.dot-stat-green,
+.dot-stat-red,
+.dot-stat-gray{
+    height: 40px;
+    width: 40px;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #00008f;
+.dot-stat-green {
+    background-color: #c8f4d5;
+    margin-right: 5px;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #00008f;
+.dot-stat-red{
+    background-color: rgb(247, 206, 203);
+    margin-right: 5px;
+}
+
+.dot-stat-gray{
+    background-color: #e6e6e6;
+}
+
+
+.container-info{
+    margin-bottom: 30px;
+}
+
+h6{
+    margin-bottom: 30px!important;
 }
 
 /* ***********************footer*********************** */
@@ -98,7 +113,6 @@ footer {
 }
 
 /* ***********************Responsive*********************** */
-
 @media (max-width: 640px) {
     body {
         min-height: 0;
@@ -116,4 +130,21 @@ footer {
         width: auto;
         order: 1;
     }
+}
+
+.icon-green{
+    color:green;
+}
+
+.icon-red{
+    color:red;
+}
+
+.icon-gray{
+    color:gray;
+}
+
+.icon-around{
+    margin-left: 5px;
+    margin-right: 5px;
 }

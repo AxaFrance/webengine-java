@@ -5,11 +5,10 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>3.0.11</version>
+        <version>3.1.14</version>
     </parent>
 
     <artifactId>webengine-core</artifactId>
-    <version>3.0.11</version>
     <packaging>jar</packaging>
     <name>webengine-core</name>
 
@@ -20,6 +19,13 @@
             <artifactId>webengine-report</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>fr.axa.automation.webengine</groupId>
+            <artifactId>webengine-js</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

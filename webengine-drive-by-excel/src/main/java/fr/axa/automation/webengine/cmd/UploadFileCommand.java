@@ -38,8 +38,6 @@ public class UploadFileCommand extends AbstractDriverCommand {
         }
     }
 
-
-
     private void uploadLikeImatatingMouse(AbstractGlobalApplicationContext globalApplicationContext, String value) throws AWTException {
         StringSelection owner = new StringSelection(getFilePath(globalApplicationContext, value));
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(owner,owner);

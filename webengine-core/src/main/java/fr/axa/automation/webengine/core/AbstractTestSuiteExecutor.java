@@ -23,7 +23,9 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
     }
 
     public Object initialize(AbstractGlobalApplicationContext globalApplicationContext) {
+        loggerService.info("Start Phase initialize test suite ");
         runLocalTesting(globalApplicationContext);
+        loggerService.info("End Phase initialize ");
         return null;
     }
 
@@ -32,7 +34,9 @@ public abstract class AbstractTestSuiteExecutor implements ITestSuiteExecutor {
     }
 
     public void cleanUp(Object object) {
+        loggerService.info("Start clean ");
         stopLocalTesting();
+        loggerService.info("End clean ");
     }
 
     private void stopLocalTesting() {

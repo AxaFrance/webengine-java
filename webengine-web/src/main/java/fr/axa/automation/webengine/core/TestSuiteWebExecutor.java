@@ -38,6 +38,7 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
     }
 
     public TestSuiteReport run(AbstractGlobalApplicationContext globalApplicationContext, ITestSuite testSuite) throws WebEngineException, UnknownHostException {
+        loggerService.info("Start run test ");
         Calendar startTime = Calendar.getInstance();
         TestSuiteReport testSuiteReport;
         List<TestCaseReport> testCaseReportList = new ArrayList<>();
@@ -54,7 +55,7 @@ public class TestSuiteWebExecutor extends AbstractTestSuiteExecutor implements I
             TestSuiteReportInformation testSuiteReportInformation = TestSuiteReportInformation.builder().environmentVariables(((GlobalApplicationContext)globalApplicationContext).getEnvironmentVariables()).testCaseReportList(testCaseReportList).startTime(startTime).systemError(systemError).build();
             testSuiteReport = TestSuiteReportHelper.getTestSuiteReport(testSuiteReportInformation);
         }
-
+        loggerService.info("End run test ");
         return testSuiteReport;
     }
 

@@ -4,17 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.axa.automation.webengine</groupId>
     <artifactId>webengine-parent</artifactId>
-    <version>3.0.11</version>
+    <version>3.1.14</version>
     <packaging>pom</packaging>
     <name>webengine-parent</name>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/AxaFrance/webengine-java</url>
-        </repository>
-    </distributionManagement>
+    <parent>
+        <groupId>fr.axa.socle.axafr</groupId>
+        <artifactId>axafr-corporate-parent</artifactId>
+        <version>2.0.3</version>
+    </parent>
 
     <properties>
         <java-source.version>1.8</java-source.version>
@@ -69,22 +67,24 @@
         <poi.version>5.2.3</poi.version>
 
         <jackson-core.version>2.13.2</jackson-core.version>
+        <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     </properties>
 
     <modules>
         <module>webengine-util</module>
+        <module>webengine-js</module>
         <module>webengine-report</module>
         <module>webengine-core</module>
         <module>webengine-web</module>
         <module>webengine-runner</module>
-        <module>webengine-boot-keyword-driven</module>
-        <module>webengine-test-keyword-driven</module>
         <module>webengine-boot-gherkin</module>
-        <module>webengine-test-gherkin</module>
-        <module>webengine-test-linear</module>
-		<module>webengine-report-jacoco-aggregate</module>
+        <module>webengine-boot-keyword-driven</module>
         <module>webengine-drive-by-excel</module>
         <module>webengine-cmd-line</module>
+        <module>webengine-report-jacoco-aggregate</module>
+        <module>webengine-test-linear</module>
+        <module>webengine-test-gherkin</module>
+        <module>webengine-test-keyword-driven</module>
     </modules>
 
     <dependencies>
@@ -460,6 +460,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-deploy-plugin -->
+
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+
             </plugin>
 
         </plugins>

@@ -10,16 +10,32 @@ public class CommandFactory {
                 return new OpenCommand();
             case OPEN_PRIVATE:
                 return new OpenInPrivateModeCommand();
+            case SWITCH_TO:
+                return new SwitchToCommand();
+            case OPEN_TAB:
+                return new OpenTabCommand();
+            case DELETE_COOKIE:
+                return new DeleteCookieCommand();
             case CLEAR:
                 return new ClearCommand();
             case SEND_KEYS:
                 return new SendKeysCommand();
+            case SEND_KEYS_WITHOUT_ASSERTION:
+                return new SendKeysWithoutAssertionCommand();
             case SEND_KEYS_WITH_CLEAR:
                 return new SendKeysWithClearCommand();
             case CLICK:
                 return new ClickCommand();
+            case CLICK_ON_PSEUDO_ELEMENT:
+                return new ClickPseudoElementCommand();
+            case DOUBLE_CLICK:
+                return new DoubleClickCommand();
             case SAVE_DATA:
                 return new SaveDataCommand();
+            case SAVE_DATA_AND_APPLY_REGEX:
+                return new SaveDataAndApplyRegexCommand();
+            case CHECK_BY_VALUE:
+                return new CheckByValueCommand();
             case CALL:
                 return new CallCommand();
             case SELECT:
@@ -38,6 +54,8 @@ public class CommandFactory {
                 return new AssertNotCheckedCommand();
             case SCREENSHOT:
                 return new ScrenshotCommand();
+            case FULLSCREENSHOT:
+                return new FullScrenshotCommand();
             case ASSERT_CONTENT:
                 return new AssertContentCommand();
             case ASSERT_NOT_CONTENT:
@@ -58,6 +76,8 @@ public class CommandFactory {
                 return new SwitchFrameCommand();
             case EXIT_FRAME:
                 return new ExitFrameCommand();
+            case SCROLL_TO_ELEMENT:
+                return new ScrollToElementCommand();
             case REFRESH:
                 return new RefreshCommand();
             default:

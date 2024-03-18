@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
+import com.microsoft.schemas.office.office.STInsetMode;
 import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
@@ -114,9 +115,9 @@ public class EvaluateValueHelper {
         if(CollectionUtils.isNotEmpty(commandResultList)){
             List<CommandResult> commandResultFlatList = CommandResultHelper.flatCommandResult(commandResultList,new ArrayList<>());
             List<String> saveDataList = commandResultFlatList.stream()
-                                                        .filter(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value))
-                                                        .map(commandResult -> commandResult.getSavedData())
-                                                        .collect(Collectors.toList());
+                    .filter(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value))
+                    .map(commandResult -> commandResult.getSavedData())
+                    .collect(Collectors.toList());
             if(CollectionUtils.isNotEmpty(commandResultList)){
                 return saveDataList.get(0);
             }
@@ -126,29 +127,48 @@ public class EvaluateValueHelper {
 
     private static String replaceTagDateValue(String value){
         String onlyTagValue = getOnlyTagValue(value);
+        String dateFormat = getFormatForTagValue(value);
+        if (!StringUtils.isNotEmpty(dateFormat)) {
+            if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY_HOUR.getTagValue()))
+                dateFormat = FormatDate.DDMMYYYYHHMMSS.getFormat();
+            {
+                dateFormat = FormatDate.DDMMYYYY.getFormat();
+            }
+        }
+
         if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstantNoCode.MINUS.getValue())) {
-            return DateUtil.minusDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
+            return DateUtil.minusDay(dateFormat,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue()) && value.contains(ConstantNoCode.PLUS.getValue())) {
-            return DateUtil.addDay(FormatDate.DDMMYYYY,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
+            return DateUtil.addDay(dateFormat,RegexUtil.getNumber(RegexContante.REGEX_NUMBER,value));
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY.getTagValue())) {
-            return DateUtil.getDateTime(FormatDate.DDMMYYYY);
+            return DateUtil.getDateTime(dateFormat);
         }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_TODAY_HOUR.getTagValue())) {
-            return DateUtil.getDateTime(FormatDate.DDMMYYYYHHMM);
+            return DateUtil.getDateTime(FormatDate.DDMMYYYYHHMMSS);
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_ANTERIOR_DAY.getTagValue()) && StringUtil.contains(value, PredefinedDateTagValue.TAG_YESTERDAY.getTagValue())) {
-            return DateUtil.minusDay(FormatDate.DDMMYYYY,1);
+            return DateUtil.minusDay(dateFormat,1);
         }else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_NEXT_DAY.getTagValue()) && StringUtil.contains(value, PredefinedDateTagValue.TAG_PAST_DAY.getTagValue())) {
-            return DateUtil.addDay(FormatDate.DDMMYYYY,1);
+            return DateUtil.addDay(dateFormat,1);
         } else if (StringUtils.equalsIgnoreCase(onlyTagValue, PredefinedDateTagValue.TAG_NEXT_MONTH.getTagValue())) {
-            return DateUtil.addMonth(FormatDate.DDMMYYYY,1);
+            return DateUtil.addMonth(dateFormat,1);
         }else {
             return value;
         }
+
     }
 
     private static String getOnlyTagValue(String value) {
         if(StringUtils.isNotEmpty(value)){
-            return Arrays.asList(value.split("[+-]")).get(0);
+            return value.split(":")[0].split("[+-]")[0];
         }
         return "";
     }
+
+    private static String getFormatForTagValue(String value) {
+        if(StringUtils.isNotEmpty(value) && value.contains(":")){
+            return value.substring(value.indexOf(":")+1);
+        }
+        return "";
+    }
+    //create unit test code for getFormatForTagValue method
+
 }

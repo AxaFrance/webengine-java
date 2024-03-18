@@ -5,11 +5,10 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>3.0.11</version>
+        <version>3.1.14</version>
     </parent>
     
     <artifactId>webengine-test-keyword-driven</artifactId>
-    <version>3.0.11</version>
     <packaging>jar</packaging>
     <name>webengine-test-keyword-driven</name>
 
@@ -89,7 +88,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>unpack</id>
+                        <id>unpack-report</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -102,6 +101,25 @@
                                     <version>${project.parent.version}</version>
                                     <type>jar</type>
                                     <includes>html-report/**</includes>
+                                    <outputDirectory>${basedir}/src/main/resources/</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-js</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fr.axa.automation.webengine</groupId>
+                                    <artifactId>webengine-js</artifactId>
+                                    <version>${project.parent.version}</version>
+                                    <type>jar</type>
+                                    <includes>js/**</includes>
                                     <outputDirectory>${basedir}/src/main/resources/</outputDirectory>
                                 </artifactItem>
                             </artifactItems>

@@ -2,35 +2,36 @@
     flex-grow: 1;
     width: 100%;
     height: 100%;
-    color: #ffffff;
+    color: black;
     font-weight: 500;
     font-size: 1.2em;
     cursor: pointer;
     padding: 8px 16px !important;
     margin-bottom: 0px;
-    border-bottom: #D5D8DC 6px solid !important;
+    border-bottom: #D5D8DC 2px solid !important;
 }
 
 .tab-bar {
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: #00008f;
+    background-color: #ffffff;
 }
 
 .tab-label:hover {
-    color: #00008f !important;
+    color: black !important;
     background-color: #ffffff !important;
-    border-bottom: #00008f 6px solid !important;
+    border-bottom: black 2px solid !important;
 }
 
 .tab-content-container {
     width: 100%;
-    padding: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
 }
 
 .tab-content-log-container {
-    white-space: pre-line;
+    white-space: normal;
 }
 
 .container-img {
@@ -48,12 +49,11 @@
 }
 
 .w3-border-blue,.w3-hover-border-blue:hover {
-    border-color: #00008f !important;
+    border-color: black !important;
     background-color: #ffffff;
-    color: #00008f;
+    color: black;
 }
 .tab-content-container.class-container-tab h6 {
-    color: #00008f !important;
     font-weight: 700 !important;
 }
 .border-div {
