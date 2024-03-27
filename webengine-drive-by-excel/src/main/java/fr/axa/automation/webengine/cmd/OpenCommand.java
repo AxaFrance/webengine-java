@@ -17,15 +17,21 @@ public class OpenCommand extends AbstractDriverCommand{
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
         String url = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        WebDriver webDriver = instantiateWebDriver(globalApplicationContext, commandResultList);
+        minimizeCurrentWindow(commandResultList);
+        WebDriver newWebDriver = instantiateWebDriver(globalApplicationContext, commandResultList);
+        DriverContext newDriverContext = getDriverContext(newWebDriver, url);
+        setDriverContext(newDriverContext);
+        newWebDriver = newDriverContext.getWebDriver();
+        newWebDriver.switchTo().window(newDriverContext.getWindowHandle());
+        newWebDriver.manage().window().maximize();
+        newWebDriver.navigate().to(url);
+    }
 
-        DriverContext currentDriverContext = getDriverContext(webDriver, url);
-
-        setDriverContext(currentDriverContext);
-        webDriver = currentDriverContext.getWebDriver();
-        webDriver.switchTo().window(currentDriverContext.getWindowHandle());
-        webDriver.manage().window().maximize();
-        webDriver.navigate().to(url);
+    protected void minimizeCurrentWindow(List<CommandResult> commandResultList) throws WebEngineException {
+        WebDriver currentWebDriver = getWebDriverToUse(commandResultList);
+        if(currentWebDriver != null){
+            currentWebDriver.manage().window().minimize();
+        }
     }
 
     protected DriverContext getDriverContext(WebDriver webDriver, String url) {
