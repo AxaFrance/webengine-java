@@ -14,9 +14,8 @@ body {
     min-height: 100vh; /*toute la hauteur du viewport (compatible IE9+) */
     margin: 0;
     background: #fff;
-    /* font-family: Source Sans Pro, sans-serif; */
     font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 15px !important;
+    font-size: 12px !important;
     height: 100%;
     width: 100%;
 }
@@ -57,26 +56,35 @@ a {
     background-color: transparent !important;
 }
 
+h7{
+    color: black; !important;
+    font-weight: bold; !important;
+}
+
 .dot,.dot-stat,
 .dot-stat-green,
 .dot-stat-red,
-.dot-stat-gray{
-    height: 25px;
-    width: 25px;
+.dot-stat-gray,
+.dot-expand{
+    height: 35px;
+    width: 35px;
     background-color: #bbb;
     border-radius: 50%;
     justify-content: center;
     align-items: center;
     padding-top: 2px;
     display: flex;
+    /*font-size: 12px;*/
+    font-weight: bold;
+    color: black;
 }
 
-.dot-stat,.dot-stat-green,
-.dot-stat-red,
-.dot-stat-gray{
-    height: 40px;
-    width: 40px;
+.dot-expand{
+    height: 20px;
+    width: 20px;
+    font-size: 10px;
 }
+
 
 .dot-stat-green {
     background-color: #c8f4d5;

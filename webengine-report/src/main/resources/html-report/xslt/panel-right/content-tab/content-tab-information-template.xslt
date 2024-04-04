@@ -3,7 +3,6 @@
         <xsl:param name="id"/>
         <div id="content-id-information-{$id}" class="tab-content-container class-container-tab" style="display:none">
             <div class="container-info">
-                <h6>Information :</h6>
 
                 <table id="table-common">
                     <tr>
@@ -26,7 +25,7 @@
             </div>
 
             <div>
-                <h6>Screenshot :</h6>
+                <h9>Screenshot :</h9>
                 <div class="container-img">
                     <xsl:choose>
                         <xsl:when test="we:Screenshots">

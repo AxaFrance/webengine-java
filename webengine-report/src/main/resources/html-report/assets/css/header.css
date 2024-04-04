@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: flex-start;
     flex-grow: 1;
-    height: 100px;
+    height: 70px;
     padding: 0 32px;
     background-color: #000;
 }
@@ -20,9 +20,9 @@
 }
 
 .site-header-item {
-    padding: 5px 15px;
+    padding-left: 15px;
     color: #515a5a;
-    font-size: 25px;
+    font-size: 20px;
     color: white;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .site-header-icon {
-    font-size: 30px;
+    font-size: 20px;
     color: #515a5a;
 }
 

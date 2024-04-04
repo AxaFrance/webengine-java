@@ -5,15 +5,15 @@
         <div class="tab-bar">
             <div id="tab-id-information-{$id}" class="tab-label tablink "
                  onclick="openSelectedTab('tab-id-information-{$id}', 'content-id-information-{$id}');">
-                Information / Screenshot
+                <h7>Information / Screenshot</h7>
             </div>
             <div id="tab-id-log-{$id}" class="tab-label tablink "
                  onclick="openSelectedTab('tab-id-log-{$id}', 'content-id-log-{$id}');">
-                Log
+                <h7>Log</h7>
             </div>
             <div id="tab-id-context-value-{$id}" class="tab-label tablink "
                  onclick="openSelectedTab('tab-id-context-value-{$id}', 'content-id-context-value-{$id}');">
-                Context value
+                <h7>Context value</h7>
             </div>
         </div>
     </xsl:template>

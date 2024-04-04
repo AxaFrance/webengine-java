@@ -40,13 +40,13 @@
         <div id="body-left-container" class="body-left-container">
             <div id='id-tree-header-container' class="tree-header-container">
                 <div class="tree-title-container">
-                    <h1>Test cases</h1>
+                    <h7>Test cases</h7>
                 </div>
                 <div class="tree-action-container">
-                    <div class="tree-one-action-container dot" onclick="expandAll()">
+                    <div class="tree-one-action-container dot-expand" onclick="expandAll()">
                         <i class="fa fa-plus icon-action-tree"></i>
                     </div>
-                    <div class="tree-one-action-container dot" onclick="collapseAll()">
+                    <div class="tree-one-action-container dot-expand" onclick="collapseAll()">
                         <i class="fa fa-minus icon-action-tree"></i>
                     </div>
                 </div>
