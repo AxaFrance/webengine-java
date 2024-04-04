@@ -26,4 +26,5 @@ webengineConfiguration:
         localIdentifier: XXXXYYYY
 applicationConfiguration:
   values:
-    prenom: joseph
+    prenom: Charlie
+    '[prenom\path]': Charlie
