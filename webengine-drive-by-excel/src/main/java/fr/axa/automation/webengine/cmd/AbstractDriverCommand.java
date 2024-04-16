@@ -169,12 +169,13 @@ public abstract class AbstractDriverCommand implements ICommand {
     public CommandResult execute(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList) throws WebEngineException {
         ActionReport actionReport = ActionReportHelper.getActionReport(commandData.getName());
         String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
-        loggerService.info("--------------------------------------------------------------------------------------------------------------------------------");
+        loggerService.info("----------------------------------------------------------------------------------------------");
         loggerService.info("Executed command : " + commandData);
-        getLogReport().getVariables().add(VariableHelper.getVariable("Executed command", commandData.getCommand().name()));
         Map.Entry<TargetKey,String> targetEntry = getTargetValue(globalApplicationContext, commandData, commandResultList);
-        getLogReport().getVariables().add(VariableHelper.getVariable("Target", targetEntry == null ? "" : targetEntry.getValue()));
         String evaluateValue = getValue(globalApplicationContext, (TestCaseNoCodeContext)testCaseContext, commandData, commandResultList);
+
+        getLogReport().getVariables().add(VariableHelper.getVariable("Target", targetEntry == null ? "" : targetEntry.getValue()));
+        getLogReport().getVariables().add(VariableHelper.getVariable("Executed command", commandData.getCommand().name()));
         getLogReport().getVariables().add(VariableHelper.getVariable("Data", evaluateValue == null ? "" : evaluateValue));
         try {
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
@@ -214,7 +215,6 @@ public abstract class AbstractDriverCommand implements ICommand {
                 .savedData(savedData).build();
     }
 
-
     protected ScreenshotReport screenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
         WebDriver webDriver = getWebDriverToUse(commandResultList);
         if(webDriver==null){
@@ -231,15 +231,15 @@ public abstract class AbstractDriverCommand implements ICommand {
         return ScreenshotHelper.getScreenshotReport(name, screenshot);
     }
 
-    protected ScreenshotReport fullScreenShot(AbstractGlobalApplicationContext globalApplicationContext,AbstractTestCaseContext testCaseContext,String name, List<CommandResult> commandResultList) throws WebEngineException {
+    protected ScreenshotReport fullScreenShot(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, String name, List<CommandResult> commandResultList) throws WebEngineException {
         try {
             byte[] screenshot = getFullScreenShotBytes();
             return ScreenshotHelper.getScreenshotReport(name, screenshot);
         } catch (Exception e) {
             loggerService.warn("Error during full screenshot", e);
-                throw new WebEngineException("Error during full screenshot", e);
-            }
+            throw new WebEngineException("Error during full screenshot", e);
         }
+    }
 
     @NotNull
     private byte[] getFullScreenShotBytes() {
