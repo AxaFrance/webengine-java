@@ -1,10 +1,10 @@
 package fr.axa.automation.webengine.helper;
 
-import com.microsoft.schemas.office.office.STInsetMode;
 import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
 import fr.axa.automation.webengine.constante.RegexContante;
+import fr.axa.automation.webengine.context.SharedNoCodeContext;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.AbstractSettings;
 import fr.axa.automation.webengine.global.SettingsNoCode;
@@ -17,7 +17,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,16 +69,21 @@ public class EvaluateValueHelper {
         if (CollectionUtils.isNotEmpty(externalRegexValueList)) {
             for (String externalRegexValue : externalRegexValueList) {
                 String valueWithouBrackets = getExternalValue(externalRegexValue);
-                String valueFromSetting = settings.getValues().get(valueWithouBrackets);
-                if (StringUtils.isEmpty(valueFromSetting)) {
-                    //Check the value in Keepass if the value is not found in the settings
-                    resultValue = KeepassUtils.getPassword(valueWithouBrackets, ((SettingsNoCode)settings).getKeePassDatabasePassword(), ((SettingsNoCode)settings).getKeePassDatabasePath());
-                    if(StringUtils.isEmpty(resultValue)){
-                        throw  new WebEngineException("The keepass password can't be empty");
-                    }
-                }else {
-                    resultValue = resultValue.replace(externalRegexValue, valueFromSetting);
+                String externalValue = settings.getValues().get(valueWithouBrackets);
+                if(StringUtils.isEmpty(externalValue)){
+                    externalValue = SharedNoCodeContext.CONTEXT.get(valueWithouBrackets);
                 }
+
+                if (StringUtils.isEmpty(externalValue)) {
+                    resultValue = KeepassUtils.getPassword(valueWithouBrackets, ((SettingsNoCode)settings).getKeePassDatabasePassword(), ((SettingsNoCode)settings).getKeePassDatabasePath());
+                }
+
+                if(StringUtils.isEmpty(resultValue)){
+                    throw  new WebEngineException("the value : "+valueWithouBrackets+" is not found in external context");
+                }
+
+                resultValue = resultValue.replace(externalRegexValue, externalValue);
+
             }
         }
         return resultValue;

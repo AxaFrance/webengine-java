@@ -22,6 +22,7 @@ public enum ConstantNoCode {
     PLUS("+"),
     DASH("-"),
     CR_LF("\r\n"),
-    DOUBLE_CR_LF("\r\n \r\n");
+    DOUBLE_CR_LF("\r\n \r\n"),
+    TEST_CASE_DATA_FILE("test_case_data.yml");
     final String value;
 }

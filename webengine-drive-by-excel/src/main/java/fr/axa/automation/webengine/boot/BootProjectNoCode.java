@@ -9,6 +9,7 @@ import fr.axa.automation.webengine.checking.chain.impl.OptionalChecking;
 import fr.axa.automation.webengine.checking.chain.impl.TestCaseArgChecking;
 import fr.axa.automation.webengine.checking.runner.ICheckingRunner;
 import fr.axa.automation.webengine.checking.runner.impl.CheckingRunner;
+import fr.axa.automation.webengine.context.SharedNoCodeContext;
 import fr.axa.automation.webengine.core.ITestSuiteExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.executor.ITestSuiteNoCodeExecutor;
@@ -24,6 +25,7 @@ import fr.axa.automation.webengine.logger.LoggerAppender;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.parser.ArgumentParser;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
+import fr.axa.automation.webengine.properties.TestCaseNoCodeDataProperties;
 import fr.axa.automation.webengine.report.constante.ReportPathKey;
 import fr.axa.automation.webengine.report.helper.global.IReportHelper;
 import fr.axa.automation.webengine.util.ApplicationDesktop;
@@ -31,6 +33,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -46,11 +49,17 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class BootProjectNoCode extends AbstractBootProject {
+
+    TestCaseNoCodeDataProperties testCaseNoCodeDataProperties;
     static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.TEST_CASE_TO_RUN, ArgumentOption.PLATFORM, ArgumentOption.BROWSER, ArgumentOption.OUTPUT_DIR, ArgumentOption.SHOW_REPORT,ArgumentOption.CLOSE_BROWSER_AFTER_EACH_SCENARIO, ArgumentOption.KEEPASS_PASSWORD, ArgumentOption.KEEPASS_FILE, ArgumentOption.DELETE_TEMP_FILE);
 
     @Autowired
-    public BootProjectNoCode(@Qualifier("testSuiteNoCodeExecutor") ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration) {
+    public BootProjectNoCode(@Qualifier("testSuiteNoCodeExecutor") ITestSuiteExecutor testSuiteExecutor, IReportHelper reportHelper, ILoggerService loggerService, GlobalConfiguration globalConfiguration, TestCaseNoCodeDataProperties testCaseNoCodeDataProperties) {
         super(testSuiteExecutor, reportHelper, loggerService, globalConfiguration);
+        this.testCaseNoCodeDataProperties = testCaseNoCodeDataProperties;
+        if(MapUtils.isNotEmpty(testCaseNoCodeDataProperties.getTestCaseDataMap())){
+            SharedNoCodeContext.CONTEXT.putAll(testCaseNoCodeDataProperties.getTestCaseDataMap());
+        }
     }
 
     @Override

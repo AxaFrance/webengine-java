@@ -2,6 +2,7 @@ package fr.axa.automation.webengine.executor;
 
 import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.constante.TargetKey;
+import fr.axa.automation.webengine.context.SharedNoCodeContext;
 import fr.axa.automation.webengine.core.AbstractTestCaseWebExecutor;
 import fr.axa.automation.webengine.core.ITestStepExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -214,6 +215,8 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
                         break;
                 }
 
+                populateContextTestCase(allCommandResultList);
+
                 if (isSubReport && CollectionUtils.isNotEmpty(commandResultOfSubCommandList)) {
                     commandResult.setSubCommandResultList(new ArrayList<>());
                     commandResult.getSubCommandResultList().addAll(commandResultOfSubCommandList);
@@ -230,6 +233,16 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             firstParentCommandResultOnlyList.add(CommandResultHelper.getCommandResult(commandData, actionReport, ""));
         }
         return firstParentCommandResultOnlyList;
+    }
+
+    private void populateContextTestCase(List<CommandResult> allCommandResultList) {
+        allCommandResultList.stream().forEach(commandResult -> {
+            if (commandResult.getCommandData().getCommand() == CommandName.SAVE_DATA || commandResult.getCommandData().getCommand() == CommandName.SAVE_DATA_AND_APPLY_REGEX){
+                String key = commandResult.getCommandData().getName();
+                String value = commandResult.getSavedData();
+                SharedNoCodeContext.addContext(key, value);
+            }
+        });
     }
 
     protected List<CommandResult> ignoreCommand(TreeNode treeNodeCommand) {

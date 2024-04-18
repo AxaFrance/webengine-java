@@ -21,9 +21,7 @@ public final class ChromeDriverUtil {
 
 
     public static WebDriver getChromeDriver(List<String> chromeOptionList) {
-
-            WebDriverManager.chromedriver().setup();
-
+        WebDriverManager.chromedriver().setup();
         if(CollectionUtils.isNotEmpty(chromeOptionList)){
             ChromeOptions chromeOptions1 = new ChromeOptions();
             chromeOptions1.addArguments(chromeOptionList);

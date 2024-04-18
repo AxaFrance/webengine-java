@@ -1,5 +1,7 @@
 package fr.axa.automation.webengine.executor;
 
+import fr.axa.automation.webengine.constante.ConstantNoCode;
+import fr.axa.automation.webengine.context.SharedNoCodeContext;
 import fr.axa.automation.webengine.core.AbstractTestSuiteExecutor;
 import fr.axa.automation.webengine.core.ITestCaseExecutor;
 import fr.axa.automation.webengine.exception.WebEngineException;
@@ -17,12 +19,15 @@ import fr.axa.automation.webengine.object.TestCaseNodeNoCode;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.report.helper.TestSuiteReportHelper;
 import fr.axa.automation.webengine.report.object.TestSuiteReportInformation;
+import fr.axa.automation.webengine.util.FileUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -51,7 +56,8 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
 
         try {
             testCaseReportList.addAll(runTestCase(globalApplicationContext, testSuiteData));
-        } catch (WebEngineException e) {
+            saveNoCodeContext(globalApplicationContext);
+        } catch (WebEngineException | IOException e) {
             systemError = ExceptionUtils.getStackTrace(e);
         } finally {
             TestSuiteReportInformation testSuiteReportInformation = TestSuiteReportInformation.builder().environmentVariables(null).testCaseReportList(testCaseReportList).startTime(startTime).systemError(systemError).build();
@@ -59,6 +65,10 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         }
         loggerService.info("End run test suite");
         return testSuiteReport;
+    }
+
+    private void saveNoCodeContext(AbstractGlobalApplicationContext globalApplicationContext) throws IOException {
+        FileUtil.saveObjectAsYamlFile(SharedNoCodeContext.CONTEXT,globalApplicationContext.getSettings().getOutputDir() + File.separator + ConstantNoCode.TEST_CASE_DATA_FILE.getValue());
     }
 
     protected List<TestCaseReport> runTestCase(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData) throws WebEngineException {

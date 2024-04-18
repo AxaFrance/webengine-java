@@ -1,5 +1,8 @@
 package fr.axa.automation.webengine.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.logger.ILoggerService;
@@ -196,6 +199,12 @@ public final class FileUtil {
             }
         }
         return text;
+    }
+
+    public static void saveObjectAsYamlFile(Object object,String path) throws IOException {
+        YAMLFactory yamlFactory = YAMLFactory.builder().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER).build();
+        ObjectMapper mapper = new ObjectMapper(yamlFactory);
+        mapper.writeValue(new File(path), object);
     }
 
 }
