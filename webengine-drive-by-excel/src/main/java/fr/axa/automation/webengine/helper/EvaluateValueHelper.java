@@ -14,6 +14,7 @@ import fr.axa.automation.webengine.util.FormatDate;
 import fr.axa.automation.webengine.util.RegexUtil;
 import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -66,42 +67,44 @@ public class EvaluateValueHelper {
 
     public static String evaluateExternalRegexValue(String completeValue, List<String> externalRegexValueList, AbstractSettings settings) throws WebEngineException {
         String resultValue = completeValue;
-        if (CollectionUtils.isNotEmpty(externalRegexValueList)) {
-            for (String externalRegexValue : externalRegexValueList) {
-                String valueWithouBrackets = getExternalValue(externalRegexValue);
-                String externalValue = settings.getValues().get(valueWithouBrackets);
-                if(StringUtils.isEmpty(externalValue)){
-                    externalValue = SharedNoCodeContext.ADDITIONAL_DATA.get(valueWithouBrackets);
-                }
-
-                if (StringUtils.isEmpty(externalValue)) {
-                    resultValue = KeepassUtils.getPassword(valueWithouBrackets, ((SettingsNoCode)settings).getKeePassDatabasePassword(), ((SettingsNoCode)settings).getKeePassDatabasePath());
-                }
-
-                if(StringUtils.isEmpty(externalValue)){
-                    throw  new WebEngineException("the value : "+valueWithouBrackets+" is not found in external context");
-                }
-
-                resultValue = resultValue.replace(externalRegexValue, externalValue);
-
-            }
+        if (CollectionUtils.isEmpty(externalRegexValueList)) {
+            return resultValue;
         }
+
+        for (String externalRegexValue : externalRegexValueList) {
+            String valueWithoutBrackets = getExternalValue(externalRegexValue);
+            String externalValue = settings.getValues().get(valueWithoutBrackets);
+
+            if (StringUtils.isEmpty(externalValue)) {
+                externalValue = KeepassUtils.getPassword(valueWithoutBrackets, ((SettingsNoCode) settings).getKeePassDatabasePassword(), ((SettingsNoCode) settings).getKeePassDatabasePath());
+            }
+
+            if (StringUtils.isEmpty(externalValue)) {
+                throw new WebEngineException("the value : " + valueWithoutBrackets + " is not found in external context");
+            }
+
+            resultValue = resultValue.replace(externalRegexValue, externalValue);
+        }
+
         return resultValue;
     }
 
     private static String evaluateInternalRegexValue(String completeValue, List<String> internalRegexValueList, List<CommandResult> commandResultList ) {
         String resultValue = completeValue;
-        if(CollectionUtils.isNotEmpty(internalRegexValueList)){
-            for (String referencedRegexValue: internalRegexValueList) {
-                String valueWithouRafter = getInternalValue(referencedRegexValue);
-                if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)) {
-                    resultValue = resultValue.replace(referencedRegexValue,replaceTagDateValue(valueWithouRafter));
-                } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
-                    resultValue = resultValue.replace(referencedRegexValue,PredefinedTagValue.valueOf(valueWithouRafter).getTagValue());
-                } else if (isContainsInternalValue(valueWithouRafter, commandResultList)) {
-                    String savedData = getSavedData(valueWithouRafter,commandResultList);
-                    resultValue = resultValue.replace(referencedRegexValue,savedData);
-                }
+        if(CollectionUtils.isEmpty(internalRegexValueList)){
+            return resultValue;
+        }
+        for (String referencedRegexValue: internalRegexValueList) {
+            String valueWithouRafter = getInternalValue(referencedRegexValue);
+            if(PredefinedDateTagValue.isContainsPredefinedDateTagValue(valueWithouRafter)) {
+                resultValue = resultValue.replace(referencedRegexValue,replaceTagDateValue(valueWithouRafter));
+            } else if (PredefinedTagValue.isContainsPredefinedTagValue(valueWithouRafter)) {
+                resultValue = resultValue.replace(referencedRegexValue,PredefinedTagValue.valueOf(valueWithouRafter).getTagValue());
+            } else if (isContainsInternalValue(valueWithouRafter, commandResultList)) {
+                String savedData = getSavedData(valueWithouRafter,commandResultList);
+                resultValue = resultValue.replace(referencedRegexValue,savedData);
+            }else if(MapUtils.isNotEmpty(SharedNoCodeContext.ADDITIONAL_DATA)){
+                resultValue = resultValue.replace(referencedRegexValue,SharedNoCodeContext.ADDITIONAL_DATA.get(valueWithouRafter));
             }
         }
         return resultValue;
