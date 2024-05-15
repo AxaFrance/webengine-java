@@ -70,9 +70,7 @@ public abstract class AbstractBootProject implements IBootProject{
     }
 
     protected String[] getArgumentsSeparatedByOptionAndValue(List<String> filterArguments) {
-        String[] argumentsForProject = ArgumentParser.splitArguments(filterArguments, IConstant.SEPARATOR_ARG, 2);
-        //loggerService.info("Arguments after decomposition : "+ArgumentParser.removePassWordAfterDecompositionArgs(argumentsForProject));
-        return argumentsForProject;
+        return ArgumentParser.splitArguments(filterArguments, IConstant.SEPARATOR_ARG, 2);
     }
 
     protected abstract void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException;

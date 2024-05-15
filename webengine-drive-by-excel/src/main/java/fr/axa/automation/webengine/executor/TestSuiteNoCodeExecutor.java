@@ -1,6 +1,6 @@
 package fr.axa.automation.webengine.executor;
 
-import fr.axa.automation.webengine.constante.ConstantNoCode;
+import fr.axa.automation.webengine.constante.AdditionalDataPath;
 import fr.axa.automation.webengine.context.SharedNoCodeContext;
 import fr.axa.automation.webengine.core.AbstractTestSuiteExecutor;
 import fr.axa.automation.webengine.core.ITestCaseExecutor;
@@ -11,6 +11,7 @@ import fr.axa.automation.webengine.global.AbstractGlobalApplicationContext;
 import fr.axa.automation.webengine.global.AbstractTestCaseContext;
 import fr.axa.automation.webengine.global.GlobalApplicationContextNoCode;
 import fr.axa.automation.webengine.global.SettingsNoCode;
+import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.helper.TestCaseHelperNoCode;
 import fr.axa.automation.webengine.localtesting.ILocalTestingRunner;
 import fr.axa.automation.webengine.logger.ILoggerService;
@@ -33,7 +34,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -67,8 +70,10 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
         return testSuiteReport;
     }
 
-    private void saveNoCodeContext(AbstractGlobalApplicationContext globalApplicationContext) throws IOException {
-        FileUtil.saveObjectAsYamlFile(SharedNoCodeContext.CONTEXT,globalApplicationContext.getSettings().getOutputDir() + File.separator + ConstantNoCode.TEST_CASE_DATA_FILE.getValue());
+    private void saveNoCodeContext(AbstractGlobalApplicationContext globalApplicationContext) throws IOException, WebEngineException {
+        String path = globalApplicationContext.getSettings().getOutputDir() + File.separator + AdditionalDataPath.ADDITIONAL_TEST_CASE_DATA_DIR.getValue();
+        FileUtil.createDirectories(path);
+        FileUtil.saveObjectAsYamlFile(SharedNoCodeContext.ADDITIONAL_DATA,path + File.separator + AdditionalDataPath.ADDITIONAL_TEST_CASE_DATA_FILE.getValue());
     }
 
     protected List<TestCaseReport> runTestCase(AbstractGlobalApplicationContext globalApplicationContext, TestSuiteDataNoCode testSuiteData) throws WebEngineException {
@@ -82,12 +87,21 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
 
         for (TestCaseNodeNoCode testCaseNodeToRun : testCaseToRunList) {
             List<String> dataTestColumNameList = getDataTestColumNameList(settingsNoCode, testCaseNodeToRun);
+            populateAdditionalDataProperties(globalApplicationContext);
             for (String dataTestColumnName : dataTestColumNameList) {
                 AbstractTestCaseContext testCaseContext = ((ITestCaseNoCodeExecutor) testCaseExecutor).initialize(globalApplicationContext, testSuiteData, testCaseNodeToRun, dataTestColumnName );
                 testCaseReportList.add(testCaseExecutor.run(globalApplicationContext, testCaseContext));
             }
         }
         return testCaseReportList;
+    }
+
+    private void populateAdditionalDataProperties(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
+        String outputDir = globalApplicationContext.getSettings().getOutputDir();
+        Map additionalDataMap = PropertiesHelperProvider.getInstance().loadPropertiesFile(outputDir + File.separator + AdditionalDataPath.getAdditionDataPath(), HashMap.class);
+        if(additionalDataMap != null){
+            SharedNoCodeContext.ADDITIONAL_DATA.putAll(additionalDataMap);
+        }
     }
 
     private List<String> getDataTestColumNameList(SettingsNoCode settingsNoCode, TestCaseNodeNoCode testCaseNodeToRun) {

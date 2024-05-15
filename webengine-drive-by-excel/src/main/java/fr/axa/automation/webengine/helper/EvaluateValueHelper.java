@@ -71,14 +71,14 @@ public class EvaluateValueHelper {
                 String valueWithouBrackets = getExternalValue(externalRegexValue);
                 String externalValue = settings.getValues().get(valueWithouBrackets);
                 if(StringUtils.isEmpty(externalValue)){
-                    externalValue = SharedNoCodeContext.CONTEXT.get(valueWithouBrackets);
+                    externalValue = SharedNoCodeContext.ADDITIONAL_DATA.get(valueWithouBrackets);
                 }
 
                 if (StringUtils.isEmpty(externalValue)) {
                     resultValue = KeepassUtils.getPassword(valueWithouBrackets, ((SettingsNoCode)settings).getKeePassDatabasePassword(), ((SettingsNoCode)settings).getKeePassDatabasePath());
                 }
 
-                if(StringUtils.isEmpty(resultValue)){
+                if(StringUtils.isEmpty(externalValue)){
                     throw  new WebEngineException("the value : "+valueWithouBrackets+" is not found in external context");
                 }
 

@@ -1,12 +1,8 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
-import fr.axa.automation.webengine.cmd.CommandName;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.global.SettingsNoCode;
-import fr.axa.automation.webengine.object.CommandDataNoCode;
-import fr.axa.automation.webengine.object.TestCaseDataNoCode;
-import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.RegexUtil;
 import fr.axa.automation.webengine.util.StringUtil;
@@ -23,7 +19,6 @@ import java.util.Optional;
 
 public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
 
-    public static final String TEST_CASE_AND_DATA_TEST_COLUMN_NAME_PATTERN = "([.*-]+\\[[-.*:;]+\\])|([.*-]+)";; // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
     public static final String TEST_CASE_PATTERN = "^([^\\[]+)";
     public static final String DATA_TEST_COLUMN_NAME_PATTERN = "(?<=:)([^\\]]+)";
 
@@ -117,17 +112,5 @@ public final class TestSuiteHelperNoCode extends AbstractTestSuiteHelper {
             }
         }
        return dataTestColumnList;
-    }
-
-    public static List<CommandDataNoCode> getApplicationVisited(TestCaseDataNoCode testCaseDataNoCode){
-        return CommandDataHelper.getCommandDataByName(testCaseDataNoCode, CommandName.OPEN);
-    }
-
-
-    public static TestCaseDataNoCode getTestCaseDataNoCode(TestSuiteDataNoCode testSuiteDataNoCode, String testCaseName){
-        return testSuiteDataNoCode.getTestCaseList().stream()
-                .filter(testCaseDataNoCode -> StringUtil.equalsIgnoreCase(testCaseDataNoCode.getName(),testCaseName))
-                .findFirst()
-                .orElse(null);
     }
 }

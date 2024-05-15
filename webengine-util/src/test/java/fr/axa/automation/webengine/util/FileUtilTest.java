@@ -68,7 +68,7 @@ class FileUtilTest {
 
     @Test
     public void testGetPathDirectoryInTargetDirectory() {
-        String filePath = FileUtil.getPathInTargetDirectory("test-create-directory-in-target");
+        String filePath = FileUtil.getPathWithTargetDirectory("test-create-directory-in-target");
         logger.info("Define directory in target directory : "+ filePath);
         Assertions.assertTrue(filePath.contains(File.separator+"target"+File.separator));
     }

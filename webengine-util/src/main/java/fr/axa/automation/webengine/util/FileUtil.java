@@ -95,13 +95,19 @@ public final class FileUtil {
     }
 
     public static String createDirectoryInTarget(String subDirectory) throws WebEngineException {
-        return FileUtil.createDirectories(FileUtil.getPathInTargetDirectory(subDirectory)).toAbsolutePath().toString();
+        return FileUtil.createDirectories(FileUtil.getPathWithTargetDirectory(subDirectory)).toAbsolutePath().toString();
     }
 
-    public static String getPathInTargetDirectory(String directoryToCreate) {
+    public static String getPathTargetDirectory() {
         StringJoiner directory = new StringJoiner(File.separator);
         Path currentAbsolutePath = Paths.get("").toAbsolutePath();
-        directory.add(currentAbsolutePath.toString()).add(getPathTargetDirectory(currentAbsolutePath)).add(directoryToCreate);
+        directory.add(currentAbsolutePath.toString()).add(getPathTargetDirectory(currentAbsolutePath));
+        return directory.toString();
+    }
+
+    public static String getPathWithTargetDirectory(String directoryToCreate) {
+        StringJoiner directory = new StringJoiner(getPathTargetDirectory());
+        directory.add(directoryToCreate);
         return directory.toString();
     }
 

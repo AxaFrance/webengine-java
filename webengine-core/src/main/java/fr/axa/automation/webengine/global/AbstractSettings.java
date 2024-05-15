@@ -1,6 +1,7 @@
 package fr.axa.automation.webengine.global;
 
 
+import fr.axa.automation.webengine.report.constante.ReportPathConstant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -25,4 +27,8 @@ public abstract class AbstractSettings {
     Map<String,String> values;
     boolean showReport;
     boolean closeBrowser;
+
+    public String getReportPath() {
+        return outputDir + File.separator + ReportPathConstant.REPORT_DIRECTORY_NAME.getValue();
+    }
 }

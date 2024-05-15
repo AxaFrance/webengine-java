@@ -240,7 +240,7 @@ public class TestCaseNoCodeExecutor extends AbstractTestCaseWebExecutor implemen
             if (commandResult.getCommandData().getCommand() == CommandName.SAVE_DATA || commandResult.getCommandData().getCommand() == CommandName.SAVE_DATA_AND_APPLY_REGEX){
                 String key = commandResult.getCommandData().getName();
                 String value = commandResult.getSavedData();
-                SharedNoCodeContext.addContext(key, value);
+                SharedNoCodeContext.addAdditionalData(key, value);
             }
         });
     }

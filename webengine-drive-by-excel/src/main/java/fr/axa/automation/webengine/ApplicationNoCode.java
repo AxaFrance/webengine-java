@@ -32,6 +32,7 @@ public class ApplicationNoCode implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        // "-tc:firsttestcase[-dataColumName:jdd-rec-auto;jdd-rec-moto];testcase2[-dataColumName:jdd-rec-moto]"
         loggerService.info("***************Start automation***************");
         loggerService.info("Temporary directory : "+System.getProperty("java.io.tmpdir"));
         bootProject.runFromFramework(args);

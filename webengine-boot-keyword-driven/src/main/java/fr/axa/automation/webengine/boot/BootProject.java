@@ -67,7 +67,7 @@ public class BootProject extends AbstractBootProject{
         }
         TestSuiteReport testSuiteReport = ((ITestSuiteWebExecutor)testSuiteExecutor).run(globalApplicationContext, testSuite);
         testSuiteExecutor.cleanUp(globalApplicationContext);
-        Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getOutputDir());
+        Map<ReportPathKey,String> reportsPath = reportHelper.generateReports(testSuiteReport, testSuite.getClass().getSimpleName(), globalApplicationContext.getSettings().getReportPath());
 
         if(globalApplicationContext.getSettings().isShowReport()) {
             reportHelper.openReport(reportsPath.get(ReportPathKey.HTML_REPORT_PATH_KEY) + File.separator + "index.html");

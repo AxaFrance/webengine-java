@@ -125,6 +125,6 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         testSuiteReport.setIgnored(testCaseMetric.getNumberOfTestCaseIgnored());
 
         ReportHelper reportHelper =  new ReportHelper(new WebengineXmlReportHelper(new LoggerService()), new WebengineHtmlReportHelper(new LoggerService()), new JunitReportHelper(new LoggerService()),new LoggerService());
-        reportHelper.generateReports(testSuiteReport,applicationName, FileUtil.getPathInTargetDirectory(ReportPathConstant.REPORT_DIRECTORY_NAME.getValue()));
+        reportHelper.generateReports(testSuiteReport,applicationName, FileUtil.getPathWithTargetDirectory(ReportPathConstant.REPORT_DIRECTORY_NAME.getValue()));
     }
 }

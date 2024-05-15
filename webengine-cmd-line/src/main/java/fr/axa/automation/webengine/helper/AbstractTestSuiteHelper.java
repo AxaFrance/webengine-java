@@ -7,7 +7,6 @@ import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
-import fr.axa.automation.webengine.report.constante.ReportPathConstant;
 import fr.axa.automation.webengine.util.FileUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.collections4.CollectionUtils;
@@ -93,7 +92,7 @@ public abstract class AbstractTestSuiteHelper {
                 outputDir = globalConfiguration.getOutputDir();
             }
             if (StringUtils.isEmpty(outputDir)) {
-                outputDir = FileUtil.getPathInTargetDirectory(ReportPathConstant.REPORT_DIRECTORY_NAME.getValue());
+                outputDir = FileUtil.getPathTargetDirectory();
             }
         }
         return outputDir;
