@@ -57,11 +57,14 @@ public class EvaluateValueHelper {
 
     public static String evaluateKeyboardRegexValue(String completeValue, List<String> keyBoardRegexValueList) {
         String resultValue = completeValue;
-        if (CollectionUtils.isNotEmpty(keyBoardRegexValueList)) {
-            for (String keyBoardValue : keyBoardRegexValueList) {
-                return getKeyboardValue(keyBoardValue);
-            }
+        if(CollectionUtils.isEmpty(keyBoardRegexValueList)){
+            return resultValue;
         }
+
+        for (String keyBoardValue : keyBoardRegexValueList) {
+            return getKeyboardValue(keyBoardValue);
+        }
+
         return resultValue;
     }
 

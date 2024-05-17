@@ -42,11 +42,15 @@ public class PropertiesHelper {
         return Optional.empty();
     }
 
-    public <T>T loadPropertiesFile(String pathfileName, Class<T> clazz) throws WebEngineException {
+    public <T>T loadPropertiesFile(String pathfileName, Class<T> clazz, boolean fromFileOnly) throws WebEngineException {
         if(propertyFileMap.get(pathfileName) == null){
-            propertyFileMap.put(pathfileName, PropertiesUtil.loadPropertiesFile(pathfileName, clazz));
+            propertyFileMap.put(pathfileName, PropertiesUtil.loadPropertiesFile(pathfileName, clazz, fromFileOnly));
         }
         return (T) propertyFileMap.get(pathfileName);
+    }
+
+    public <T>T loadPropertiesFile(String pathfileName, Class<T> clazz) throws WebEngineException {
+       return loadPropertiesFile(pathfileName, clazz, false);
     }
 
 

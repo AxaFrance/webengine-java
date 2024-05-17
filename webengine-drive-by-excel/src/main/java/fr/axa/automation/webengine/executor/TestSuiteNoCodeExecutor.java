@@ -98,7 +98,7 @@ public class TestSuiteNoCodeExecutor extends AbstractTestSuiteExecutor implement
 
     private void populateAdditionalDataProperties(AbstractGlobalApplicationContext globalApplicationContext) throws WebEngineException {
         String outputDir = globalApplicationContext.getSettings().getOutputDir();
-        Map additionalDataMap = PropertiesHelperProvider.getInstance().loadPropertiesFile(outputDir + File.separator + AdditionalDataPath.getAdditionDataPath(), HashMap.class);
+        Map additionalDataMap = PropertiesHelperProvider.getInstance().loadPropertiesFile(outputDir + File.separator + AdditionalDataPath.getAdditionDataPath(), HashMap.class, true);
         if(additionalDataMap != null){
             SharedNoCodeContext.ADDITIONAL_DATA.putAll(additionalDataMap);
         }

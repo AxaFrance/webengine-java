@@ -106,8 +106,9 @@ public final class FileUtil {
     }
 
     public static String getPathWithTargetDirectory(String directoryToCreate) {
-        StringJoiner directory = new StringJoiner(getPathTargetDirectory());
-        directory.add(directoryToCreate);
+        StringJoiner directory = new StringJoiner(File.separator);
+        String pathTargetDirectory = getPathTargetDirectory();
+        directory.add(pathTargetDirectory).add(directoryToCreate);
         return directory.toString();
     }
 
@@ -158,10 +159,17 @@ public final class FileUtil {
             return IOUtils.contentEqualsIgnoreEOL(reader1, reader2);
         }
     }
+    public static InputStream getFileInputStream(String pathfileName) throws FileNotFoundException {
+        try {
+            return new FileInputStream(pathfileName);
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("The file " + pathfileName + " not found in directory ");
+        }
+    }
 
     public static InputStream getInputStreamByPathOrResource(String fileOrResource) throws IOException {
         try {
-            return new FileInputStream(fileOrResource);
+            return getFileInputStream(fileOrResource);
         } catch (FileNotFoundException fileNotFoundException) {
             return getInputStreamFromResource(fileOrResource);
         }
@@ -212,6 +220,7 @@ public final class FileUtil {
         ObjectMapper mapper = new ObjectMapper(yamlFactory);
         mapper.writeValue(new File(path), object);
     }
+
 
 }
 

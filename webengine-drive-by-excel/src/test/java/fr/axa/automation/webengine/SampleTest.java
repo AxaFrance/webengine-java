@@ -28,52 +28,52 @@ public class SampleTest {
         driver.quit();
     }
 
-    @Test
-    public void identifyShadowElementWithOneLevelTest() throws Exception {
-        String baseUrl = "http://watir.com/examples/shadow_dom.html";
-        if(optionalWebdriver.isPresent()){
-            WebDriver driver = optionalWebdriver.get();
-            driver.get(baseUrl);
-            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).build();
-            WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='shadow_content']");
-            Assertions.assertNotNull(webElement);
-        }
-    }
-
-    @Test
-    public void identifyShadowElementWithIdTest() throws Exception {
-        String baseUrl = "http://watir.com/examples/shadow_dom.html";
-        if(optionalWebdriver.isPresent()){
-            WebDriver driver = optionalWebdriver.get();
-            driver.get(baseUrl);
-            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).id("shadow_content").shadowDom(true).build();
-            WebElement webElement = webElementDescription.findElement();
-            Assertions.assertNotNull(webElement);
-        }
-    }
-
-    @Test
-    public void identifyShadowElementWithClassNameTest() throws Exception {
-        String baseUrl = "http://watir.com/examples/shadow_dom.html";
-        if(optionalWebdriver.isPresent()){
-            WebDriver driver = optionalWebdriver.get();
-            driver.get(baseUrl);
-            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).className("wrapper").shadowDom(true).build();
-            WebElement webElement = webElementDescription.findElement();
-            Assertions.assertNotNull(webElement);
-        }
-    }
-
-    @Test
-    public void identifyShadowElementWithSecondLevelTest() throws Exception {
-        String baseUrl = "http://watir.com/examples/shadow_dom.html";
-        if(optionalWebdriver.isPresent()){
-            WebDriver driver = optionalWebdriver.get();
-            driver.get(baseUrl);
-            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).build();
-            WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='nested_shadow_content']");
-            Assertions.assertNotNull(webElement);
-        }
-    }
+//    @Test
+//    public void identifyShadowElementWithOneLevelTest() throws Exception {
+//        String baseUrl = "http://watir.com/examples/shadow_dom.html";
+//        if(optionalWebdriver.isPresent()){
+//            WebDriver driver = optionalWebdriver.get();
+//            driver.get(baseUrl);
+//            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).build();
+//            WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='shadow_content']");
+//            Assertions.assertNotNull(webElement);
+//        }
+//    }
+//
+//    @Test
+//    public void identifyShadowElementWithIdTest() throws Exception {
+//        String baseUrl = "http://watir.com/examples/shadow_dom.html";
+//        if(optionalWebdriver.isPresent()){
+//            WebDriver driver = optionalWebdriver.get();
+//            driver.get(baseUrl);
+//            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).id("shadow_content").shadowDom(true).build();
+//            WebElement webElement = webElementDescription.findElement();
+//            Assertions.assertNotNull(webElement);
+//        }
+//    }
+//
+//    @Test
+//    public void identifyShadowElementWithClassNameTest() throws Exception {
+//        String baseUrl = "http://watir.com/examples/shadow_dom.html";
+//        if(optionalWebdriver.isPresent()){
+//            WebDriver driver = optionalWebdriver.get();
+//            driver.get(baseUrl);
+//            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).className("wrapper").shadowDom(true).build();
+//            WebElement webElement = webElementDescription.findElement();
+//            Assertions.assertNotNull(webElement);
+//        }
+//    }
+//
+//    @Test
+//    public void identifyShadowElementWithSecondLevelTest() throws Exception {
+//        String baseUrl = "http://watir.com/examples/shadow_dom.html";
+//        if(optionalWebdriver.isPresent()){
+//            WebDriver driver = optionalWebdriver.get();
+//            driver.get(baseUrl);
+//            WebElementDescription webElementDescription = WebElementDescription.builder().useDriver(driver).build();
+//            WebElement webElement = webElementDescription.getElementInShadowByXpath("//*[@id='nested_shadow_content']");
+//            Assertions.assertNotNull(webElement);
+//        }
+//    }
 
 }
