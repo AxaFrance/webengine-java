@@ -11,6 +11,7 @@ import fr.axa.automation.webengine.global.SettingsNoCode;
 import fr.axa.automation.webengine.object.CommandResult;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FormatDate;
+import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.RegexUtil;
 import fr.axa.automation.webengine.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -128,8 +129,8 @@ public class EvaluateValueHelper {
                     .filter(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value))
                     .map(commandResult -> commandResult.getSavedData())
                     .collect(Collectors.toList());
-            if(CollectionUtils.isNotEmpty(commandResultList)){
-                return saveDataList.get(0);
+            if(CollectionUtils.isNotEmpty(saveDataList)){
+                return ListUtil.getLastElement(saveDataList).get();
             }
         }
         return StringUtils.EMPTY;
