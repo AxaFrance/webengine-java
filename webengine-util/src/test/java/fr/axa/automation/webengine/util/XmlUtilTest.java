@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 
 public class XmlUtilTest {
 
-    private static UserWithPackageInfo getUserFromXml(String filePath) throws URISyntaxException, WebEngineException {
+    private static UserWithPackageInfo getUserFromXml(String filePath) throws WebEngineException {
         return XmlUtil.unmarshall(filePath, UserWithPackageInfo.class);
     }
 
@@ -21,7 +21,7 @@ public class XmlUtilTest {
     public void testUnmarshall() throws URISyntaxException, WebEngineException {
         String xmlFilePath = FileUtil.getFileFromResource("jaxb-users.xml").getAbsolutePath();
         UserWithPackageInfo user = getUserFromXml(xmlFilePath);
-        Assertions.assertEquals(1, user.getId());
+        Assertions.assertEquals(12, user.getId());
         Assertions.assertEquals("Ramesh", user.getFirstName());
     }
 

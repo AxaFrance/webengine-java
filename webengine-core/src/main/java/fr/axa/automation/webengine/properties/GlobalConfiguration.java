@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @Data
 @Builder
@@ -16,7 +15,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigurationProperties
-@ConfigurationPropertiesScan
 public class GlobalConfiguration {
     WebengineConfiguration webengineConfiguration;
     ApplicationConfiguration applicationConfiguration;

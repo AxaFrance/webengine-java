@@ -2,6 +2,7 @@ webengineConfiguration:
     name: spoolnet-automation
     platformName: WINDOWS
     browserName: CHROME
+    packageToScan: fr.axa.automation
     browserOptionList:
         - --remote-allow-origins=*
     appiumConfiguration:

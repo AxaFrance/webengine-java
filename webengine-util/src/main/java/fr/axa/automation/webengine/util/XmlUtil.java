@@ -1,17 +1,17 @@
 package fr.axa.automation.webengine.util;
 
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
+
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
-import fr.axa.automation.webengine.xml.NamespacePrefixerWebengine;
+import fr.axa.automation.webengine.xml.DefaultNamespacePrefixer;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import org.apache.commons.lang3.StringUtils;
+import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 import org.springframework.util.Assert;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -32,9 +32,8 @@ public final class XmlUtil {
             File file = FileUtil.getFileByPathOrResource(filePath);
             Source source = new StreamSource(file);
             jaxbContext = JAXBContext.newInstance(returnType);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            JAXBElement<T> jaxbElement = jaxbUnmarshaller.unmarshal(source, returnType);
-            return (T) jaxbElement.getValue();
+            JAXBElement<T> jaxbElement = jaxbContext.createUnmarshaller().unmarshal(source, returnType);
+            return jaxbElement.getValue();
         } catch (JAXBException | IOException e) {
             throw new WebEngineException("Error during parsing XML data for file : "+filePath, e);
         }
@@ -49,11 +48,10 @@ public final class XmlUtil {
             jaxbContext = JAXBContext.newInstance(objectToMarshall.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//            jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, Charset.defaultCharset().name());
             jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
             Optional<NamespacePrefixMapper> namespacePrefixMapper = getNamespacePrefixMapper(inputMarshallDTO);
             if(namespacePrefixMapper.isPresent()){
-                jaxbMarshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", namespacePrefixMapper.get());
+                jaxbMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", namespacePrefixMapper.get());
             }
 
             QName qname = getQName(inputMarshallDTO);
@@ -74,7 +72,7 @@ public final class XmlUtil {
         if (StringUtils.isNotEmpty(inputMarshallDTO.getNamespace()) && StringUtils.isNotEmpty(inputMarshallDTO.getPrefix())) {
             Map<String, String> namespaceAndPrefixMap = new HashMap() ;
             namespaceAndPrefixMap.put(inputMarshallDTO.getNamespace(), inputMarshallDTO.getPrefix());
-            return Optional.of(new NamespacePrefixerWebengine(namespaceAndPrefixMap));
+            return Optional.of(new DefaultNamespacePrefixer(namespaceAndPrefixMap));
         }
         return Optional.empty();
     }

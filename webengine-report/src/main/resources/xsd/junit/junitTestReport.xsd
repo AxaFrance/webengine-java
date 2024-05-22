@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
         elementFormDefault="qualified"
-        attributeFormDefault="unqualified">
+        attributeFormDefault="unqualified"
+        jxb:version="3.0">
   <xs:annotation>
     <xs:documentation xml:lang="en">
       JUnit test result schema for the Apache Ant JUnit and JUnitReport tasks

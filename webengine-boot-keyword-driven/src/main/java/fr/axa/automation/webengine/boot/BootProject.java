@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -36,6 +37,7 @@ import java.util.Map;
 @Qualifier("bootProject")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
+@EnableConfigurationProperties(GlobalConfiguration.class)
 public class BootProject extends AbstractBootProject{
 
     static final List<ArgumentOption> ARGUMENT_OPTION_FRAMEWORK = Arrays.asList(ArgumentOption.PROJECT, ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST, ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.OUTPUT_DIR, ArgumentOption.MANUAL_DEBUG, ArgumentOption.JUNIT, ArgumentOption.SHOW_REPORT, ArgumentOption.TEST_CASE_TO_RUN);
@@ -58,7 +60,7 @@ public class BootProject extends AbstractBootProject{
     }
 
     public void runTestSuite(CommandLine commandLine) throws WebEngineException, IOException {
-        ITestSuite testSuite = TestSuiteHelper.getTestSuite();
+        ITestSuite testSuite = TestSuiteHelper.getTestSuite(globalConfiguration);
         AbstractGlobalApplicationContext globalApplicationContext = getGlobalApplicationContext(commandLine, testSuite);
 
         testSuiteExecutor.initialize(globalApplicationContext);

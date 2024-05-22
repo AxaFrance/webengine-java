@@ -2,8 +2,8 @@ package fr.axa.automation.webengine.report.adapter;
 
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FormatDate;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -11,7 +11,7 @@ public class CalendarAdapter extends XmlAdapter<String, Calendar> {
 
     @Override
     public Calendar unmarshal(String value) throws Exception {
-        return (javax.xml.bind.DatatypeConverter.parseDateTime(value));
+        return (jakarta.xml.bind.DatatypeConverter.parseDateTime(value));
     }
 
     @Override
