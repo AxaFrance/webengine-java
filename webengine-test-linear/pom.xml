@@ -5,7 +5,7 @@
     <parent>
         <groupId>fr.axa.automation.webengine</groupId>
         <artifactId>webengine-parent</artifactId>
-        <version>3.1.16-SNAPSHOT</version>
+        <version>3.1.17-SNAPSHOT</version>
     </parent>
 
     <artifactId>webengine-test-linear</artifactId>
