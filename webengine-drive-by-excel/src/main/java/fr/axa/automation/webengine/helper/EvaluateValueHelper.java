@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
+import fr.axa.automation.webengine.cmd.CommandFactory;
 import fr.axa.automation.webengine.constante.ConstantNoCode;
 import fr.axa.automation.webengine.constante.PredefinedDateTagValue;
 import fr.axa.automation.webengine.constante.PredefinedTagValue;
@@ -126,6 +127,7 @@ public class EvaluateValueHelper {
         if(CollectionUtils.isNotEmpty(commandResultList)){
             List<CommandResult> commandResultFlatList = CommandResultHelper.flatCommandResult(commandResultList,new ArrayList<>());
             List<String> saveDataList = commandResultFlatList.stream()
+                    .filter(commandResult -> CommandFactory.getAllSaveCommand().contains(commandResult.getCommandData().getCommand()))
                     .filter(commandResult -> StringUtil.equalsIgnoreCase(commandResult.getCommandData().getName(),value))
                     .map(commandResult -> commandResult.getSavedData())
                     .collect(Collectors.toList());

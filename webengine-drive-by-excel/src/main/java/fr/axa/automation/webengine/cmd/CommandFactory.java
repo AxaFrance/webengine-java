@@ -2,6 +2,9 @@ package fr.axa.automation.webengine.cmd;
 
 import fr.axa.automation.webengine.object.CommandDataNoCode;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CommandFactory {
 
     public static AbstractDriverCommand getCommand(CommandDataNoCode commandData) throws IllegalArgumentException {
@@ -83,5 +86,9 @@ public class CommandFactory {
             default:
                 throw new IllegalArgumentException("Command not recognized");
         }
+    }
+
+    public static List<CommandName> getAllSaveCommand(){
+        return Arrays.asList(CommandName.SAVE_DATA, CommandName.SAVE_DATA_AND_APPLY_REGEX);
     }
 }
