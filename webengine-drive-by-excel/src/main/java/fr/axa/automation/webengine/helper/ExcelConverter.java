@@ -43,9 +43,7 @@ public class ExcelConverter {
         Workbook workbook = ExcelReader.getWorkbook(excelFileName);
         List<String> sheetNameList = ExcelReader.getAllSheetName(workbook);
         assertSheetName(sheetNameList,testCaseAndDataTestColumNameMap);
-        for (String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
-            assertColumnName(ExcelReader.getAllColumnName(testCaseToRun, workbook),testCaseAndDataTestColumNameMap);
-        }
+        assertColumnName(workbook,testCaseAndDataTestColumNameMap);
         if (MapUtils.isEmpty(testCaseAndDataTestColumNameMap)) {
             testCaseList.addAll(getTestCaseList(workbook, getTestCaseNameAndDataTestColumnName(sheetNameList)));
         } else {
@@ -77,8 +75,9 @@ public class ExcelConverter {
         }
     }
 
-    private static void assertColumnName(List<String> columnNameList, Map<String, List<String>> testCaseAndDataTestColumNameMap){
-        for ( String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
+    private static void assertColumnName(Workbook workbook, Map<String, List<String>> testCaseAndDataTestColumNameMap){
+        for (String testCaseToRun : testCaseAndDataTestColumNameMap.keySet()) {
+            List<String> columnNameList = ExcelReader.getAllColumnName(testCaseToRun, workbook);
             List<String> columnNameDoesntExist = new ArrayList<>();
             for (String columnName : testCaseAndDataTestColumNameMap.get(testCaseToRun)) {
                 if(!columnNameList.contains(columnName)){
