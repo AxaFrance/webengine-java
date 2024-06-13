@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import com.microsoft.applicationinsights.attach.ApplicationInsights;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SpringBootApplication
@@ -27,6 +28,11 @@ public class ApplicationNoCode implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
+        if (System.getProperty("applicationinsights.runtime-attach.configuration.classpath.file") == null) {
+            System.setProperty("applicationinsights.role.name",System.getenv("USERNAME"));
+            System.setProperty("applicationinsights.runtime-attach.configuration.classpath.file", "applicationinsights-dev.json");
+            ApplicationInsights.attach();
+        }
         new SpringApplicationBuilder(ApplicationNoCode.class).web(WebApplicationType.NONE).run(args);
     }
 
