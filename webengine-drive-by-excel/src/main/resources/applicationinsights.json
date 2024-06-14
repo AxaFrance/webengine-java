@@ -1,4 +1,7 @@
 {
   "connectionStringConfiguredAtRuntime": true,
-  "connectionString": "#{connectionStringAppInsights}#"
+  "connectionString": "#{connectionStringAppInsights}#",
+  "sampling": {
+    "percentage": 100
+  }
 }
