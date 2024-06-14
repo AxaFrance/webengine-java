@@ -1,4 +1,4 @@
 {
   "connectionStringConfiguredAtRuntime": true,
-  "connectionString": #{connectionStringAppInsights}#
+  "connectionString": "#{connectionStringAppInsights}#"
 }
