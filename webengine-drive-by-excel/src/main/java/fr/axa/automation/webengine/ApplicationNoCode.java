@@ -28,12 +28,16 @@ public class ApplicationNoCode implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
+        configureAppInsights();
+        new SpringApplicationBuilder(ApplicationNoCode.class).web(WebApplicationType.NONE).run(args);
+    }
+
+    private static void configureAppInsights() {
         if (System.getProperty("applicationinsights.runtime-attach.configuration.classpath.file") == null) {
             System.setProperty("applicationinsights.role.name",System.getenv("USERNAME"));
-            System.setProperty("applicationinsights.runtime-attach.configuration.classpath.file", "applicationinsights-dev.json");
+            System.setProperty("applicationinsights.runtime-attach.configuration.classpath.file", "applicationinsights.json");
             ApplicationInsights.attach();
         }
-        new SpringApplicationBuilder(ApplicationNoCode.class).web(WebApplicationType.NONE).run(args);
     }
 
     @Override
