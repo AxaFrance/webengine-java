@@ -1,0 +1,13 @@
+{
+  "connectionStringConfiguredAtRuntime": true,
+  "connectionString": "#{connectionStringAppInsights}#",
+  "sampling": {
+    "overrides": [
+      {
+        "telemetryType": "dependency",
+        "percentage": 0
+      }
+    ]
+  }
+
+}
