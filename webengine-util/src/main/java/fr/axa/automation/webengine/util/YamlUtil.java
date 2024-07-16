@@ -1,5 +1,7 @@
 package fr.axa.automation.webengine.util;
 
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
@@ -12,9 +14,9 @@ public final class YamlUtil {
     }
 
     public static <T> Yaml getYaml(Class<T> clazz) {
-        Representer representer = new Representer();
+        Representer representer = new Representer(new DumperOptions());
         representer.getPropertyUtils().setSkipMissingProperties(true);
-        return new Yaml(new Constructor(clazz),representer);
+        return new Yaml(new Constructor(clazz,new LoaderOptions()),representer);
     }
 
     public static  <T> T loadYaml(Class<T> clazz, InputStream inputStream) {

@@ -1,5 +1,8 @@
 package fr.axa.automation.webengine.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +17,11 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileUtilTest {
 
@@ -27,6 +35,24 @@ class FileUtilTest {
         logger.info("Create directory  : "+path.toAbsolutePath());
         Assertions.assertTrue(Files.exists(path));
     }
+
+    @Test
+    void testCopyFileFromResource() throws IOException {
+        // Call the method under test
+        FileUtil.copyFileFromResource("copy-source.txt", "target/copy.txt");
+        assertEquals("TEST", Files.readString(Paths.get("target/copy.txt")));
+        Files.delete(Paths.get("target/copy.txt"));
+    }
+
+    @Test
+    void testGetResourceFiles() throws IOException {
+        // Call the method under test
+        List<String> resultContent = FileUtil.getResourceFiles("xml");
+
+        // Check that the result content is the same as the source content
+        Assertions.assertTrue(resultContent.contains("user-with-custom-namespace.xml"));
+    }
+
 
     @Test
     public void testSaveAsXMLWithoutNamespace() throws WebEngineException {
@@ -122,5 +148,34 @@ class FileUtilTest {
     void testAssertContentToTrue() throws URISyntaxException, IOException {
         boolean resultCompareFile = FileUtil.assertContent(FileUtil.getFileFromResource("xml"+File.separator+"user-with-custom-namespace.xml"), FileUtil.getFileFromResource("xml"+File.separator+"user-with-custom-namespace.xml"));
         Assertions.assertTrue(resultCompareFile);
+    }
+
+
+    @Test
+    void testSaveObjectAsYamlFile() throws IOException {
+        // Create a simple object
+        Object object = new Object() {
+            public String field1 = "Hello";
+            public String field2 = "World";
+        };
+
+        // Create a temporary file
+        Path tempFilePath = Files.createTempFile("temp", ".yaml");
+
+        // Call the method under test
+        FileUtil.saveObjectAsYamlFile(object, tempFilePath.toString());
+
+        // Read the content of the file
+        String fileContent = Files.readString(tempFilePath);
+
+        // Create an ObjectMapper for comparison
+        YAMLFactory yamlFactory = YAMLFactory.builder().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER).build();
+        ObjectMapper mapper = new ObjectMapper(yamlFactory);
+
+        // Check that the file content is the same as the object
+        assertEquals(mapper.writeValueAsString(object).trim(), fileContent.trim());
+
+        // Clean up the temporary file
+        Files.delete(tempFilePath);
     }
 }

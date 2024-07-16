@@ -26,6 +26,4 @@ target/
 *.iml
 .idea/*
 .run/*
-/src/main/resources/js/querySelector.js
-/src/main/resources/js/css-selector-generator.js
-/src/main/resources/js/shadow-dom-query-selector.js
+/src/main/resources/js/*

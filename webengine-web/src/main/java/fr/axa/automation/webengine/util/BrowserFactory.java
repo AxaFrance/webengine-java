@@ -12,10 +12,10 @@ import fr.axa.automation.webengine.properties.AppiumConfiguration;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
@@ -134,7 +134,7 @@ public final class BrowserFactory {
     private static DesiredCapabilities getAppiumOption(GlobalConfiguration globalConfiguration) throws WebEngineException {
         Browser browser = BrowserTypeHelper.getBrowser(globalConfiguration.getWebengineConfiguration().getBrowserName());
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setCapability(MobileCapabilityType.BROWSER_NAME, browser.getValue());
+        desiredCapabilities.setCapability(CapabilityType.BROWSER_NAME, browser.getValue());
 
         Map<String, Object> browserStackOptions = new HashMap<>();
         AppiumConfiguration appiumSettings = globalConfiguration.getWebengineConfiguration().getAppiumConfiguration();

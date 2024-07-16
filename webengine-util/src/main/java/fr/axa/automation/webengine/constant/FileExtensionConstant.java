@@ -1,8 +1,6 @@
 package fr.axa.automation.webengine.constant;
 
-public interface FileExtensionConstant {
-    String JPG = ".jpg";
-    String PNG = ".png";
-
-    String XML = ".xml";
+public class FileExtensionConstant {
+    public static String PNG = ".png";
+    public static String XML = ".xml";
 }

@@ -6,5 +6,5 @@
            targetNamespace="http://www.axa.fr/WebEngine/2022"
            jaxb:version="3.0">
     <xs:include schemaLocation="type.xsd"/>
-    <xs:element name="TestSuiteReport" nillable="true" type="tns:TestSuiteReport"/>
+    <xs:element name="EnvironmentVariables" nillable="true" type="tns:EnvironmentVariables"/>
 </xs:schema>

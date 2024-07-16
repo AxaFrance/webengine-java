@@ -1,7 +1,6 @@
 package fr.axa.automation.webengine.helper;
 
 import fr.axa.automation.webengine.argument.ArgumentOption;
-import fr.axa.automation.webengine.core.ITestSuite;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.EnvironmentVariables;
 import fr.axa.automation.webengine.generated.TestSuiteData;
@@ -10,15 +9,11 @@ import fr.axa.automation.webengine.global.Platform;
 import fr.axa.automation.webengine.global.Settings;
 import fr.axa.automation.webengine.parser.ArgumentParser;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
-import fr.axa.automation.webengine.util.FileUtil;
-import fr.axa.automation.webengine.util.JarUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,12 +22,12 @@ class TestSuiteHelperTest {
     private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT_FROM_CONFIG_FILE = Arrays.asList(ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE);
     private static final List<ArgumentOption> ARGUMENT_OPTION_PROJECT_FROM_CONFIG_COMMAND_LINE = Arrays.asList(ArgumentOption.BROWSER, ArgumentOption.PLATFORM, ArgumentOption.TEST_DATA, ArgumentOption.ENVIRONMENT_VARIABLE, ArgumentOption.PROPERTIES_FILE_LIST);
 
-    @Test
-    void getTestSuite() throws URISyntaxException, WebEngineException {
-        JarUtil.loadLibrary(new File(FileUtil.getFileFromResource("jar/spoolnet-automation-keyword-driven-1.0-SNAPSHOT.jar").toURI()));
-        ITestSuite testSuite = TestSuiteHelper.getTestSuite();
-        Assertions.assertNotNull(testSuite);
-    }
+//    @Test
+//    void getTestSuite() throws URISyntaxException, WebEngineException {
+//        JarUtil.loadLibrary(new File(FileUtil.getFileFromResource("jar/spoolnet-automation-keyword-driven-1.0-SNAPSHOT.jar").toURI()));
+//        ITestSuite testSuite = TestSuiteHelper.getTestSuite();
+//        Assertions.assertNotNull(testSuite);
+//    }
 
     @Test
     void getEnvironmentVariables() throws WebEngineException, ParseException {

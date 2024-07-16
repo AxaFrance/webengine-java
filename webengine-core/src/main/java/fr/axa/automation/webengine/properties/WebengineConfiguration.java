@@ -20,5 +20,6 @@ public class WebengineConfiguration {
     String browserName = null;
     List<String> browserOptionList;
     String outputDir;
+    String packageToScan;
     AppiumConfiguration appiumConfiguration;
 }

@@ -5,7 +5,7 @@
 // Generated on: 2022.12.09 at 09:56:59 AM CET 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.axa.fr/WebEngine/2022",
-        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://www.axa.fr/WebEngine/2022",
+        elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package fr.axa.automation.webengine.jaxb.withpackageinfo;
 

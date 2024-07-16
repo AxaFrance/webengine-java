@@ -52,8 +52,8 @@ public final class TestSuiteHelper extends AbstractTestSuiteHelper {
         return getArgumentList(cmd,ArgumentOption.TEST_CASE_TO_RUN);
     }
 
-    public static ITestSuite getTestSuite() throws WebEngineException {
-        Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList();
+    public static ITestSuite getTestSuite(GlobalConfiguration globalConfiguration) throws WebEngineException {
+        Set<Class<? extends ITestSuite>> testSuiteList = getTestSuiteList(globalConfiguration);
         ITestSuite testSuite = filterTestSuite(testSuiteList);
         if (testSuite == null) {
             throw new WebEngineException("TestSuite class is null. No TestSuite class found in the project");
@@ -61,9 +61,9 @@ public final class TestSuiteHelper extends AbstractTestSuiteHelper {
         return testSuite;
     }
 
-    private static Set<Class<? extends ITestSuite>> getTestSuiteList() {
+    private static Set<Class<? extends ITestSuite>> getTestSuiteList(GlobalConfiguration globalConfiguration) {
         loggerService.info("Find Test Suite Class is running ");
-        Set<Class<? extends ITestSuite>> testSuiteList = CommonClassUtil.findAllClass(ITestSuite.class);
+        Set<Class<? extends ITestSuite>> testSuiteList = CommonClassUtil.findAllClass(globalConfiguration.getWebengineConfiguration().getPackageToScan(),ITestSuite.class);
         loggerService.info("Find Test Suite Class is succeed. Class founded is : " + testSuiteList.toString());
         return testSuiteList;
     }

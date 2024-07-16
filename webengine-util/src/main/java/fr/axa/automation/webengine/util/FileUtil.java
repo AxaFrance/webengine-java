@@ -220,8 +220,6 @@ public final class FileUtil {
         ObjectMapper mapper = new ObjectMapper(yamlFactory);
         mapper.writeValue(new File(path), object);
     }
-
-
 }
 
 

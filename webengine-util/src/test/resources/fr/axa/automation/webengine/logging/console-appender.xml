@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}{GMT+3}] [${HOSTNAME}] [%thread] %level %logger{36}@%method:%line - %msg%n</pattern>
         </encoder>
     </appender>
 </included>
