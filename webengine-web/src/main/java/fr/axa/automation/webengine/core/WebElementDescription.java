@@ -35,6 +35,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -1010,12 +1011,22 @@ public class WebElementDescription extends AbstractWebElement{
         return webElement!=null;
     }
 
-    private void focus(WebElement webElement) {
+    private void focus(WebElement webElement) throws Exception {
         if(StringUtil.equalsIgnoreCase(webElement.getTagName(),HtmlTag.INPUT.getValue())
                 && !StringUtil.equalsIgnoreCase(webElement.getAttribute(HtmlAttributeConstant.ATTRIBUTE_TYPE.getValue()), InputType.ATTRIBUTE_TYPE_FILE.getValue())){
             webElement.sendKeys("");
         } else{
+            moveToElement(webElement);
+        }
+    }
+
+    public void moveToElement(WebElement webElement) throws Exception {
+        try {
             new Actions(getUseDriver()).moveToElement(webElement).perform();
+        }catch (MoveTargetOutOfBoundsException e){
+            if(!webElement.isDisplayed()){
+                scrollToElement(webElement);
+            }
         }
     }
 
