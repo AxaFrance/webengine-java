@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.axa.automation.webengine</groupId>
     <artifactId>webengine-parent</artifactId>
-    <version>3.1.15-SNAPSHOT</version>
+    <version>3.1.20-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>webengine-parent</name>
 
@@ -73,6 +73,9 @@
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <selenium-http-jdk-client.version>4.13.0</selenium-http-jdk-client.version>
         <applicationinsights-core.version>3.5.3</applicationinsights-core.version>
+        <mockito-core.version>2.21.0</mockito-core.version>
+        <jaxb-maven-plugin.version>4.0.6</jaxb-maven-plugin.version>
+        <jaxb2-maven-plugin.version>3.2.0</jaxb2-maven-plugin.version>
     </properties>
 
     <modules>
@@ -211,7 +214,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.21.0</version>
+            <version>${mockito-core.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -537,13 +540,13 @@
                 <plugin>
                     <groupId>org.jvnet.jaxb</groupId>
                     <artifactId>jaxb-maven-plugin</artifactId>
-                    <version>4.0.6</version>
+                    <version>${jaxb-maven-plugin.version}</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>jaxb2-maven-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>${jaxb2-maven-plugin.version}</version>
                 </plugin>
 
 
