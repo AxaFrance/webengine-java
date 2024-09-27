@@ -23,14 +23,14 @@ public class SwitchToCommand extends AbstractDriverCommand{
 
     @Override
     public void executeCmd(AbstractGlobalApplicationContext globalApplicationContext, AbstractTestCaseContext testCaseContext, CommandDataNoCode commandData, List<CommandResult> commandResultList)throws Exception{
-        String id = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
-        if(StringUtils.isEmpty(id)){
+        String urlOrid = getValue(globalApplicationContext,(TestCaseNoCodeContext) testCaseContext, commandData, commandResultList);
+        if(StringUtils.isEmpty(urlOrid)){
             throw new WebEngineException("you must define a window id to switch to");
         }
 
-        DriverContext currentDriverContext = getWebDriverContextFromUrl(commandResultList, id);
+        DriverContext currentDriverContext = getWebDriverContextFromUrl(commandResultList, urlOrid);
         if(currentDriverContext==null) {
-            currentDriverContext = getWindowHandlesInDriver(commandResultList, id);
+            currentDriverContext = getWindowHandlesInDriver(commandResultList, urlOrid);
             if(currentDriverContext==null) {
                 throw new WebEngineException("No driver context have found for this id");
             }
@@ -43,12 +43,17 @@ public class SwitchToCommand extends AbstractDriverCommand{
         webDriver.manage().window().maximize();
     }
 
-    protected DriverContext getWebDriverContextFromUrl(List<CommandResult> commandResultList, String url) throws WebEngineException {
+    protected DriverContext getWebDriverContextFromUrl(List<CommandResult> commandResultList, String urlOrid) throws WebEngineException {
         List<DriverContext> driverContextList = CommandResultHelper.getWebDriverList(commandResultList);
         if (CollectionUtils.isNotEmpty(driverContextList)) { //If application is already open , we use the same driver
-            for (DriverContext driverContext : driverContextList) {
-                if (StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(driverContext.getCurrentUrl()), UriUtil.getHostFromURI(url))) {
-                    return driverContext;
+            List<DriverContext> driverContextListFilter = driverContextList.stream().filter(currentDriverContext -> currentDriverContext.getWebDriver().getWindowHandles().size() != currentDriverContext.getSessionIdAndUrlMap().size()).collect(Collectors.toList());
+            if(CollectionUtils.isEmpty(driverContextListFilter)) {
+                for (DriverContext driverContext : driverContextListFilter) {
+                    String urlOrId1 = UriUtil.getHostFromURI(driverContext.getCurrentUrl()) == null ? driverContext.getCurrentUrl() : UriUtil.getHostFromURI(driverContext.getCurrentUrl());
+                    String urlOrId2 = UriUtil.getHostFromURI(urlOrid) == null ? urlOrid : UriUtil.getHostFromURI(urlOrid);
+                    if (StringUtil.equalsIgnoreCase(urlOrId1, urlOrId2)) {
+                        return driverContext;
+                    }
                 }
             }
         }
@@ -62,7 +67,9 @@ public class SwitchToCommand extends AbstractDriverCommand{
             if(CollectionUtils.isEmpty(driverContextListFilter)){
                 for (DriverContext currentDriverContext : driverContextList) {
                     for (Map.Entry<String,String> entry : currentDriverContext.getSessionIdAndUrlMap().entrySet()) {
-                        if(StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(entry.getValue()),UriUtil.getHostFromURI(urlOrId))){
+                        String urlOrId1 = UriUtil.getHostFromURI(entry.getValue()) == null ? entry.getValue() : UriUtil.getHostFromURI(entry.getValue());
+                        String urlOrId2 = UriUtil.getHostFromURI(urlOrId) == null ? urlOrId : UriUtil.getHostFromURI(urlOrId);
+                        if (StringUtil.equalsIgnoreCase(urlOrId1, urlOrId2)) {
                             return DriverContext.builder().currentUrl(urlOrId).webDriver(currentDriverContext.getWebDriver()).sessionIdAndUrlMap(currentDriverContext.getSessionIdAndUrlMap()).build();
                         }
                     }

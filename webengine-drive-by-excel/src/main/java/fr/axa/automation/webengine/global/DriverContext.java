@@ -20,13 +20,14 @@ public class DriverContext {
     Map<String,String> sessionIdAndUrlMap;
     WebDriver webDriver;
 
-    public String getWindowHandle(){
-        return sessionIdAndUrlMap.entrySet().stream().filter(entry -> {
-            try {
-                return StringUtil.equalsIgnoreCase(UriUtil.getHostFromURI(entry.getValue()), UriUtil.getHostFromURI(currentUrl));
-            } catch (WebEngineException e) {
-                throw new RuntimeException(e);
+    public String getWindowHandle() throws WebEngineException {
+        for (Map.Entry<String,String> entry : sessionIdAndUrlMap.entrySet()) {
+            String url1 = UriUtil.getHostFromURI(entry.getValue())==null? entry.getValue() :UriUtil.getHostFromURI(entry.getValue());
+            String url2 = UriUtil.getHostFromURI(currentUrl)==null? currentUrl : UriUtil.getHostFromURI(currentUrl);
+            if (StringUtil.equalsIgnoreCase(url1, url2)) {
+                return entry.getKey();
             }
-        }).findFirst().get().getKey();
+        }
+        return sessionIdAndUrlMap.entrySet().stream().findFirst().get().getKey();
     }
 }
