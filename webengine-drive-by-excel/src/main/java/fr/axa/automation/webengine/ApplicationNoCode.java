@@ -1,5 +1,6 @@
 package fr.axa.automation.webengine;
 
+import com.microsoft.applicationinsights.attach.ApplicationInsights;
 import fr.axa.automation.webengine.boot.IBootProject;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerService;
@@ -11,7 +12,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import com.microsoft.applicationinsights.attach.ApplicationInsights;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SpringBootApplication

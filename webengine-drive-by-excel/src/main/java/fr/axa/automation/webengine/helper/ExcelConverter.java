@@ -9,7 +9,6 @@ import fr.axa.automation.webengine.object.CommandDataNoCode;
 import fr.axa.automation.webengine.object.TestCaseDataNoCode;
 import fr.axa.automation.webengine.object.TestSuiteDataNoCode;
 import fr.axa.automation.webengine.util.ExcelReader;
-import fr.axa.automation.webengine.util.RegexUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,9 +29,6 @@ import java.util.stream.Collectors;
 
 
 public class ExcelConverter {
-
-    public static final String XPATH_PATTERN = "^([/]{1,2}.*)$";
-    public static final String JSON_PATTERN = "^\\{.*\\}$";
 
     private static final Integer NUMBER_OF_EMPTY_LINE_FOR_ENDING_SCENARIO = 2;
 
@@ -207,23 +203,14 @@ public class ExcelConverter {
     private static Map<TargetKey, String> getTargetValueList(Row currentRow) {
         CommandName commandValue = getCommandValue(currentRow);
         String targetCellValue = ExcelReader.getCellValue(currentRow, ExcelColumn.TARGETS.getValue()).trim();
-        return getTargetValueList(commandValue, targetCellValue);
+        Map.Entry<TargetKey, String> entry = TargetKey.getTargetValueList(commandValue, targetCellValue);
+
+        Map<TargetKey, String> targetValueMap = new HashMap<>();
+        if (entry != null && entry.getKey() != null && entry.getValue() != null) {
+            targetValueMap.put(entry.getKey(), entry.getValue());
+        }
+        return targetValueMap;
     }
 
-    private static Map<TargetKey, String> getTargetValueList(CommandName commandName, String targetCellValue) {
-        Map<TargetKey, String> targets = new HashMap<>();
-        if(StringUtils.isEmpty(targetCellValue)){
-            return targets;
-        }
-        if (CommandName.CALL == commandName) {
-            targets.put(TargetKey.CALL, targetCellValue);
-        }else if (CollectionUtils.isNotEmpty(RegexUtil.match(XPATH_PATTERN, targetCellValue))) {
-            targets.put(TargetKey.XPATH, targetCellValue);
-        } else if (CollectionUtils.isNotEmpty(RegexUtil.match(JSON_PATTERN, targetCellValue))) {
-            targets.put(TargetKey.COMBINAISON_OF_LOCATOR, targetCellValue);
-        } else {
-            targets.put(TargetKey.ID, targetCellValue);
-        }
-        return targets;
-    }
+
 }

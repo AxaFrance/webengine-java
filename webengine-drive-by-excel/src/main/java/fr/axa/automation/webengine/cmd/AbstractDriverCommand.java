@@ -113,7 +113,11 @@ public abstract class AbstractDriverCommand implements ICommand {
                     .build();
         }
 
-        switch (entry.getKey()){
+        TargetKey targetKey = entry.getKey();
+        if(targetKey == TargetKey.EXPRESSION_TO_EVALUATE){
+            targetKey = TargetKey.getTargetValueList(commandData.getCommand(), entry.getValue()).getKey();
+        }
+        switch (targetKey){
             case ID:
                 return WebElementDescription.builder()
                         .useDriver(webDriver)
@@ -147,19 +151,7 @@ public abstract class AbstractDriverCommand implements ICommand {
         Set<TargetKey> targetKeyList = commandData.getTargetList().keySet();
         if (MapUtils.isNotEmpty(commandData.getTargetList()) && targetKeyList.size() == 1) {
             TargetKey targetKey = targetKeyList.iterator().next();
-            switch (targetKey) {
-                case ID:
-                    value = commandData.getTargetList().get(TargetKey.ID);
-                    break;
-                case XPATH:
-                    value = commandData.getTargetList().get(TargetKey.XPATH);
-                    break;
-                case COMBINAISON_OF_LOCATOR:
-                    value = commandData.getTargetList().get(TargetKey.COMBINAISON_OF_LOCATOR);
-                    break;
-                default:
-                    value = StringUtils.EMPTY;
-            }
+            value = commandData.getTargetList().getOrDefault(targetKey, StringUtils.EMPTY);
             String evaluateValue = StringUtils.isNotEmpty(value) ? EvaluateValueHelper.evaluateValue(globalApplicationContext.getSettings(), value, commandResultList) : StringUtils.EMPTY; //For xpath, id ...etc dynamic
             return MapUtils.isNotEmpty(commandData.getTargetList()) ? new AbstractMap.SimpleEntry(targetKeyList.iterator().next(), evaluateValue) : null;
         }
