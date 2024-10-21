@@ -37,6 +37,8 @@ public class CommandFactory {
                 return new SaveDataCommand();
             case SAVE_DATA_AND_APPLY_REGEX:
                 return new SaveDataAndApplyRegexCommand();
+            case SAVE_DATA_AND_APPLY_OPERATOR:
+                return new SaveDataAndApplyOperatorCommand();
             case CHECK_BY_VALUE:
                 return new CheckByValueCommand();
             case CALL:
@@ -89,6 +91,6 @@ public class CommandFactory {
     }
 
     public static List<CommandName> getAllSaveCommand(){
-        return Arrays.asList(CommandName.SAVE_DATA, CommandName.SAVE_DATA_AND_APPLY_REGEX);
+        return Arrays.asList(CommandName.SAVE_DATA, CommandName.SAVE_DATA_AND_APPLY_REGEX, CommandName.SAVE_DATA_AND_APPLY_OPERATOR);
     }
 }
