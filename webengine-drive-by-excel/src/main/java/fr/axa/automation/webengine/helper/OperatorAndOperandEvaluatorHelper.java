@@ -15,8 +15,11 @@ public class OperatorAndOperandEvaluatorHelper {
                 int j = findClosingParenthesis(expression, i);
                 values.push(parseExpression(expression.substring(i + 1, j), values, ops));
                 i = j;
-            } else if (Character.isDigit(expression.charAt(i))) {
+            } else if (Character.isDigit(expression.charAt(i)) || (expression.charAt(i) == '-' && i + 1 < expression.length() && Character.isDigit(expression.charAt(i + 1)))) {
                 int j = i;
+                if (expression.charAt(i) == '-') {
+                    j++;
+                }
                 while (j < expression.length() && (Character.isDigit(expression.charAt(j)) || expression.charAt(j) == '.')) {
                     j++;
                 }
@@ -62,15 +65,15 @@ public class OperatorAndOperandEvaluatorHelper {
     private static double applyOperation(String op, double a, double b) {
         switch (op) {
             case "sum":
-                return a + b;
+                return (a) + (b);
             case "minus":
-                return a - b;
+                return (a) - (b);
             case "multiply":
-                return a * b;
+                return (a) * (b);
             case "division":
-                return a / b;
+                return (a) / (b);
             case "percentage":
-                return (a / 100) * b;
+                return ((a) / 100) * (b);
             default:
                 throw new IllegalArgumentException("Unknown operation: " + op);
         }
