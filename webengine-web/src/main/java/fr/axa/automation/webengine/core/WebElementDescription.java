@@ -13,6 +13,7 @@ import fr.axa.automation.webengine.global.ElementContent;
 import fr.axa.automation.webengine.global.ElementContentInputTypeRadio;
 import fr.axa.automation.webengine.global.ElementContentSelect;
 import fr.axa.automation.webengine.global.SettingsWeb;
+import fr.axa.automation.webengine.util.Comparator;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.StringUtil;
@@ -669,10 +670,7 @@ public class WebElementDescription extends AbstractWebElement{
             ElementContentSelect elementContent = (ElementContentSelect) getContentSelect();
             Map<String, String> actualValueMap = elementContent.getValueAndTextMap()
                     .entrySet().stream()
-                    .filter(entry -> StringUtil.equalsIgnoreCase(expectedValueParam, entry.getKey()) ||
-                            (expectedValueParam.endsWith("****") && StringUtil.contains(entry.getKey(), expectedValueParam.split("\\*{4}")[0].trim())) ||
-                            StringUtil.equalsIgnoreCase(expectedValueParam, entry.getValue()) ||
-                            (expectedValueParam.endsWith("****") && StringUtil.contains(entry.getValue(), expectedValueParam.split("\\*{4}")[0].trim())))
+                    .filter(entry -> Comparator.compare(entry.getKey(), expectedValueParam, true) || Comparator.compare(entry.getValue(), expectedValueParam, true))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
             String actualValue = elementContent.getValueAndTextMap().toString();
@@ -721,7 +719,7 @@ public class WebElementDescription extends AbstractWebElement{
         IFunction<String, AssertContentResult> fun = (expectedValueParam) -> {
             ElementContent elementContent = getContentInput();
             String actualValue = elementContent.getValue();
-            boolean resultAssert = StringUtil.equalsIgnoreCase(actualValue, expectedValueParam) || (expectedValueParam.endsWith("****") && StringUtil.contains(actualValue, expectedValueParam.split("\\*{4}")[0].trim()));
+            boolean resultAssert = Comparator.compare(actualValue,expectedValueParam,true);
             if (!resultAssert) {
                 throw new WebEngineException("The expected value is : '" + expectedValueParam + "' and the actual value is : '" + actualValue + "'");
             }
@@ -756,7 +754,7 @@ public class WebElementDescription extends AbstractWebElement{
         IFunction<String, AssertContentResult> fun = (expectedValueParam) -> {
             ElementContent elementContent = getContentText();
             String actualValue = elementContent.getValue();
-            boolean resultAssert = StringUtil.equalsIgnoreCase(actualValue, expectedValueParam) || (expectedValueParam.endsWith("****") && StringUtil.contains(actualValue, expectedValueParam.split("\\*{4}")[0].trim()));
+            boolean resultAssert = Comparator.compare(actualValue, expectedValueParam,true);
             if (!resultAssert) {
                 throw new WebEngineException("The expected value is : '" + expectedValueParam + "' and the actual value is : '" + actualValue + "'");
             }
