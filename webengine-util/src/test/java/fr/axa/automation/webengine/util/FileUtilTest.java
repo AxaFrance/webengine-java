@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import fr.axa.automation.webengine.dto.InputMarshallDTO;
 import fr.axa.automation.webengine.exception.WebEngineException;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -25,6 +26,40 @@ class FileUtilTest {
 
     public static final String TEST_CREATE_DIRECTORY = "test-create-directory";
     public static final Logger logger = LoggerFactory.getLogger(FileUtilTest .class);
+
+    @Test
+    public void testCopyDirectory() throws IOException {
+        // Create source and destination directories
+        String sourceDir = "src/test/resources/sourceDir";
+        String destDir = "src/test/resources/destDir";
+
+        // Create files in the source directory
+        new File(sourceDir).mkdirs();
+        Files.write(Paths.get(sourceDir, "testFile1.txt"), "Test Content 1".getBytes());
+        Files.write(Paths.get(sourceDir, "testFile2.txt"), "Test Content 2".getBytes());
+
+        // Call the method under test
+        FileUtil.copyDirectory(sourceDir, destDir);
+
+        // Verify that the destination directory contains the copied files
+        Assertions.assertTrue(Files.exists(Paths.get(destDir, "testFile1.txt")));
+        Assertions.assertTrue(Files.exists(Paths.get(destDir, "testFile2.txt")));
+
+        // Clean up the created directories and files
+        FileUtils.deleteDirectory(new File(sourceDir));
+        FileUtils.deleteDirectory(new File(destDir));
+    }
+    @Test
+    public void testCreateDirectoryInTmpDirectory() {
+        String directoryName = "test-create-directory-in-tmp";
+        File directory = FileUtil.createDirectoryInTmpDirectory(directoryName);
+
+        // Check if the directory exists
+        Assertions.assertTrue(Files.exists(Paths.get(directory.getAbsolutePath())));
+
+        // Clean up the created directory
+        directory.delete();
+    }
 
     @Test
     public void testCreateDirectories() throws WebEngineException {
@@ -75,12 +110,6 @@ class FileUtilTest {
         return InputMarshallDTO.builder().fileDestinationPath(xmlFilePath.toAbsolutePath().toString()).objectToMarshall(objectToMarshall).namespace(namespace).prefix(prefix).build();
     }
 
-    @Test
-    public void testCreateDirectoryInTmpDirectory() {
-        File file = FileUtilForTest.createDirectoryInTmpDirectory("test-create-directory-in-tmp");
-        logger.info("Create directory in temp directory : "+file.getAbsolutePath());
-        Assertions.assertTrue(Files.exists(Paths.get(file.getAbsolutePath())));
-    }
 
     @Test
     public void testCreateDirectoryInTargetDirectory() throws WebEngineException {

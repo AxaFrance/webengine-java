@@ -1,3 +1,4 @@
+@feature-sample-flow
 Feature: Test du parcours
 
   Background:
