@@ -20,10 +20,10 @@ public class OperatorAndOperandEvaluatorHelper {
                 if (expression.charAt(i) == '-') {
                     j++;
                 }
-                while (j < expression.length() && (Character.isDigit(expression.charAt(j)) || expression.charAt(j) == '.')) {
+                while (j < expression.length() && (Character.isDigit(expression.charAt(j)) || expression.charAt(j) == '.' || expression.charAt(j) == ',')) {
                     j++;
                 }
-                values.push(Double.parseDouble(expression.substring(i, j)));
+                values.push(Double.parseDouble(expression.replace(",",".").substring(i, j)));
                 i = j - 1;
             } else if (expression.charAt(i) == ';') {
                 continue;

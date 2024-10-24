@@ -81,7 +81,7 @@ public final class ExcelReader {
             CellType cellType = cell.getCellType();
             switch (cellType) {
                 case NUMERIC:
-                    int numericCellValue = (int) cell.getNumericCellValue();
+                    double numericCellValue = cell.getNumericCellValue();
                     return String.valueOf(numericCellValue);
                 default:
                     String cellValue = cell.getStringCellValue();
