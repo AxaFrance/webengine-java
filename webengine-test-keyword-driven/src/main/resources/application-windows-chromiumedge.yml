@@ -24,3 +24,7 @@ webengineConfiguration:
                 local: true
                 networkLogs: true
                 localIdentifier: XXXXYYYY
+application-configuration:
+    values:
+        url: https://www.google.com
+        varAzure: Charlie
