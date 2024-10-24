@@ -353,6 +353,16 @@
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-http-jdk-client</artifactId>
                 <version>${selenium-http-jdk-client.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-json</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
