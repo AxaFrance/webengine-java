@@ -81,8 +81,12 @@ public final class ExcelReader {
             CellType cellType = cell.getCellType();
             switch (cellType) {
                 case NUMERIC:
-                    double numericCellValue = cell.getNumericCellValue();
-                    return String.valueOf(numericCellValue);
+                    double cellValueAsDouble = cell.getNumericCellValue();
+                    boolean isInteger = cellValueAsDouble == Math.floor(cellValueAsDouble);
+                    if (isInteger) {
+                        return String.valueOf((int) cellValueAsDouble);
+                    }
+                    return String.valueOf(cellValueAsDouble);
                 default:
                     String cellValue = cell.getStringCellValue();
                     return cellValue.replaceFirst("^-*", "");
