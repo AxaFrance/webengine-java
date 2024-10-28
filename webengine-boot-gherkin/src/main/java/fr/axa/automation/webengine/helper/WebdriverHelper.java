@@ -24,8 +24,8 @@ public final class WebdriverHelper {
     }
 
     public static Optional<WebDriver> getDriver() throws Exception {
-        Optional<GlobalConfiguration> optionalGlobalConfigProperties = getConfig();
         Optional<WebDriver> driver;
+        Optional<GlobalConfiguration> optionalGlobalConfigProperties = getLocalOrDefaultGlobalConfiguration();
         if(optionalGlobalConfigProperties.isPresent()){
             driver = BrowserFactory.getDriver(optionalGlobalConfigProperties.get());
         }else{
@@ -34,8 +34,8 @@ public final class WebdriverHelper {
         return driver;
     }
 
-    private static Optional<GlobalConfiguration> getConfig() throws Exception {
-        return PropertiesHelperProvider.getInstance().getDefaultGlobalConfiguration();
+    private static Optional<GlobalConfiguration> getLocalOrDefaultGlobalConfiguration() throws Exception {
+        return PropertiesHelperProvider.getInstance().getLocalOrDefaultGlobalConfiguration();
     }
 
     public static Optional<WebDriver> getDefaultDriver() throws WebEngineException {

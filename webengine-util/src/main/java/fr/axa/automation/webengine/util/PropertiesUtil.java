@@ -32,7 +32,7 @@ public final class PropertiesUtil {
     }
 
     private static void displayWarningMsg(String pathfileName) {
-        String msg = "[!!WARNING!!] No " + pathfileName + " file found in resource folder.";
+        String msg = "***[WARNING]*** No " + pathfileName + " file found in resource folder.";
         loggerService.warn(msg,new FileNotFoundException(msg));
     }
 }

@@ -26,6 +26,7 @@ public class PropertiesHelper {
     Map<String, Object> propertyFileMap;
 
     public static final String APPLICATION_FILE_NAME = "application.yml";
+    public static final String LOCAL_APPLICATION_FILE_NAME = "application-local.yml";
     public static final String APPLICATION_FILE_NAME_WITHOUT_POSTFIX = "application";
 
     public PropertiesHelper() {
@@ -53,9 +54,21 @@ public class PropertiesHelper {
        return loadPropertiesFile(pathfileName, clazz, false);
     }
 
+    public Optional<GlobalConfiguration> getLocalOrDefaultGlobalConfiguration() throws Exception {
+        Optional<GlobalConfiguration> optionalGlobalConfiguration = getLocalGlobalConfiguration();
+        if(optionalGlobalConfiguration.isPresent()){
+            return optionalGlobalConfiguration;
+        }else{
+            return getDefaultGlobalConfiguration();
+        }
+    }
 
     public Optional<GlobalConfiguration> getDefaultGlobalConfiguration() throws WebEngineException{
         return getGlobalConfigurationByName(APPLICATION_FILE_NAME);
+    }
+
+    public Optional<GlobalConfiguration> getLocalGlobalConfiguration() throws WebEngineException{
+        return getGlobalConfigurationByName(LOCAL_APPLICATION_FILE_NAME);
     }
 
     //--!!!!!Use by project like e-declaration, axa.fr..., be careful
