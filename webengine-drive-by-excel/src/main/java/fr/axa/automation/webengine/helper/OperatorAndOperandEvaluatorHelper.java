@@ -1,5 +1,7 @@
 package fr.axa.automation.webengine.helper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Stack;
 
 public class OperatorAndOperandEvaluatorHelper {
@@ -63,20 +65,27 @@ public class OperatorAndOperandEvaluatorHelper {
     }
 
     private static double applyOperation(String op, double a, double b) {
+        double result;
         switch (op) {
             case "sum":
-                return (a) + (b);
+                result = (a) + (b);
+                break;
             case "minus":
-                return (a) - (b);
+                result = (a) - (b);
+                break;
             case "multiply":
-                return (a) * (b);
+                result = (a) * (b);
+                break;
             case "division":
-                return (a) / (b);
+                result = (a) / (b);
+                break;
             case "percentage":
-                return ((a) / 100) * (b);
+                result = ((a) / 100) * (b);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown operation: " + op);
         }
+        return new BigDecimal(result).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     public static void main(String[] args) {
