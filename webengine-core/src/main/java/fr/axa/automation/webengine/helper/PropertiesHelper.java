@@ -54,13 +54,22 @@ public class PropertiesHelper {
        return loadPropertiesFile(pathfileName, clazz, false);
     }
 
-    public Optional<GlobalConfiguration> getLocalOrDefaultGlobalConfiguration() throws Exception {
-        Optional<GlobalConfiguration> optionalGlobalConfiguration = getLocalGlobalConfiguration();
+    public Optional<GlobalConfiguration> getGlobalConfigurationByProfileOrLocalOrDefault(String profile) throws Exception {
+        Optional<GlobalConfiguration> optionalGlobalConfiguration = getGlobalConfigurationByProfile(profile);
         if(optionalGlobalConfiguration.isPresent()){
             return optionalGlobalConfiguration;
         }else{
-            return getDefaultGlobalConfiguration();
+            optionalGlobalConfiguration = getLocalGlobalConfiguration();
+            if(optionalGlobalConfiguration.isPresent()){
+                return optionalGlobalConfiguration;
+            }else{
+                return getDefaultGlobalConfiguration();
+            }
         }
+    }
+
+    public Optional<GlobalConfiguration> getGlobalConfigurationByProfile(String profile) throws WebEngineException{
+        return getGlobalConfigurationByName(APPLICATION_FILE_NAME_WITHOUT_POSTFIX + "-" + profile + ".yml");
     }
 
     public Optional<GlobalConfiguration> getDefaultGlobalConfiguration() throws WebEngineException{

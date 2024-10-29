@@ -1,4 +1,4 @@
-package fr.axa.automation.feature.step;
+package fr.axa.automation.feature.hook;
 
 import fr.axa.automation.webengine.helper.WebdriverHelper;
 import io.cucumber.java.After;
@@ -11,12 +11,14 @@ public class Hook {
 
     @Before
     public void setUp() throws Exception {
+        //mvn test -DprofileConfigFile=recette
         System.out.println("This will run before the Scenario");
-        webDriver = WebdriverHelper.initializeDriver();
+        String profileConfigFile = System.getProperty("profileConfigFile");
+        webDriver = WebdriverHelper.initializeWebDriver(profileConfigFile);
     }
 
     @After
     public void afterScenario()  throws Exception {
-        WebdriverHelper.quiDriver(webDriver);
+        WebdriverHelper.quitWebDriver(webDriver);
     }
 }

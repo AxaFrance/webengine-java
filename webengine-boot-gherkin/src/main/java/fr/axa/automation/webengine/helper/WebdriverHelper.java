@@ -14,35 +14,39 @@ public final class WebdriverHelper {
     private WebdriverHelper() {
     }
 
-    public static WebDriver initializeDriver() throws Exception {
-        Optional<WebDriver> driver = getDriver();
-        if(driver.isPresent()){
-            return driver.get();
+    public static WebDriver initializeWebDriver(String profile) throws Exception {
+        Optional<WebDriver> webDriver = getWebDriver(profile);
+        if(webDriver.isPresent()){
+            return webDriver.get();
         }else{
-            throw new Exception("Error during get driver");
+            throw new Exception("Error during get webDriver");
         }
     }
 
-    public static Optional<WebDriver> getDriver() throws Exception {
-        Optional<WebDriver> driver;
-        Optional<GlobalConfiguration> optionalGlobalConfigProperties = getLocalOrDefaultGlobalConfiguration();
+    public static WebDriver initializeWebDriver() throws Exception {
+       return initializeWebDriver(null);
+    }
+
+    public static Optional<WebDriver> getWebDriver(String profile) throws Exception {
+        Optional<WebDriver> webDriver;
+        Optional<GlobalConfiguration> optionalGlobalConfigProperties = getGlobalConfigurationByProfileOrLocalOrDefault(profile);
         if(optionalGlobalConfigProperties.isPresent()){
-            driver = BrowserFactory.getDriver(optionalGlobalConfigProperties.get());
+            webDriver = BrowserFactory.getDriver(optionalGlobalConfigProperties.get());
         }else{
-            driver = getDefaultDriver();
+            webDriver = getDefaultWebDriver();
         }
-        return driver;
+        return webDriver;
     }
 
-    private static Optional<GlobalConfiguration> getLocalOrDefaultGlobalConfiguration() throws Exception {
-        return PropertiesHelperProvider.getInstance().getLocalOrDefaultGlobalConfiguration();
+    public static Optional<GlobalConfiguration> getGlobalConfigurationByProfileOrLocalOrDefault(String profile) throws Exception {
+        return PropertiesHelperProvider.getInstance().getGlobalConfigurationByProfileOrLocalOrDefault(profile);
     }
 
-    public static Optional<WebDriver> getDefaultDriver() throws WebEngineException {
+    public static Optional<WebDriver> getDefaultWebDriver() throws WebEngineException {
         return BrowserFactory.getWebDriver(Platform.WINDOWS, Browser.CHROMIUM_EDGE,true);
     }
 
-    public static void quiDriver(WebDriver webDriver) throws WebEngineException {
+    public static void quitWebDriver(WebDriver webDriver) throws WebEngineException {
         try {
             webDriver.quit();
         }catch (Exception e){

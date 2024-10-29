@@ -1,5 +1,6 @@
 package fr.axa.automation.feature.step;
 
+import fr.axa.automation.feature.hook.Hook;
 import fr.axa.automation.feature.model.WebEngineHomeTestPage;
 import fr.axa.automation.webengine.step.AbstractStep;
 import io.cucumber.java.en.And;
