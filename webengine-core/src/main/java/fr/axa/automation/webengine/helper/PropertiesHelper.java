@@ -6,10 +6,12 @@ import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.PropertiesUtil;
+import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,16 +57,18 @@ public class PropertiesHelper {
     }
 
     public Optional<GlobalConfiguration> getGlobalConfigurationByProfileOrLocalOrDefault(String profile) throws Exception {
-        Optional<GlobalConfiguration> optionalGlobalConfiguration = getGlobalConfigurationByProfile(profile);
+        Optional<GlobalConfiguration> optionalGlobalConfiguration;
+        if(StringUtils.isNotEmpty(profile)){
+            optionalGlobalConfiguration = getGlobalConfigurationByProfile(profile);
+            if(optionalGlobalConfiguration.isPresent()){
+                return optionalGlobalConfiguration;
+            }
+        }
+        optionalGlobalConfiguration = getLocalGlobalConfiguration();
         if(optionalGlobalConfiguration.isPresent()){
             return optionalGlobalConfiguration;
         }else{
-            optionalGlobalConfiguration = getLocalGlobalConfiguration();
-            if(optionalGlobalConfiguration.isPresent()){
-                return optionalGlobalConfiguration;
-            }else{
-                return getDefaultGlobalConfiguration();
-            }
+            return getDefaultGlobalConfiguration();
         }
     }
 
