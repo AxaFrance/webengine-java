@@ -8,8 +8,8 @@ import java.net.UnknownHostException;
 public interface IReportGherkinHelper {
     void createReport() throws UnknownHostException;
     void closeReport() throws WebEngineException;
-    void addTestCaseReport(String featureName,String testCaseName);
+    void createTestCaseReport(String featureName, String testCaseName);
     void updateTestCaseReport(String featureName,String testCaseName, Result result);
-    void addTestStepReport(String featureName,String testCaseName, String testStepName);
+    void createTestStepReport(String featureName, String testCaseName, String testStepName);
     void updateTestStepReport(ReportDetail reportDetail);
 }

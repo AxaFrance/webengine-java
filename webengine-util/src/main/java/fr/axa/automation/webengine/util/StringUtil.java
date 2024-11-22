@@ -33,7 +33,7 @@ public final class StringUtil {
     }
 
     public static String removeSpecialCharacters(String text){
-        return StringUtils.stripAccents(text).replaceAll(CHARACTERS_TO_REPLACE, UNDERSCORE).toUpperCase();
+        return StringUtils.stripAccents(text).replaceAll(CHARACTERS_TO_REPLACE, UNDERSCORE).toLowerCase();
     }
 
     public static String getNormalizeString(String[] name, String delimiter){

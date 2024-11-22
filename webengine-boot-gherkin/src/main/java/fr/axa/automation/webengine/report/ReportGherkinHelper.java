@@ -7,6 +7,7 @@ import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.NameNormalizerHelper;
 import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
@@ -49,7 +50,8 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
     Map<String,TestCaseReport> testCaseReportMap;
     Map<String,ActionReport> actionReportMap;
 
-    public ReportGherkinHelper() {
+    public ReportGherkinHelper() throws UnknownHostException {
+        createReport();
     }
 
     public void createReport() throws UnknownHostException {
@@ -64,31 +66,31 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
         testSuiteReport.setStartTime(Calendar.getInstance());
     }
 
-    public void addTestCaseReport(String featureName,String testCaseName){
-        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(testCaseName);
-        String normalizeTestCaseName = StringUtil.getNormalizeString(new String[]{featureName,testCaseName},StringUtil.DOUBLE_TWO_POINTS);
+    public void createTestCaseReport(String featureName, String testCaseName){
+        String normalizeTestCaseName = NameNormalizerHelper.getNormalizeName(featureName,testCaseName);
+        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(normalizeTestCaseName);
         testCaseReportMap.put(normalizeTestCaseName,testCaseReport);
     }
 
     public void updateTestCaseReport(String featureName,String testCaseName,Result result){
-        TestCaseReport testCaseReport = getTestCaseReport(featureName, testCaseName, StringUtil.DOUBLE_TWO_POINTS);
+        TestCaseReport testCaseReport = getTestCaseReport(featureName, testCaseName);
         testCaseReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
         testCaseReport.setResult(result);
     }
 
-    private TestCaseReport getTestCaseReport(String featureName, String testCaseName, String doubleTwoPoints) {
-        String normalizeTestCaseName = StringUtil.getNormalizeString(new String[]{featureName, testCaseName}, doubleTwoPoints);
+    private TestCaseReport getTestCaseReport(String featureName, String testCaseName) {
+        String normalizeTestCaseName = NameNormalizerHelper.getNormalizeName(featureName,testCaseName);
         return testCaseReportMap.get(normalizeTestCaseName);
     }
 
-    public void addTestStepReport(String featureName,String testCaseName, String testStepName){
+    public void createTestStepReport(String featureName, String testCaseName, String testStepName){
         ActionReport actionReport = ActionReportHelper.getActionReport(testStepName);
-        String normalizeName = StringUtil.getNormalizeString(new String[]{featureName,testCaseName,testStepName}, StringUtil.DOUBLE_TWO_POINTS);
+        String normalizeName = NameNormalizerHelper.getNormalizeName(featureName, testCaseName, testStepName);
         actionReportMap.put(normalizeName,actionReport);
     }
 
     public void updateTestStepReport(ReportDetail reportDetail){
-        TestCaseReport testCaseReport = getTestCaseReport(reportDetail.getFeatureName(), reportDetail.getTestCaseName(), StringUtil.DOUBLE_TWO_POINTS);
+        TestCaseReport testCaseReport = getTestCaseReport(reportDetail.getFeatureName(), reportDetail.getTestCaseName());
         ActionReport actionReport = getActionReport(reportDetail);
         byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage());
         actionReport.getScreenshots().getScreenshotReports().add(ScreenshotHelper.getScreenshotReport(reportDetail.getStepName(),screenshot));
@@ -96,7 +98,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
     }
 
     private ActionReport getActionReport(ReportDetail reportDetail) {
-        String normalizeName = StringUtil.getNormalizeString(new String[]{reportDetail.getFeatureName(),reportDetail.getTestCaseName(),reportDetail.getStepName()}, StringUtil.DOUBLE_TWO_POINTS);
+        String normalizeName = NameNormalizerHelper.getNormalizeName(reportDetail.getFeatureName(),reportDetail.getTestCaseName(),reportDetail.getStepName());
         ActionReport actionReport = actionReportMap.get(normalizeName);
         List<String> informationList = SharedInformation.INFORMATION.get(normalizeName);
         StringJoiner stringJoiner = new StringJoiner("\n").add(CollectionUtils.isNotEmpty(informationList) ? informationList.toString() : "");
