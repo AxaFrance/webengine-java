@@ -28,19 +28,19 @@ public class SampleFormStep extends AbstractStep {
 
     @Given("^I visit the test page \"([^\"]*)\"$")
     public void visitTheTestPage(String url) {
-        addInformation("Open WebEngine test page");
+        info("Open WebEngine test page");
         driver.get(url);
     }
 
     @When("^I press on the OK button$")
     public void pressOKButton() throws Exception {
-        addInformation("I press the OK button");
+        info("I press the OK button");
         getPageModel().okButton.click();
     }
 
     @And("^I see a pop up$")
     public void seePopUpAndEnterText() throws Exception {
-        addInformation("I See a pop up and i enter a text");
+        info("I See a pop up and i enter a text");
         String textInAlert = driver.switchTo().alert().getText();
         Assertions.assertEquals("hello world!",textInAlert);
     }

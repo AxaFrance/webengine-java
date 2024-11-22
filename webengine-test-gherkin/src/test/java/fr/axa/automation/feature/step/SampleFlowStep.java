@@ -44,21 +44,23 @@ public class SampleFlowStep extends AbstractStep {
 
     @Given("^I visit the test page \"([^\"]*)\" for running journey$")
     public void visitTheTestPage(String url) throws InterruptedException {
-        addInformation("Open WebEngine test page");
+        info("Start : Open WebEngine test page");
         driver.get(url);
         getWebEngineHomeTestPage().sync(3); //Just for code coverage
         getWebEngineHomeTestPage().maximize();//Just for code coverage
+        warn("End : Open WebEngine test page");
     }
 
     @And("^I click on the link Start step 1$")
     public void chooseTheLanguage() throws Exception {
-        addInformation("Click on the link start step 1");
+        info("Start: Click on the link ");
         getWebEngineHomeTestPage().startStep1Link.click();
+        info("End: Click on the link ");
     }
 
     @And("^I choose the language with text \"([^\"]*)\"$")
     public void chooseTheLanguage(String language) throws Exception {
-        addInformation("Choose the language");
+        info("Start: Choose the language");
         getWebEngineFirstStepPage().language.selectByText(language);
     }
 

@@ -1,14 +1,17 @@
 package fr.axa.automation.webengine.report;
 
-import fr.axa.automation.webengine.context.SharedInformation;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
+import fr.axa.automation.webengine.generated.ArrayOfVariable;
 import fr.axa.automation.webengine.generated.Result;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
+import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
 import fr.axa.automation.webengine.helper.NameNormalizerHelper;
 import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
+import fr.axa.automation.webengine.helper.VariableHelper;
+import fr.axa.automation.webengine.logger.Logger;
 import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.report.constante.ReportPathConstant;
@@ -24,22 +27,22 @@ import fr.axa.automation.webengine.util.ActiveWindowScreenShotUtil;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FileUtil;
 import fr.axa.automation.webengine.util.ImageUtil;
-import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Data
@@ -100,15 +103,37 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
     private ActionReport getActionReport(ReportDetail reportDetail) {
         String normalizeName = NameNormalizerHelper.getNormalizeName(reportDetail.getFeatureName(),reportDetail.getTestCaseName(),reportDetail.getStepName());
         ActionReport actionReport = actionReportMap.get(normalizeName);
-        List<String> informationList = SharedInformation.INFORMATION.get(normalizeName);
-        StringJoiner stringJoiner = new StringJoiner("\n").add(CollectionUtils.isNotEmpty(informationList) ? informationList.toString() : "");
-        if(reportDetail.getThrowable()!=null){
-            stringJoiner.add(ExceptionUtils.getStackTrace(reportDetail.getThrowable()));
-        }
-        actionReport.setLog(stringJoiner.toString());
+        List<Variable> allLogList = getAllLogList(reportDetail, normalizeName);
+        ArrayOfVariable arrayOfVariable = new ArrayOfVariable();
+        arrayOfVariable.getVariables().addAll(allLogList);
+        actionReport.setLogMap(arrayOfVariable);
         actionReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
         actionReport.setResult(reportDetail.getResult());
         return actionReport;
+    }
+
+    private List<Variable> getAllLogList(ReportDetail reportDetail, String normalizeName) {
+        List<Variable> infoLogList = getLog(Logger.INFO, "info", normalizeName);
+        List<Variable> warnLogList = getLog(Logger.WARN, "warn", normalizeName);
+        List<Variable> errorLogList = getLog(Logger.ERROR, "error", normalizeName);
+        List<Variable> fatalLogList = getLog(Logger.FATAL, "fatal", normalizeName);
+        if(reportDetail.getThrowable()!=null){
+            fatalLogList.add(VariableHelper.getVariable("fatal",ExceptionUtils.getStackTrace(reportDetail.getThrowable())));
+        }
+        List<Variable> allLogList = Stream.of(infoLogList, warnLogList, errorLogList, fatalLogList).flatMap(Collection::stream).collect(Collectors.toList());
+        return allLogList;
+    }
+
+    private List<Variable> getLog(Map<String, List<String>> map, String severity, String normalizeName) {
+        List<String> informationList = map.get(normalizeName);
+        if(informationList == null){
+            return List.of() ;
+        }
+        List<Variable> infoList = informationList.stream()
+                .map(information -> {
+                    return VariableHelper.getVariable(severity,information);
+                }).collect(Collectors.toList());
+        return infoList;
     }
 
     public void closeReport() throws  WebEngineException {
