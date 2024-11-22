@@ -88,7 +88,7 @@ public class WebengineReportListener implements ConcurrentEventListener {
             String currentFeatureName = getFeatureName(testStepStarted.getTestStep());
             String currentScenarioName = getScenarioName(testStepStarted);
             String currentStepName = getTestStepName(testStepStarted.getTestStep());
-            loggerService.info("Step read started : " + currentStepName);
+            loggerService.info("Step read started : " + currentFeatureName + ":" + currentScenarioName + ":" + currentStepName);
             reportGherkinHelper.createTestStepReport(currentFeatureName, currentScenarioName, currentStepName);
             ExecutionDetail.STEP_IN_PROGRESS.add(NameNormalizerHelper.getNormalizeName(currentFeatureName,currentScenarioName,currentStepName));
         }
@@ -96,10 +96,12 @@ public class WebengineReportListener implements ConcurrentEventListener {
 
     private void stepFinished(TestStepFinished testStepFinished) {
         if(isNotHookStep(testStepFinished)) {
+            String currentFeatureName = getFeatureName(testStepFinished.getTestStep());
+            String currentScenarioName = getScenarioName(testStepFinished);
             String currentStepName = getTestStepName(testStepFinished.getTestStep());
             loggerService.info("Step read finished : " + currentStepName);
-            ReportDetail reportDetail = ReportDetail.builder().featureName(getFeatureName(testStepFinished.getTestStep()))
-                    .testCaseName(testStepFinished.getTestCase().getName())
+            ReportDetail reportDetail = ReportDetail.builder().featureName(currentFeatureName)
+                    .testCaseName(currentScenarioName)
                     .stepName(currentStepName)
                     .result(StatusMapping.MAPPING.get(testStepFinished.getResult().getStatus()))
                     .throwable(testStepFinished.getResult().getError()).build();
@@ -149,6 +151,10 @@ public class WebengineReportListener implements ConcurrentEventListener {
 
     private String getScenarioName(TestStepStarted testStepStarted) {
         return testStepStarted.getTestCase().getName();
+    }
+
+    private String getScenarioName(TestStepFinished testStepFinished) {
+        return testStepFinished.getTestCase().getName();
     }
 
     private static boolean isHookStep(TestCaseEvent testCaseEvent) {
