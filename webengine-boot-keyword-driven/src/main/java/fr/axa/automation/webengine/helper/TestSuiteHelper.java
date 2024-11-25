@@ -61,8 +61,11 @@ public final class TestSuiteHelper extends AbstractTestSuiteHelper {
         return testSuite;
     }
 
-    private static Set<Class<? extends ITestSuite>> getTestSuiteList(GlobalConfiguration globalConfiguration) {
+    private static Set<Class<? extends ITestSuite>> getTestSuiteList(GlobalConfiguration globalConfiguration) throws WebEngineException {
         loggerService.info("Find Test Suite Class is running ");
+        if(globalConfiguration.getWebengineConfiguration().getPackageToScan()==null){
+            throw new WebEngineException("You need to specify package to scan the property in the configuration file");
+        }
         Set<Class<? extends ITestSuite>> testSuiteList = CommonClassUtil.findAllClass(globalConfiguration.getWebengineConfiguration().getPackageToScan(),ITestSuite.class);
         loggerService.info("Find Test Suite Class is succeed. Class founded is : " + testSuiteList.toString());
         return testSuiteList;

@@ -2,6 +2,7 @@ webengineConfiguration:
     name: spoolnet-automation
     platformName: WINDOWS
     browserName: CHROMIUMEDGE
+    packageToScan: fr.axa.automation
     appiumConfiguration:
         gridConnection: https://hub-cloud.browserstack.com/wd/hub
         userName: XXXXXXX
