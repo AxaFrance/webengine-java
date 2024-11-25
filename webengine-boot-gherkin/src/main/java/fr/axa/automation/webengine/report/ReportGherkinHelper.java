@@ -4,10 +4,12 @@ import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.generated.ActionReport;
 import fr.axa.automation.webengine.generated.ArrayOfVariable;
 import fr.axa.automation.webengine.generated.Result;
+import fr.axa.automation.webengine.generated.ScreenshotReport;
 import fr.axa.automation.webengine.generated.TestCaseReport;
 import fr.axa.automation.webengine.generated.TestSuiteReport;
 import fr.axa.automation.webengine.generated.Variable;
 import fr.axa.automation.webengine.helper.ActionReportHelper;
+import fr.axa.automation.webengine.helper.ArrayOfVariableHelper;
 import fr.axa.automation.webengine.helper.NameNormalizerHelper;
 import fr.axa.automation.webengine.helper.PropertiesHelperProvider;
 import fr.axa.automation.webengine.helper.VariableHelper;
@@ -23,10 +25,8 @@ import fr.axa.automation.webengine.report.helper.frmk.WebengineXmlReportHelper;
 import fr.axa.automation.webengine.report.helper.global.ReportHelper;
 import fr.axa.automation.webengine.report.helper.junit.JunitReportHelper;
 import fr.axa.automation.webengine.report.object.TestCaseMetric;
-import fr.axa.automation.webengine.util.ActiveWindowScreenShotUtil;
 import fr.axa.automation.webengine.util.DateUtil;
 import fr.axa.automation.webengine.util.FileUtil;
-import fr.axa.automation.webengine.util.ImageUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -95,24 +95,23 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
     public void updateTestStepReport(ReportDetail reportDetail){
         TestCaseReport testCaseReport = getTestCaseReport(reportDetail.getFeatureName(), reportDetail.getTestCaseName());
         ActionReport actionReport = getActionReport(reportDetail);
-        byte[] screenshot = ImageUtil.getImage(ActiveWindowScreenShotUtil.getGeneratedCurrentDesktopImage());
-        actionReport.getScreenshots().getScreenshotReports().add(ScreenshotHelper.getScreenshotReport(reportDetail.getStepName(),screenshot));
         testCaseReport.getActionReports().getActionReports().add(actionReport);
     }
 
+
     private ActionReport getActionReport(ReportDetail reportDetail) {
         String normalizeName = NameNormalizerHelper.getNormalizeName(reportDetail.getFeatureName(),reportDetail.getTestCaseName(),reportDetail.getStepName());
+        List<Variable> allLogList = getLogList(reportDetail, normalizeName);
+        ArrayOfVariable arrayOfVariable = ArrayOfVariableHelper.getArrayOfVariable(allLogList);
         ActionReport actionReport = actionReportMap.get(normalizeName);
-        List<Variable> allLogList = getAllLogList(reportDetail, normalizeName);
-        ArrayOfVariable arrayOfVariable = new ArrayOfVariable();
-        arrayOfVariable.getVariables().addAll(allLogList);
         actionReport.setLogMap(arrayOfVariable);
+        actionReport.getScreenshots().getScreenshotReports().addAll(getScreeenshots(normalizeName));
         actionReport.setEndTime(DateUtil.localDateTimeToCalendar(LocalDateTime.now()));
         actionReport.setResult(reportDetail.getResult());
         return actionReport;
     }
 
-    private List<Variable> getAllLogList(ReportDetail reportDetail, String normalizeName) {
+    private List<Variable> getLogList(ReportDetail reportDetail, String normalizeName) {
         List<Variable> infoLogList = getLog(Logger.INFO, "info", normalizeName);
         List<Variable> warnLogList = getLog(Logger.WARN, "warn", normalizeName);
         List<Variable> errorLogList = getLog(Logger.ERROR, "error", normalizeName);
@@ -130,10 +129,22 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
             return List.of() ;
         }
         List<Variable> infoList = informationList.stream()
-                .map(information -> {
-                    return VariableHelper.getVariable(severity,information);
-                }).collect(Collectors.toList());
+                .map(information ->
+                    VariableHelper.getVariable(severity,information)
+                ).collect(Collectors.toList());
         return infoList;
+    }
+
+    private List<ScreenshotReport> getScreeenshots(String normalizeName) {
+        List<byte[]> screeenshotList = fr.axa.automation.webengine.helper.ScreenshotHelper.SCREENSHOT.get(normalizeName);
+        if(screeenshotList == null){
+            return List.of() ;
+        }
+        List<ScreenshotReport> screenshotReportList = screeenshotList.stream()
+                .map(screen ->
+                    ScreenshotHelper.getScreenshotReport("",screen)
+                ).collect(Collectors.toList());
+        return screenshotReportList;
     }
 
     public void closeReport() throws  WebEngineException {

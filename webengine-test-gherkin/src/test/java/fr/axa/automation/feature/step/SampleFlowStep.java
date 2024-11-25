@@ -48,6 +48,7 @@ public class SampleFlowStep extends AbstractStep {
         driver.get(url);
         getWebEngineHomeTestPage().sync(3); //Just for code coverage
         getWebEngineHomeTestPage().maximize();//Just for code coverage
+        screenshot();
         warn("End : Open WebEngine test page");
     }
 
@@ -112,5 +113,6 @@ public class SampleFlowStep extends AbstractStep {
     @Then("^I see the Done title$")
     public void seeDone() throws Exception {
         Assertions.assertEquals("DONE",getWebEngineFourthStepPage().doneTitle.getText());
+        screenshot();
     }
 }
