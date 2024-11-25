@@ -1,6 +1,5 @@
 package fr.axa.automation.webengine.step;
 
-import fr.axa.automation.webengine.context.ExecutionDetail;
 import fr.axa.automation.webengine.logger.Logger;
 
 public abstract class AbstractStep {

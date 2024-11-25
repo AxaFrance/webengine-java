@@ -6,7 +6,6 @@ import fr.axa.automation.webengine.logger.LoggerService;
 import fr.axa.automation.webengine.properties.GlobalConfiguration;
 import fr.axa.automation.webengine.util.ListUtil;
 import fr.axa.automation.webengine.util.PropertiesUtil;
-import fr.axa.automation.webengine.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
