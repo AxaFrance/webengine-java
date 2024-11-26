@@ -3,6 +3,8 @@ package fr.axa.automation.webengine.util;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -46,7 +48,8 @@ public final class CommonClassUtil {
     }
 
     public static <T> Set<Class<? extends T>> findAllClass(String packageToScan, Class<T> clazz) {
-        Reflections reflections = new Reflections(packageToScan, new SubTypesScanner());
+        //Reflections reflections = new Reflections(packageToScan, new SubTypesScanner());
+        Reflections reflections = new Reflections(new ConfigurationBuilder().setClassLoaders(new ClassLoader[]{CommonClassUtil.class.getClassLoader()}).setUrls(ClasspathHelper.forPackage(packageToScan)).setScanners(new SubTypesScanner()));
         return reflections.getSubTypesOf(clazz);
     }
 
