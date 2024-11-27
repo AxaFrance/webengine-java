@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public final class FileUtil {
@@ -145,7 +146,7 @@ public final class FileUtil {
 
 
     public static InputStream getInputStreamFromResource(String resourceName) throws FileNotFoundException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = FileUtil.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(resourceName);
         if (inputStream == null) {
             throw new FileNotFoundException("The resource file " + resourceName + " not found in resource directory ");
@@ -175,7 +176,28 @@ public final class FileUtil {
         }
     }
 
+    public static File convertInputStreamToFile(InputStream inputStream) throws IOException {
+        File file = File.createTempFile(UUID.randomUUID().toString(), ".tmp");
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        }
+        return file;
+    }
+
     public static File getFileByPathOrResource(String fileOrResource) throws IOException {
+        try {
+            InputStream inputStream = getInputStreamByPathOrResource(fileOrResource);
+            return inputStream != null ? convertInputStreamToFile(inputStream) : getFileInResource(fileOrResource);
+        } catch (IOException var2) {
+            return getFileInResource(fileOrResource);
+        }
+    }
+
+    private static File getFileInResource(String fileOrResource) {
         try {
             URL url = Thread.currentThread().getContextClassLoader().getResource(fileOrResource);
             return url != null ? new File(url.toURI()) : new File(fileOrResource);

@@ -1,0 +1,10 @@
+Keyword-driven Web Engine
+
+C:\work\outil\jdk21\jdk-21.0.1+12\bin\java -jar .\sample-keyword-driven-webengine-java-1.0.0-SNAPSHOT-exec.jar "-data:input/data.xml" "-env:input/env.xml"
+C:\work\outil\jdk21\jdk-21.0.1+12\bin\java -jar .\sample-keyword-driven-webengine-java-1.0.0-SNAPSHOT-exec.jar "-data:C:\temp\data.xml" "-env:C:\temp\env.xml
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005" -Dspring-boot.run.arguments="'-data:input/data.xml' '-env:input/env.xml'"
+
+
+Bdd
+mvn clean test -Dcucumber.filter.tags="@flow"
+mvn clean test -Dcucumber.filter.tags="@flow" -DprofileConfig=recette
