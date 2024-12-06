@@ -72,7 +72,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
 
     public void createTestCaseReport(String featureName, String testCaseName){
         String normalizeTestCaseName = NameNormalizerHelper.getNormalizeName(featureName,testCaseName);
-        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(normalizeTestCaseName);
+        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(NameNormalizerHelper.SCENARIO_NAME.get(normalizeTestCaseName));
         testCaseReportMap.put(normalizeTestCaseName,testCaseReport);
     }
 
