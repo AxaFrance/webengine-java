@@ -163,13 +163,14 @@ public abstract class AbstractDriverCommand implements ICommand {
         String dataTestColumName = ((TestCaseNoCodeContext) testCaseContext).getDataTestColumnName();
         loggerService.info("----------------------------------------------------------------------------------------------");
         loggerService.info("Executed command : " + commandData);
-        Map.Entry<TargetKey,String> targetEntry = getTargetValue(globalApplicationContext, commandData, commandResultList);
-        String evaluateValue = getValue(globalApplicationContext, (TestCaseNoCodeContext)testCaseContext, commandData, commandResultList);
-
-        getLogReport().getVariables().add(VariableHelper.getVariable("Target", targetEntry == null ? "" : targetEntry.getValue()));
-        getLogReport().getVariables().add(VariableHelper.getVariable("Executed command", commandData.getCommand().name()));
-        getLogReport().getVariables().add(VariableHelper.getVariable("Data", evaluateValue == null ? "" : evaluateValue));
         try {
+            Map.Entry<TargetKey,String> targetEntry = getTargetValue(globalApplicationContext, commandData, commandResultList);
+            String evaluateValue = getValue(globalApplicationContext, (TestCaseNoCodeContext)testCaseContext, commandData, commandResultList);
+
+            getLogReport().getVariables().add(VariableHelper.getVariable("Target", targetEntry == null ? "" : targetEntry.getValue()));
+            getLogReport().getVariables().add(VariableHelper.getVariable("Executed command", commandData.getCommand().name()));
+            getLogReport().getVariables().add(VariableHelper.getVariable("Data", evaluateValue == null ? "" : evaluateValue));
+
             if (CommandDataHelper.canExecuteDataTestColumn(commandData.getDataTestReferenceList(), dataTestColumName)) {
                 executeCmd(globalApplicationContext, testCaseContext, commandData, commandResultList);
                 actionReport.getScreenshots().getScreenshotReports().addAll(getScreenshotReportList());
