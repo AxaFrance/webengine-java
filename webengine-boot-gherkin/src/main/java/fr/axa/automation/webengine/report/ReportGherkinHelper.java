@@ -35,6 +35,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
 
     public void createTestCaseReport(String featureName, String testCaseName){
         String normalizeTestCaseName = NameNormalizerHelper.getNormalizeName(featureName,testCaseName);
-        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(normalizeTestCaseName);
+        TestCaseReport testCaseReport = TestCaseReportHelper.createTestCaseReport(NameNormalizerHelper.SCENARIO_NAME.get(normalizeTestCaseName));
         testCaseReportMap.put(normalizeTestCaseName,testCaseReport);
     }
 
@@ -126,7 +127,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
     private List<Variable> getLog(Map<String, List<String>> map, String severity, String normalizeName) {
         List<String> informationList = map.get(normalizeName);
         if(informationList == null){
-            return List.of() ;
+            return new ArrayList<>();
         }
         List<Variable> infoList = informationList.stream()
                 .map(information ->
@@ -138,7 +139,7 @@ public class ReportGherkinHelper implements IReportGherkinHelper {
     private List<ScreenshotReport> getScreeenshots(String normalizeName) {
         List<byte[]> screeenshotList = fr.axa.automation.webengine.helper.ScreenshotHelper.SCREENSHOT.get(normalizeName);
         if(screeenshotList == null){
-            return List.of() ;
+            return new ArrayList<>();
         }
         List<ScreenshotReport> screenshotReportList = screeenshotList.stream()
                 .map(screen ->
