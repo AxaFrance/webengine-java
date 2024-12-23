@@ -3,6 +3,7 @@ package fr.axa.automation.webengine.listener;
 import fr.axa.automation.webengine.context.ExecutionDetail;
 import fr.axa.automation.webengine.exception.WebEngineException;
 import fr.axa.automation.webengine.helper.NameNormalizerHelper;
+import fr.axa.automation.webengine.helper.ScreenshotHelper;
 import fr.axa.automation.webengine.logger.ILoggerService;
 import fr.axa.automation.webengine.logger.LoggerServiceProvider;
 import fr.axa.automation.webengine.report.IReportGherkinHelper;
@@ -13,6 +14,7 @@ import io.cucumber.plugin.ConcurrentEventListener;
 import io.cucumber.plugin.event.EventPublisher;
 import io.cucumber.plugin.event.HookTestStep;
 import io.cucumber.plugin.event.PickleStepTestStep;
+import io.cucumber.plugin.event.Status;
 import io.cucumber.plugin.event.TestCaseEvent;
 import io.cucumber.plugin.event.TestCaseFinished;
 import io.cucumber.plugin.event.TestCaseStarted;
@@ -100,6 +102,9 @@ public class WebengineReportListener implements ConcurrentEventListener {
             String currentScenarioName = getScenarioName(testStepFinished);
             String currentStepName = getTestStepName(testStepFinished.getTestStep());
             loggerService.info("Step read finished : " + currentStepName);
+            if(testStepFinished.getResult().getStatus().is(Status.FAILED)){
+                ScreenshotHelper.screenshot();
+            }
             ReportDetail reportDetail = ReportDetail.builder().featureName(currentFeatureName)
                     .testCaseName(currentScenarioName)
                     .stepName(currentStepName)

@@ -4,39 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.axa.automation.webengine</groupId>
     <artifactId>webengine-parent</artifactId>
-    <version>4.3.0</version>
+    <version>4.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>webengine-parent</name>
-    <description>AXA WebEngine Framework makes it easier to build highly effective test automation solutions for Web, Mobile Web and Mobile App testing..</description>
-    <url>https://github.com/AxaFrance/webengine-java?tab=readme-ov-file</url>
-
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Joseph ARUL</name>
-            <email>joseph.arul@axa.fr</email>
-            <organization>AXA FRANCE</organization>
-            <organizationUrl>https://www.axa.fr</organizationUrl>
-        </developer>
-        <developer>
-            <name>Jean-Prince DOTOU-SEGLA</name>
-            <email>jeanprince.dotousegla@axa.fr</email>
-            <organization>AXA FRANCE</organization>
-            <organizationUrl>https://www.axa.fr</organizationUrl>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/AxaFrance/webengine-java.git</connection>
-        <developerConnection>scm:git:ssh://github.com/AxaFrance/webengine-java.git</developerConnection>
-        <url>https://github.com/AxaFrance/webengine-java/tree/main</url>
-    </scm>
 
     <parent>
         <groupId>fr.axa.socle.axafr</groupId>
@@ -450,20 +420,11 @@
                 <version>${istack-commons-runtime.version}</version>
             </dependency>
 
-            <!-- CUCUMBER JUNIT 4 -->
-            <!--
-            <dependency>
-                <groupId>io.cucumber</groupId>
-                <artifactId>cucumber-junit</artifactId>
-                <version>${cucumber.version}</version>
-            </dependency>
-            -->
             <dependency>
                 <groupId>io.cucumber</groupId>
                 <artifactId>cucumber-junit-platform-engine</artifactId>
                 <version>${cucumber.version}</version>
             </dependency>
-
 
             <dependency>
                 <groupId>io.cucumber</groupId>
@@ -656,33 +617,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.2.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar-no-fork</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
 
             </plugins>
