@@ -11,6 +11,8 @@
     <artifactId>webengine-runner</artifactId>
     <packaging>jar</packaging>
     <name>webengine-runner</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <properties>
         <start-class>fr.axa.automation.webengine.Application</start-class>

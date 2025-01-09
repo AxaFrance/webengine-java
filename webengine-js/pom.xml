@@ -9,6 +9,9 @@
     </parent>
 
     <artifactId>webengine-js</artifactId>
+    <name>webengine-js</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

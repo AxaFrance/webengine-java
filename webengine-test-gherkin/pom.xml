@@ -11,6 +11,8 @@
     <artifactId>webengine-test-gherkin</artifactId>
     <packaging>jar</packaging>
     <name>webengine-test-gherkin</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <dependencies>
 

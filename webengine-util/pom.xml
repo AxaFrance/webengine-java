@@ -11,6 +11,8 @@
     <artifactId>webengine-util</artifactId>
     <packaging>jar</packaging>
     <name>webengine-util</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <dependencies>
 

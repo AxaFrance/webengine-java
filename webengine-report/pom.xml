@@ -10,6 +10,8 @@
     <artifactId>webengine-report</artifactId>
     <packaging>jar</packaging>
     <name>webengine-report</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <dependencies>
 

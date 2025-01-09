@@ -11,6 +11,8 @@
     <artifactId>webengine-drive-by-excel</artifactId>
     <packaging>jar</packaging>
     <name>webengine-drive-by-excel</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <properties>
         <start-class>fr.axa.automation.webengine.ApplicationNoCode</start-class>

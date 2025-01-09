@@ -12,6 +12,8 @@
     <artifactId>webengine-cmd-line</artifactId>
     <packaging>jar</packaging>
     <name>webengine-cmd-line</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <dependencies>
 

@@ -10,7 +10,9 @@
 
     <artifactId>webengine-boot-gherkin</artifactId>
     <packaging>jar</packaging>
-    <name>webengine-boot-gherkin</name>	
+    <name>webengine-boot-gherkin</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <dependencies>
 

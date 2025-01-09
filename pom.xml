@@ -7,6 +7,39 @@
     <version>4.5.0</version>
     <packaging>pom</packaging>
     <name>webengine-parent</name>
+    <description>
+        A Test Automation Framework (TAF) is a set of guidelines, libraries for creating and designing test cases. It is conceptual part of the automated testing, provides common functionalities and best practices that helps Test Automation Engineers to create reliable, maintainable, and well-structured Test Automation Solutions (TAS).
+        AXA WebEngine Framework makes it easier to build highly effective test automation solutions for Web, Mobile Web and Mobile App testing.
+        Built by Test Guild of AXA France, available in .NET and JAVA and used in dozens of test automation projects within AXA France. We decided to open source this framework to share our knowledge on Test Automation to the community and hopes we can improve the framework (and the quality of IT Systems, or course 😉) together.
+    </description>
+    <url>https://github.com/AxaFrance/webengine-java</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Joseph Arul</name>
+            <email>joseph.arul@axa.fr</email>
+            <organization>AXA France</organization>
+            <organizationUrl>http://www.axa.fr</organizationUrl>
+        </developer>
+        <developer>
+            <name>Jean-Prince DOTOU-SEGLA</name>
+            <email>jeanprince.dotousegla@axa.fr</email>
+            <organization>AXA France</organization>
+            <organizationUrl>http://www.axa.fr</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/AxaFrance/webengine-java.git</connection>
+        <developerConnection>scm:git:ssh://github.com/AxaFrance/webengine-java.git</developerConnection>
+        <url>https://github.com/AxaFrance/webengine-java/tree/maven-central</url>
+    </scm>
 
     <properties>
         <java-source.version>21</java-source.version>
@@ -552,6 +585,8 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                    <waitUntil>published</waitUntil>
                 </configuration>
             </plugin>
             <plugin>
@@ -561,8 +596,10 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <phase>deploy</phase>
-                        <goals><goal>jar-no-fork</goal></goals>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -573,8 +610,24 @@
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
-                        <phase>deploy</phase>
-                        <goals><goal>jar</goal></goals>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.7</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

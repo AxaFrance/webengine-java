@@ -11,6 +11,8 @@
     <artifactId>webengine-core</artifactId>
     <packaging>jar</packaging>
     <name>webengine-core</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <dependencies>
 

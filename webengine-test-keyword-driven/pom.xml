@@ -11,6 +11,8 @@
     <artifactId>webengine-test-keyword-driven</artifactId>
     <packaging>jar</packaging>
     <name>webengine-test-keyword-driven</name>
+    <description>${parent.description}</description>
+    <url>${parent.url}</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
